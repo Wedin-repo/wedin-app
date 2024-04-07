@@ -1,0 +1,154 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum UserType {
+  ADMIN
+  COUPLE
+  INVITEE
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model User {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  lastName         String?
+  email            String?   @unique
+  password         String?
+  emailVerified    DateTime?
+  image            String?
+  userType         UserType  @default(COUPLE)
+  isOnboarded      Boolean   @default(false)
+  hasPYbankAccount Boolean   @default(false)
+  isMagicLinkLogin Boolean   @default(false)
+  onboardingStep   Int       @default(1)
+
+  accounts        Account[]
+  sessions        Session[]
+  weddingsAsBride Wedding[] @relation("Bride")
+  weddingsAsGroom Wedding[] @relation("Groom")
+}
+
+model Wedding {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String?
+  brideId    String   @db.ObjectId
+  groomId    String    @db.ObjectId
+  date       DateTime?
+  location   String?
+  url        String?   @unique
+  wishListId String?   @db.ObjectId
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  country    String?
+  city       String?
+
+  wishList WishList? @relation(fields: [wishListId], references: [id])
+  bride    User?     @relation("Bride", fields: [brideId], references: [id])
+  groom    User?     @relation("Groom", fields: [groomId], references: [id])
+  
+  @@unique([wishListId])
+  @@unique([groomId])
+  @@unique([brideId])
+}
+
+// create a wedding and wishlist for the user after finishing onboarding
+model WishList {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  weddingId   String?   @db.ObjectId
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  giftIds     String[] @db.ObjectId
+
+  gifts   Gift[]   @relation(fields: [giftIds], references: [id])
+  wedding Wedding?
+}
+
+model Gift {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  giftListId  String   @db.ObjectId
+  isDefault   Boolean  @default(false)
+  categoryId  String   @db.ObjectId
+  wishListIds String[] @db.ObjectId
+  price       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  wishLists WishList[] @relation(fields: [wishListIds], references: [id])
+  giftlist  GiftList   @relation(fields: [giftListId], references: [id])
+  images    Image[]
+}
+
+model GiftList {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  quantity    String
+  isDefault   Boolean @default(false)
+  totalPrice  String
+
+  gifts  Gift[]
+  images Image[]
+}
+
+model Category {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+}
+
+model Image {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  url        String
+  giftId     String   @db.ObjectId
+  giftListId String   @db.ObjectId
+  gift       Gift     @relation(fields: [giftId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  GiftList   GiftList @relation(fields: [giftListId], references: [id])
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}

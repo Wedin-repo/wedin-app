@@ -1,0 +1,117 @@
+'use client';
+
+import useLoginModal from '@/app/hooks/useLoginModal';
+import useOutsideClick from '@/app/hooks/useOutsideClick';
+import useRegisterModal from '@/app/hooks/useRegisterModal';
+import { User } from '@prisma/client';
+import { signOut } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useRef, useState } from 'react';
+import { IoIosArrowDown } from 'react-icons/io';
+import Avatar from '../Avatar';
+import MenuItem from '../MenuItem';
+import { MdLogout } from "react-icons/md";
+import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
+
+
+type UserMenuProps = {
+  currentUser?: User | null;
+};
+
+const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
+  const toggleOpen = useCallback(() => {
+    setIsOpen(!isOpen);
+  }, [isOpen]);
+
+  const router = useRouter();
+  const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
+
+  useOutsideClick(dropdownRef, () => setIsOpen(false), isOpen);
+
+  const handleLoginModal = useCallback(() => {
+    loginModal.open();
+    toggleOpen();
+  }, [toggleOpen, loginModal]);
+
+  const handleRegisterModal = useCallback(() => {
+    registerModal.open();
+    toggleOpen();
+  }, [toggleOpen, registerModal]);
+
+  const handleClick = (url: string) => {
+    router.push(url);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="relative" ref={dropdownRef}>
+      {currentUser ? (
+        <div className="flex flex-row items-center gap-4">
+          <div className="hidden md:block text-sm">
+            {currentUser?.name ? `Hola ${currentUser?.name}!` : 'Hola! Hi! Oi!'}
+          </div>
+          <div
+            className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
+            onClick={toggleOpen}
+          >
+            <div className="hidden md:block">
+              <Avatar src={currentUser?.image} />
+            </div>
+            <IoIosArrowDown size={18} />
+          </div>
+        </div>
+      ) : (
+        <div className="flex gap-4 items-center">
+          <Link
+            href="/login"
+            className="border-2 text-primaryTextColor py-1.5 rounded-full px-5 hover:bg-primaryBackgroundColor hover:text-white transition-all shadow-black"
+          >
+            Login
+          </Link>
+          <Link
+            href="/register"
+            className="bg-primaryBackgroundColor text-white py-1.5 rounded-full px-5 hover:opacity-80 transition-all shadow-black"
+          >
+            Registrarme
+          </Link>
+        </div>
+      )}
+
+      {isOpen && (
+        <div className="absolute rounded-xl shadow-md w-[40vw] md:w-11/12 bg-white overflow-hidden right-0 top-12 text-sm">
+          <div className="flex flex-col cursor-pointer">
+            {currentUser ? (
+              <>
+                <MenuItem
+                  onClick={() => handleClick('/')}
+                  label="Mis regalos"
+                  icon={<IoGiftOutline fontSize={'18px'} />}
+                />
+                <MenuItem
+                  onClick={() => handleClick('/')}
+                  label="Mi perfil"
+                  icon={<IoSettingsOutline fontSize={'18px'} />
+                }
+                />
+                <hr />
+                <MenuItem onClick={() => signOut()} label="Cerrar sesión" icon={<MdLogout fontSize={'18px'} />} />
+              </>
+            ) : (
+              <>
+                <MenuItem onClick={handleLoginModal} label="Ingresar" icon={""} />
+                <MenuItem onClick={handleRegisterModal} label="Register" icon={""} />
+              </>
+            )}
+            {/* <MenuItem onClick={() => handleClick("/")} label="Listings" /> */}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default UserMenu;
