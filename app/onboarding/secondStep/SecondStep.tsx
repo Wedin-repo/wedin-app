@@ -38,12 +38,10 @@ const formSchema = z.object({
 });
 
 interface SecondStepProps {
-  currentUser: User | null;
+  currentUser: User;
 }
 
-const SecondStep: React.FC<SecondStepProps> = ({
-  currentUser,
-}) => {
+const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -67,33 +65,29 @@ const SecondStep: React.FC<SecondStepProps> = ({
     });
   }
 
+  async function makeAndHandleApiCall(url: any, data: any, errorMessage: any) {
+    try {
+      const response = await makeApiCall(url, data);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || errorMessage);
+      }
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(errorMessage + ' ' + error.message);
+      } else {
+        console.error('An unexpected error occurred:', error);
+        throw new Error(errorMessage);
+      }
+    }
+  }
+
   const handleSubmitFinal = async () => {
     setIsLoading(true);
     const formValues = form.getValues();
     const { weddingCountry, weddingCity, hasPYbankAccount } = formValues;
-    const userId = currentUser?.id;
-
-    async function makeAndHandleApiCall(
-      url: any,
-      data: any,
-      errorMessage: any
-    ) {
-      try {
-        const response = await makeApiCall(url, data);
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || errorMessage);
-        }
-        return await response.json();
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(errorMessage + ' ' + error.message);
-        } else {
-          console.error('An unexpected error occurred:', error);
-          throw new Error(errorMessage);
-        }
-      }
-    }
+    const userId = currentUser.id;
 
     try {
       await makeAndHandleApiCall(

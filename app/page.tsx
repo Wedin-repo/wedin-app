@@ -1,3 +1,5 @@
+'use client';
+
 import Container from '../components/Container';
 
 export default async function Home() {
