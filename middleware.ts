@@ -6,10 +6,6 @@ export function middleware(request: NextRequest) {
     request.cookies.get('_vercel_jwt')?.value;
   const { pathname } = request.nextUrl;
 
-  console.log('request', request);
-  console.log('cookies', request.cookies);
-  console.log('middleware.ts', sessionToken, pathname);
-
   if (!sessionToken && pathname === '/') {
     return NextResponse.redirect(new URL('/gifts', request.url));
   }
