@@ -19,16 +19,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { User } from '@prisma/client';
+import { Loader2 } from 'lucide-react';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
 import { boolean, z } from 'zod';
 import { countries } from '../countries';
-import { toast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
-import { User } from '@prisma/client';
-import { useRouter } from 'next/navigation';
 import { makeAndHandleApiCall } from '../helper';
 
 const formSchema = z.object({
@@ -46,7 +45,6 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -76,7 +74,7 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
         'No se pudo actualizar la información del usuario.'
       );
 
-      router.push('/');
+      window.location.href = '/';
     } catch (error) {
       console.error('API call failed:', error);
       if (error instanceof Error) {

@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
@@ -46,13 +47,17 @@ export default function LoginForm() {
     //setIsMagicLinkLogin(false);
     setIsLoading(true);
     const { email, password } = values;
+    console.log(email, password);
 
     signIn('credentials', {
       email,
       password,
-      redirect: true,
-      callbackUrl: '/',
+      redirect: false,
     }).then(callback => {
+      if (callback?.ok) {
+        window.location.href = '/';
+      }
+
       if (callback?.error) {
         toast({
           variant: 'destructive',
