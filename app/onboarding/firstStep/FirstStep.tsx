@@ -26,6 +26,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
 import { z } from 'zod';
+import { makeAndHandleApiCall } from '../helper';
 
 const formSchema = z.object({
   weddingUrl: z
@@ -66,10 +67,10 @@ const formSchema = z.object({
   isDecidingWeddingDate: z.boolean(),
 });
 
-interface FirstStepProps {
+type FirstStepProps = {
   onNextStep: () => void;
   currentUser: User;
-}
+};
 
 const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
   const [isDecidingWeddingDate, setIsDecidingWeddingDate] = useState<
@@ -91,14 +92,6 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
     },
   });
 
-  async function makeApiCall(url: any, data: any) {
-    return fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-  }
-
   const handleSubmit = async () => {
     setIsLoading(true);
     const formValues = form.getValues();
@@ -112,28 +105,6 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
       partnerLastName,
     } = formValues;
     const userId = currentUser?.id;
-
-    async function makeAndHandleApiCall(
-      url: any,
-      data: any,
-      errorMessage: any
-    ) {
-      try {
-        const response = await makeApiCall(url, data);
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || errorMessage);
-        }
-        return await response.json();
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(errorMessage + ' ' + error.message);
-        } else {
-          console.error('An unexpected error occurred:', error);
-          throw new Error(errorMessage);
-        }
-      }
-    }
 
     try {
       await makeAndHandleApiCall(
@@ -409,16 +380,14 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
           </div>
 
           <div style={{ margin: '0 auto', marginTop: '20px' }}>
-            {isLoading ? (
-              <Button variant="onboardingButton" disabled>
-                Continuar
-                <Loader2 className="h-4 w-4 animate-spin" />
-              </Button>
-            ) : (
-              <Button type="submit" variant="onboardingButton">
-                Continuar <FaArrowRight />
-              </Button>
-            )}
+            <Button
+              type="submit"
+              variant="onboardingButton"
+              disabled={isLoading}
+            >
+              Registrarme
+              {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+            </Button>
           </div>
         </form>
       </Form>

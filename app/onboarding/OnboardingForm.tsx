@@ -11,7 +11,7 @@ type OnboardingFormProps = {
 
 const OnboardingForm = ({ currentUser }: OnboardingFormProps) => {
   const [currentPage, setCurrentPage] = useState(
-    currentUser?.onboardingStep || 1
+    currentUser.onboardingStep
   );
 
   return (

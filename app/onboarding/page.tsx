@@ -8,11 +8,11 @@ import OnboardingForm from './OnboardingForm';
 
 const OnboardingPage = async () => {
   const currentUser = await getCurrentUser();
-  // console.log('onboarding', currentUser);
 
   if (!currentUser) {
     redirect('/login');
   }
+
   if (currentUser && currentUser.isOnboarded === true) {
     redirect('/');
   }
