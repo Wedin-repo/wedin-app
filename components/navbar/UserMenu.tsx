@@ -5,15 +5,14 @@ import useOutsideClick from '@/app/hooks/useOutsideClick';
 import useRegisterModal from '@/app/hooks/useRegisterModal';
 import { User } from '@prisma/client';
 import { signOut } from 'next-auth/react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import Avatar from '../Avatar';
 import MenuItem from '../MenuItem';
-import { MdLogout } from "react-icons/md";
+import { MdLogout } from 'react-icons/md';
 import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
-
+import { Button } from '@/components/ui/button';
 
 type UserMenuProps = {
   currentUser?: User | null;
@@ -52,7 +51,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       {currentUser ? (
         <div className="flex flex-row items-center gap-4">
           <div className="hidden md:block text-sm">
-            {currentUser?.name ? `Hola ${currentUser?.name}!` : 'Hola! Hi! Oi!'}
+            {`Hola ${currentUser.name || currentUser.email}!`}
           </div>
           <div
             className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
@@ -66,18 +65,18 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
         </div>
       ) : (
         <div className="flex gap-4 items-center">
-          <Link
-            href="/login"
+          <Button
+            onClick={() => handleClick('/login')}
             className="border-2 text-primaryTextColor py-1.5 rounded-full px-5 hover:bg-primaryBackgroundColor hover:text-white transition-all shadow-black"
           >
             Login
-          </Link>
-          <Link
-            href="/register"
+          </Button>
+          <Button
+            onClick={() => handleClick('/register')}
             className="bg-primaryBackgroundColor text-white py-1.5 rounded-full px-5 hover:opacity-80 transition-all shadow-black"
           >
             Registrarme
-          </Link>
+          </Button>
         </div>
       )}
 
@@ -87,6 +86,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             {currentUser ? (
               <>
                 <MenuItem
+                  // TODO: Fix this ??
                   onClick={() => handleClick('/')}
                   label="Mis regalos"
                   icon={<IoGiftOutline fontSize={'18px'} />}
@@ -94,19 +94,21 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                 <MenuItem
                   onClick={() => handleClick('/')}
                   label="Mi perfil"
-                  icon={<IoSettingsOutline fontSize={'18px'} />
-                }
+                  icon={<IoSettingsOutline fontSize={'18px'} />}
                 />
                 <hr />
-                <MenuItem onClick={() => signOut()} label="Cerrar sesión" icon={<MdLogout fontSize={'18px'} />} />
+                <MenuItem
+                  onClick={() => signOut()}
+                  label="Cerrar sesión"
+                  icon={<MdLogout fontSize={'18px'} />}
+                />
               </>
             ) : (
               <>
-                <MenuItem onClick={handleLoginModal} label="Ingresar" icon={""} />
-                <MenuItem onClick={handleRegisterModal} label="Register" icon={""} />
+                <MenuItem onClick={handleLoginModal} label="Ingresar" />
+                <MenuItem onClick={handleRegisterModal} label="Register" />
               </>
             )}
-            {/* <MenuItem onClick={() => handleClick("/")} label="Listings" /> */}
           </div>
         </div>
       )}

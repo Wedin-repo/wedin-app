@@ -1,18 +1,13 @@
-import { NextAuthOptions } from 'next-auth';
-import GoogleProvider from 'next-auth/providers/google';
-import FacebookProvider from 'next-auth/providers/facebook';
-import EmailProvider from 'next-auth/providers/email';
-import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import prisma from '../db/client';
-import { User } from 'next-auth';
 import bcrypt from 'bcrypt';
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import EmailProvider from 'next-auth/providers/email';
+import FacebookProvider from 'next-auth/providers/facebook';
+import GoogleProvider from 'next-auth/providers/google';
+import prisma from '../db/client';
 
-/* interface MyUser extends User {
-  userType: string; 
-} */
-
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -42,7 +37,7 @@ export const authOptions = {
         email: { label: 'email', type: 'text' },
         password: { label: 'password', type: 'password' },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Missing email or password');
         }
@@ -63,32 +58,22 @@ export const authOptions = {
           credentials.password,
           user.password
         );
+
         if (!isValid) {
           throw new Error('Invalid password');
         }
 
-        /* if (!user.emailVerified) {
-          throw new Error("Please verify your email before logging in");
-        } */
-
-        //const { password, ...safeUser } = user;
         return user;
       },
     }),
   ],
   pages: {
-    signIn: "/register",
+    signIn: '/register',
   },
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === 'development',
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
+    maxAge: 30 * 24 * 60 * 60,
   },
   secret: process.env.NEXTAUTH_SECRET,
-  /* callbacks: {
-    async session({ session, user }) {
-      const myUser = user as unknown as MyUser;
-      (session.user as MyUser).userType = myUser.userType;
-      return session;
-    },
-  }, */
-} satisfies NextAuthOptions;
+};

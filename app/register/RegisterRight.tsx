@@ -26,7 +26,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosHeartEmpty } from 'react-icons/io';
@@ -48,10 +47,8 @@ const formSchema = z.object({
 });
 
 const RegisterRight = () => {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -71,10 +68,15 @@ const RegisterRight = () => {
   }
 
   async function loginUser(email: string, password: string) {
-    return await signIn('credentials', {
-      redirect: false,
+    signIn('credentials', {
+      redirect: true,
       email,
       password,
+      callbackUrl: '/onboarding',
+    }).then(callback => {
+      if (callback?.error) {
+        showErrorToast('Uh oh! Algo salió mal.', callback.error);
+      }
     });
   }
 
@@ -91,34 +93,23 @@ const RegisterRight = () => {
     setIsLoading(true);
     const { email, password } = values;
 
-    try {
-      const registerResponse = await registerUser(email, password);
+    const registerResponse = await registerUser(email, password);
 
-      if (!registerResponse.ok) {
-        const data = await registerResponse.json();
-        const errorMessage =
-          data.error === 'Email already in use'
-            ? 'Este email ya está registrado.'
-            : 'Ocurrió un error al crear tu cuenta, intenta de vuelta.';
+    if (!registerResponse.ok) {
+      const data = await registerResponse.json();
+      const errorMessage =
+        data.error === 'Email already in use'
+          ? 'Este email ya está registrado.'
+          : 'Ocurrió un error al crear tu cuenta, intenta de vuelta.';
 
-        showErrorToast('Uh oh! Algo salió mal.', errorMessage);
-      } else {
-        const loginResponse = await loginUser(email, password);
-        if (loginResponse?.ok) {
-          router.push('/onboarding');
-        } else {
-          showErrorToast(
-            'Error al iniciar sesión',
-            'Por favor intente de nuevo.'
-          );
-        }
-      }
-    } catch (error) {
-      console.error('Error in onSubmit:', error);
-      showErrorToast('Error inesperado', 'Por favor intente más tarde.');
-    } finally {
+      showErrorToast('Uh oh! Algo salió mal.', errorMessage);
       setIsLoading(false);
+      return;
     }
+
+    loginUser(email, password);
+
+    setIsLoading(false);
   }
 
   return (
@@ -237,25 +228,15 @@ const RegisterRight = () => {
               />
             </div>
           </div>
-          {isLoading ? (
-            <Button
-              type="submit"
-              variant="primaryButton"
-              className="rounded-lg"
-              disabled
-            >
-              Registarme
-              <Loader2 className="h-4 w-4 animate-spin" />
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              variant="primaryButton"
-              className="rounded-lg"
-            >
-              Registarme
-            </Button>
-          )}
+          <Button
+            type="submit"
+            variant="primaryButton"
+            className="rounded-lg"
+            disabled={isLoading}
+          >
+            Registarme
+            <Loader2 className="h-4 w-4 animate-spin" />
+          </Button>
         </form>
       </Form>
 

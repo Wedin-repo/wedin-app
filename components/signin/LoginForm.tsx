@@ -1,7 +1,4 @@
-'use client';
-
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -10,16 +7,16 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
+import { MdErrorOutline } from 'react-icons/md';
 import { z } from 'zod';
-import { IoEyeOffOutline, IoEyeOutline, IoGiftOutline } from 'react-icons/io5';
-import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
   email: z
@@ -33,7 +30,6 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
-  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -76,38 +72,22 @@ export default function LoginForm() {
     setIsLoading(true);
     const { email, password } = values;
 
-    try {
-      const response = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      //console.log(response);
-
-      if (response?.error === 'Invalid password') {
+    signIn('credentials', {
+      email,
+      password,
+      redirect: true,
+      callbackUrl: '/',
+    }).then(callback => {
+      if (callback?.error) {
         toast({
           variant: 'destructive',
           title: 'Uh Oh! Error al iniciar sesión.',
           description: 'Email o Contraseña incorrecta.',
         });
       }
+    });
 
-      if (response?.ok) {
-        router.push('/');
-      }
-    } catch (error) {
-    } finally {
-      setIsLoading(false);
-    }
-
-    try {
-    } catch (error) {
-      console.error('Error in onSubmit:', error);
-      //showErrorToast('Error inesperado', 'Por favor intente más tarde.');
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(false);
   }
 
   return (
@@ -129,7 +109,6 @@ export default function LoginForm() {
                       placeholder="tucorreo@wedin.app"
                       className="!mt-1.5"
                       {...field}
-                      //onBlur={() => getUserByEmail(field.value)}
                     />
                   </FormControl>
                   <FormMessage className="font-normal text-yellow-600" />
@@ -174,21 +153,16 @@ export default function LoginForm() {
             </div>
           )}
         </div>
-        {isLoading ? (
-          <Button
-            type="submit"
-            variant="primaryButton"
-            className="rounded-lg"
-            disabled
-          >
-            Iniciar sesión
-            <Loader2 className="h-4 w-4 animate-spin" />
-          </Button>
-        ) : (
-          <Button type="submit" variant="primaryButton" className="rounded-lg">
-            Iniciar sesión
-          </Button>
-        )}
+
+        <Button
+          type="submit"
+          variant="primaryButton"
+          className="rounded-lg"
+          disabled={isLoading}
+        >
+          Iniciar sesión
+          {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+        </Button>
       </form>
     </Form>
   );

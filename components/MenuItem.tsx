@@ -3,7 +3,7 @@ import type { NextPage } from 'next';
 type Props = {
   onClick: () => void;
   label: string;
-  icon: any;
+  icon?: any;
 };
 const MenuItem: NextPage<Props> = ({ onClick, label, icon }) => {
   return (
