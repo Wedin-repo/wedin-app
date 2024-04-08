@@ -52,7 +52,7 @@ export const countries = [
   { id: 51, name: 'Venezuela' },
   { id: 52, name: 'Madagascar' },
   { id: 53, name: 'Camerún' },
-  { id: 54, name: "Costa de Marfil" },
+  { id: 54, name: 'Costa de Marfil' },
   { id: 55, name: 'Corea del Norte' },
   { id: 56, name: 'Australia' },
   { id: 57, name: 'Níger' },
@@ -69,4 +69,4 @@ export const countries = [
   { id: 68, name: 'Ecuador' },
   { id: 69, name: 'Syria' },
   { id: 70, name: 'Paises Bajos' },
-]
+];

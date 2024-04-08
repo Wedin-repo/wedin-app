@@ -22,9 +22,9 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
 type GiftCardProps = {
-  gift: Gift
-  wishListId?: string
-  currentUser?: Object | null
+  gift: Gift;
+  wishListId?: string;
+  currentUser?: Object | null;
 };
 
 const GiftCard = ({ gift, wishListId, currentUser }: GiftCardProps) => {
@@ -59,7 +59,7 @@ const GiftCard = ({ gift, wishListId, currentUser }: GiftCardProps) => {
           title: 'Success',
           description: 'Gift added to your wishlist.',
           action: <FaCheck color="green" fontSize={'36px'} />,
-          className: 'bg-white'
+          className: 'bg-white',
         });
       } else {
         throw new Error('Failed to add gift to wishlist');
@@ -89,8 +89,8 @@ const GiftCard = ({ gift, wishListId, currentUser }: GiftCardProps) => {
       </div>
 
       <Dialog>
-        <DialogTrigger asChild className=''>
-          <Button variant='primaryButton'>
+        <DialogTrigger asChild className="">
+          <Button variant="primaryButton">
             Añadir a mi lista
             <IoAdd size={22} />
           </Button>

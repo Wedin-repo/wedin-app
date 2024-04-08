@@ -20,11 +20,7 @@ export default function SignInGoogle() {
       onClick={handleSignIn}
       className="bg-secondaryBackgroundColor text-tertiaryTextColor py-1.5 px-6 rounded-lg w-[208px] hover:opacity-80 transition-all"
     >
-      {isLoading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      ) : (
-        "Google"
-      )}
+      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Google'}
     </Button>
   );
 }

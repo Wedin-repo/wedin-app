@@ -1,8 +1,8 @@
 import prisma from '@/db/client';
-import { NextResponse } from 'next/server';
-import { NextRequest } from 'next/server'
+// import { revalidatePath, revalidateTag } from 'next/cache';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(request: NextRequest) { 
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { userId, hasPYbankAccount } = body;
@@ -17,8 +17,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
+    // revalidatePath('/', 'layout');
+    // revalidateTag('users');
     return NextResponse.json({
       message: 'User updated successfully',
+      revalidate: true,
     });
   } catch (error: any) {
     console.error('Error updating user:', error);

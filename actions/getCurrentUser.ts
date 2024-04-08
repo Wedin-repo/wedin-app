@@ -1,7 +1,6 @@
 import prisma from '@/db/client';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/utils/auth';
-import { revalidatePath } from 'next/cache';
 
 export async function getSession() {
   return await getServerSession(authOptions);
@@ -20,8 +19,6 @@ export async function getCurrentUser() {
     });
 
     if (!currentUser) return null;
-
-    revalidatePath('/', 'layout');
 
     return currentUser;
   } catch (error: any) {

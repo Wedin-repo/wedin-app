@@ -1,11 +1,10 @@
-import type { Metadata } from 'next';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { Toaster } from '@/components/ui/toaster';
-import NavBar from '@/components/navbar/Navbar';
-import { Inter } from 'next/font/google';
 import Footer from '@/components/footer/Footer';
+import NavBar from '@/components/navbar/Navbar';
+import { Toaster } from '@/components/ui/toaster';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import './globals.css';
-import { redirect } from 'next/navigation';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,11 +19,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const currentUser = await getCurrentUser();
-  console.log("layout", currentUser);
-
-  /* if (currentUser && currentUser.isOnboarded === false) {
-    redirect('/onboarding');
-  } */
 
   return (
     <html lang="en">
