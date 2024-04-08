@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get('next-auth.session-token');
   const { pathname } = request.nextUrl;
-
+  console.log(request.cookies);
   console.log('middleware.ts', sessionToken, pathname);
 
   // if (!sessionToken && pathname === '/') {
