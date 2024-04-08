@@ -8,14 +8,13 @@ import OnboardingForm from './OnboardingForm';
 
 const OnboardingPage = async () => {
   const currentUser = await getCurrentUser();
-  // console.log('onboarding', currentUser);
-
-  // if (!currentUser) {
-  //   redirect('/login');
-  // }
-  // if (currentUser && currentUser.isOnboarded === true) {
-  //   redirect('/');
-  // }
+  
+  if (!currentUser) {
+    redirect('/login');
+  }
+  if (currentUser && currentUser.isOnboarded === true) {
+    redirect('/');
+  }
 
   return (
     <div className="flex-col lg:flex-row flex items-center justify-center w-full gap-4 px-10 min-h-[82vh]">

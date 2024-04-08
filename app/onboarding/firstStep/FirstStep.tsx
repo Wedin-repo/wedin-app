@@ -15,17 +15,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@prisma/client';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
-import { useState } from 'react';
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
 import { z } from 'zod';
+import { toast } from '@/components/ui/use-toast';
+//import { User } from '@prisma/client';
 
 const formSchema = z.object({
   weddingUrl: z
@@ -68,14 +68,14 @@ const formSchema = z.object({
 
 interface FirstStepProps {
   onNextStep: () => void;
-  currentUser: User;
+  currentUser: any;
 }
 
 const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
-  const [isDecidingWeddingDate, setIsDecidingWeddingDate] = useState<
+  const [isDecidingWeddingDate, setIsDecidingWeddingDate] = React.useState<
     boolean | string
   >(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -113,11 +113,7 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
     } = formValues;
     const userId = currentUser?.id;
 
-    async function makeAndHandleApiCall(
-      url: any,
-      data: any,
-      errorMessage: any
-    ) {
+    async function makeAndHandleApiCall(url: any, data: any, errorMessage: any) {
       try {
         const response = await makeApiCall(url, data);
         if (!response.ok) {
@@ -138,20 +134,13 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
     try {
       await makeAndHandleApiCall(
         '/api/onboarding/updateUser',
-        { userId, name, lastName, onboardingStep: 2 },
+        { userId, name, lastName, onboardingStep: 2},
         'No se pudo actualizar la información del usuario.'
       );
       // change to createWedding and updateWedding
       await makeAndHandleApiCall(
         '/api/onboarding/createWeddingAndBride',
-        {
-          userId,
-          weddingDate,
-          weddingUrl,
-          partnerEmail,
-          partnerName,
-          partnerLastName,
-        },
+        { userId, weddingDate, weddingUrl, partnerEmail, partnerName, partnerLastName },
         'No se pudo actualizar los detalles de la boda.'
       );
 
