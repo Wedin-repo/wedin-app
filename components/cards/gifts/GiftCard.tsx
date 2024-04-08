@@ -35,12 +35,6 @@ const GiftCard = ({ gift, wishListId, currentUser }: GiftCardProps) => {
   const addGiftToWishListHandler = async () => {
     if (!currentUser) {
       router.push('/register');
-      /* toast({
-        title: 'Authentication Required',
-        description: 'You need to be logged in or registered to add a gift to your wishlist.',
-        action: <FaCheck color="red" fontSize={'36px'} />,
-        className: 'bg-white',
-      }); */
       return;
     }
     try {

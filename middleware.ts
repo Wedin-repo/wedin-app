@@ -6,9 +6,11 @@ export function middleware(request: NextRequest) {
     request.cookies.get('_vercel_jwt')?.value;
   const { pathname } = request.nextUrl;
 
-  if (!sessionToken && pathname === '/') {
-    return NextResponse.redirect(new URL('/gifts', request.url));
-  }
+  console.log(request.cookies.get('_vercel_jwt')?.value);
+
+  // if (!sessionToken && pathname === '/') {
+  //   return NextResponse.redirect(new URL('/gifts', request.url));
+  // }
 
   return NextResponse.next();
 }
