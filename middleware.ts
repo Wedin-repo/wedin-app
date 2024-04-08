@@ -7,6 +7,8 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   console.log(request.cookies.get('_vercel_jwt')?.value);
+  console.log(sessionToken);
+  console.log(!sessionToken && pathname === '/');
 
   // if (!sessionToken && pathname === '/') {
   //   return NextResponse.redirect(new URL('/gifts', request.url));
