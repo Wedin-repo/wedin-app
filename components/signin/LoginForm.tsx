@@ -15,7 +15,6 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import { MdErrorOutline } from 'react-icons/md';
 import { z } from 'zod';
 
 const formSchema = z.object({
@@ -34,30 +33,6 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isMagicLinkLogin, setIsMagicLinkLogin] = useState(false);
-
-  const getUserByEmail = async (email: string) => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/login/${email}`);
-      const data = await response.json();
-      //console.log(response, data);
-      if (!response.ok) {
-        throw new Error(
-          data.error || 'An error occurred while fetching user data.'
-        );
-      }
-      setIsMagicLinkLogin(data.isMagicLinkLogin);
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch user data.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
