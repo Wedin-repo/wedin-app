@@ -24,7 +24,7 @@ const RegisterPage = async () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

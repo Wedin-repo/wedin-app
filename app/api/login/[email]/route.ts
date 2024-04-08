@@ -19,7 +19,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({
-      user: user
+      user: user,
     });
   } catch (error: any) {
     console.error('Error finding user:', error);

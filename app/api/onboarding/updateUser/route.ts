@@ -10,25 +10,24 @@ export async function POST(request: Request) {
     const { userId, name, lastName, onboardingStep } = body;
 
     const updatedUser = await prisma.user.update({
-        where: {
-          id: userId, 
-        },
-        data: {
-          name: name,
-          lastName: lastName,
-          onboardingStep: onboardingStep,
-        },
-      });
+      where: {
+        id: userId,
+      },
+      data: {
+        name: name,
+        lastName: lastName,
+        onboardingStep: onboardingStep,
+      },
+    });
 
-      return NextResponse.json({
-        message: 'User updated successfully',
-        user: {
-          id: updatedUser.id,
-          name: updatedUser.name,
-          lastName: updatedUser.lastName,
-        },
-      });
-
+    return NextResponse.json({
+      message: 'User updated successfully',
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        lastName: updatedUser.lastName,
+      },
+    });
   } catch (error: any) {
     console.error('Error updating user:', error);
 

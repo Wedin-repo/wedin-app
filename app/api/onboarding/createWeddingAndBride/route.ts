@@ -3,7 +3,14 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const body = await request.json();
-  const { userId, weddingDate, weddingUrl, partnerEmail, partnerName, partnerLastName } = body;
+  const {
+    userId,
+    weddingDate,
+    weddingUrl,
+    partnerEmail,
+    partnerName,
+    partnerLastName,
+  } = body;
 
   try {
     const bride = await prisma.user.create({
@@ -20,7 +27,7 @@ export async function POST(request: Request) {
     const wishList = await prisma.wishList.create({
       data: {
         description: 'My first wish list',
-      }
+      },
     });
 
     await prisma.wedding.create({
@@ -29,10 +36,9 @@ export async function POST(request: Request) {
         brideId: bride.id,
         date: weddingDate ? new Date(weddingDate) : undefined,
         url: weddingUrl,
-        wishListId: wishList.id, 
+        wishListId: wishList.id,
       },
     });
-    
 
     return NextResponse.json({
       message: 'Wedding details updated and groom created successfully',
