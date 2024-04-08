@@ -29,6 +29,7 @@ import { toast } from '@/components/ui/use-toast';
 import { Loader2 } from 'lucide-react';
 import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { makeAndHandleApiCall } from '../helper';
 
 const formSchema = z.object({
   weddingCountry: z.string(),
@@ -37,13 +38,11 @@ const formSchema = z.object({
   hasPYbankAccount: z.boolean(),
 });
 
-interface SecondStepProps {
-  currentUser: User | null;
-}
+type SecondStepProps = {
+  currentUser: User;
+};
 
-const SecondStep: React.FC<SecondStepProps> = ({
-  currentUser,
-}) => {
+const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -59,41 +58,11 @@ const SecondStep: React.FC<SecondStepProps> = ({
     },
   });
 
-  async function makeApiCall(url: any, data: any) {
-    return fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-  }
-
   const handleSubmitFinal = async () => {
     setIsLoading(true);
     const formValues = form.getValues();
     const { weddingCountry, weddingCity, hasPYbankAccount } = formValues;
-    const userId = currentUser?.id;
-
-    async function makeAndHandleApiCall(
-      url: any,
-      data: any,
-      errorMessage: any
-    ) {
-      try {
-        const response = await makeApiCall(url, data);
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || errorMessage);
-        }
-        return await response.json();
-      } catch (error) {
-        if (error instanceof Error) {
-          throw new Error(errorMessage + ' ' + error.message);
-        } else {
-          console.error('An unexpected error occurred:', error);
-          throw new Error(errorMessage);
-        }
-      }
-    }
+    const userId = currentUser.id;
 
     try {
       await makeAndHandleApiCall(
