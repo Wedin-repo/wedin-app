@@ -26,6 +26,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosHeartEmpty } from 'react-icons/io';
@@ -47,6 +48,7 @@ const formSchema = z.object({
 });
 
 const RegisterRight = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -69,13 +71,12 @@ const RegisterRight = () => {
 
   async function loginUser(email: string, password: string) {
     signIn('credentials', {
-      redirect: true,
       email,
       password,
-      callbackUrl: '/onboarding',
+      redirect: false,
     }).then(callback => {
-      if (callback?.error) {
-        showErrorToast('Uh oh! Algo salió mal.', callback.error);
+      if (callback?.ok) {
+        router.push('/onboarding');
       }
     });
   }
