@@ -105,7 +105,7 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <p className="text-3xl text-primaryTextColor text-center font-medium">
+      <p className="text-2xl sm:text-3xl text-primaryTextColor text-center font-medium">
         Donde te casas?
       </p>
       <Form {...form}>

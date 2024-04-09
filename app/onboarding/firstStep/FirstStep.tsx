@@ -156,7 +156,7 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <p className="text-3xl text-primaryTextColor text-center font-medium">
+      <p className="text-2xl sm:text-3xl text-primaryTextColor text-center font-medium">
         Antes de empezar, necesitamos unos datos
       </p>
       <Form {...form}>
@@ -171,7 +171,7 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
               <FormItem>
                 <FormControl>
                   <div className="flex flex-col">
-                    <p className="text-sm font-medium text-[#0F172A] mb-2">
+                    <p className="text-sm font-medium text-[#0F172A] mb-2 sm:text-start text-center">
                       ¿Qué dirección quieres para tu espacio? Escribe la
                       dirección para comprobar su disponibilidad
                     </p>
@@ -289,7 +289,7 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
           />
 
           <div className="flex flex-col items-center gap-2 w-full">
-            <div className="font-medium text-sm flex items-start justify-start w-full">
+            <div className="font-medium text-sm flex flex-col sm:flex-row items-start justify-start w-full">
               Fecha de la boda &nbsp;
               <span className="font-normal text-sm text-[#64748B]">
                 (No te preocupes, puede cambiarlo mas adelante)
@@ -369,7 +369,7 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
                       />
                     </FormControl>
                     <div className="!m-0">
-                      <FormLabel className="font-normal text-md cursor-pointer">
+                      <FormLabel className="font-normal text-sm sm:text-md cursor-pointer">
                         Aún estamos decidiendo
                       </FormLabel>
                     </div>

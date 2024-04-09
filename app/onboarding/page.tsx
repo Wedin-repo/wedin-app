@@ -18,7 +18,7 @@ const OnboardingPage = async () => {
   }
 
   return (
-    <div className="flex-col lg:flex-row flex items-center justify-center w-full gap-4 px-10 min-h-[82vh]">
+    <div className="flex-col lg:flex-row flex items-center justify-center w-full gap-4 px-4 sm:px-10 min-h-[82vh]">
       <div className="w-2/5 hidden lg:flex items-center justify-center">
         <div className="bg-[#F3F4F6] w-full h-[600px] flex items-center justify-center rounded-xl">
           <CiImageOn fontSize={'54px'} color="#A1A1AA" />
