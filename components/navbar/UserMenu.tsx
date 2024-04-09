@@ -64,16 +64,16 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
           </div>
         </div>
       ) : (
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 items-center">
           <Button
             onClick={() => handleClick('/login')}
-            className="border-2 text-primaryTextColor py-1.5 rounded-full px-5 hover:bg-primaryBackgroundColor hover:text-white transition-all shadow-black"
+            className="text-primaryTextColor h-9 rounded-full px-5 hover:bg-primaryBackgroundColor hover:text-white transition-all shadow-black"
           >
             Login
           </Button>
           <Button
             onClick={() => handleClick('/register')}
-            className="bg-primaryBackgroundColor text-white py-1.5 rounded-full px-5 hover:opacity-80 transition-all shadow-black"
+            className="bg-primaryBackgroundColor text-white h-9 rounded-full px-5 hover:opacity-80 transition-all shadow-black"
           >
             Registrarme
           </Button>
