@@ -1,5 +1,4 @@
 import prisma from '@/db/client';
-// import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
@@ -17,8 +16,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // revalidatePath('/', 'layout');
-    // revalidateTag('users');
     return NextResponse.json({
       message: 'User updated successfully',
       revalidate: true,
