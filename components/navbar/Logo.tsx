@@ -10,7 +10,7 @@ const Logo = () => {
     <Image
       alt="logo"
       onClick={() => router.push('/')}
-      className="cursor-pointer"
+      className="cursor-pointer hidden sm:block"
       height="39"
       width="90"
       src="/images/wedin.svg"

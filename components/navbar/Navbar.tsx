@@ -27,10 +27,10 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
       <div className="py-4 px-6 sm:px-10">
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
-            <div className="flex gap-4 mb-[-20px]">
+            <div className="flex gap-4 items-center">
               <Logo />
-              <Tabs className="mb-[-20px]">
-                <TabsList className="gap-4 overflow-x-auto overflow-y-hidden !text-md">
+              <Tabs className="">
+                <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">
                   <TabsTrigger value="myList" className="!text-sm">
                     Mi lista
                   </TabsTrigger>

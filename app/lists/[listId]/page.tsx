@@ -1,14 +1,9 @@
 import Container from '@/components/Container';
-//import { redirect, useRouter } from 'next/navigation';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { Button } from '@/components/ui/button';
-import { GoArrowRight } from 'react-icons/go';
 import { getGiftListById } from '@/actions/giftLists/getGiftListById';
 import { getGiftsByGiftListId } from '@/actions/gift/getGiftsByGiftListId';
 import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
 import GiftCard from './GiftCard';
-import { useToast } from '@/components/ui/use-toast';
-import { FaCheck } from 'react-icons/fa6';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -18,6 +13,7 @@ import {
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
+import AddToWishListButton from './AddToWishListButton';
 
 type Props = {
   params: {
@@ -34,53 +30,9 @@ export default async function PredefinedGiftListPage({ params }: Props) {
   const wedding = await getWeddingByUserId(currentUser?.id);
   const wishList = await getWishListByWeddingId(wedding?.wishListId);
 
-  //const router = useRouter();
-  //const { toast } = useToast();
+  if (!giftList) return null;
 
-  const { name, quantity, totalPrice, description } = giftList ?? {
-    name: '',
-    quantity: '',
-    totalPrice: '',
-    description: '',
-  };
-
-  const addGiftsToWishList = async () => {
-    if (!currentUser || !wishList?.id) {
-      console.log("User not logged in or wishList ID missing");
-      //router.push('/register');
-      return;
-    }
-    try {
-      const response = await fetch(`/api/gift/${wishList?.id}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          giftIds: giftIds,
-        }),
-      });
-      if (response.ok) {
-        console.log("Gifts added to wishlist successfully");
-        /* toast({
-          title: 'Success',
-          description: 'Lista agregada a tu wishlist.',
-          action: <FaCheck color="green" fontSize={'36px'} />,
-          className: 'bg-white',
-        }); */
-      } else {
-        throw new Error('Failed to add gift to wishlist');
-      }
-    } catch (error) {
-      console.error(error);
-      /* toast({
-        title: 'Error',
-        description: 'Failed to add gift to wishlist.',
-        action: <FaCheck color="red" fontSize={'36px'} />,
-        className: 'bg-white',
-      }); */
-    }
-  };
+  const { name, quantity, totalPrice } = giftList;
 
   return (
     <Container>
@@ -88,7 +40,7 @@ export default async function PredefinedGiftListPage({ params }: Props) {
         <Breadcrumb className='mb-6'>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="/gifts">Listas pré definidas</BreadcrumbLink>
+              <BreadcrumbLink href="/gifts">Listas pré-definidas</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
@@ -112,18 +64,11 @@ export default async function PredefinedGiftListPage({ params }: Props) {
             </div>
             <p className="text-xl">
               Elegí esta lista pré-definida, podes personalizarla más adelante
-              {/* {description} */}
             </p>
           </div>
 
           <div className="w-full sm:w-1/3 flex justify-start sm:justify-end">
-            <Button
-              //onClick={addGiftsToWishList}
-              variant="chooseGiftListButton"
-              size="chooseGiftListButton"
-            >
-              Elegir lista <GoArrowRight fontSize={'24px'} />
-            </Button>
+            <AddToWishListButton currentUser={currentUser} wishList={wishList} giftIds={giftIds} />
           </div>
         </div>
 
