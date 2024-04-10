@@ -63,11 +63,14 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
     const userId = currentUser.id;
 
     try {
+      // TODO: Change this to Update Wedding
       await makeAndHandleApiCall(
         '/api/onboarding/updateWeddingCountryCity',
         { userId, weddingCountry, weddingCity },
         'No se pudo actualizar los detalles de la boda.'
       );
+      // TODO: Change this to Update user
+      // api/onboarding/updateUser/route.ts
       await makeAndHandleApiCall(
         '/api/onboarding/updateUserBankAccount',
         { userId, hasPYbankAccount },
