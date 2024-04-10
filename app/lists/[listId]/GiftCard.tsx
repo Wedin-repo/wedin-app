@@ -1,4 +1,11 @@
 import { Gift } from '@prisma/client';
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+  } from '@/components/ui/carousel';
 
 type GiftCard = {
   gift: Gift;
@@ -7,13 +14,24 @@ type GiftCard = {
 const GiftCard = ({ gift }: GiftCard) => {
   const { name, description, price } = gift;
   return (
-    <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-4 max-w-[435px]">
+    <div className="border shadow-sm rounded-xl py-6 px-4 flex flex-col gap-4 max-w-[435px]">
       <div>
-        <div className="h-[212px] w-full bg-borderColor rounded-xl flex items-start justify-end">
-          {/* <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center mt-4 mr-4">
-            {quantity} regalos
-          </div> */}
-        </div>
+        <Carousel>
+          <CarouselContent>
+            <CarouselItem>
+              <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+        {/* <div className="h-[212px] w-full bg-borderColor rounded-xl flex items-start justify-end"></div> */}
       </div>
 
       <div className="flex flex-col gap-2">

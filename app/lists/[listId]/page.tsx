@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { GoArrowRight } from 'react-icons/go';
 import { getGiftListById } from '@/actions/giftLists/getGiftListById';
 import { getGiftsByGiftListId } from '@/actions/gift/getGiftsByGiftListId';
+import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
 import GiftCard from './GiftCard';
 import { useToast } from '@/components/ui/use-toast';
 import { FaCheck } from 'react-icons/fa6';
@@ -16,6 +17,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
+import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
 
 type Props = {
   params: {
@@ -24,9 +26,14 @@ type Props = {
 };
 
 export default async function PredefinedGiftListPage({ params }: Props) {
+  const currentUser = await getCurrentUser();
   const { listId } = params;
   const giftList = await getGiftListById(listId);
   const gifts = await getGiftsByGiftListId(listId);
+  const giftIds = gifts?.map(gift => gift.id);
+  const wedding = await getWeddingByUserId(currentUser?.id);
+  const wishList = await getWishListByWeddingId(wedding?.wishListId);
+
   //const router = useRouter();
   //const { toast } = useToast();
 
@@ -36,33 +43,34 @@ export default async function PredefinedGiftListPage({ params }: Props) {
     totalPrice: '',
     description: '',
   };
-  const currentUser = await getCurrentUser();
 
-  const addGiftToWishListHandler = async () => {
-    if (!currentUser) {
+  const addGiftsToWishList = async () => {
+    if (!currentUser || !wishList?.id) {
+      console.log("User not logged in or wishList ID missing");
       //router.push('/register');
       return;
     }
     try {
-      /* const response = await fetch(`/api/wishList/${wishListId}`, {
+      const response = await fetch(`/api/gift/${wishList?.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          giftId: id,
+          giftIds: giftIds,
         }),
-      }); */
-      /* if (response.ok) {
-        toast({
+      });
+      if (response.ok) {
+        console.log("Gifts added to wishlist successfully");
+        /* toast({
           title: 'Success',
           description: 'Lista agregada a tu wishlist.',
           action: <FaCheck color="green" fontSize={'36px'} />,
           className: 'bg-white',
-        });
+        }); */
       } else {
         throw new Error('Failed to add gift to wishlist');
-      } */
+      }
     } catch (error) {
       console.error(error);
       /* toast({
@@ -90,7 +98,7 @@ export default async function PredefinedGiftListPage({ params }: Props) {
         </Breadcrumb>
 
         <div className="w-full flex flex-col sm:flex-row items-center gap-6 sm:gap-0">
-          <div className="flex flex-col gap-4 sm:gap-6 w-full sm:w-2/3">
+          <div className="flex flex-col gap-4 w-full sm:w-2/3">
             <h1 className="text-4xl font-medium text-primaryTextColor">
               {name}
             </h1>
@@ -110,6 +118,7 @@ export default async function PredefinedGiftListPage({ params }: Props) {
 
           <div className="w-full sm:w-1/3 flex justify-start sm:justify-end">
             <Button
+              //onClick={addGiftsToWishList}
               variant="chooseGiftListButton"
               size="chooseGiftListButton"
             >
