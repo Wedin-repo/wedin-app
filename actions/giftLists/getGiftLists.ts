@@ -9,6 +9,6 @@ export async function getGiftLists() {
     return giftLists;
   } catch (error: any) {
     console.log(error);
-    return null;
+    throw error;
   }
 }

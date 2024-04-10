@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getCategories } from '@/actions/gift/getCategory';
+import { getCategories } from '@/actions/gift/getCategories';
 import { getGift as getGifts, GiftParams } from '@/actions/gift/getGift';
 import { getGiftLists } from '@/actions/giftLists/getGiftLists';
 import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
@@ -27,9 +27,16 @@ const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start">
-        <h1 className="text-4xl sm:text-5xl font-medium text-primaryTextColor px-10 mt-12 sm:mt-16">
-          Créa tu lista de regalos
-        </h1>
+
+        {currentUser ? (
+          <h1 className="text-3xl sm:text-4xl font-semibold text-primaryTextColor px-10 mt-12 sm:mt-16 flex w-full items-center justify-center">
+            Agregar regalos
+          </h1>
+        ) : (
+          <h1 className="text-4xl sm:text-5xl font-medium text-primaryTextColor px-10 mt-12 sm:mt-16">
+            Créa tu lista de regalos
+          </h1>
+        )}
 
         <Tabs defaultValue="predefinedGift" className="">
           <TabsList className="flex items-center justify-start gap-4 my-6 sm:my-10 border-b border-[#D7D7D7] px-10 overflow-x-auto overflow-y-hidden">
@@ -55,7 +62,7 @@ const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
               adelante
             </p>
             <div className="flex justify-center items-center">
-              <div className="px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-8">
+              <div className="px-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-8">
                 {giftLists?.map(giftList => (
                   <PredefinedGiftListCard
                     key={giftList.id}
