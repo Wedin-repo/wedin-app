@@ -1,6 +1,6 @@
 import { getGiftLists } from '@/actions/giftLists/getGiftLists';
 import EmptyState from '@/components/EmptyState';
-import PredefinedGiftListCard from '@/components/cards/gifts/PredefinedGiftListCard';
+import GiftListCard from '@/components/cards/gift-lists/card';
 
 async function GiftLists() {
   const giftLists = await getGiftLists();
@@ -10,7 +10,7 @@ async function GiftLists() {
   return (
     <>
       {giftLists?.map(giftList => (
-        <PredefinedGiftListCard key={giftList.id} giftList={giftList} />
+        <GiftListCard key={giftList.id} giftList={giftList} />
       ))}
     </>
   );
