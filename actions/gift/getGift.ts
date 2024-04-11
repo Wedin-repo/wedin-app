@@ -4,7 +4,11 @@ export type GiftParams = {
   category?: string;
 };
 
-export async function getGift({ searchParams }: { searchParams?: GiftParams }) {
+export async function getGifts({
+  searchParams,
+}: {
+  searchParams?: GiftParams;
+}) {
   try {
     let query: any = {};
     const { category } = searchParams ?? {};

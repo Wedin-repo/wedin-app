@@ -1,28 +1,15 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getCategories } from '@/actions/gift/getCategory';
-import { getGift as getGifts, GiftParams } from '@/actions/gift/getGift';
-import { getGiftLists } from '@/actions/giftLists/getGiftLists';
-import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
-import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
-import GiftCard from '@/components/cards/gifts/GiftCard';
-import PredefinedGiftListCard from '@/components/cards/gifts/PredefinedGiftListCard';
+import { GiftParams } from '@/actions/gift/getGift';
 import Container from '@/components/Container';
-import EmptyState from '@/components/EmptyState';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import Categories from './Categories';
+import GiftLists from './gift-lists';
+import Gifts from './gifts';
 
 const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
-  const giftLists = await getGiftLists();
-  const gifts = await getGifts({ searchParams });
   const categories = await getCategories();
-  const currentUser = await getCurrentUser();
-  const wedding = await getWeddingByUserId(currentUser?.id);
-  const wishList = await getWishListByWeddingId(wedding?.wishListId);
-
-  if (giftLists?.length === 0) return <EmptyState showReset />;
-  if (gifts?.length === 0) return <EmptyState showReset />;
 
   return (
     <Container>
@@ -56,12 +43,7 @@ const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
             </p>
             <div className="flex justify-center items-center">
               <div className="px-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-8">
-                {giftLists?.map(giftList => (
-                  <PredefinedGiftListCard
-                    key={giftList.id}
-                    giftList={giftList}
-                  />
-                ))}
+                <GiftLists />
               </div>
             </div>
           </TabsContent>
@@ -73,16 +55,8 @@ const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
             <Categories categories={categories} />
 
             <div className="flex justify-center items-center">
-              <div className="px-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-8">
-                {gifts?.map(gift => (
-                  <GiftCard
-                    key={gift.id}
-                    gift={gift}
-                    wishListId={wishList?.id}
-                    currentUser={currentUser}
-                  />
-                ))}
-              </div>
+              <div className="px-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-8"></div>
+              <Gifts searchParams={searchParams} />
             </div>
           </TabsContent>
         </Tabs>
