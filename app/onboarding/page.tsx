@@ -3,8 +3,8 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { redirect } from 'next/navigation';
 import { CiImageOn } from 'react-icons/ci';
-import Logo from './Logo';
-import OnboardingForm from './OnboardingForm';
+import Logo from './logo';
+import OnboardingForm from './onboarding-form';
 
 const OnboardingPage = async () => {
   const currentUser = await getCurrentUser();
