@@ -4,7 +4,7 @@ import Container from '@/components/Container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import Categories from './Categories';
+import Categories from './categories';
 import GiftLists from './gift-lists';
 import Gifts from './gifts';
 
