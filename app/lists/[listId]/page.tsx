@@ -37,7 +37,7 @@ export default async function PredefinedGiftListPage({ params }: Props) {
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
-        <Breadcrumb className='mb-6'>
+        {/* <Breadcrumb className='mb-6'>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/gifts">Listas pré-definidas</BreadcrumbLink>
@@ -47,10 +47,10 @@ export default async function PredefinedGiftListPage({ params }: Props) {
               <BreadcrumbPage>{name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </Breadcrumb>
+        </Breadcrumb> */}
 
-        <div className="w-full flex flex-col sm:flex-row items-center gap-6 sm:gap-0">
-          <div className="flex flex-col gap-4 w-full sm:w-2/3">
+        <div className="w-full flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 w-full ">
             <h1 className="text-4xl font-medium text-primaryTextColor">
               {name}
             </h1>
@@ -59,21 +59,21 @@ export default async function PredefinedGiftListPage({ params }: Props) {
                 {quantity} regalos
               </div>
               <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-sm">
-                Gs. {totalPrice}
+                Gs. {totalPrice?.toString().replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",")}
               </div>
             </div>
-            <p className="text-xl">
+            <p className="text-xl text-center">
               Elegí esta lista pré-definida, podes personalizarla más adelante
             </p>
           </div>
 
-          <div className="w-full sm:w-1/3 flex justify-start sm:justify-end">
+          <div className="w-full flex justify-center">
             <AddToWishListButton currentUser={currentUser} wishList={wishList} giftIds={giftIds} />
           </div>
         </div>
 
         <div className="flex justify-center items-center mt-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
             {gifts?.map(gift => (
               <GiftCard key={gift.id} gift={gift} />
             ))}
