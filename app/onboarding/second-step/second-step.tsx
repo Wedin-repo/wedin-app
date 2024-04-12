@@ -255,16 +255,14 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
             />
           </div>
           <div style={{ margin: '0 auto', marginTop: '20px' }}>
-            {isLoading ? (
-              <Button variant="onboardingButton" disabled>
-                Continuar
+            <Button variant="onboardingButton" disabled={isLoading}>
+              Continuar
+              {isLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
-              </Button>
-            ) : (
-              <Button type="submit" variant="onboardingButton">
-                Continuar <FaArrowRight />
-              </Button>
-            )}
+              ) : (
+                <FaArrowRight />
+              )}
+            </Button>
           </div>
         </form>
       </Form>
