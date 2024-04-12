@@ -1,7 +1,7 @@
 import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getGiftListById } from '@/actions/giftLists/getGiftListById';
-import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
+import { getGiftList } from '@/actions/getGiftList';
+import { getWedding } from '@/actions/getWedding';
 import GiftCard from './GiftCard';
 import {
   Breadcrumb,
@@ -11,9 +11,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
+import { getWishList } from '@/actions/getWishList';
 import AddToWishListButton from './AddToWishListButton';
-import { getGifts } from '@/actions/gift/getGifts';
+import { getGifts } from '@/actions/getGifts';
 
 type Props = {
   params: {
@@ -26,12 +26,12 @@ export default async function PredefinedGiftListPage({ params }: Props) {
   const { listId } = params;
 
   //const giftList = await getGiftList({ id: listId });
-  const giftList = await getGiftListById(listId);
+  const giftList = await getGiftList(listId);
 
   const gifts = await getGifts({ searchParams: { giftListId: listId } });
   const giftIds = gifts?.map(gift => gift.id);
-  const wedding = await getWeddingByUserId(currentUser?.id);
-  const wishList = await getWishListByWeddingId(wedding?.wishListId);
+  const wedding = await getWedding(currentUser?.id);
+  const wishList = await getWishList(wedding?.wishListId);
 
   if (!giftList) return null;
 

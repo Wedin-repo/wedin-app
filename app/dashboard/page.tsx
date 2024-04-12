@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
 import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
-import { getGifts } from '@/actions/gift/getGifts';
+import { getWedding } from '@/actions/getWedding';
+import { getGifts } from '@/actions/getGifts';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import { Switch } from '@/components/ui/switch';
@@ -16,7 +16,7 @@ export default async function DashboardPage() {
   const currentUser = await getCurrentUser();
   if (!currentUser) redirect('/login');
 
-  const wedding = await getWeddingByUserId(currentUser?.id);
+  const wedding = await getWedding(currentUser?.id);
 
   const wishListId = wedding?.wishListId;
 
