@@ -16,15 +16,28 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  let menuValue;
+
+  if (pathname.includes('/gifts')) {
+    menuValue = 'addGifts';
+  } else if (pathname.includes('/gifts-received')) {
+    menuValue = 'giftsRecieved';
+  } else if (pathname.includes('/dashboard')) {
+    menuValue = 'myList';
+  }
+
+  //console.log(menuValue)
+
   if (!currentUser) {
     console.log("first")
   }
+
 
   const handleTabChange = (value: string) => {
     let url = '/';
     switch (value) {
       case 'myList':
-        url = '/';
+        url = '/dashboard';
         break;
       case 'addGifts':
         url = '/gifts';
@@ -56,7 +69,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
                 <Logo />
               </div>
 
-              <Tabs className="mb-[-8px] hidden sm:block" onValueChange={handleTabChange} defaultValue="addGifts">
+              <Tabs className="mb-[-8px] hidden sm:block" onValueChange={handleTabChange} defaultValue={menuValue}>
                 <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">
                   {currentUser && (
                     <TabsTrigger value="myList" className="!text-sm pb-4">

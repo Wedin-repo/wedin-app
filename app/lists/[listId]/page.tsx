@@ -1,7 +1,6 @@
 import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getGiftListById } from '@/actions/giftLists/getGiftListById';
-import { getGiftsByGiftListId } from '@/actions/gift/getGiftsByGiftListId';
 import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
 import GiftCard from './GiftCard';
 import {
@@ -14,6 +13,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
 import AddToWishListButton from './AddToWishListButton';
+import { getGifts } from '@/actions/gift/getGifts';
 
 type Props = {
   params: {
@@ -24,8 +24,11 @@ type Props = {
 export default async function PredefinedGiftListPage({ params }: Props) {
   const currentUser = await getCurrentUser();
   const { listId } = params;
+
+  //const giftList = await getGiftList({ id: listId });
   const giftList = await getGiftListById(listId);
-  const gifts = await getGiftsByGiftListId(listId);
+
+  const gifts = await getGifts({ searchParams: { giftListId: listId } });
   const giftIds = gifts?.map(gift => gift.id);
   const wedding = await getWeddingByUserId(currentUser?.id);
   const wishList = await getWishListByWeddingId(wedding?.wishListId);
@@ -59,7 +62,7 @@ export default async function PredefinedGiftListPage({ params }: Props) {
                 {quantity} regalos
               </div>
               <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-sm">
-                Gs. {totalPrice?.toString().replace(/\\B(?=(\\d{3})+(?!\\d))/g, ",")}
+                Gs. {totalPrice}
               </div>
             </div>
             <p className="text-xl text-center">

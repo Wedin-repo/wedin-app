@@ -106,7 +106,9 @@ model Gift {
   giftListId  String   @db.ObjectId
   isDefault   Boolean  @default(false)
   categoryId  String   @db.ObjectId
+  weddingId   String   @db.ObjectId
   wishListIds String[] @db.ObjectId
+  //price can be = > < 
   price       String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -123,6 +125,7 @@ model GiftList {
   quantity    String
   isDefault   Boolean @default(false)
   totalPrice  String
+  weddingId   String  @db.ObjectId
 
   gifts  Gift[]
   images Image[]

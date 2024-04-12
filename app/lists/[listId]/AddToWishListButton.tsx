@@ -24,7 +24,7 @@ const AddToWishListButton = ({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(wishList);
+  //console.log(wishList);
 
   const addGiftsToWishList = async () => {
     setIsLoading(true);
@@ -43,7 +43,8 @@ const AddToWishListButton = ({
         }),
       });
       if (response.ok) {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
+        //router.push('/dashboard');
         /* toast({
           title: 'Success',
           description: 'Lista agregada a tu wishlist.',

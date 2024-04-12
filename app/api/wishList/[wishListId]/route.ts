@@ -14,6 +14,8 @@ export async function POST(
   const body = await request.json();
   const { giftId } = body;
 
+  console.log(giftId);
+
   if (!wishListId) {
     return NextResponse.error();
   }

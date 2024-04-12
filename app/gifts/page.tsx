@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getCategories } from '@/actions/gift/getCategories';
-import { getGift as getGifts, GiftParams } from '@/actions/gift/getGift';
+import { getGifts, GiftParams } from '@/actions/gift/getGifts';
 import { getGiftLists } from '@/actions/giftLists/getGiftLists';
 import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
 import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
