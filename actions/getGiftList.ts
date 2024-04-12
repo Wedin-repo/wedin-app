@@ -1,6 +1,6 @@
 import prisma from '@/db/client';
 
-export async function getGiftListById(giftListId: string) {
+export async function getGiftList(giftListId: string) {
   try {
     const giftList = await prisma.giftList.findUnique({
       where: {

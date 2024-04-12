@@ -1,8 +1,7 @@
 import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getGiftListById } from '@/actions/giftLists/getGiftListById';
-import { getGiftsByGiftListId } from '@/actions/gift/getGiftsByGiftListId';
-import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
+import { getGiftList } from '@/actions/getGiftList';
+import { getWedding } from '@/actions/getWedding';
 import GiftCard from './GiftCard';
 import {
   Breadcrumb,
@@ -12,8 +11,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
+import { getWishList } from '@/actions/getWishList';
 import AddToWishListButton from './AddToWishListButton';
+import { getGifts } from '@/actions/getGifts';
 
 type Props = {
   params: {
@@ -24,11 +24,14 @@ type Props = {
 export default async function PredefinedGiftListPage({ params }: Props) {
   const currentUser = await getCurrentUser();
   const { listId } = params;
-  const giftList = await getGiftListById(listId);
-  const gifts = await getGiftsByGiftListId(listId);
+
+  //const giftList = await getGiftList({ id: listId });
+  const giftList = await getGiftList(listId);
+
+  const gifts = await getGifts({ searchParams: { giftListId: listId } });
   const giftIds = gifts?.map(gift => gift.id);
-  const wedding = await getWeddingByUserId(currentUser?.id);
-  const wishList = await getWishListByWeddingId(wedding?.wishListId);
+  const wedding = await getWedding(currentUser?.id);
+  const wishList = await getWishList(wedding?.wishListId);
 
   if (!giftList) return null;
 
@@ -37,7 +40,7 @@ export default async function PredefinedGiftListPage({ params }: Props) {
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
-        <Breadcrumb className='mb-6'>
+        {/* <Breadcrumb className='mb-6'>
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/gifts">Listas pré-definidas</BreadcrumbLink>
@@ -47,10 +50,10 @@ export default async function PredefinedGiftListPage({ params }: Props) {
               <BreadcrumbPage>{name}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
-        </Breadcrumb>
+        </Breadcrumb> */}
 
-        <div className="w-full flex flex-col sm:flex-row items-center gap-6 sm:gap-0">
-          <div className="flex flex-col gap-4 w-full sm:w-2/3">
+        <div className="w-full flex flex-col items-center gap-4">
+          <div className="flex flex-col items-center gap-3 w-full ">
             <h1 className="text-4xl font-medium text-primaryTextColor">
               {name}
             </h1>
@@ -62,18 +65,18 @@ export default async function PredefinedGiftListPage({ params }: Props) {
                 Gs. {totalPrice}
               </div>
             </div>
-            <p className="text-xl">
+            <p className="text-xl text-center">
               Elegí esta lista pré-definida, podes personalizarla más adelante
             </p>
           </div>
 
-          <div className="w-full sm:w-1/3 flex justify-start sm:justify-end">
+          <div className="w-full flex justify-center">
             <AddToWishListButton currentUser={currentUser} wishList={wishList} giftIds={giftIds} />
           </div>
         </div>
 
         <div className="flex justify-center items-center mt-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
             {gifts?.map(gift => (
               <GiftCard key={gift.id} gift={gift} />
             ))}

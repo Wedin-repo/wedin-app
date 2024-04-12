@@ -1,9 +1,9 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getCategories } from '@/actions/gift/getCategories';
-import { getGift as getGifts, GiftParams } from '@/actions/gift/getGift';
-import { getGiftLists } from '@/actions/giftLists/getGiftLists';
-import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
-import { getWishListByWeddingId } from '@/actions/wishList/getWishListByWeddingId';
+import { getCategories } from '@/actions/getCategories';
+import { getGifts, GiftParams } from '@/actions/getGifts';
+import { getGiftLists } from '@/actions/getGiftLists';
+import { getWedding } from '@/actions/getWedding';
+import { getWishList } from '@/actions/getWishList';
 import GiftCard from '@/components/cards/gifts/GiftCard';
 import PredefinedGiftListCard from '@/components/cards/gifts/PredefinedGiftListCard';
 import Container from '@/components/Container';
@@ -18,8 +18,8 @@ const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
   const gifts = await getGifts({ searchParams });
   const categories = await getCategories();
   const currentUser = await getCurrentUser();
-  const wedding = await getWeddingByUserId(currentUser?.id);
-  const wishList = await getWishListByWeddingId(wedding?.wishListId);
+  const wedding = await getWedding(currentUser?.id);
+  const wishList = await getWishList(wedding?.wishListId);
 
   if (giftLists?.length === 0) return <EmptyState showReset />;
   if (gifts?.length === 0) return <EmptyState showReset />;

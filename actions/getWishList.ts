@@ -1,6 +1,6 @@
 import prisma from '@/db/client';
 
-export async function getWishListByWeddingId(
+export async function getWishList(
   wishListId: string | null | undefined
 ) {
   try {
