@@ -44,7 +44,7 @@ function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
     <form action={handleAddGiftToWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
       <Button type="submit" variant="primaryButton">
-        Añadir a mi lista server
+        Añadir a mi lista
         <IoAdd size={22} />
       </Button>
     </form>
