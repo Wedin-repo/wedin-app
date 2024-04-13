@@ -19,6 +19,9 @@ export default async function DashboardPage() {
 
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
+
+  if (!wishListId) redirect('/');
+
   const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
 
   const totalPrice =
@@ -64,7 +67,9 @@ export default async function DashboardPage() {
         </div>
 
         <div className="flex flex-col gap-5">
-          {gifts?.map(gift => <GiftCard key={gift.id} gift={gift} />)}
+          {gifts?.map(gift => (
+            <GiftCard key={gift.id} gift={gift} currentUser={currentUser} wishListId={wishListId} />
+          ))}
         </div>
       </div>
     </Container>
