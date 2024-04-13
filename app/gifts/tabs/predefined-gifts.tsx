@@ -1,5 +1,5 @@
+import GiftLists from '@/components/cards/gift-lists';
 import { Suspense } from 'react';
-import GiftLists from '../components/gift-lists';
 
 function PredefinedGifts() {
   return (

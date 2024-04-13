@@ -1,23 +1,45 @@
-import { Gift } from '@prisma/client';
-import GiftCardModal from './components/gift-modal';
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
 } from '@/components/ui/card';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { Gift } from '@prisma/client';
+import GiftCardModal from './components/gift-modal';
 
 type GiftCardProps = {
   gift: Gift;
+  hideButton?: boolean;
 };
 
-async function GiftCard({ gift }: GiftCardProps) {
+async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
   const { name, description, price } = gift;
 
   return (
     <Card className="flex flex-col border-2 rounded-xl py-6 px-4 gap-5 max-w-[435px]">
-      <CardHeader className="h-[212px] w-full bg-borderColor rounded-xl flex items-start justify-end">
-        <div className=""></div>
+      <CardHeader className="p-0">
+        <Carousel>
+          <CarouselContent>
+            <CarouselItem>
+              <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div>
+            </CarouselItem>
+            <CarouselItem>
+              <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div>
+            </CarouselItem>
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
       </CardHeader>
       <CardContent className="flex flex-col flex-grow gap-1 w-full p-0 ">
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
@@ -26,9 +48,11 @@ async function GiftCard({ gift }: GiftCardProps) {
           Gs. {price}
         </span>
       </CardContent>
-      <CardFooter className="p-0">
-        <GiftCardModal gift={gift} />
-      </CardFooter>
+      {!hideButton && (
+        <CardFooter className="p-0">
+          <GiftCardModal gift={gift} />
+        </CardFooter>
+      )}
     </Card>
   );
 }

@@ -3,21 +3,21 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { User, WishList } from '@prisma/client';
+import { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa6';
 import { GoArrowRight } from 'react-icons/go';
 import { Loader2 } from 'lucide-react';
 
 type AddToWishListButtonProps = {
-  currentUser: User | null;
-  wishList: WishList | null;
-  giftIds: string[] | undefined;
+  currentUser?: User | null;
+  wishListId?: string | null;
+  giftIds?: string[] | null;
 };
 
 const AddToWishListButton = ({
   currentUser,
-  wishList,
+  wishListId,
   giftIds,
 }: AddToWishListButtonProps) => {
   const router = useRouter();
@@ -26,12 +26,12 @@ const AddToWishListButton = ({
 
   const addGiftsToWishList = async () => {
     setIsLoading(true);
-    if (!currentUser || !wishList?.id) {
+    if (!currentUser || !wishListId) {
       router.push('/register');
       return;
     }
     try {
-      const response = await fetch(`/api/gift/${wishList?.id}`, {
+      const response = await fetch(`/api/gift/${wishListId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

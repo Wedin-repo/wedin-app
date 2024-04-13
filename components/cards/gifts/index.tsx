@@ -1,12 +1,13 @@
 import { GetGiftsParams, getGifts } from '@/actions/getGifts';
 import EmptyState from '@/components/EmptyState';
-import GiftCard from '@/components/cards/gifts/card';
+import GiftCard from './card';
 
 type GiftsProps = {
   searchParams: GetGiftsParams;
+  hideButton?: boolean;
 };
 
-async function Gifts({ searchParams }: GiftsProps) {
+async function Gifts({ searchParams, hideButton }: GiftsProps) {
   const gifts = await getGifts({ searchParams });
 
   if (gifts?.length === 0 || !gifts) return <EmptyState showReset />;
@@ -14,7 +15,7 @@ async function Gifts({ searchParams }: GiftsProps) {
   return (
     <>
       {gifts.map(gift => (
-        <GiftCard key={gift.id} gift={gift} />
+        <GiftCard key={gift.id} gift={gift} hideButton={hideButton} />
       ))}
     </>
   );

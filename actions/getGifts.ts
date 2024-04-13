@@ -13,7 +13,20 @@ export async function getGifts({
 }) {
   try {
     let query: any = {};
-    const { category, giftListId, wishListId } = searchParams ?? {};
+
+    if (!searchParams) {
+      const gifts = await prisma.gift.findMany({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      if (!gifts) return null;
+
+      return gifts;
+    }
+
+    const { category, giftListId, wishListId } = searchParams;
 
     if (category) {
       query.categoryId = category;

@@ -1,6 +1,6 @@
 import { getGiftLists } from '@/actions/getGiftLists';
 import EmptyState from '@/components/EmptyState';
-import GiftListCard from '@/components/cards/gift-lists/card';
+import GiftListCard from './card';
 
 async function GiftLists() {
   const giftLists = await getGiftLists();
