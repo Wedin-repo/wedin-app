@@ -1,4 +1,4 @@
-import { getGiftLists } from '@/actions/giftLists/getGiftLists';
+import { getGiftLists } from '@/actions/getGiftLists';
 import EmptyState from '@/components/EmptyState';
 import GiftListCard from '@/components/cards/gift-lists/card';
 

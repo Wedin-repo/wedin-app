@@ -1,3 +1,4 @@
+import { Link } from 'lucide-react';
 import Container from '../components/Container';
 
 export default async function Home() {

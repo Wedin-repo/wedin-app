@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWeddingByUserId } from '@/actions/weddings/getWeddingByUserId';
+import { getWedding } from '@/actions/getWedding';
 import { Button } from '@/components/ui/button';
 import {
   Carousel,
@@ -26,7 +26,7 @@ type GiftCardModalProps = {
 async function GiftCardModal({ gift }: GiftCardModalProps) {
   const { name, description, price, id } = gift;
   const currentUser = await getCurrentUser();
-  const wedding = await getWeddingByUserId(currentUser?.id);
+  const wedding = await getWedding(currentUser?.id);
 
   return (
     <Dialog>
