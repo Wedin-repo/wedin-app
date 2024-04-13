@@ -1,10 +1,10 @@
 import prisma from '@/db/client';
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { User } from '@prisma/client';
 
 type RequestBodyType = User & { userId: string };
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body: RequestBodyType = await request.json();
     const { userId, name, lastName, onboardingStep } = body;

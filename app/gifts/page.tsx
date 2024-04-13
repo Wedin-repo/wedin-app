@@ -1,14 +1,14 @@
-import { GiftParams } from '@/actions/gift/getGift';
+import { GetGiftParams } from '@/actions/getGift';
 import Container from '@/components/Container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import PredefinedGifts from './tabs/predefined-gifts';
-import AllGifts from './tabs/all-gifts';
 import GiftHeader from './gifts-header';
+import AllGifts from './tabs/all-gifts';
+import PredefinedGifts from './tabs/predefined-gifts';
 
 type GiftsPageProps = {
-  searchParams: GiftParams;
+  searchParams: GetGiftParams;
 };
 
 const GiftsPage = async ({ searchParams }: GiftsPageProps) => {

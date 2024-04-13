@@ -23,7 +23,14 @@ export const addGiftToWishList = async (
   wishlistId: string,
   formData: FormData
 ) => {
-  const giftId = formData.get('content');
+  const giftId = formData.get('content') as string | null;
+
+  if (typeof giftId !== 'string' || giftId === null) {
+    return {
+      status: 'Error',
+      message: 'Invalid gift ID',
+    };
+  }
 
   if (!wishlistId) {
     return {
@@ -48,10 +55,10 @@ export const addGiftToWishList = async (
     };
   }
 
+  revalidatePath('/', 'layout');
+
   return {
     status: 'Success',
     message: 'Added gift to wishlist successfully',
   };
-
-  revalidatePath('/', 'layout');
 };

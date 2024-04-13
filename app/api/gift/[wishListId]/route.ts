@@ -1,12 +1,12 @@
 import prisma from '@/db/client';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 type UpdateWishListParams = {
   wishListId: string;
 };
 
 export async function POST(
-  request: Request,
+  request: NextRequest,
   { params }: { params: UpdateWishListParams }
 ) {
   const { wishListId } = params;
@@ -15,20 +15,28 @@ export async function POST(
   const { giftIds } = body;
 
   if (!wishListId || !Array.isArray(giftIds)) {
-    return new Response(JSON.stringify({ error: 'Invalid request' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json(
+      { error: 'Invalid request' },
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 
-  const result = await prisma.wishList.update({
-    where: { id: wishListId },
-    data: {
-      gifts: {
-        connect: giftIds.map(giftId => ({ id: giftId })),
+  try {
+    await prisma.wishList.update({
+      where: { id: wishListId },
+      data: {
+        gifts: {
+          connect: giftIds.map(giftId => ({ id: giftId })),
+        },
       },
-    },
-  });
+    });
 
-  return NextResponse.json(result);
+    return NextResponse.json({
+      status: '200',
+    });
+  } catch (error: any) {
+    return NextResponse.json({
+      status: '200',
+    });
+  }
 }

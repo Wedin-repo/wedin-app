@@ -9,7 +9,7 @@ import { IoAdd } from 'react-icons/io5';
 
 type AddToWishListFormProps = {
   giftId: string;
-  wishlistId: string | null | undefined;
+  wishlistId?: string | null;
 };
 
 function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
