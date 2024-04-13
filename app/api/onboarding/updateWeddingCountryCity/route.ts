@@ -11,8 +11,8 @@ export async function POST(request: NextRequest) {
         groomId: userId,
       },
       data: {
-        country: weddingCountry && weddingCountry,
-        city: weddingCity && weddingCity,
+        country: weddingCountry,
+        city: weddingCity,
       },
     });
 

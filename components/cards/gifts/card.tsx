@@ -21,9 +21,10 @@ async function GiftCard({ gift }: GiftCardProps) {
       </CardHeader>
       <CardContent className="flex flex-col flex-grow gap-1 w-full p-0 ">
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
-
         <p className="text-secondaryTextColor">{description}</p>
-        <span className="text-secondaryTitleColor text-xl">Gs. {price}</span>
+        <span className="text-secondaryTitleColor text-xl flex flex-grow items-end">
+          Gs. {price}
+        </span>
       </CardContent>
       <CardFooter className="p-0">
         <GiftCardModal gift={gift} />
