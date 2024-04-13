@@ -8,22 +8,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Gift } from '@prisma/client';
 import { IoAdd } from 'react-icons/io5';
-import AddToWishlistButton from './add-to-wishlist-button';
+import AddToWishListForm from './add-to-wishlist-form';
 
 type GiftCardModalProps = {
   gift: Gift;
 };
 
-async function GiftCardModal({ gift }: GiftCardModalProps) {
+function GiftCardModal({ gift }: GiftCardModalProps) {
   const { name, description, price, id } = gift;
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
@@ -78,14 +73,7 @@ async function GiftCardModal({ gift }: GiftCardModalProps) {
                 Gs. {price}
               </span>
             </div>
-
-            <DialogClose asChild>
-              <AddToWishlistButton
-                currentUser={currentUser}
-                giftId={id}
-                wishListId={wedding?.wishListId}
-              />
-            </DialogClose>
+            <AddToWishListForm giftId={id} />
           </div>
         </div>
       </DialogContent>

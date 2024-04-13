@@ -1,7 +1,7 @@
 import { getCategories } from '@/actions/getCategories';
 import { Suspense } from 'react';
 import Categories from '../components/categories';
-import Gifts from '../gifts';
+import Gifts from '../components/gifts';
 import { GetGiftsParams } from '@/actions/getGifts';
 
 type AllGiftsProps = {
