@@ -3,11 +3,11 @@ import { GoArrowRight } from 'react-icons/go';
 import { Button } from '@/components/ui/button';
 import { GiftList } from '@prisma/client';
 
-type GiftListCard = {
+type GiftListCardProps = {
   giftList: GiftList;
 };
 
-const PredefinedGiftListCard = ({ giftList }: GiftListCard) => {
+const GiftListCard = ({ giftList }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
   return (
     <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[435px]">
@@ -36,4 +36,4 @@ const PredefinedGiftListCard = ({ giftList }: GiftListCard) => {
   );
 };
 
-export default PredefinedGiftListCard;
+export default GiftListCard;

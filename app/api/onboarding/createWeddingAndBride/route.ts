@@ -12,8 +12,10 @@ export async function POST(request: Request) {
     partnerLastName,
   } = body;
 
+  let bride, wishList;
+
   try {
-    const bride = await prisma.user.create({
+    bride = await prisma.user.create({
       data: {
         email: partnerEmail,
         name: partnerName,
@@ -22,14 +24,21 @@ export async function POST(request: Request) {
         isOnboarded: true,
       },
     });
+  } catch (error: any) {
+    return handleError(error, 'Failed to create bride');
+  }
 
-    // this is the only place where we create a wishList for the user
-    const wishList = await prisma.wishList.create({
+  try {
+    wishList = await prisma.wishList.create({
       data: {
         description: 'My first wish list',
       },
     });
+  } catch (error: any) {
+    return handleError(error, 'Failed to create wish list');
+  }
 
+  try {
     await prisma.wedding.create({
       data: {
         groomId: userId,
@@ -39,23 +48,24 @@ export async function POST(request: Request) {
         wishListId: wishList.id,
       },
     });
-
-    return NextResponse.json({
-      message: 'Wedding details updated and groom created successfully',
-    });
   } catch (error: any) {
-    console.error('Error updating wedding:', error);
-
-    if (error.code === 'P2025') {
-      return new Response(JSON.stringify({ error: 'Wedding not found' }), {
-        status: 404, // Not Found
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
-      status: 500, // Internal Server Error
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return handleError(error, 'Failed to create wedding');
   }
+
+  return NextResponse.json({ status: '200' });
+}
+
+function handleError(error: any, message: string) {
+  let statusCode = 500;
+  let errorMessage = 'Internal Server Error';
+
+  if (error.code === 'P2025') {
+    statusCode = 404;
+    errorMessage = 'Item not found';
+  }
+
+  return new Response(JSON.stringify({ error: message ?? errorMessage }), {
+    status: statusCode,
+    headers: { 'Content-Type': 'application/json' },
+  });
 }

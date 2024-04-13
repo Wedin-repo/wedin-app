@@ -1,7 +1,7 @@
 import prisma from '@/db/client';
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   const body = await request.json();
   const { email } = body;
   try {
@@ -12,21 +12,15 @@ export async function GET(request: Request) {
     });
 
     if (!user) {
-      return new Response(JSON.stringify({ error: 'User not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return NextResponse.json(
+        { error: 'User not found' },
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
     }
-
-    return NextResponse.json({
-      user: user,
-    });
   } catch (error: any) {
-    console.error('Error finding user:', error);
-
-    return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
-      status: 500, // Internal server error
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
 }

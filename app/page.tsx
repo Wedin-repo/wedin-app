@@ -1,12 +1,7 @@
-import { redirect } from 'next/navigation';
+import { Link } from 'lucide-react';
 import Container from '../components/Container';
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import Link from 'next/link';
 
 export default async function Home() {
-  const currentUser = await getCurrentUser();
-
-  if (!currentUser) redirect('/login');
   return (
     <Container>
       <div className="min-h-screen flex flex-col justify-center items-center w-full">

@@ -16,10 +16,7 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({
-      message: 'User updated successfully',
-      revalidate: true,
-    });
+    return NextResponse.json({ message: 'User updated successfully' });
   } catch (error: any) {
     console.error('Error updating user:', error);
   }

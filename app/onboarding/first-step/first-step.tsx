@@ -24,7 +24,6 @@ import { es } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaArrowRight } from 'react-icons/fa6';
 import { z } from 'zod';
 import { makeAndHandleApiCall } from '../helper';
 

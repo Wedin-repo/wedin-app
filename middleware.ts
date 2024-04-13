@@ -2,12 +2,12 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const sessionToken =
-    request.cookies.get('next-auth.session-token') ||
-    request.cookies.get('_vercel_jwt')?.value;
-  const { pathname } = request.nextUrl;
+  // const sessionToken =
+  //   request.cookies.get('next-auth.session-token') ||
+  //   request.cookies.get('_vercel_jwt')?.value;
+  // const { pathname } = request.nextUrl;
 
-  const cookieStore = cookies();
+  // const cookieStore = cookies();
 
   /* console.log(
     cookieStore

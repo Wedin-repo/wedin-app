@@ -2,17 +2,15 @@
 
 import { User } from '@prisma/client';
 import { useState } from 'react';
-import FirstStep from './firstStep/FirstStep';
-import SecondStep from './secondStep/SecondStep';
+import FirstStep from './first-step/first-step';
+import SecondStep from './second-step/second-step';
 
 type OnboardingFormProps = {
   currentUser: User;
 };
 
 const OnboardingForm = ({ currentUser }: OnboardingFormProps) => {
-  const [currentPage, setCurrentPage] = useState(
-    currentUser.onboardingStep
-  );
+  const [currentPage, setCurrentPage] = useState(currentUser.onboardingStep);
 
   return (
     <>

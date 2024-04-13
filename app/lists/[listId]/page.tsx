@@ -2,7 +2,6 @@ import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getGiftList } from '@/actions/getGiftList';
 import { getWedding } from '@/actions/getWedding';
-import GiftCard from './GiftCard';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,24 +13,23 @@ import {
 import { getWishList } from '@/actions/getWishList';
 import AddToWishListButton from './AddToWishListButton';
 import { getGifts } from '@/actions/getGifts';
+import { Suspense } from 'react';
+import Gifts from '@/components/cards/gifts';
 
-type Props = {
+type GiftListPageProps = {
   params: {
     listId: string;
   };
 };
 
-export default async function PredefinedGiftListPage({ params }: Props) {
-  const currentUser = await getCurrentUser();
+export default async function GiftListPage({ params }: GiftListPageProps) {
   const { listId } = params;
-
+  const currentUser = await getCurrentUser();
+  const wedding = await getWedding(currentUser?.id);
   //const giftList = await getGiftList({ id: listId });
   const giftList = await getGiftList(listId);
-
   const gifts = await getGifts({ searchParams: { giftListId: listId } });
   const giftIds = gifts?.map(gift => gift.id);
-  const wedding = await getWedding(currentUser?.id);
-  const wishList = await getWishList(wedding?.wishListId);
 
   if (!giftList) return null;
 
@@ -71,15 +69,19 @@ export default async function PredefinedGiftListPage({ params }: Props) {
           </div>
 
           <div className="w-full flex justify-center">
-            <AddToWishListButton currentUser={currentUser} wishList={wishList} giftIds={giftIds} />
+            <AddToWishListButton
+              currentUser={currentUser}
+              wishListId={wedding?.wishListId}
+              giftIds={giftIds}
+            />
           </div>
         </div>
 
         <div className="flex justify-center items-center mt-10">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
-            {gifts?.map(gift => (
-              <GiftCard key={gift.id} gift={gift} />
-            ))}
+            <Suspense fallback={<div>Loading...</div>}>
+              <Gifts searchParams={{ giftListId: listId }} hideButton />
+            </Suspense>
           </div>
         </div>
       </div>

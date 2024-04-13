@@ -65,12 +65,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
         </div>
       ) : (
         <div className="flex gap-2 items-center">
-          {/* <Button
+          <Button
             onClick={() => handleClick('/login')}
             className="text-primaryTextColor h-9 rounded-full px-5 hover:bg-primaryBackgroundColor hover:text-white transition-all shadow-black"
           >
             Login
-          </Button> */}
+          </Button>
           <Button
             onClick={() => handleClick('/register')}
             className="bg-[#E9E9E9] text-[#333333] h-9 rounded-full px-5 hover:opacity-80 transition-all shadow-sm"

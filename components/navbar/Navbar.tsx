@@ -26,13 +26,6 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
     menuValue = 'myList';
   }
 
-  //console.log(menuValue)
-
-  if (!currentUser) {
-    console.log("first")
-  }
-
-
   const handleTabChange = (value: string) => {
     let url = '/';
     switch (value) {
@@ -65,11 +58,15 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
         <Container>
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <div className="flex gap-4 items-center">
-              <div className='pb-4'>
+              <div className="pb-4">
                 <Logo />
               </div>
 
-              <Tabs className="mb-[-8px] hidden sm:block" onValueChange={handleTabChange} defaultValue={menuValue}>
+              <Tabs
+                className="mb-[-8px] hidden sm:block"
+                onValueChange={handleTabChange}
+                defaultValue={menuValue}
+              >
                 <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">
                   {currentUser && (
                     <TabsTrigger value="myList" className="!text-sm pb-4">
@@ -80,14 +77,17 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
                     Agregar regalos
                   </TabsTrigger>
                   {currentUser && (
-                    <TabsTrigger value="giftsRecieved" className="!text-sm pb-4">
+                    <TabsTrigger
+                      value="giftsRecieved"
+                      className="!text-sm pb-4"
+                    >
                       Regalos recibidos
                     </TabsTrigger>
                   )}
                 </TabsList>
               </Tabs>
             </div>
-            <div className='pb-4'>
+            <div className="pb-4">
               <UserMenu currentUser={currentUser} />
             </div>
           </div>
