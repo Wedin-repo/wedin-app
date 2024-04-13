@@ -10,6 +10,7 @@ import { IoIosLink } from 'react-icons/io';
 import { LuScreenShare } from 'react-icons/lu';
 import GiftCard from './GiftCard';
 import Search from './Search';
+import { formatPrice } from '@/utils/format';
 
 export default async function DashboardPage() {
   const currentUser = await getCurrentUser();
@@ -20,16 +21,9 @@ export default async function DashboardPage() {
   const wishListId = wedding?.wishListId;
   const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
 
-  function formatPrice(price: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'PYG',
-      minimumFractionDigits: 0,
-    }).format(price);
-  }
-
   const totalPrice =
     gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
+
   const formattedTotalPrice = formatPrice(totalPrice);
 
   return (

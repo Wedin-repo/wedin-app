@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { GoArrowRight } from 'react-icons/go';
 import { Button } from '@/components/ui/button';
 import { GiftList } from '@prisma/client';
+import { formatPrice } from '@/utils/format';
 
 type GiftListCardProps = {
   giftList: GiftList;
@@ -9,6 +10,9 @@ type GiftListCardProps = {
 
 const GiftListCard = ({ giftList }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
+
+  const formattedPrice = formatPrice(Number(totalPrice));
+
   return (
     <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[435px]">
       <div>
@@ -23,7 +27,7 @@ const GiftListCard = ({ giftList }: GiftListCardProps) => {
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
 
         <p className="text-sm">{description}</p>
-        <span className="text-black text-xl">Gs. {totalPrice}</span>
+        <span className="text-black text-xl">{formattedPrice}</span>
       </div>
 
       <Link href={`/lists/${id}`}>

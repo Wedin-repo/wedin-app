@@ -37,7 +37,7 @@ function Search() {
       className="bg-[#F2F2F2] w-full md:w-auto py-1.5 pl-4 pr-1.5 rounded-full flex items-center gap-2"
     >
       <BiSearch fontSize={'22px'} />
-      <Input className="bg-transparent border-0 rounded-full text-md pl-2" placeholder="Buscar" />
+      <Input className="bg-transparent border-0 rounded-full text-md pl-2 text-primaryTextColor" placeholder="Buscar" />
     </div>
   );
 }

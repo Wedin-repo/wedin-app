@@ -1,6 +1,7 @@
 import { Gift } from '@prisma/client';
 import { FiEdit3 } from 'react-icons/fi';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { formatPrice } from '@/utils/format';
 
 type GiftCard = {
   gift: Gift;
@@ -8,6 +9,9 @@ type GiftCard = {
 
 const GiftCard = ({ gift }: GiftCard) => {
   const { name, description, price } = gift;
+
+  const formattedPrice = formatPrice(Number(price));
+  
   return (
     <div className="border-b-[#848484] border-b pb-3 w-full flex items-center justify-between gap-4">
       <div>
@@ -19,7 +23,7 @@ const GiftCard = ({ gift }: GiftCard) => {
       <div className="flex flex-col gap-1 w-full justify-start">
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
         <p className="text-sm text-secondaryTextColor">{description}</p>
-        <span className="text-black text-xl">Gs. {price}</span>
+        <span className="text-black text-lg">{formattedPrice}</span>
       </div>
 
       <div className="flex items-center gap-3">
