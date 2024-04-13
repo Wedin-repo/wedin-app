@@ -1,6 +1,6 @@
 import prisma from '@/db/client';
 
-export async function getWeddingByUserId(userId: string | undefined) {
+export async function getWedding(userId: string | undefined) {
   try {
     if (!userId) return null;
 

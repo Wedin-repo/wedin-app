@@ -9,7 +9,7 @@ export function middleware(request: NextRequest) {
 
   const cookieStore = cookies();
 
-  console.log(
+  /* console.log(
     cookieStore
       .getAll()
       .map(cookie => console.log('cookie', cookie.name, cookie.value))
@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
   console.log('request', request);
   console.log('cookies', request.cookies.get('_vercel_jwt')?.value);
   console.log('sessionToken', sessionToken);
-  console.log('redirect?', !sessionToken && pathname === '/');
+  console.log('redirect?', !sessionToken && pathname === '/'); */
 
   // if (!sessionToken && pathname === '/') {
   //   return NextResponse.redirect(new URL('/gifts', request.url));

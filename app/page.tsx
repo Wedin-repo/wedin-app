@@ -4,8 +4,13 @@ export default async function Home() {
   return (
     <Container>
       <div className="min-h-screen flex flex-col justify-center items-center w-full">
-        en esta pagina se muestra el dashboard de los novios donde estan sus
-        regalos anhadidos
+        hi, go to /dashboard. <br />
+        <p className="flex gap-1">
+          if you can&apos;t go because you&apos;re disabled just{' '}
+          <Link href="/dashboard" className="hover:underline text-blue-500">
+            click here
+          </Link>
+        </p>
       </div>
     </Container>
   );

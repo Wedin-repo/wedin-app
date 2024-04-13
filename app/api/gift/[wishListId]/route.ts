@@ -12,19 +12,20 @@ export async function POST(
   const { wishListId } = params;
 
   const body = await request.json();
-  const { giftId } = body;
+  const { giftIds } = body;
 
-  console.log(giftId);
-
-  if (!wishListId) {
-    return NextResponse.error();
+  if (!wishListId || !Array.isArray(giftIds)) {
+    return new Response(JSON.stringify({ error: 'Invalid request' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   const result = await prisma.wishList.update({
     where: { id: wishListId },
     data: {
       gifts: {
-        connect: { id: giftId },
+        connect: giftIds.map(giftId => ({ id: giftId })),
       },
     },
   });

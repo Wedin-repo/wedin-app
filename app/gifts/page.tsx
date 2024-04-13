@@ -15,9 +15,16 @@ const GiftsPage = async ({ searchParams }: { searchParams: GiftParams }) => {
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start">
-        <h1 className="text-4xl sm:text-5xl font-medium text-primaryTextColor px-10 mt-12 sm:mt-16">
-          Créa tu lista de regalos
-        </h1>
+
+        {currentUser ? (
+          <h1 className="text-3xl sm:text-4xl font-semibold text-primaryTextColor px-10 mt-12 sm:mt-16 flex w-full items-center justify-center">
+            Agregar regalos
+          </h1>
+        ) : (
+          <h1 className="text-4xl sm:text-5xl font-medium text-primaryTextColor px-10 mt-12 sm:mt-16">
+            Créa tu lista de regalos
+          </h1>
+        )}
 
         <Tabs defaultValue="predefinedGift" className="">
           <TabsList className="flex items-center justify-start gap-4 my-6 sm:my-10 border-b border-[#D7D7D7] px-10 overflow-x-auto overflow-y-hidden">

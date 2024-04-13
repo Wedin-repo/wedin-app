@@ -10,7 +10,7 @@ type GiftListCardProps = {
 const GiftListCard = ({ giftList }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
   return (
-    <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[320px]">
+    <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[435px]">
       <div>
         <div className="h-[212px] w-full bg-borderColor rounded-xl flex items-start justify-end">
           <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center mt-4 mr-4">
