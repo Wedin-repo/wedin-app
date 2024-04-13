@@ -24,8 +24,6 @@ const AddToWishListButton = ({
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
-  //console.log(wishList);
-
   const addGiftsToWishList = async () => {
     setIsLoading(true);
     if (!currentUser || !wishList?.id) {
@@ -44,13 +42,6 @@ const AddToWishListButton = ({
       });
       if (response.ok) {
         window.location.href = '/dashboard';
-        //router.push('/dashboard');
-        /* toast({
-          title: 'Success',
-          description: 'Lista agregada a tu wishlist.',
-          action: <FaCheck color="green" fontSize={'36px'} />,
-          className: 'bg-white',
-        }); */
       } else {
         throw new Error('Failed to add gift to wishlist');
       }
@@ -73,7 +64,12 @@ const AddToWishListButton = ({
       size="chooseGiftListButton"
       disabled={isLoading}
     >
-      Elegir lista {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <GoArrowRight fontSize={'24px'} /> }
+      Elegir lista
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <GoArrowRight fontSize={'24px'} />
+      )}
     </Button>
   );
 };

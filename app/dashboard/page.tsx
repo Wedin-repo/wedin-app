@@ -7,19 +7,17 @@ import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import { Switch } from '@/components/ui/switch';
 import { IoIosLink } from 'react-icons/io';
-import { CiShare1 } from 'react-icons/ci';
 import { LuScreenShare } from 'react-icons/lu';
 import GiftCard from './GiftCard';
 import Search from './Search';
 
 export default async function DashboardPage() {
   const currentUser = await getCurrentUser();
+
   if (!currentUser) redirect('/login');
 
   const wedding = await getWedding(currentUser?.id);
-
   const wishListId = wedding?.wishListId;
-
   const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
 
   function formatPrice(price: number): string {
@@ -33,8 +31,6 @@ export default async function DashboardPage() {
   const totalPrice =
     gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
   const formattedTotalPrice = formatPrice(totalPrice);
-
-  //console.log('gifts:', gifts);
 
   return (
     <Container>
@@ -69,14 +65,12 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        <div className='my-8'>
-          <Search/>
+        <div className="my-8">
+          <Search />
         </div>
 
         <div className="flex flex-col gap-5">
-          {gifts?.map(gift => (
-            <GiftCard key={gift.id} gift={gift} />
-          ))}
+          {gifts?.map(gift => <GiftCard key={gift.id} gift={gift} />)}
         </div>
       </div>
     </Container>

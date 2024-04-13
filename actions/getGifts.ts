@@ -1,12 +1,16 @@
 import prisma from '@/db/client';
 
-export type GiftParams = {
+export type GetGiftsParams = {
   category?: string;
   giftListId?: string;
   wishListId?: string | null;
 };
 
-export async function getGifts({ searchParams }: { searchParams?: GiftParams }) {
+export async function getGifts({
+  searchParams,
+}: {
+  searchParams?: GetGiftsParams;
+}) {
   try {
     let query: any = {};
     const { category, giftListId, wishListId } = searchParams ?? {};
@@ -21,7 +25,7 @@ export async function getGifts({ searchParams }: { searchParams?: GiftParams }) 
 
     if (wishListId) {
       query.wishListIds = {
-        has: wishListId
+        has: wishListId,
       };
     }
 
@@ -30,11 +34,6 @@ export async function getGifts({ searchParams }: { searchParams?: GiftParams }) 
       orderBy: {
         createdAt: 'desc',
       },
-      // Include relational data if needed
-      /* include: {
-        giftList: true,
-        wishList: true,
-      }, */
     });
 
     if (!gifts) return null;

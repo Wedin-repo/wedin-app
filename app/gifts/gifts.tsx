@@ -1,9 +1,9 @@
-import { GiftParams, getGifts } from '@/actions/gift/getGift';
+import { GetGiftsParams, getGifts } from '@/actions/getGifts';
 import EmptyState from '@/components/EmptyState';
 import GiftCard from '@/components/cards/gifts/card';
 
 type GiftsProps = {
-  searchParams: GiftParams;
+  searchParams: GetGiftsParams;
 };
 
 async function Gifts({ searchParams }: GiftsProps) {

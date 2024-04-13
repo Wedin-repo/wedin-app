@@ -2,10 +2,10 @@ import { getCategories } from '@/actions/getCategories';
 import { Suspense } from 'react';
 import Categories from '../components/categories';
 import Gifts from '../gifts';
-import { GiftParams } from '@/actions/getGifts';
+import { GetGiftsParams } from '@/actions/getGifts';
 
 type AllGiftsProps = {
-  searchParams: GiftParams;
+  searchParams: GetGiftsParams;
 };
 
 async function AllGifts({ searchParams }: AllGiftsProps) {
