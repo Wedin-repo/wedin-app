@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 
 const RegisterPage = async () => {
   const currentUser = await getCurrentUser();
+
   if (currentUser) {
     redirect('/gifts');
   }

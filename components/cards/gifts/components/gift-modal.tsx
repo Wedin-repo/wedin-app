@@ -18,7 +18,7 @@ type GiftCardModalProps = {
   gift: Gift;
 };
 
-function GiftCardModal({ gift }: GiftCardModalProps) {
+async function GiftCardModal({ gift }: GiftCardModalProps) {
   const { name, description, price, id } = gift;
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
@@ -73,7 +73,7 @@ function GiftCardModal({ gift }: GiftCardModalProps) {
                 Gs. {price}
               </span>
             </div>
-            <AddToWishListForm giftId={id} />
+            <AddToWishListForm giftId={id} wishlistId={wedding?.wishListId} />
           </div>
         </div>
       </DialogContent>
