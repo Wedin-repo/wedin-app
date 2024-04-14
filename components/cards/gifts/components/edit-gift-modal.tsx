@@ -8,9 +8,12 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Switch } from '@/components/ui/switch';
 import { Gift } from '@prisma/client';
-import EditGiftFromWishList from '@/components/cards/gifts/components/edit-gift-from-wishlist';
+import EditGiftFromWishListForm from '@/components/cards/gifts/components/edit-gift-from-wishlist-form';
+import { Button } from '@/components/ui/button';
+import { FiEdit3 } from 'react-icons/fi';
+import EditGiftForm from './edit-gift-form';
+import { getCategories } from '@/actions/getCategories';
 
 type EditGiftModalProps = {
   gift: Gift;
@@ -18,13 +21,20 @@ type EditGiftModalProps = {
 
 async function EditGiftModal({ gift }: EditGiftModalProps) {
   const { name, description, price, id } = gift;
-  const currentUser = await getCurrentUser();
+  const categories = await getCategories();
+
+  if (!categories) return null;
+  
+  //const currentUser = await getCurrentUser();
   //const wedding = await getWedding(currentUser?.id);
+
 
   return (
     <Dialog>
       <DialogTrigger className="">
-        <EditGiftFromWishList giftId={id} />
+        <Button type="submit" variant="editIconButton" size="iconButton">
+          <FiEdit3 fontSize={'16px'} />
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="bg-white !rounded-2xl">
@@ -47,28 +57,12 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
             </Carousel>
           </div>
 
-          <div className="w-full lg:w-1/2 flex flex-col h-full justify-evenly gap-6 lg:gap-0">
-            <div>
-              <h1 className="text-primaryTextColor text-3xl font-medium">
-                {name}
-              </h1>
-              <p className="text-secondaryTextColor text-lg">{description}</p>
-            </div>
-
-            <div className="flex flex-col text-primaryTextColor text-lg gap-3">
-              <div className="flex items-center justify-between space-x-2">
-                <p>Marcar como el que más queremos ⭐️</p>
-                <Switch id="favorite-gift" />
-              </div>
-              <div className="flex items-center justify-between space-x-2">
-                <p>Regalo grupal</p>
-                <Switch id="group-gift" />
-              </div>
-              <span className="text-3xl text-secondaryTitleColor font-medium">
-                Gs. {price}
-              </span>
-            </div>
+          <div className='w-full lg:w-1/2'>
+            {categories && <EditGiftForm gift={gift} categories={categories} />}
+            {/* <EditGiftFromWishListForm giftId={id} /> */}
           </div>
+          
+          
         </div>
       </DialogContent>
     </Dialog>

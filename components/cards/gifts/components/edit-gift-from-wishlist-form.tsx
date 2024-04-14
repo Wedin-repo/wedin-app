@@ -3,15 +3,15 @@
 import { Button } from '@/components/ui/button';
 import { FiEdit3 } from 'react-icons/fi';
 
-type EditGiftFromWishListProps = {
+type EditGiftFromWishListFormProps = {
   giftId: string;
   wishlistId?: string | null;
 };
 
-function EditGiftFromWishList({
+function EditGiftFromWishListForm({
   giftId,
   wishlistId,
-}: EditGiftFromWishListProps) {
+}: EditGiftFromWishListFormProps) {
   const handleRemoveGiftFromWishList = async (formData: FormData) => {
     console.log('first');
   };
@@ -21,11 +21,12 @@ function EditGiftFromWishList({
     // submitted. Fix this is possible, does not seem to affect functionality
     <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <Button type="submit" variant="editIconButton" size="iconButton">
+      <Button type="submit" variant="primaryButton">
+        Editar datos
         <FiEdit3 fontSize={'16px'} />
       </Button>
     </form>
   );
 }
 
-export default EditGiftFromWishList;
+export default EditGiftFromWishListForm;
