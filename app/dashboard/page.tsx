@@ -68,7 +68,7 @@ export default async function DashboardPage() {
 
         <div className="flex flex-col gap-5">
           {gifts?.map(gift => (
-            <GiftCard key={gift.id} gift={gift} currentUser={currentUser} wishListId={wishListId} />
+            <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
           ))}
         </div>
       </div>

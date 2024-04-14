@@ -1,29 +1,29 @@
 'use client';
 
-import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
+import { deleteGiftFromWishList } from '@/actions/delete-gift-from-wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { FaCheck } from 'react-icons/fa';
+import { FaCheck, FaRegTrashAlt } from 'react-icons/fa';
 import { IoAdd } from 'react-icons/io5';
 
-type AddToWishListFormProps = {
+type RemoveFromWishListFormProps = {
   giftId: string;
   wishlistId?: string | null;
 };
 
-function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
+function RemoveFromWishListForm({ giftId, wishlistId }: RemoveFromWishListFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleAddGiftToWishList = async (formData: FormData) => {
+  const handleRemoveGiftFromWishList = async (formData: FormData) => {
     if (!wishlistId) {
       router.push('/register');
       return;
     }
 
-    const addToWishListWithId = addGiftToWishList.bind(null, wishlistId);
-    const response = await addToWishListWithId(formData);
+    const removeFromWishListWithId = deleteGiftFromWishList.bind(null, wishlistId);
+    const response = await removeFromWishListWithId(formData);
 
     toast({
       title: response.status,
@@ -41,14 +41,13 @@ function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
   return (
     // In the HTML form the action throw an error that the form was
     // submitted. Fix this is possible, does not seem to affect functionality
-    <form action={handleAddGiftToWishList} id={giftId}>
+    <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <Button type="submit" variant="primaryButton">
-        Añadir a mi lista
-        <IoAdd size={22} />
+      <Button type="submit" variant="deleteIconButton" size='iconButton'>
+        <FaRegTrashAlt fontSize={'16px'} />
       </Button>
     </form>
   );
 }
 
-export default AddToWishListForm;
+export default RemoveFromWishListForm;

@@ -1,55 +1,17 @@
-'use client';
-
-import { Gift, User, WishList } from '@prisma/client';
-import { FiEdit3 } from 'react-icons/fi';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import { Gift, User } from '@prisma/client';
 import { formatPrice } from '@/utils/format';
-import { toast } from '@/components/ui/use-toast';
-import { FaCheck } from 'react-icons/fa6';
+import RemoveFromWishListForm from '@/components/cards/gifts/components/delete-from-wishlist-form';
+import EditGiftModal from '@/components/cards/gifts/components/edit-gift-modal';
 
 type GiftCard = {
   gift: Gift;
-  currentUser: User;
   wishListId: string | null;
 };
 
-const GiftCard = async ({ gift, currentUser, wishListId }: GiftCard) => {
-  const { name, description, price } = gift;
+const GiftCard = async ({ gift, wishListId }: GiftCard) => {
+  const { id, name, description, price } = gift;
 
-  const deleteGiftFromWishList = async () => { 
-    try {
-      const response = await fetch(`/api/wishList/${wishListId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        next: { tags: ['gifts'] },
-        body: JSON.stringify({
-          giftId: gift.id,
-        }),
-      });
-
-      if (response.ok) {
-        toast({
-          title: 'Success',
-          description: 'Gift deleted from your wishlist.',
-          action: <FaCheck color="green" fontSize={'36px'} />,
-          className: 'bg-white',
-        });
-      } else {
-        throw new Error('Failed to add gift to wishlist');
-      }
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: 'Error',
-        description: 'Failed to remove gift from wishlist.',
-        action: <FaCheck color="red" fontSize={'36px'} />,
-        className: 'bg-white',
-      });
-    }
-  }
-
+  if (!gift) return null;
 
   const formattedPrice = formatPrice(Number(price));
   
@@ -68,12 +30,8 @@ const GiftCard = async ({ gift, currentUser, wishListId }: GiftCard) => {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl p-2.5">
-          <FiEdit3 />
-        </button>
-        <button onClick={deleteGiftFromWishList} className="border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl p-2.5">
-          <FaRegTrashAlt />
-        </button>
+        <EditGiftModal gift={gift} />
+        <RemoveFromWishListForm giftId={id} wishlistId={wishListId} />
       </div>
     </div>
   );
