@@ -2,6 +2,7 @@ import { Gift, User } from '@prisma/client';
 import { formatPrice } from '@/utils/format';
 import RemoveFromWishListForm from '@/components/cards/gifts/components/delete-from-wishlist-form';
 import EditGiftModal from '@/components/cards/gifts/components/edit-gift-modal';
+import EmptyState from '@/components/EmptyState';
 
 type GiftCard = {
   gift: Gift;
@@ -10,8 +11,6 @@ type GiftCard = {
 
 const GiftCard = async ({ gift, wishListId }: GiftCard) => {
   const { id, name, description, price } = gift;
-
-  if (!gift) return null;
 
   const formattedPrice = formatPrice(Number(price));
   

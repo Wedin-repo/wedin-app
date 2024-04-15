@@ -23,7 +23,7 @@ export const addGiftToWishList = async (
   wishlistId: string,
   formData: FormData
 ) => {
-  const giftId = formData.get('content') as string | null;
+  const giftId = formData.get('giftId') as string | null;
 
   if (typeof giftId !== 'string' || giftId === null) {
     return {

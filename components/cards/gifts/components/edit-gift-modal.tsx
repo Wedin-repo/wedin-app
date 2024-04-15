@@ -31,7 +31,7 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
 
   return (
     <Dialog>
-      <DialogTrigger className="">
+      <DialogTrigger asChild className="">
         <Button type="submit" variant="editIconButton" size="iconButton">
           <FiEdit3 fontSize={'16px'} />
         </Button>

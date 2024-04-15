@@ -11,6 +11,7 @@ import { LuScreenShare } from 'react-icons/lu';
 import GiftCard from './GiftCard';
 import Search from './Search';
 import { formatPrice } from '@/utils/format';
+import EmptyState from '@/components/EmptyState';
 
 export default async function DashboardPage() {
   const currentUser = await getCurrentUser();
@@ -23,6 +24,8 @@ export default async function DashboardPage() {
   if (!wishListId) redirect('/');
 
   const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
+
+  //if (gifts?.length === 0) return <EmptyState showReset />;
 
   const totalPrice =
     gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
@@ -65,6 +68,8 @@ export default async function DashboardPage() {
         <div className="my-8">
           <Search />
         </div>
+
+        {gifts?.length === 0 && <EmptyState showReset title='Aún no tienes regalos en tu lista' />}
 
         <div className="flex flex-col gap-5">
           {gifts?.map(gift => (

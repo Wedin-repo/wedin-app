@@ -23,9 +23,11 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
+        editGiftButton: 'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
         link: 'text-primary underline-offset-4 hover:underline',
         deleteIconButton: 'border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl',
         editIconButton: 'border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl',
+        emptyStateButton: 'bg-black rounded-full text-white font-normal hover:opacity-80 hover transition text-lg',
       },
       size: {
         default: 'h-10 px-4 py-2',
@@ -34,6 +36,7 @@ const buttonVariants = cva(
         icon: 'h-10 w-10',
         chooseGiftListButton: 'h-12 px-2',
         iconButton: 'h-10 w-10',
+        emptyStateButton: 'h-11 px-4',
       },
     },
     defaultVariants: {
