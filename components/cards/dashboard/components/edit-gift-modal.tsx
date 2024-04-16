@@ -42,33 +42,16 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-white !rounded-2xl">
-        <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
+      <DialogContent className="bg-white !rounded-2xl ">
+        <div className="flex flex-col  lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
           <div className="w-full lg:w-1/2">
             <ImageUpload />
-            {/* <Carousel>
-              <CarouselContent>
-                <CarouselItem>
-                  <div className="border rounded-2xl w-full h-[298px] sm:h-[358px] bg-secondaryBackgroundColor"></div>
-                </CarouselItem>
-                <CarouselItem>
-                  <div className="border rounded-2xl w-full h-[298px] sm:h-[358px] bg-secondaryBackgroundColor"></div>
-                </CarouselItem>
-                <CarouselItem>
-                  <div className="border rounded-2xl w-full h-[298px] sm:h-[358px] bg-secondaryBackgroundColor"></div>
-                </CarouselItem>
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel> */}
           </div>
 
           <div className='w-full lg:w-1/2'>
             {categories && <EditGiftForm gift={gift} categories={categories} category={category} />}
             {/* <EditGiftFromWishListForm giftId={id} /> */}
           </div>
-          
-          
         </div>
       </DialogContent>
     </Dialog>

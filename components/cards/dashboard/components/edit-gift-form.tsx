@@ -65,7 +65,7 @@ function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormPr
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3 sm:gap-5">
         <div>
           <Label className="">Nombre</Label>
           <Input
@@ -131,7 +131,7 @@ function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormPr
           <Switch checked={isGroupGift} onCheckedChange={setIsGroupGift} />
         </div>
       </div>
-      <div className="w-full flex justify-center mt-8">
+      <div className="w-full flex justify-center mt-4 sm:mt-8">
         <EditGiftFromWishListForm />
       </div>
     </form>

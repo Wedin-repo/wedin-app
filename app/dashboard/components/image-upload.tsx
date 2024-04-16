@@ -46,12 +46,12 @@ function ImageUpload() {
       <Label>Imagen del regalo <span className='!text-xs font-normal text-secondaryTextColor'>372px por 322px</span></Label>
       <div className="bg-[#F3F4F6] rounded-xl p-4 flex flex-col gap-3">
         {error && <p className="text-red-500 text-sm">{error}</p>}
-        <div className={`border-dashed rounded-xl border-2 h-[324px] flex items-center justify-center text-[#A1A1AA] ${error ? 'border-red-500 text-red-500' : 'border-[#D1D5DB]'}`}>
+        <div className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-[#A1A1AA] ${error ? 'border-red-500 text-red-500' : 'border-[#D1D5DB]'}`}>
           {previewUrl ? (
             <img
               src={previewUrl}
               alt="Vista previa de la imagen seleccionada"
-              className="h-[321.5px] max-w-full rounded-xl object-cover"
+              className="max-h-full max-w-full rounded-xl object-cover"
             />
           ) : (
             <IoImageOutline fontSize={'24px'} />
