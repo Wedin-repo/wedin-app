@@ -20,18 +20,37 @@ type EditGiftFormProps = {
   gift: Gift;
   wishlistId?: string | null;
   categories?: string[] | Category[] | null;
+  category: Category | null;
 };
 
-function EditGiftForm({ gift, wishlistId, categories }: EditGiftFormProps) {
+function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormProps) {
   const { name, description, price, id, categoryId, isDefault, wishListIds } =
     gift;
   const [editedName, setEditedName] = useState(name);
-  const [editedPrice, setEditedPrice] = useState(price);
-  const [editedCategory, setEditedCategory] = useState(categoryId);
+  const [editedPrice, setEditedPrice] = useState(formatPrice(Number(price)));
+  const [editedCategory, setEditedCategory] = useState(category?.name);
   const [isFavoriteGift, setIsFavoriteGift] = useState(isDefault);
   const [isGroupGift, setIsGroupGift] = useState(false);
 
   const formattedPrice = formatPrice(Number(price));
+
+  const handlePriceInput = (event: any) => {
+    const value = event.target.value.replace(/\D/g, '');
+    const formattedInput = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    setEditedPrice(formattedInput);
+  };
+
+  const handlePriceKeyPress = (event: any) => {
+    if (
+      !/[0-9]/.test(event.key) &&
+      event.keyCode !== 8 &&
+      event.keyCode !== 46
+    ) {
+      event.preventDefault();
+    }
+  };
+
+  //console.log(category);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,24 +65,24 @@ function EditGiftForm({ gift, wishlistId, categories }: EditGiftFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="flex flex-col gap-3 mb-5">
+      <div className="flex flex-col gap-5">
         <div>
-          <Label className='!mb-1.5'>Nombre</Label>
+          <Label className="">Nombre</Label>
           <Input
             value={editedName}
             onChange={e => setEditedName(e.target.value)}
             placeholder={name}
-            type='text'
+            type="text"
           />
         </div>
 
         {categoryId && (
           <div>
-            <Label className='!mb-1.5'>Categoria</Label>
+            <Label className="">Categoria</Label>
 
             <Select value={editedCategory} onValueChange={setEditedCategory}>
               <SelectTrigger>
-                <SelectValue placeholder="Select a category" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-white">
                 {categories?.map(category => (
@@ -87,12 +106,13 @@ function EditGiftForm({ gift, wishlistId, categories }: EditGiftFormProps) {
         )}
 
         <div>
-          <Label className='!mb-1.5'>Precio</Label>
+          <Label className="">Precio</Label>
           <Input
-            type="number"
+            type="text"
             placeholder={formattedPrice}
             value={editedPrice}
-            onChange={e => setEditedPrice(e.target.value)}
+            onInput={handlePriceInput}
+            onKeyPress={handlePriceKeyPress}
           />
         </div>
 
@@ -111,7 +131,7 @@ function EditGiftForm({ gift, wishlistId, categories }: EditGiftFormProps) {
           <Switch checked={isGroupGift} onCheckedChange={setIsGroupGift} />
         </div>
       </div>
-      <div className="w-full flex justify-center">
+      <div className="w-full flex justify-center mt-8">
         <EditGiftFromWishListForm />
       </div>
     </form>

@@ -39,8 +39,6 @@ function RemoveFromWishListForm({ giftId, wishlistId }: RemoveFromWishListFormPr
   };
 
   return (
-    // In the HTML form the action throw an error that the form was
-    // submitted. Fix this is possible, does not seem to affect functionality
     <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
       <Button type="submit" variant="deleteIconButton" size='iconButton'>

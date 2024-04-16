@@ -28,6 +28,7 @@ const buttonVariants = cva(
         deleteIconButton: 'border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl',
         editIconButton: 'border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl',
         emptyStateButton: 'bg-black rounded-full text-white font-normal hover:opacity-80 hover transition text-lg',
+        uploadImageButton: 'w-full bg-white flex items-center justify-center rounded-lg py-2 gap-2 text-black font-medium hover:opacity-60 hover transition'
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -39,9 +39,7 @@ function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
   };
 
   return (
-    // In the HTML form the action throw an error that the form was
-    // submitted. Fix this is possible, does not seem to affect functionality
-    <form action={(formData) => handleAddGiftToWishList(formData)}>
+    <form action={handleAddGiftToWishList}>
       <input id="giftId" type="hidden" name="giftId" value={giftId} />
       <Button type="submit" variant="primaryButton">
         Añadir a mi lista

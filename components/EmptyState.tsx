@@ -1,6 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -16,7 +15,6 @@ const EmptyState: FC<Props> = ({
   subtitle = '',
   showReset,
 }) => {
-  const router = useRouter();
 
   return (
     <div className="h-[60vh] flex flex-col gap-2 justify-center items-center">
@@ -25,9 +23,9 @@ const EmptyState: FC<Props> = ({
         <h1 className="text-3xl font-normal text-black max-w-sm text-center">{title}</h1>
       </div>
 
-      <div className="mt-8">
+      <div className="mt-6">
         {showReset && (
-          <Button variant="emptyStateButton" size='emptyStateButton' onClick={() => router.push('/gifts')}>
+          <Button variant="emptyStateButton" size='emptyStateButton' onClick={() => window.location.href='/gifts'}>
             Agregá un regalo ahora
           </Button>
         )}
