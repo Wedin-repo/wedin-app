@@ -6,7 +6,11 @@ import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
 
-function Search() {
+type SearchProps = {
+  disabled?: boolean;
+};
+
+function Search( { disabled }: SearchProps) {
   /* const { open } = useFilterModal();
   const params = useSearchParams();
   const startDateValue = params?.get("startDate");
@@ -37,7 +41,7 @@ function Search() {
       className="bg-[#F2F2F2] w-full md:w-auto py-1.5 pl-4 pr-1.5 rounded-full flex items-center gap-2"
     >
       <BiSearch fontSize={'22px'} />
-      <Input className="bg-transparent border-0 rounded-full text-md pl-2 text-primaryTextColor" placeholder="Buscar" />
+      <Input disabled={disabled} className="bg-transparent border-0 rounded-full text-md pl-2 text-primaryTextColor" placeholder="Buscar" />
     </div>
   );
 }
