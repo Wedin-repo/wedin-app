@@ -15,6 +15,11 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
+import { editGiftInWishList } from '@/actions/edit-gift-from-wishlist';
+import { FaCheck } from 'react-icons/fa6';
+import { toast } from '@/components/ui/use-toast';
+import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getWedding } from '@/actions/getWedding';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -23,14 +28,15 @@ type EditGiftFormProps = {
   category: Category | null;
 };
 
-function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormProps) {
-  const { name, description, price, id, categoryId, isDefault, wishListIds } =
+function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormProps) {
+  const { name, description, price, id, isDefault, wishListIds } =
     gift;
   const [editedName, setEditedName] = useState(name);
-  const [editedPrice, setEditedPrice] = useState(formatPrice(Number(price)));
+  const [editedPrice, setEditedPrice] = useState(price);
   const [editedCategory, setEditedCategory] = useState(category?.name);
   const [isFavoriteGift, setIsFavoriteGift] = useState(isDefault);
   const [isGroupGift, setIsGroupGift] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formattedPrice = formatPrice(Number(price));
 
@@ -52,19 +58,38 @@ function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormPr
 
   //console.log(category);
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log({
-      editedName,
-      editedPrice,
-      editedCategory,
-      isFavoriteGift,
-      isGroupGift,
+  const handleSubmit = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('giftId', id);
+    formData.append('name', editedName);
+    formData.append('category', editedCategory ?? '');
+    formData.append('price', editedPrice);
+    formData.append('isFavoriteGift', isFavoriteGift.toString());
+    formData.append('isGroupGift', isGroupGift.toString());
+
+    const editGiftWithId = editGiftInWishList.bind(null, wishlistId || '');
+    const response = await editGiftWithId(formData);
+
+    console.log('first', formData.values);
+    console.log(response);
+
+    toast({
+      title: response.status,
+      description: response.message,
+      action: (
+        <FaCheck
+          color={response.status === 'Error' ? 'red' : 'green'}
+          fontSize="36px"
+        />
+      ),
+      className: 'bg-white',
     });
+    setIsLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form action={handleSubmit}>
       <div className="flex flex-col gap-3 sm:gap-5">
         <div>
           <Label className="">Nombre</Label>
@@ -76,7 +101,7 @@ function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormPr
           />
         </div>
 
-        {categoryId && (
+  
           <div>
             <Label className="">Categoria</Label>
 
@@ -103,7 +128,6 @@ function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormPr
               </SelectContent>
             </Select>
           </div>
-        )}
 
         <div>
           <Label className="">Precio</Label>
@@ -132,7 +156,7 @@ function EditGiftForm({ gift, wishlistId, categories, category }: EditGiftFormPr
         </div>
       </div>
       <div className="w-full flex justify-center mt-4 sm:mt-8">
-        <EditGiftFromWishListForm />
+        <EditGiftFromWishListForm isLoading={isLoading} />
       </div>
     </form>
   );

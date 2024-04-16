@@ -22,6 +22,10 @@ type EditGiftModalProps = {
 };
 
 async function EditGiftModal({ gift }: EditGiftModalProps) {
+
+  const currentUser = await getCurrentUser();
+  const wedding = await getWedding(currentUser?.id);
+
   const { name, description, price, id } = gift;
   const categories = await getCategories();
 
@@ -49,7 +53,7 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
           </div>
 
           <div className='w-full lg:w-1/2'>
-            {categories && <EditGiftForm gift={gift} categories={categories} category={category} />}
+            {categories && <EditGiftForm gift={gift} categories={categories} category={category} wishlistId={wedding?.wishListId} />}
             {/* <EditGiftFromWishListForm giftId={id} /> */}
           </div>
         </div>
