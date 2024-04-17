@@ -67,8 +67,9 @@ function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormPr
     formData.append('price', editedPrice);
     formData.append('isFavoriteGift', isFavoriteGift.toString());
     formData.append('isGroupGift', isGroupGift.toString());
+    console.log(formData.values.toString());
 
-    const editGiftWithId = editGiftInWishList.bind(null, wishlistId || '');
+    /* const editGiftWithId = editGiftInWishList.bind(null, wishlistId || '');
     const response = await editGiftWithId(formData);
 
     console.log('first', formData.values);
@@ -84,7 +85,7 @@ function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormPr
         />
       ),
       className: 'bg-white',
-    });
+    }); */
     setIsLoading(false);
   };
 
@@ -111,12 +112,12 @@ function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormPr
               </SelectTrigger>
               <SelectContent className="bg-white">
                 {categories?.map(category => (
-                  <div key={category.id}>
+                  <div key={typeof category === 'string' ? category : category.id}>
                     <SelectItem
-                      value={category.name}
+                      value={typeof category === 'string' ? category : category.name}
                       className="cursor-pointer"
                     >
-                      {category.name}
+                      {typeof category === 'string' ? category : category.name}
                     </SelectItem>
                     {/* this is just a border for aesthetic purposes */}
                     <div
