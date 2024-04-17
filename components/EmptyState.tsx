@@ -1,10 +1,8 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { FC } from 'react';
 
 import { Button } from '@/components/ui/button';
-import Heading from './Heading';
 
 type Props = {
   title?: string;
@@ -13,19 +11,22 @@ type Props = {
 };
 
 const EmptyState: FC<Props> = ({
-  title = 'Something bad happened',
-  subtitle = 'Try changing yourself',
+  title = '',
+  subtitle = '',
   showReset,
 }) => {
-  const router = useRouter();
 
   return (
     <div className="h-[60vh] flex flex-col gap-2 justify-center items-center">
-      <Heading center title={title} subtitle={subtitle} />
-      <div className="w-48 mt-4">
+      <div className='flex flex-col items-center gap-4'>
+        <div className='h-36 w-36 bg-[#D9D9D9] rounded-full'></div>
+        <h1 className="text-3xl font-normal text-black max-w-sm text-center">{title}</h1>
+      </div>
+
+      <div className="mt-6">
         {showReset && (
-          <Button variant="outline" onClick={() => router.push('/')}>
-            Volver al inicio
+          <Button variant="emptyStateButton" size='emptyStateButton' onClick={() => window.location.href='/gifts'}>
+            Agregá un regalo ahora
           </Button>
         )}
       </div>

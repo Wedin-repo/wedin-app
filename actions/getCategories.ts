@@ -2,11 +2,11 @@ import prisma from '@/db/client';
 
 export async function getCategories() {
   try {
-    const category = await prisma.category.findMany();
+    const categories = await prisma.category.findMany();
 
-    if (!category) return null;
+    if (!categories) return null;
 
-    return category;
+    return categories;
   } catch (error: any) {
     console.log(error);
     // Maybe throw an error here?

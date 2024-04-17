@@ -13,6 +13,9 @@ import {
 import { getWishList } from '@/actions/getWishList';
 import AddToWishListButton from './AddToWishListButton';
 import { getGifts } from '@/actions/getGifts';
+import { IoGiftOutline } from 'react-icons/io5';
+import { PiWallet } from 'react-icons/pi';
+import { formatPrice } from '@/utils/format';
 import { Suspense } from 'react';
 import Gifts from '@/components/cards/gifts';
 
@@ -33,7 +36,10 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
   if (!giftList) return null;
 
-  const { name, quantity, totalPrice } = giftList;
+  const { name, quantity, totalPrice, description } = giftList;
+
+
+  const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
     <Container>
@@ -56,15 +62,18 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
               {name}
             </h1>
             <div className="flex items-center gap-3">
-              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-sm">
+              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-md flex items-center gap-2">
+                <IoGiftOutline fontSize={'18px'} />
                 {quantity} regalos
               </div>
-              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-sm">
-                Gs. {totalPrice}
+              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-md flex items-center gap-2">
+                <PiWallet fontSize={'18px'} />
+                {formattedPrice}
               </div>
             </div>
             <p className="text-xl text-center">
-              Elegí esta lista pré-definida, podes personalizarla más adelante
+              {/* Elegí esta lista pré-definida, podes personalizarla más adelante */}
+              {description}
             </p>
           </div>
 

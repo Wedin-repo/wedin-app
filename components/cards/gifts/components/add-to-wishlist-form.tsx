@@ -1,6 +1,6 @@
 'use client';
 
-import { addGiftToWishList } from '@/actions/AddGiftToWishlist';
+import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
@@ -39,10 +39,8 @@ function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
   };
 
   return (
-    // In the HTML form the action throw an error that the form was
-    // submitted. Fix this is possible, does not seem to affect functionality
-    <form action={handleAddGiftToWishList} id={giftId}>
-      <input id="giftId" type="hidden" name="content" value={giftId} />
+    <form action={handleAddGiftToWishList}>
+      <input id="giftId" type="hidden" name="giftId" value={giftId} />
       <Button type="submit" variant="primaryButton">
         Añadir a mi lista
         <IoAdd size={22} />

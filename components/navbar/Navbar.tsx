@@ -6,14 +6,12 @@ import { User } from '@prisma/client';
 import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRouter } from 'next/navigation';
 
 type NavBarProps = {
   currentUser?: User | null;
 };
 
 export const NavBar = ({ currentUser }: NavBarProps) => {
-  const router = useRouter();
   const pathname = usePathname();
 
   let menuValue;
@@ -41,7 +39,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
       default:
         break;
     }
-    router.push(url);
+    window.location.href = url;
   };
 
   if (
