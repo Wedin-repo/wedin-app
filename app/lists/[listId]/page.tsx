@@ -31,7 +31,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
   const wedding = await getWedding(currentUser?.id);
   //const giftList = await getGiftList({ id: listId });
   const giftList = await getGiftList(listId);
-  const gifts = await getGifts({ searchParams: { giftListId: listId } });
+  const gifts = await getGifts({ giftListId: listId });
   const giftIds = gifts?.map(gift => gift.id);
 
   if (!giftList) return null;

@@ -41,7 +41,7 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
           <CarouselNext />
         </Carousel>
       </CardHeader>
-      <CardContent className="flex flex-col flex-grow gap-1 w-full p-0 ">
+      <CardContent className="flex flex-col flex-grow gap-1 w-full p-0">
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
         <p className="text-secondaryTextColor">{description}</p>
         <span className="text-secondaryTitleColor text-xl flex flex-grow items-end">

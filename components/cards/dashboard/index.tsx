@@ -7,7 +7,7 @@ type GiftsProps = {
 };
 
 async function Gifts({ searchParams }: GiftsProps) {
-  const gifts = await getGifts({ searchParams: { wishListId: searchParams.toString() } });
+  const gifts = await getGifts({ wishListId: searchParams.toString()});
 
   if (gifts?.length === 0 || !gifts) return <EmptyState showReset title='Aún no tienes regalos en tu lista' />;
 

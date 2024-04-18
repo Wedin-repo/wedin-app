@@ -18,7 +18,7 @@ export default async function DashboardPage() {
 
   if (!wishListId) redirect('/gifts');
 
-  const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
+  const gifts = await getGifts({ wishListId: wishListId });
 
   const totalPrice = gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
 
@@ -30,7 +30,7 @@ export default async function DashboardPage() {
 
         <DashboardHeader quantity={gifts?.length} formattedTotalPrice={formattedTotalPrice} />
 
-        <AllGifts searchParams={wishListId as GetGiftsParams} />
+        <AllGifts searchParams={{wishListId}} />
       </div>
     </Container>
   );

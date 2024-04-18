@@ -6,11 +6,7 @@ export type GetGiftsParams = {
   wishListId?: string | null;
 };
 
-export async function getGifts({
-  searchParams,
-}: {
-  searchParams?: GetGiftsParams;
-}) {
+export async function getGifts(searchParams: GetGiftsParams) {
   try {
     let query: any = {};
 

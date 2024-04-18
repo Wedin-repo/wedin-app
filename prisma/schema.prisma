@@ -123,9 +123,10 @@ model GiftList {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  quantity    String
+  quantity    String?
+  categoryId  String @db.ObjectId
   isDefault   Boolean @default(false)
-  totalPrice  String
+  totalPrice  String?
   weddingId   String? @db.ObjectId
 
   gifts  Gift[]
@@ -142,10 +143,11 @@ model Image {
   url        String
   giftId     String   @db.ObjectId
   giftListId String   @db.ObjectId
-  gift       Gift     @relation(fields: [giftId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  GiftList   GiftList @relation(fields: [giftListId], references: [id])
+
+  giftList   GiftList @relation(fields: [giftListId], references: [id])
+  gift       Gift     @relation(fields: [giftId], references: [id])
 }
 
 model VerificationToken {

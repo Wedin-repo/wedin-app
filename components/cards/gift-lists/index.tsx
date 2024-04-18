@@ -5,7 +5,7 @@ import GiftListCard from './card';
 async function GiftLists() {
   const giftLists = await getGiftLists();
 
-  if (giftLists?.length === 0) return <EmptyState showReset />;
+  if (giftLists?.length === 0 || !giftLists) return <EmptyState showReset />;
 
   return (
     <>

@@ -3,13 +3,16 @@ import { GoArrowRight } from 'react-icons/go';
 import { Button } from '@/components/ui/button';
 import { GiftList } from '@prisma/client';
 import { formatPrice } from '@/utils/format';
+import { getGifts } from '@/actions/getGifts';
 
 type GiftListCardProps = {
   giftList: GiftList;
 };
 
-const GiftListCard = ({ giftList }: GiftListCardProps) => {
+const GiftListCard = async ({ giftList }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
+  
+  const gifts = await getGifts({giftListId: id });
 
   const formattedPrice = formatPrice(Number(totalPrice));
 
@@ -23,11 +26,11 @@ const GiftListCard = ({ giftList }: GiftListCardProps) => {
         </div>
       </div>
 
-      <div>
+      <div className='flex flex-col flex-grow gap-1 w-full p-0 '>
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
 
         <p className="text-sm">{description}</p>
-        <span className="text-black text-xl">{formattedPrice}</span>
+        <span className="text-black text-xl flex flex-grow items-end">{formattedPrice}</span>
       </div>
 
       <Link href={`/lists/${id}`}>
