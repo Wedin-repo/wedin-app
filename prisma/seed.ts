@@ -44,11 +44,12 @@ async function main() {
     const gift = await prismaClient.gift.create({
       data: {
         name: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
+        description: faker.commerce.productDescription().substring(0, 60),
         isDefault: faker.datatype.boolean(),
         price: faker.number.int({ min: 89000, max: 1820000 }).toString(),
         giftListId: randomGiftList.id,
         categoryId: randomGiftList.categoryId,
+        imageUrl: faker.image.url()
       },
     });
     gifts.push(gift);

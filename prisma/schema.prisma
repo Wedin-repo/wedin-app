@@ -108,6 +108,7 @@ model Gift {
   categoryId     String   @db.ObjectId
   weddingId      String?  @db.ObjectId
   wishListIds    String[] @db.ObjectId
+  imageUrl       String?
   //price can be = > < 
   price          String
   createdAt      DateTime @default(now())
@@ -124,7 +125,7 @@ model GiftList {
   name        String
   description String
   quantity    String?
-  categoryId  String @db.ObjectId
+  categoryId  String  @db.ObjectId
   isDefault   Boolean @default(false)
   totalPrice  String?
   weddingId   String? @db.ObjectId
@@ -146,8 +147,8 @@ model Image {
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  giftList   GiftList @relation(fields: [giftListId], references: [id])
-  gift       Gift     @relation(fields: [giftId], references: [id])
+  giftList GiftList @relation(fields: [giftListId], references: [id])
+  gift     Gift     @relation(fields: [giftId], references: [id])
 }
 
 model VerificationToken {

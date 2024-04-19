@@ -1,12 +1,5 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getWedding } from '@/actions/getWedding';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Gift } from '@prisma/client';
 import EditGiftFromWishListForm from '@/components/cards/dashboard/components/edit-gift-from-wishlist-form';

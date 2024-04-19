@@ -4,10 +4,13 @@ import { GetGiftsParams } from '@/actions/getGifts';
 import Gifts from '@/components/cards/dashboard';
 import Search from './components/search-bar';
 
-async function AllGifts(searchParams: GetGiftsParams) {
+type AllGiftsProps = {
+  searchParams: GetGiftsParams;
+};
+
+async function AllGifts({ searchParams }: AllGiftsProps) {
   //const categories = await getCategories();
-  const { wishListId } = searchParams;
-  
+
   return (
     <>
       <div className="my-8">
@@ -16,7 +19,7 @@ async function AllGifts(searchParams: GetGiftsParams) {
 
       <div className="">
         <Suspense fallback={<div>Loading...</div>}>
-          <Gifts searchParams={wishListId} />
+          <Gifts searchParams={searchParams} />
         </Suspense>
       </div>
     </>
