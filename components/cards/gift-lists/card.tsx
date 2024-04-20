@@ -3,7 +3,6 @@ import { GoArrowRight } from 'react-icons/go';
 import { Button } from '@/components/ui/button';
 import { Gift, GiftList } from '@prisma/client';
 import { formatPrice } from '@/utils/format';
-import { getGifts } from '@/actions/getGifts';
 import {
   Carousel,
   CarouselContent,
@@ -14,11 +13,12 @@ import {
 
 type GiftListCardProps = {
   giftList: GiftList;
+  gifts: Gift[];
 };
 
-const GiftListCard = async ({ giftList }: GiftListCardProps) => {
+const GiftListCard = async ({ giftList, gifts }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
-  const gifts = await getGifts({ searchParams: { giftListId: id } });
+
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
@@ -44,10 +44,10 @@ const GiftListCard = async ({ giftList }: GiftListCardProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col flex-grow gap-1 w-full p-0 ">
+      <div className="flex flex-col flex-grow gap-1 w-full p-0">
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
 
-        <p className="text-sm">{description}</p>
+        <p className="text-secondaryTextColor">{description}</p>
         <span className="text-black text-xl flex flex-grow items-end">
           {formattedPrice}
         </span>

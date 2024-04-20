@@ -66,14 +66,14 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
                 defaultValue={menuValue}
               >
                 <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">
+                  <TabsTrigger value="addGifts" className="!text-sm pb-4">
+                    Agregar regalos
+                  </TabsTrigger>
                   {currentUser && (
                     <TabsTrigger value="myList" className="!text-sm pb-4">
                       Mi lista
                     </TabsTrigger>
                   )}
-                  <TabsTrigger value="addGifts" className="!text-sm pb-4">
-                    Agregar regalos
-                  </TabsTrigger>
                   {currentUser && (
                     <TabsTrigger
                       value="giftsRecieved"

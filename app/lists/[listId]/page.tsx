@@ -2,14 +2,6 @@ import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getGiftList } from '@/actions/getGiftList';
 import { getWedding } from '@/actions/getWedding';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { getWishList } from '@/actions/getWishList';
 import AddToWishListButton from './AddToWishListButton';
 import { getGifts } from '@/actions/getGifts';
@@ -31,19 +23,18 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
   const wedding = await getWedding(currentUser?.id);
   //const giftList = await getGiftList({ id: listId });
   const giftList = await getGiftList(listId);
-  const gifts = await getGifts({ giftListId: listId });
+  const gifts = await getGifts({ searchParams: { giftListId: listId } });
   const giftIds = gifts?.map(gift => gift.id);
 
   if (!giftList) return null;
 
   const { name, quantity, totalPrice, description } = giftList;
 
-
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
     <Container>
-      <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
+      <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-6 sm:px-10">
         {/* <Breadcrumb className='mb-6'>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -58,7 +49,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
         <div className="w-full flex flex-col items-center gap-4">
           <div className="flex flex-col items-center gap-3 w-full ">
-            <h1 className="text-4xl font-medium text-primaryTextColor">
+            <h1 className="text-4xl font-medium text-primaryTextColor text-center">
               {name}
             </h1>
             <div className="flex items-center gap-3">
@@ -86,12 +77,10 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
           </div>
         </div>
 
-        <div className="flex justify-center items-center mt-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Gifts searchParams={{ giftListId: listId }} hideButton />
-            </Suspense>
-          </div>
+        <div className="flex justify-center items-center mt-6 sm:mt-10">
+          <Suspense fallback={<div>Loading...</div>}>
+            <Gifts searchParams={{ giftListId: listId }} hideButton />
+          </Suspense>
         </div>
       </div>
     </Container>

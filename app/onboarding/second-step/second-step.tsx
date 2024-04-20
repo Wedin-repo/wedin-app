@@ -77,7 +77,7 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
         'No se pudo actualizar la información del usuario.'
       );
 
-      window.location.href = '/';
+      window.location.href = '/gifts';
     } catch (error) {
       console.error('API call failed:', error);
       if (error instanceof Error) {

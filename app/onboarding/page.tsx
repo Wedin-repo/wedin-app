@@ -14,7 +14,7 @@ const OnboardingPage = async () => {
   }
 
   if (currentUser && currentUser.isOnboarded === true) {
-    redirect('/');
+    redirect('/gifts');
   }
 
   return (

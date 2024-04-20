@@ -6,40 +6,68 @@ import { PiCouchLight } from 'react-icons/pi';
 import GiftHeader from './gifts-header';
 import AllGifts from './tabs/all-gifts';
 import PredefinedGifts from './tabs/predefined-gifts';
+import { GetGiftListsParams } from '@/actions/getGiftLists';
+import Link from 'next/link';
 
 type GiftsPageProps = {
-  searchParams: GetGiftParams;
+  searchParams: GetGiftParams | GetGiftListsParams;
 };
 
 const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
+  let currentTab = (searchParams as { tab?: string }).tab ?? 'predefined-gift';
+
+  if (currentTab !== 'all-gifts' && currentTab !== 'create-gift') {
+    currentTab = 'predefined-gift';
+  }
+
+  //console.log(currentTab);
+
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start">
         <GiftHeader />
 
-        <Tabs defaultValue="predefined-gift" className="">
-          <TabsList className="flex items-center justify-start gap-4 my-6 sm:my-10 border-b border-[#D7D7D7] px-10 overflow-x-auto overflow-y-hidden">
-            <TabsTrigger
-              value="predefined-gift"
-              className="flex gap-2 items-center"
-            >
-              <IoGiftOutline size={24} className="mb-[2.5px]" />
-              <span>Listas pré-definidas</span>
+        <Tabs defaultValue={currentTab} className="">
+          <TabsList className="flex items-center justify-start gap-4 my-6 sm:my-10 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
+            <TabsTrigger value="predefined-gift" asChild>
+              <Link
+                href={{
+                  query: { ...searchParams as { name?: string }, tab: 'predefined-gift' },
+                }}
+                className="flex gap-2 items-center"
+              >
+                <IoGiftOutline size={24} className="mb-[2.5px]" />
+                <span>Listas pré-definidas</span>
+              </Link>
             </TabsTrigger>
 
-            <TabsTrigger value="all-gifts" className="flex gap-2 items-end">
-              <PiCouchLight size={24} className="mb-[2.5px]" />
-              <span>Todos los productos</span>
+            <TabsTrigger value="all-gifts" asChild>
+              <Link
+                href={{
+                  query: { ...searchParams as { name?: string }, tab: 'all-gifts' },
+                }}
+                className="flex gap-2 items-center"
+              >
+                <PiCouchLight size={24} />
+                <span>Todos los productos</span>
+              </Link>
             </TabsTrigger>
 
-            <TabsTrigger value="createGift" className="flex gap-2 items-center">
-              <IoAdd size={24} />
-              <span>Crear regalo</span>
+            <TabsTrigger value="create-gift" asChild>
+              <Link
+                href={{
+                  query: { tab: 'create-gift' },
+                }}
+                className="flex gap-2 items-center"
+              >
+                <IoAdd size={24} />
+                <span>Crear regalo</span>
+              </Link>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="predefined-gift">
-            <PredefinedGifts />
+            <PredefinedGifts searchParams={searchParams} />
           </TabsContent>
 
           <TabsContent value="all-gifts">

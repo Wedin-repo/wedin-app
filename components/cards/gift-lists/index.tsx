@@ -1,18 +1,30 @@
-import { getGiftLists } from '@/actions/getGiftLists';
+import { GetGiftListsParams, getGiftLists } from '@/actions/getGiftLists';
 import EmptyState from '@/components/EmptyState';
 import GiftListCard from './card';
+import { getGifts } from '@/actions/getGifts';
 
-async function GiftLists() {
-  const giftLists = await getGiftLists();
+type GiftListsProps = {
+  searchParams: GetGiftListsParams;
+};
 
-  if (giftLists?.length === 0 || !giftLists) return <EmptyState showReset />;
+async function GiftLists({searchParams}: GiftListsProps) {
+  const giftLists = await getGiftLists({searchParams});
+
+  if (giftLists?.length === 0 || !giftLists) return <EmptyState title='No se encontraron listas pré-definidas' />;
+
+  const giftListsData = await Promise.all(
+    giftLists.map(async (giftList) => {
+      const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
+      return { ...giftList, gifts }; // Combine the gift list and gifts into a single object
+    })
+  );
 
   return (
-    <>
-      {giftLists?.map(giftList => (
-        <GiftListCard key={giftList.id} giftList={giftList} />
+    <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-8'>
+      {giftListsData?.map(giftListData => (
+        <GiftListCard key={giftListData.id} giftList={giftListData} gifts={giftListData.gifts || []} />
       ))}
-    </>
+    </div>
   );
 }
 

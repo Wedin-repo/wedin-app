@@ -58,7 +58,7 @@ export const addGiftToWishList = async (
   revalidatePath('/', 'layout');
 
   return {
-    status: 'Success',
-    message: 'Added gift to wishlist successfully',
+    status: 'Éxito! 🎁🎉',
+    message: 'Regalo agregado a tu lista.',
   };
 };

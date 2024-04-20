@@ -53,7 +53,7 @@ export default function LoginForm() {
       redirect: false,
     }).then(callback => {
       if (callback?.ok) {
-        window.location.href = '/';
+        window.location.href = '/dashboard';
       }
 
       if (callback?.error) {

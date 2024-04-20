@@ -26,10 +26,9 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
             src={imageUrl?.toString()}
             height={212}
             alt={name}
-            className='border rounded-2xl w-full shadow-sm'
+            className='border rounded-2xl w-full h-[212px] sm:h-[252px] object-cover shadow'
           />
         </div>
-        {/* <div className="border rounded-2xl w-full h-[212px] bg-secondaryBackgroundColor"></div> */}
       </CardHeader>
       <CardContent className="flex flex-col flex-grow gap-1 w-full p-0">
         <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
