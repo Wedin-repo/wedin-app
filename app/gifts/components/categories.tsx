@@ -13,7 +13,7 @@ const Categories = ({ categories }: CategoryProps) => {
   const category_url = params?.get('category');
 
   return (
-    <div className="flex items-start gap-3 mb-6 sm:mb-10 overflow-x-auto overflow-y-hidden">
+    <div className="flex items-start gap-3 mb-6 sm:mb-8 overflow-x-auto overflow-y-hidden">
       {categories?.map(category => (
         <CategoryPill
           key={category.id}

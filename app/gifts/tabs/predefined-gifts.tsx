@@ -13,10 +13,10 @@ async function PredefinedGifts({ searchParams }: PredefinedGiftsProps) {
   const categories = await getCategories();
   return (
     <div className='px-6 sm:px-10'>
-      <div className="mb-4 sm:mb-8">
+      <div className="mb-4 sm:mb-6">
         <SearchBar />
       </div>
-      <p className="text-secondaryTextColor text-lg sm:text-xl mb-4 sm:mb-8">
+      <p className="text-secondaryTextColor text-lg sm:text-xl mb-4 sm:mb-6">
         Comenzá con una lista pre-definida, podes personalizarla más adelante
       </p>
 

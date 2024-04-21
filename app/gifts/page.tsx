@@ -28,7 +28,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
         <GiftHeader />
 
         <Tabs defaultValue={currentTab} className="">
-          <TabsList className="flex items-center justify-start gap-4 my-6 sm:my-10 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
+          <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
             <TabsTrigger value="predefined-gift" asChild>
               <Link
                 href={{
