@@ -1,17 +1,20 @@
-import { Link } from 'lucide-react';
 import Container from '../components/Container';
+import { getCurrentUser } from '@/actions/getCurrentUser';
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    redirect('/gifts');
+  } else {
+    redirect('/dashboard');
+  }
+
   return (
     <Container>
-      <div className="min-h-screen flex flex-col justify-center items-center w-full">
-        hi, go to /dashboard. <br />
-        <p className="flex gap-1">
-          if you can&apos;t go because you&apos;re disabled just{' '}
-          <Link href="/dashboard" className="hover:underline text-blue-500">
-            click here
-          </Link>
-        </p>
+      <div className="min-h-screen flex flex-col justify-center items-center w-full text-3xl">
+        go to /dashboard.
       </div>
     </Container>
   );

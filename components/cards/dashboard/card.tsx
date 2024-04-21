@@ -9,15 +9,21 @@ type GiftCard = {
 };
 
 const GiftCard = async ({ gift, wishListId }: GiftCard) => {
-  const { id, name, description, price, isDefault } = gift;
+  const { id, name, description, price, isDefault, imageUrl } = gift;
 
   const formattedPrice = formatPrice(Number(price));
 
   return (
     <div className="border-b-[#848484] border-b pb-3 w-full flex items-center justify-between gap-4">
       <div className="relative">
-        <div className="h-[90px] bg-borderColor rounded-xl w-[90px] flex items-center justify-center text-white">
-          item
+        <div className="h-[90px] bg-borderColor rounded-xl w-[90px] flex items-center justify-cente">
+          <img
+            src={imageUrl?.toString()}
+            height={90}
+            width={90}
+            alt={name}
+            className="rounded-xl w-full h-full object-cover shadow"
+          />
         </div>
 
         {isDefault && (

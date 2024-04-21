@@ -15,7 +15,7 @@ async function GiftLists({searchParams}: GiftListsProps) {
   const giftListsData = await Promise.all(
     giftLists.map(async (giftList) => {
       const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
-      return { ...giftList, gifts }; // Combine the gift list and gifts into a single object
+      return { ...giftList, gifts };
     })
   );
 

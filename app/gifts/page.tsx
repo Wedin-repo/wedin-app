@@ -20,8 +20,6 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
     currentTab = 'predefined-gift';
   }
 
-  //console.log(currentTab);
-
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start">
