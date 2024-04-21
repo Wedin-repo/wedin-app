@@ -15,7 +15,7 @@ async function Gifts({ searchParams }: GiftsProps) {
   return (
     <div className="flex flex-col gap-5">
       {gifts.map(gift => (
-        <GiftCard key={gift.id} gift={gift} wishListId={searchParams.toString()} />
+        <GiftCard key={gift.id} gift={gift} wishListId={searchParams.wishListId} />
       ))}
     </div>
   );
