@@ -8,14 +8,18 @@ type GiftsProps = {
 
 async function Gifts({ searchParams }: GiftsProps) {
   const gifts = await getGifts({ searchParams });
-  // console.log("Search Params:", searchParams);
 
-  if (gifts?.length === 0 || !gifts) return <EmptyState showReset title='Aún no tienes regalos en tu lista' />;
+  if (gifts?.length === 0 || !gifts)
+    return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
 
   return (
     <div className="flex flex-col gap-5">
       {gifts.map(gift => (
-        <GiftCard key={gift.id} gift={gift} wishListId={searchParams.wishListId} />
+        <GiftCard
+          key={gift.id}
+          gift={gift}
+          wishListId={searchParams.wishListId}
+        />
       ))}
     </div>
   );

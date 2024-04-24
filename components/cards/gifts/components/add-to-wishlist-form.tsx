@@ -1,31 +1,27 @@
-'use client';
-
 import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { FaCheck } from 'react-icons/fa';
-import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { useRouter } from 'next/navigation';
+import { IoGiftOutline } from 'react-icons/io5';
+import AddToWishListButton from './add-to-wishlist-button';
 
 type AddToWishListFormProps = {
   giftId: string;
-  wishlistId?: string | null;
+  wishlistId: string;
+  setIsOpen: (value: boolean) => void;
 };
 
-function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
+function AddToWishListForm({
+  giftId,
+  wishlistId,
+  setIsOpen,
+}: AddToWishListFormProps) {
   const router = useRouter();
   const { toast } = useToast();
 
   const handleAddGiftToWishList = async (formData: FormData) => {
-    if (!wishlistId) {
-      router.push('/register');
-      return;
-    }
-
     const addToWishListWithId = addGiftToWishList.bind(null, wishlistId);
     const response = await addToWishListWithId(formData);
-
-    console.log(response);
 
     toast({
       title: response.status,
@@ -33,8 +29,8 @@ function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
       action: (
         <Button
           onClick={() => router.push('/dashboard')}
-          variant='outline'
-          className='gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white'
+          variant="outline"
+          className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
         >
           <IoGiftOutline />
           Ver lista
@@ -42,15 +38,13 @@ function AddToWishListForm({ giftId, wishlistId }: AddToWishListFormProps) {
       ),
       className: 'bg-white',
     });
+    setIsOpen(false);
   };
 
   return (
     <form action={handleAddGiftToWishList}>
       <input id="giftId" type="hidden" name="giftId" value={giftId} />
-      <Button type="submit" variant="primaryButton">
-        Agregar a mi lista
-        <IoAdd size={22} />
-      </Button>
+      <AddToWishListButton />
     </form>
   );
 }

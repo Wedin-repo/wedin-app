@@ -1,12 +1,7 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
+'use client';
+
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Gift } from '@prisma/client';
 import { IoAdd } from 'react-icons/io5';
@@ -14,22 +9,22 @@ import AddToWishListForm from './add-to-wishlist-form';
 import { formatPrice } from '@/utils/format';
 import Image from 'next/image';
 import ringsLoader from '@/public/images/rings.svg';
+import { useState } from 'react';
 
 type GiftCardModalProps = {
   gift: Gift;
+  wishlistId: string;
 };
 
-async function GiftCardModal({ gift }: GiftCardModalProps) {
+function GiftCardModal({ gift, wishlistId }: GiftCardModalProps) {
   const { name, description, price, id, imageUrl } = gift;
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
-
   const formattedPrice = formatPrice(Number(price));
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="primaryButton">
+        <Button variant="primaryButton" onClick={() => setIsOpen(true)}>
           Ver regalo
           <IoAdd size={22} />
         </Button>
@@ -70,9 +65,11 @@ async function GiftCardModal({ gift }: GiftCardModalProps) {
                 {formattedPrice}
               </span>
             </div>
-            <DialogClose asChild>
-              <AddToWishListForm giftId={id} wishlistId={wedding?.wishListId} />
-            </DialogClose>
+            <AddToWishListForm
+              giftId={id}
+              wishlistId={wishlistId}
+              setIsOpen={setIsOpen}
+            />
           </div>
         </div>
       </DialogContent>
