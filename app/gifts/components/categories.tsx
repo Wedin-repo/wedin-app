@@ -10,10 +10,15 @@ type CategoryProps = {
 
 const Categories = ({ categories }: CategoryProps) => {
   const params = useSearchParams();
-  const category_url = params?.get('category');
-
+  const category_url = params?.get('category' || 'todos');
   return (
     <div className="flex items-start gap-3 mb-6 sm:mb-8 overflow-x-auto overflow-y-hidden">
+      <CategoryPill
+        key='all-gifts'
+        id='all-gifts'
+        label='Todos'
+        selected={!category_url || category_url === 'all-gifts'}
+      />
       {categories?.map(category => (
         <CategoryPill
           key={category.id}

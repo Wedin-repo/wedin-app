@@ -27,7 +27,7 @@ const CategoryPill: React.FC<CategoryPillProps> = ({ selected, label, id }) => {
       category: id,
     };
 
-    if (params?.get('category') === id) {
+    if (params?.get('category') === id || id === 'all-gifts') {
       updatedQuery.category = '';
     }
 
