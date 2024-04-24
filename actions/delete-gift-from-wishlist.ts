@@ -58,7 +58,7 @@ export const deleteGiftFromWishList = async (
   revalidatePath('/', 'layout');
 
   return {
-    status: 'Success',
-    message: 'Removed gift from wishlist successfully',
+    status: 'Éxito! 🎁🗑️',
+    message: 'El regalo fue eliminado de tu lista.',
   };
 };
