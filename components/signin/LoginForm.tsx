@@ -16,6 +16,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { z } from 'zod';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   email: z
@@ -29,6 +30,7 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -53,7 +55,7 @@ export default function LoginForm() {
       redirect: false,
     }).then(callback => {
       if (callback?.ok) {
-        window.location.href = '/';
+        window.location.href = '/dashboard';
       }
 
       if (callback?.error) {

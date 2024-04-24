@@ -7,7 +7,7 @@ const LoginPage = async () => {
   const currentUser = await getCurrentUser();
 
   if (currentUser) {
-    redirect('/');
+    redirect('/dashboard');
   }
 
   return (

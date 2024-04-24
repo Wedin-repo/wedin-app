@@ -4,6 +4,7 @@ export type GetGiftsParams = {
   category?: string;
   giftListId?: string;
   wishListId?: string | null;
+  name?: string;
 };
 
 export async function getGifts({
@@ -26,7 +27,14 @@ export async function getGifts({
       return gifts;
     }
 
-    const { category, giftListId, wishListId } = searchParams;
+    const { category, giftListId, wishListId, name } = searchParams;
+
+    if (name) {
+      query.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
+    }
 
     if (category) {
       query.categoryId = category;

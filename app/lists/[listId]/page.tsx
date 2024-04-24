@@ -2,19 +2,15 @@ import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getGiftList } from '@/actions/getGiftList';
 import { getWedding } from '@/actions/getWedding';
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
 import { getWishList } from '@/actions/getWishList';
 import AddToWishListButton from './AddToWishListButton';
 import { getGifts } from '@/actions/getGifts';
+import { IoGiftOutline } from 'react-icons/io5';
+import { PiWallet } from 'react-icons/pi';
+import { formatPrice } from '@/utils/format';
 import { Suspense } from 'react';
 import Gifts from '@/components/cards/gifts';
+import { Loader2 } from 'lucide-react';
 
 type GiftListPageProps = {
   params: {
@@ -33,11 +29,13 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
   if (!giftList) return null;
 
-  const { name, quantity, totalPrice } = giftList;
+  const { name, quantity, totalPrice, description } = giftList;
+
+  const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
     <Container>
-      <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
+      <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-6 sm:px-10">
         {/* <Breadcrumb className='mb-6'>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -52,19 +50,22 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
         <div className="w-full flex flex-col items-center gap-4">
           <div className="flex flex-col items-center gap-3 w-full ">
-            <h1 className="text-4xl font-medium text-primaryTextColor">
+            <h1 className="text-4xl font-medium text-primaryTextColor text-center">
               {name}
             </h1>
             <div className="flex items-center gap-3">
-              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-sm">
+              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-md flex items-center gap-2">
+                <IoGiftOutline fontSize={'18px'} />
                 {quantity} regalos
               </div>
-              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-sm">
-                Gs. {totalPrice}
+              <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-md flex items-center gap-2">
+                <PiWallet fontSize={'18px'} />
+                {formattedPrice}
               </div>
             </div>
             <p className="text-xl text-center">
-              Elegí esta lista pré-definida, podes personalizarla más adelante
+              {/* Elegí esta lista pré-definida, podes personalizarla más adelante */}
+              {description}
             </p>
           </div>
 
@@ -77,12 +78,10 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
           </div>
         </div>
 
-        <div className="flex justify-center items-center mt-10">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-6">
-            <Suspense fallback={<div>Loading...</div>}>
-              <Gifts searchParams={{ giftListId: listId }} hideButton />
-            </Suspense>
-          </div>
+        <div className="flex justify-center items-center mt-6 sm:mt-10">
+          <Suspense fallback={<div className='min-h-[50vh] flex items-center justify-center'><Loader2 className="h-20 w-20 animate-spin text-secondaryBorderColor" /></div>}>
+            <Gifts searchParams={{ giftListId: listId }} hideButton />
+          </Suspense>
         </div>
       </div>
     </Container>

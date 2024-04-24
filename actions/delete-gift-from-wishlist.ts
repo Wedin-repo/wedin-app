@@ -19,7 +19,7 @@ export const getErrorMessage = (error: unknown): string => {
   return message;
 };
 
-export const addGiftToWishList = async (
+export const deleteGiftFromWishList = async (
   wishlistId: string,
   formData: FormData
 ) => {
@@ -44,7 +44,7 @@ export const addGiftToWishList = async (
       where: { id: wishlistId },
       data: {
         gifts: {
-          connect: { id: giftId },
+          disconnect: { id: giftId },
         },
       },
     });
@@ -59,6 +59,6 @@ export const addGiftToWishList = async (
 
   return {
     status: 'Success',
-    message: 'Added gift to wishlist successfully',
+    message: 'Removed gift from wishlist successfully',
   };
 };

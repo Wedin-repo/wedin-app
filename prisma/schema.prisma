@@ -66,7 +66,7 @@ model User {
 model Wedding {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   name       String?
-  brideId    String   @db.ObjectId
+  brideId    String    @db.ObjectId
   groomId    String    @db.ObjectId
   date       DateTime?
   location   String?
@@ -80,7 +80,7 @@ model Wedding {
   wishList WishList? @relation(fields: [wishListId], references: [id])
   bride    User?     @relation("Bride", fields: [brideId], references: [id])
   groom    User?     @relation("Groom", fields: [groomId], references: [id])
-  
+
   @@unique([wishListId])
   @@unique([groomId])
   @@unique([brideId])
@@ -89,7 +89,7 @@ model Wedding {
 // create a wedding and wishlist for the user after finishing onboarding
 model WishList {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  weddingId   String?   @db.ObjectId
+  weddingId   String?  @db.ObjectId
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -100,18 +100,20 @@ model WishList {
 }
 
 model Gift {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  giftListId  String   @db.ObjectId
-  isDefault   Boolean  @default(false)
-  categoryId  String   @db.ObjectId
-  weddingId   String?   @db.ObjectId
-  wishListIds String[] @db.ObjectId
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String
+  giftListId     String   @db.ObjectId
+  isDefault      Boolean  @default(false)
+  categoryId     String   @db.ObjectId
+  weddingId      String?  @db.ObjectId
+  wishListIds    String[] @db.ObjectId
+  imageUrl       String?
   //price can be = > < 
-  price       String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  price          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  isFavoriteGift Boolean  @default(false)
 
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
   giftlist  GiftList   @relation(fields: [giftListId], references: [id])
@@ -122,10 +124,11 @@ model GiftList {
   id          String  @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
-  quantity    String
+  quantity    String?
+  categoryId  String  @db.ObjectId
   isDefault   Boolean @default(false)
-  totalPrice  String
-  weddingId   String?  @db.ObjectId
+  totalPrice  String?
+  weddingId   String? @db.ObjectId
 
   gifts  Gift[]
   images Image[]
@@ -141,10 +144,11 @@ model Image {
   url        String
   giftId     String   @db.ObjectId
   giftListId String   @db.ObjectId
-  gift       Gift     @relation(fields: [giftId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  GiftList   GiftList @relation(fields: [giftListId], references: [id])
+
+  giftList GiftList @relation(fields: [giftListId], references: [id])
+  gift     Gift     @relation(fields: [giftId], references: [id])
 }
 
 model VerificationToken {

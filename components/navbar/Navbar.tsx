@@ -16,11 +16,9 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  let menuValue;
+  let menuValue = 'addGifts';
 
-  if (pathname.includes('/gifts')) {
-    menuValue = 'addGifts';
-  } else if (pathname.includes('/gifts-received')) {
+  if (pathname.includes('/gifts-received')) {
     menuValue = 'giftsRecieved';
   } else if (pathname.includes('/dashboard')) {
     menuValue = 'myList';
@@ -64,18 +62,19 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
 
               <Tabs
                 className="mb-[-8px] hidden sm:block"
+                defaultValue="addGifts"
                 onValueChange={handleTabChange}
-                defaultValue={menuValue}
+                value={menuValue}
               >
                 <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">
+                  <TabsTrigger value="addGifts" className="!text-sm pb-4">
+                    Agregar regalos
+                  </TabsTrigger>
                   {currentUser && (
                     <TabsTrigger value="myList" className="!text-sm pb-4">
                       Mi lista
                     </TabsTrigger>
                   )}
-                  <TabsTrigger value="addGifts" className="!text-sm pb-4">
-                    Agregar regalos
-                  </TabsTrigger>
                   {currentUser && (
                     <TabsTrigger
                       value="giftsRecieved"

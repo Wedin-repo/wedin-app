@@ -87,12 +87,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               <>
                 <MenuItem
                   // TODO: Fix this ??
-                  onClick={() => handleClick('/')}
+                  onClick={() => handleClick('/dashboard')}
                   label="Mis regalos"
                   icon={<IoGiftOutline fontSize={'18px'} />}
                 />
                 <MenuItem
-                  onClick={() => handleClick('/')}
+                  onClick={() => handleClick('/dashboard')}
                   label="Mi perfil"
                   icon={<IoSettingsOutline fontSize={'18px'} />}
                 />
