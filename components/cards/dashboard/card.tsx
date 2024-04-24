@@ -2,6 +2,8 @@ import { Gift, User } from '@prisma/client';
 import { formatPrice } from '@/utils/format';
 import RemoveFromWishListForm from '@/components/cards/dashboard/components/delete-from-wishlist-form';
 import EditGiftModal from '@/components/cards/dashboard/components/edit-gift-modal';
+import Image from 'next/image';
+import ringsLoader from '@/public/images/rings.svg';
 
 type GiftCard = {
   gift: Gift;
@@ -9,15 +11,21 @@ type GiftCard = {
 };
 
 const GiftCard = async ({ gift, wishListId }: GiftCard) => {
-  const { id, name, description, price, isDefault } = gift;
+  const { id, name, description, price, isDefault, imageUrl } = gift;
 
   const formattedPrice = formatPrice(Number(price));
 
   return (
     <div className="border-b-[#848484] border-b pb-3 w-full flex items-center justify-between gap-4">
       <div className="relative">
-        <div className="h-[90px] bg-borderColor rounded-xl w-[90px] flex items-center justify-center text-white">
-          item
+        <div className="h-[90px] bg-borderColor rounded-xl w-[90px] flex items-center justify-cente">
+          <Image
+            src={imageUrl || ringsLoader}
+            height={90}
+            width={90}
+            alt={name}
+            className="rounded-xl w-full h-full object-cover shadow"
+          />
         </div>
 
         {isDefault && (

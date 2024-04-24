@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useRouter } from 'next/navigation';
 import {
   Form,
   FormControl,
@@ -42,6 +43,7 @@ type SecondStepProps = {
 };
 
 const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
+  const router = useRouter();
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -77,7 +79,7 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
         'No se pudo actualizar la información del usuario.'
       );
 
-      window.location.href = '/';
+      router.push('/gifts');
     } catch (error) {
       console.error('API call failed:', error);
       if (error instanceof Error) {

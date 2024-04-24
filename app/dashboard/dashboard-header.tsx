@@ -1,5 +1,3 @@
-'use client';
-
 import { Switch } from '@/components/ui/switch';
 import React from 'react';
 import { IoIosLink } from 'react-icons/io';
@@ -13,7 +11,6 @@ type DashboardHeaderProps = {
 };
 
 function DashboardHeader({ quantity, formattedTotalPrice }: DashboardHeaderProps) {
-
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       <h1 className="text-4xl font-semibold text-primaryTextColor">Mi lista</h1>
