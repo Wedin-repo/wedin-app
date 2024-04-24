@@ -1,33 +1,43 @@
 import { GetGiftParams } from '@/actions/getGift';
+import { GetGiftListsParams } from '@/actions/getGiftLists';
 import Container from '@/components/Container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Link from 'next/link';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import GiftHeader from './gifts-header';
 import AllGifts from './tabs/all-gifts';
 import PredefinedGifts from './tabs/predefined-gifts';
-import { GetGiftListsParams } from '@/actions/getGiftLists';
-import Link from 'next/link';
+
+const TABS = {
+  predefinedGifts: 'predefinedGifts',
+  allGifts: 'allGifts',
+  createGift: 'createGift',
+};
+
+const DEFAULT_TAB = TABS.predefinedGifts;
+
+type GetGiftSearchParams = {
+  tab?: string;
+} & GetGiftParams &
+  GetGiftListsParams;
 
 type GiftsPageProps = {
-  searchParams: GetGiftParams | GetGiftListsParams;
+  searchParams: GetGiftSearchParams;
 };
 
 const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
-  let currentTab = (searchParams as { tab?: string }).tab ?? 'predefined-gift';
-
-  if (currentTab !== 'all-gifts' && currentTab !== 'create-gift') {
-    currentTab = 'predefined-gift';
-  }
+  const { tab = '' } = searchParams;
+  const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start">
         <GiftHeader />
 
-        <Tabs defaultValue={currentTab} className="">
+        <Tabs defaultValue="predefined-gift" value={currentTab} className="">
           <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
-            <TabsTrigger value="predefined-gift" asChild>
+            <TabsTrigger value={TABS.predefinedGifts} asChild>
               <Link
                 href={{
                   query: { ...searchParams, tab: 'predefined-gift' },
@@ -39,7 +49,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
               </Link>
             </TabsTrigger>
 
-            <TabsTrigger value="all-gifts" asChild>
+            <TabsTrigger value={TABS.allGifts} asChild>
               <Link
                 href={{
                   query: { ...searchParams, tab: 'all-gifts' },
@@ -51,7 +61,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
               </Link>
             </TabsTrigger>
 
-            <TabsTrigger value="create-gift" asChild>
+            <TabsTrigger value={TABS.createGift} asChild>
               <Link
                 href={{
                   query: { tab: 'create-gift' },
@@ -64,11 +74,11 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="predefined-gift">
+          <TabsContent value={TABS.predefinedGifts}>
             <PredefinedGifts searchParams={searchParams} />
           </TabsContent>
 
-          <TabsContent value="all-gifts">
+          <TabsContent value={TABS.allGifts}>
             <AllGifts searchParams={searchParams} />
           </TabsContent>
         </Tabs>

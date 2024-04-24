@@ -12,11 +12,11 @@ async function main() {
   // Seed categories
   const categories = await Promise.all(
     [
-      'Luna de miel', 'Casa', 'Electrodomésticos', 
+      'Luna de miel', 'Casa', 'Electrodomésticos',
       'Viajes', 'Gastronomía', 'Aventura', 'Relax', 'Cultura y arte'
     ].map(async (name) => {
       return prismaClient.category.create({
-        data: { name } 
+        data: { name }
       });
     })
   );
