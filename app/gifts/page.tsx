@@ -35,12 +35,12 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
       <div className="min-h-[90vh] flex flex-col justify-start">
         <GiftHeader />
 
-        <Tabs defaultValue="predefined-gift" value={currentTab} className="">
+        <Tabs defaultValue={DEFAULT_TAB} value={currentTab}>
           <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
             <TabsTrigger value={TABS.predefinedGifts} asChild>
               <Link
                 href={{
-                  query: { ...searchParams, tab: 'predefined-gift' },
+                  query: { ...searchParams, tab: TABS.predefinedGifts },
                 }}
                 className="flex gap-2 items-center"
               >
@@ -52,7 +52,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             <TabsTrigger value={TABS.allGifts} asChild>
               <Link
                 href={{
-                  query: { ...searchParams, tab: 'all-gifts' },
+                  query: { ...searchParams, tab: TABS.allGifts },
                 }}
                 className="flex gap-2 items-center"
               >
