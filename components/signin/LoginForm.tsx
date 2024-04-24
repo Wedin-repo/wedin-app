@@ -55,7 +55,7 @@ export default function LoginForm() {
       redirect: false,
     }).then(callback => {
       if (callback?.ok) {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
       }
 
       if (callback?.error) {

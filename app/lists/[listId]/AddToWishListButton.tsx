@@ -41,7 +41,8 @@ const AddToWishListButton = ({
         }),
       });
       if (response.ok) {
-        router.push('/dashboard');
+        window.location.href = '/dashboard';
+        // router.push('/dashboard');
       } else {
         throw new Error('Failed to add gift to wishlist');
       }
