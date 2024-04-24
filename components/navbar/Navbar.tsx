@@ -6,12 +6,14 @@ import { User } from '@prisma/client';
 import { usePathname } from 'next/navigation';
 import Logo from './Logo';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useRouter } from 'next/navigation';
 
 type NavBarProps = {
   currentUser?: User | null;
 };
 
 export const NavBar = ({ currentUser }: NavBarProps) => {
+  const router = useRouter();
   const pathname = usePathname();
 
   let menuValue;
@@ -24,7 +26,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
     menuValue = 'myList';
   }
 
-  const handleTabChange = (value: string) => {
+  /* const handleTabChange = (value: string) => {
     let url = '/';
     switch (value) {
       case 'myList':
@@ -39,8 +41,8 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
       default:
         break;
     }
-    window.location.href = url;
-  };
+    router.push(url);
+  }; */
 
   if (
     pathname.includes('/login') ||
@@ -62,7 +64,6 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
 
               <Tabs
                 className="mb-[-8px] hidden sm:block"
-                onValueChange={handleTabChange}
                 defaultValue={menuValue}
               >
                 <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">

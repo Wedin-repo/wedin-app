@@ -20,6 +20,8 @@ const nextConfig = {
       'lh3.googleusercontent.com',
       'res.cloudinary.com',
       'scontent.fasu11-2.fna.fbcdn.net',
+      'loremflickr.com',
+      'picsum.photos',
       // Add other domains you want to allow here
     ],
   },

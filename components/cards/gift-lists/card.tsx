@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getGifts } from '@/actions/getGifts';
 import { GoArrowRight } from 'react-icons/go';
 import { Button } from '@/components/ui/button';
 import { Gift, GiftList } from '@prisma/client';
@@ -10,28 +11,33 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import Image from 'next/image';
+import ringsLoader from '@/public/images/rings.svg';
 
 type GiftListCardProps = {
   giftList: GiftList;
-  gifts: Gift[];
 };
 
-const GiftListCard = async ({ giftList, gifts }: GiftListCardProps) => {
+const GiftListCard = async ({ giftList }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
+
+  const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
 
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
     <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[435px]">
-      <div className='relative'>
+      <div className="relative">
         <Carousel>
-        <CarouselContent>
+          <CarouselContent>
             {gifts?.map((gift, index) => (
               <CarouselItem key={index}>
-                <img
-                  src={gift.imageUrl?.toString()} 
+                <Image
+                  src={gift.imageUrl || ringsLoader}
+                  width={500}
+                  height={0}
                   alt={gift.name}
-                  className="border rounded-2xl w-full h-[212px] sm:h-[252px] object-cover shadow"
+                  className="border rounded-2xl h-[252px] w-full object-cover shadow"
                 />
               </CarouselItem>
             ))}

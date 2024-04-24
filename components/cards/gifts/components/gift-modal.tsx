@@ -12,6 +12,8 @@ import { Gift } from '@prisma/client';
 import { IoAdd } from 'react-icons/io5';
 import AddToWishListForm from './add-to-wishlist-form';
 import { formatPrice } from '@/utils/format';
+import Image from 'next/image';
+import ringsLoader from '@/public/images/rings.svg';
 
 type GiftCardModalProps = {
   gift: Gift;
@@ -36,11 +38,12 @@ async function GiftCardModal({ gift }: GiftCardModalProps) {
       <DialogContent className="bg-white !rounded-2xl">
         <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
           <div className="w-full lg:w-1/2">
-            <img
-              src={imageUrl?.toString()}
-              height={352}
-              alt={name}
-              className="border rounded-2xl w-full h-[252px] sm:h-[352px] object-cover shadow"
+            <Image
+              src={imageUrl || ringsLoader}
+              width={500}
+              height={342}
+              alt={gift.name}
+              className="border rounded-2xl h-[242px] sm:h-[342px] w-full object-cover shadow"
             />
           </div>
 

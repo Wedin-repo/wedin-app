@@ -7,6 +7,8 @@ import {
 import { Gift } from '@prisma/client';
 import GiftCardModal from './components/gift-modal';
 import { formatPrice } from '@/utils/format';
+import Image from 'next/image';
+import ringsLoader from '@/public/images/rings.svg';
 
 type GiftCardProps = {
   gift: Gift;
@@ -21,12 +23,13 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
   return (
     <Card className="flex flex-col border-2 rounded-xl py-6 px-4 gap-4 max-w-[435px]">
       <CardHeader className="p-0">
-        <div className='w-full flex items-center'>
-          <img
-            src={imageUrl?.toString()}
-            height={212}
-            alt={name}
-            className='border rounded-2xl w-full h-[212px] sm:h-[252px] object-cover shadow'
+        <div className="w-full flex items-center">
+          <Image
+            src={imageUrl || ringsLoader}
+            width={500}
+            height={0}
+            alt={gift.name}
+            className="border rounded-2xl h-[252px] w-full object-cover shadow"
           />
         </div>
       </CardHeader>

@@ -11,26 +11,21 @@ import Link from 'next/link';
 
 type GiftsPageProps = {
   searchParams: GetGiftParams | GetGiftListsParams;
+  tabParams?: string;
 };
 
-const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
-  let currentTab = (searchParams as { tab?: string }).tab ?? 'predefined-gift';
-
-  if (currentTab !== 'all-gifts' && currentTab !== 'create-gift') {
-    currentTab = 'predefined-gift';
-  }
-
+const GiftsPage = ({ searchParams }: GiftsPageProps) => {
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start">
         <GiftHeader />
 
-        <Tabs defaultValue={currentTab} className="">
+        <Tabs defaultValue={'predefined-gift'} value={searchParams?.tab}>
           <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
             <TabsTrigger value="predefined-gift" asChild>
               <Link
                 href={{
-                  query: { ...searchParams as { name?: string }, tab: 'predefined-gift' },
+                  query: { ...searchParams, tab: 'predefined-gift' },
                 }}
                 className="flex gap-2 items-center"
               >
@@ -42,7 +37,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             <TabsTrigger value="all-gifts" asChild>
               <Link
                 href={{
-                  query: { ...searchParams as { name?: string }, tab: 'all-gifts' },
+                  query: { ...searchParams, tab: 'all-gifts' },
                 }}
                 className="flex gap-2 items-center"
               >

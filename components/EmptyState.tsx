@@ -3,6 +3,7 @@
 import { FC } from 'react';
 import { Button } from '@/components/ui/button';
 import { MdErrorOutline } from "react-icons/md";
+import { useRouter } from 'next/navigation';
 
 
 type Props = {
@@ -16,6 +17,7 @@ const EmptyState: FC<Props> = ({
   subtitle = '',
   showReset,
 }) => {
+  const router = useRouter();
 
   return (
     <div className="h-[50vh] sm:h-[60vh] flex flex-col gap-2 justify-center items-center">
@@ -28,7 +30,7 @@ const EmptyState: FC<Props> = ({
 
       <div className="mt-6">
         {showReset && (
-          <Button variant="emptyStateButton" size='emptyStateButton' onClick={() => window.location.href='/gifts'}>
+          <Button variant="emptyStateButton" size='emptyStateButton' onClick={() => router.push('/gifts')}>
             Agregá un regalo ahora
           </Button>
         )}
