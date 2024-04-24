@@ -9,6 +9,9 @@ import GiftCardModal from './components/gift-modal';
 import { formatPrice } from '@/utils/format';
 import Image from 'next/image';
 import ringsLoader from '@/public/images/rings.svg';
+import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getWedding } from '@/actions/getWedding';
+import { redirect } from 'next/navigation';
 
 type GiftCardProps = {
   gift: Gift;
@@ -17,8 +20,11 @@ type GiftCardProps = {
 
 async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
   const { name, description, price, imageUrl } = gift;
-
+  const currentUser = await getCurrentUser();
+  const wedding = await getWedding(currentUser?.id);
   const formattedPrice = formatPrice(Number(price));
+
+  if (!wedding || !wedding.wishListId) return redirect('/gifts');
 
   return (
     <Card className="flex flex-col border-2 rounded-xl py-6 px-4 gap-4 max-w-[435px]">
@@ -42,7 +48,7 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
       </CardContent>
       {!hideButton && (
         <CardFooter className="p-0">
-          <GiftCardModal gift={gift} />
+          <GiftCardModal gift={gift} wishlistId={wedding.wishListId} />
         </CardFooter>
       )}
     </Card>
