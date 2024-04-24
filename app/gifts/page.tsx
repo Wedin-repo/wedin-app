@@ -30,7 +30,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             <TabsTrigger value="predefined-gift" asChild>
               <Link
                 href={{
-                  query: { ...searchParams as { name?: string }, tab: 'predefined-gift' },
+                  query: { ...searchParams, tab: 'predefined-gift' },
                 }}
                 className="flex gap-2 items-center"
               >
@@ -42,7 +42,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             <TabsTrigger value="all-gifts" asChild>
               <Link
                 href={{
-                  query: { ...searchParams as { name?: string }, tab: 'all-gifts' },
+                  query: { ...searchParams, tab: 'all-gifts' },
                 }}
                 className="flex gap-2 items-center"
               >
