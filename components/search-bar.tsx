@@ -26,10 +26,10 @@ function SearchBar({}: SearchProps) {
   }
 
   return (
-    <div className="bg-[#F2F2F2] w-full md:w-auto py-1.5 pl-4 pr-1.5 rounded-full flex items-center gap-2">
+    <div className="bg-secondaryBackgroundColor w-full md:w-auto py-1.5 pl-4 pr-1.5 rounded-full flex items-center gap-2">
       <BiSearch fontSize={'22px'} />
       <Input
-        className="bg-transparent border-0 rounded-full text-md pl-2 text-primaryTextColor focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="bg-transparent border-0 rounded-full pl-2 focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="Buscar"
         onChange={e => debounce(e.target.value)}
         defaultValue={name}

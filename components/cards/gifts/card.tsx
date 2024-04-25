@@ -24,15 +24,19 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
   const formattedPrice = formatPrice(Number(price));
 
   return (
-    <Card className="flex flex-col hover:shadow-2xl hover:shadow-gray-300 transition duration-150 ease-in-out p-0">
-      <CardHeader className="p-4">
+    <Card
+      className="flex flex-col p-0 cursor-pointer
+      transition duration-200 ease-in-out transform hover:scale-105
+      hover:shadow-2xl"
+    >
+      <CardHeader className="p-0">
         <div className="w-full flex items-center">
           <Image
             src={imageUrl || ringsLoader}
             width={500}
             height={0}
             alt={gift.name}
-            className="rounded-2xl bottom h-[252px] w-full object-cover"
+            className="rounded-t-xl h-[252px] w-full object-cover"
           />
         </div>
       </CardHeader>

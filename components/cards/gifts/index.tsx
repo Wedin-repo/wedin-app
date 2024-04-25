@@ -1,7 +1,7 @@
 import { GetGiftsParams, getGifts } from '@/actions/getGifts';
 import EmptyState from '@/components/EmptyState';
-import GiftCard from './card';
 import CardContainer from '../shared/card-container';
+import GiftCard from './card';
 
 type GiftsProps = {
   searchParams: GetGiftsParams;

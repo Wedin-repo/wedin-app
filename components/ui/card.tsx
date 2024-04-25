@@ -8,7 +8,7 @@ const Card = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('rounded-xl py-6 px-4 gap-4 h-[488px]', className)}
+    className={cn('rounded-xl py-6 px-4 gap-4 h-[400px] bg-white', className)}
     {...props}
   />
 ));
@@ -45,11 +45,7 @@ const CardDescription = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <p
-    ref={ref}
-    className={cn('text-sm text-muted-foreground', className)}
-    {...props}
-  />
+  <p ref={ref} className={cn('text-sm', className)} {...props} />
 ));
 CardDescription.displayName = 'CardDescription';
 
@@ -59,7 +55,7 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('flex flex-col flex-grow  w-full p-0', className)}
+    className={cn('flex flex-col flex-grow w-full p-0', className)}
     {...props}
   />
 ));

@@ -29,7 +29,6 @@ type GiftsPageProps = {
 const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
   const { tab = '' } = searchParams;
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
-  console.log('currentTab', currentTab)
 
   return (
     <Container>
