@@ -1,9 +1,5 @@
-import Link from 'next/link';
 import { getGifts } from '@/actions/getGifts';
-import { GoArrowRight } from 'react-icons/go';
 import { Button } from '@/components/ui/button';
-import { Gift, GiftList } from '@prisma/client';
-import { formatPrice } from '@/utils/format';
 import {
   Carousel,
   CarouselContent,
@@ -11,8 +7,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import Image from 'next/image';
 import ringsLoader from '@/public/images/rings.svg';
+import { formatPrice } from '@/utils/format';
+import { GiftList } from '@prisma/client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { GoArrowRight } from 'react-icons/go';
 
 type GiftListCardProps = {
   giftList: GiftList;
@@ -20,13 +20,11 @@ type GiftListCardProps = {
 
 const GiftListCard = async ({ giftList }: GiftListCardProps) => {
   const { name, description, totalPrice, quantity, id } = giftList;
-
   const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
-
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
-    <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[435px]">
+    <div className="flex flex-col border-2 rounded-xl py-6 px-4 gap-4">
       <div className="relative">
         <Carousel>
           <CarouselContent>

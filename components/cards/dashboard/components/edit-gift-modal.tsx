@@ -2,7 +2,6 @@ import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getWedding } from '@/actions/getWedding';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Gift } from '@prisma/client';
-import EditGiftFromWishListForm from '@/components/cards/dashboard/components/edit-gift-from-wishlist-form';
 import { Button } from '@/components/ui/button';
 import { FiEdit3 } from 'react-icons/fi';
 import EditGiftForm from './edit-gift-form';
@@ -15,19 +14,20 @@ type EditGiftModalProps = {
 };
 
 async function EditGiftModal({ gift }: EditGiftModalProps) {
-
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
 
   //const { name, description, price, id } = gift;
   const categories = await getCategories();
 
-  const category = await getCategory({ searchParams: { categoryId: gift.categoryId } });
+  const category = await getCategory({
+    searchParams: { categoryId: gift.categoryId },
+  });
 
   //console.log(category);
 
   if (!categories) return null;
-  
+
   //const currentUser = await getCurrentUser();
   //const wedding = await getWedding(currentUser?.id);
 
@@ -45,8 +45,13 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
             <ImageUpload />
           </div>
 
-          <div className='w-full lg:w-1/2'>
-            <EditGiftForm gift={gift} categories={categories} category={category} wishlistId={wedding?.wishListId} />
+          <div className="w-full lg:w-1/2">
+            <EditGiftForm
+              gift={gift}
+              categories={categories}
+              category={category}
+              wishlistId={wedding?.wishListId}
+            />
             {/* <EditGiftFromWishListForm giftId={id} /> */}
           </div>
         </div>

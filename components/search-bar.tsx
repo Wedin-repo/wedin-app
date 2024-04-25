@@ -1,20 +1,17 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useDebounceCallback } from 'usehooks-ts';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { BiSearch } from 'react-icons/bi';
+import { useDebounceCallback } from 'usehooks-ts';
 
-type SearchProps = {
-};
+type SearchProps = {};
 
 function SearchBar({}: SearchProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const debounce = useDebounceCallback(handleSearchTitle, 1000)
-
+  const debounce = useDebounceCallback(handleSearchTitle, 1000);
   const name = searchParams.get('name') ?? '';
 
   function handleSearchTitle(value: string) {
@@ -34,7 +31,7 @@ function SearchBar({}: SearchProps) {
       <Input
         className="bg-transparent border-0 rounded-full text-md pl-2 text-primaryTextColor focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="Buscar"
-        onChange={(e) => debounce(e.target.value)}
+        onChange={e => debounce(e.target.value)}
         defaultValue={name}
       />
     </div>

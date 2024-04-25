@@ -1,18 +1,17 @@
-import { Gift, User } from '@prisma/client';
-import { formatPrice } from '@/utils/format';
 import RemoveFromWishListForm from '@/components/cards/dashboard/components/delete-from-wishlist-form';
 import EditGiftModal from '@/components/cards/dashboard/components/edit-gift-modal';
-import Image from 'next/image';
 import ringsLoader from '@/public/images/rings.svg';
+import { formatPrice } from '@/utils/format';
+import { Gift } from '@prisma/client';
+import Image from 'next/image';
 
-type GiftCard = {
+type GiftCardProps = {
   gift: Gift;
   wishListId?: string | null;
 };
 
-const GiftCard = async ({ gift, wishListId }: GiftCard) => {
+const GiftCard = async ({ gift, wishListId }: GiftCardProps) => {
   const { id, name, description, price, isDefault, imageUrl } = gift;
-
   const formattedPrice = formatPrice(Number(price));
 
   return (
@@ -41,7 +40,7 @@ const GiftCard = async ({ gift, wishListId }: GiftCard) => {
         <span className="text-black text-lg">{formattedPrice}</span>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3" style={{ display: 'none' }}>
         <EditGiftModal gift={gift} />
         <RemoveFromWishListForm giftId={id} wishlistId={wishListId} />
       </div>
