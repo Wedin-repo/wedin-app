@@ -36,7 +36,7 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
             width={500}
             height={0}
             alt={gift.name}
-            className="rounded-t-xl h-[252px] w-full object-cover"
+            className="rounded-t-lg h-[252px] w-full object-cover"
           />
         </div>
       </CardHeader>

@@ -1,15 +1,15 @@
-import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getGiftList } from '@/actions/getGiftList';
-import { getWedding } from '@/actions/getWedding';
-import AddToWishListButton from './AddToWishListButton';
 import { getGifts } from '@/actions/getGifts';
+import { getWedding } from '@/actions/getWedding';
+import Container from '@/components/Container';
+import Gifts from '@/components/cards/gifts';
+import { formatPrice } from '@/utils/format';
+import { Loader2 } from 'lucide-react';
+import { Suspense } from 'react';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
-import { formatPrice } from '@/utils/format';
-import { Suspense } from 'react';
-import Gifts from '@/components/cards/gifts';
-import { Loader2 } from 'lucide-react';
+import AddToWishListButton from './AddToWishListButton';
 
 type GiftListPageProps = {
   params: {
@@ -32,18 +32,18 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
   return (
     <Container>
-      <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-6 sm:px-10">
-        <div className="w-full flex flex-col items-center gap-4">
+      <div className="flex flex-col min-h-[90vh] justify-start mt-12 sm:mt-12 px-6 sm:px-10">
+        <div className="flex flex-col w-full items-center gap-4">
           <div className="flex flex-col items-center gap-3 w-full ">
             <h1 className="text-4xl font-medium text-primaryTextColor text-center">
               {name}
             </h1>
             <div className="flex items-center gap-3">
-              <div className="bg-secondaryBackgroundColor rounded-full py-1.5 px-4 text-md flex items-center gap-2">
+              <div className="bg-secondaryBackgroundColor rounded-full py-1.5 px-4 flex items-center gap-2">
                 <IoGiftOutline fontSize={'18px'} />
                 {quantity} regalos
               </div>
-              <div className="bg-secondaryBackgroundColor rounded-full py-1.5 px-4 text-md flex items-center gap-2">
+              <div className="bg-secondaryBackgroundColor rounded-full py-1.5 px-4 flex items-center gap-2">
                 <PiWallet fontSize={'18px'} />
                 {formattedPrice}
               </div>
@@ -60,7 +60,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
           </div>
         </div>
 
-        <div className="flex justify-center items-center mt-6 sm:mt-10">
+        <div className="mt-6 sm:mt-10">
           <Suspense
             fallback={
               <div className="min-h-[50vh] flex items-center justify-center">
