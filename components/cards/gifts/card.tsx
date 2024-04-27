@@ -47,7 +47,7 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
         </Card>
       </DialogTrigger>
 
-      <DialogContent className="bg-white !rounded-2xl">
+      <DialogContent className="bg-white rounded-xl">
         <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
           <div className="w-full lg:w-1/2">
             <Image
@@ -55,21 +55,17 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
               width={500}
               height={342}
               alt={gift.name}
-              className="border rounded-2xl h-[242px] sm:h-[342px] w-full object-cover shadow"
+              className="border rounded-xl h-[242px] sm:h-[342px] w-full object-cover"
             />
           </div>
 
-          <div className="w-full lg:w-1/2 flex flex-col h-full justify-evenly gap-4">
-            <div className="flex flex-col gap-1">
-              <h1 className="text-primaryTextColor text-2xl sm:text-3xl font-medium">
-                {name}
-              </h1>
-              <p className="text-secondaryTextColor text-md sm:text-lg">
-                {description}
-              </p>
+          <div className="w-full lg:w-1/2 flex flex-col h-full justify-around gap-4">
+            <div className="flex flex-col gap-3">
+              <h1 className="text-3xl sm:text-2xl font-medium">{name}</h1>
+              <p className="text-secondaryTextColor text-base">{description}</p>
             </div>
 
-            <div className="flex flex-col text-primaryTextColor text-md sm:text-lg gap-3">
+            <div className="flex flex-col text-base sm:text-lg gap-3">
               <div className="flex items-center justify-between">
                 <p>Marcar como el que más queremos ⭐️</p>
                 <Switch id="favorite-gift" />
@@ -78,7 +74,10 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
                 <p>Regalo grupal</p>
                 <Switch id="group-gift" />
               </div>
-              <span className="text-xl sm:text-2xl text-secondaryTitleColor font-medium">
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-2xl text-secondaryTitleColor font-medium">
                 {formattedPrice}
               </span>
             </div>
