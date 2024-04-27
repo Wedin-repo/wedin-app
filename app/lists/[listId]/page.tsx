@@ -3,13 +3,13 @@ import { getGiftList } from '@/actions/getGiftList';
 import { getGifts } from '@/actions/getGifts';
 import { getWedding } from '@/actions/getWedding';
 import Container from '@/components/Container';
+import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';
 import { formatPrice } from '@/utils/format';
 import { Suspense } from 'react';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
-import AddToWishListButton from './AddToWishListButton';
-import Loader from '@/components/Loader';
+import AddToWishlistForm from './add-to-wishlist-form';
 
 type GiftListPageProps = {
   params: {
@@ -52,18 +52,15 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
           </div>
 
           <div className="w-full flex justify-center">
-            <AddToWishListButton
-              currentUser={currentUser}
-              wishListId={wedding?.wishListId}
+            <AddToWishlistForm
+              wishlistId={wedding?.wishListId}
               giftIds={giftIds}
             />
           </div>
         </div>
 
         <div className="mt-6 sm:mt-10">
-          <Suspense
-            fallback={<Loader />}
-          >
+          <Suspense fallback={<Loader />}>
             <Gifts searchParams={{ giftListId: listId }} />
           </Suspense>
         </div>

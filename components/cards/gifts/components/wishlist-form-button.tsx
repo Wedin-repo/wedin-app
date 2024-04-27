@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import { GoArrowRight } from 'react-icons/go';
 import { GrUndo } from 'react-icons/gr';
 import { IoAdd } from 'react-icons/io5';
 
@@ -16,11 +17,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
 
   if (variant === 'undoButton') {
     return (
-      <Button
-        type="submit"
-        variant="undoButton"
-        disabled={pending}
-      >
+      <Button type="submit" variant="undoButton" disabled={pending}>
         {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <GrUndo />}
         Deshacer
       </Button>
@@ -39,6 +36,24 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           <FaRegTrashAlt fontSize={'16px'} />
+        )}
+      </Button>
+    );
+  }
+
+  if (variant === 'chooseGiftListButton') {
+    return (
+      <Button
+        type="submit"
+        variant="chooseGiftListButton"
+        size="chooseGiftListButton"
+        disabled={pending}
+      >
+        Elegir lista
+        {pending ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <GoArrowRight fontSize={'24px'} />
         )}
       </Button>
     );

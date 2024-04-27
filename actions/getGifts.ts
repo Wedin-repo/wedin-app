@@ -29,7 +29,14 @@ export async function getGifts({
       return gifts;
     }
 
-    const { category, giftListId, wishListId, name, page, itemsPerPage = 15 /* default items per page */ } = searchParams;
+    const {
+      category,
+      giftListId,
+      wishListId,
+      name,
+      page,
+      itemsPerPage = 15 /* default items per page */,
+    } = searchParams;
 
     if (name) {
       query.name = {
@@ -69,7 +76,6 @@ export async function getGifts({
     if (!gifts) return null;
 
     return gifts;
-
   } catch (error: any) {
     console.error('Error retrieving gifts:', error);
     throw error;
