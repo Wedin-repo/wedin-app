@@ -17,7 +17,7 @@ type GiftCardProps = {
   hideModal?: boolean;
 };
 
-function GiftCard({ gift, wishlistId, hideModal = false }: GiftCardProps) {
+function GiftCard({ gift, wishlistId }: GiftCardProps) {
   const { name, description, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +25,7 @@ function GiftCard({ gift, wishlistId, hideModal = false }: GiftCardProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Card className={`${!hideModal && 'cursor-pointer'}`}>
+        <Card>
           <CardHeader className="w-full flex items-center p-0">
             <Image
               src={imageUrl || ringsLoader}

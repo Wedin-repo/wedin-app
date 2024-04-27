@@ -15,11 +15,15 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
         <SearchBar />
       </div>
 
-      <div className="">
-        <Suspense fallback={<div className='min-h-[50vh] flex items-center justify-center'><Loader2 className="h-20 w-20 animate-spin text-secondaryBorderColor" /></div>}>
-          <Gifts searchParams={searchParams} />
-        </Suspense>
-      </div>
+      <Suspense
+        fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <Loader2 className="h-20 w-20 animate-spin text-secondaryBorderColor" />
+          </div>
+        }
+      >
+        <Gifts searchParams={searchParams} />
+      </Suspense>
     </>
   );
 }

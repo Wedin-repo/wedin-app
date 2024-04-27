@@ -1,6 +1,5 @@
 import { GetGiftsParams, getGifts } from '@/actions/getGifts';
 import EmptyState from '@/components/EmptyState';
-import CardContainer from '../shared/card-container';
 import GiftCard from './card';
 
 type GiftsProps = {
@@ -14,7 +13,7 @@ async function Gifts({ searchParams }: GiftsProps) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
 
   return (
-    <CardContainer>
+    <div className="flex flex-col gap-5">
       {gifts.map(gift => (
         <GiftCard
           key={gift.id}
@@ -22,7 +21,7 @@ async function Gifts({ searchParams }: GiftsProps) {
           wishListId={searchParams.wishListId}
         />
       ))}
-    </CardContainer>
+    </div>
   );
 }
 
