@@ -1,6 +1,6 @@
 'use client';
 
-import useOutsideClick from '@/app/hooks/useOutsideClick';
+import useOutsideClick from '@/hooks/useOutsideClick';
 import Avatar from '@/components/Avatar';
 import MenuItem from '@/components/MenuItem';
 import { Button } from '@/components/ui/button';
@@ -69,26 +69,22 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       {isOpen && (
         <div className="absolute rounded-xl shadow-md w-[40vw] md:w-11/12 bg-white overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer">
-            {currentUser && (
-              <>
-                <MenuItem
-                  onClick={() => handleClick('/dashboard')}
-                  label="Mis regalos"
-                  icon={<IoGiftOutline fontSize={'18px'} />}
-                />
-                <MenuItem
-                  onClick={() => handleClick('/dashboard')}
-                  label="Mi perfil"
-                  icon={<IoSettingsOutline fontSize={'18px'} />}
-                />
-                <hr />
-                <MenuItem
-                  onClick={() => signOut()}
-                  label="Cerrar sesión"
-                  icon={<MdLogout fontSize={'18px'} />}
-                />
-              </>
-            )}
+            <MenuItem
+              onClick={() => handleClick('/dashboard')}
+              label="Mis regalos"
+              icon={<IoGiftOutline fontSize={'18px'} />}
+            />
+            <MenuItem
+              onClick={() => handleClick('/dashboard')}
+              label="Mi perfil"
+              icon={<IoSettingsOutline fontSize={'18px'} />}
+            />
+            <hr />
+            <MenuItem
+              onClick={() => signOut()}
+              label="Cerrar sesión"
+              icon={<MdLogout fontSize={'18px'} />}
+            />
           </div>
         </div>
       )}
