@@ -25,10 +25,10 @@ export const addGiftsToWishList = async (
 ) => {
   const giftIds = formData.get('giftIds') as string[] | null;
 
-  if (giftIds === null) {
+  if (giftIds === null || giftIds.length === 0) {
     return {
       status: 'Error',
-      message: 'Invalid gift ID',
+      message: 'Invalid gift IDs',
     };
   }
 

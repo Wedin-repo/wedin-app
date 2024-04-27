@@ -25,8 +25,8 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
 
     if (response.status === 'Error') {
       toast({
-        title: 'Error',
-        description: 'Failed to add gift to wishlist.',
+        title: response.status,
+        description: response.message,
         action: <FaCheck color="red" fontSize={'36px'} />,
         className: 'bg-white',
       });
