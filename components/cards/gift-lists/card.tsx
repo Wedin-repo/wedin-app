@@ -24,13 +24,13 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
-    <Link href={`/lists/${id}`}>
-      <Card>
-        <CardHeader className="p-0 relative">
-          <Carousel>
-            <CarouselContent>
-              {gifts?.map(gift => (
-                <CarouselItem key={gift.id}>
+    <Card>
+      <CardHeader className="p-0 relative">
+        <Carousel>
+          <CarouselContent>
+            {gifts?.map(gift => (
+              <CarouselItem key={gift.id}>
+                <Link href={`/lists/${id}`}>
                   <Image
                     src={gift.imageUrl || ringsLoader}
                     width={500}
@@ -38,17 +38,19 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
                     alt={gift.name}
                     className="rounded-t-lg h-[252px] w-full object-cover"
                   />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious />
-            <CarouselNext />
-          </Carousel>
-          <div className="bg-white rounded-full px-5 py-1.5 absolute top-2 right-0 mr-4">
-            {quantity} regalos
-          </div>
-        </CardHeader>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+        <div className="bg-white rounded-full px-5 py-1.5 absolute top-2 right-0 mr-4">
+          {quantity} regalos
+        </div>
+      </CardHeader>
 
+      <Link href={`/lists/${id}`}>
         <CardContent className="p-4">
           <p className="text-primaryTitleColor font-medium text-sm">{name}</p>
           <p className="text-secondaryTextColor text-sm">{description}</p>
@@ -57,8 +59,8 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
             <FaChevronRight fontSize="22" className="pb-1 block sm:hidden" />
           </div>
         </CardContent>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 }
 

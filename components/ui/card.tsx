@@ -6,7 +6,7 @@ const cardVariants = cva('', {
   variants: {
     variant: {
       default:
-        'flex flex-col cursor-pointer bg-white rounded-lg gap-0 p-0 transition duration-200 ease-in-out transform hover:scale-105 hover:shadow-2xl',
+        'flex flex-col cursor-pointer bg-white rounded-lg gap-0 p-0 transition duration-200 ease-in-out transform hover:scale-105 hover:shadow-xl',
       dashboard:
         'border-b-[#848484] border-b pb-3 w-full flex items-center justify-between gap-4',
     },
