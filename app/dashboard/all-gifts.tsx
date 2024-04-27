@@ -1,18 +1,19 @@
 import { Suspense } from 'react';
 import { GetGiftsParams } from '@/actions/getGiftsPagination';
+import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getWedding } from '@/actions/getWedding';
-import { User } from '@prisma/client';
-import SearchBar from '../../components/search-bar';
+import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
 // import Pagination from '@/components/cards/dashboard/components/pagination';
-import Loader from '@/components/Loader';
+import Pagination from '@/components/cards/dashboard/components/pagination';
+import SearchBar from '../../components/search-bar';
 
 type AllGiftsProps = {
   searchParams: GetGiftsParams;
-  currentUser: User;
 };
 
-async function AllGifts({ searchParams, currentUser }: AllGiftsProps) {
+async function AllGifts({ searchParams }: AllGiftsProps) {
+  const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
 

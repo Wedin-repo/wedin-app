@@ -12,6 +12,10 @@ export const login = async (
 ) => {
   const validatedFields = LoginSchema.safeParse(values);
 
+  if (!validatedFields.success) {
+    return { error: 'Campos inválidos' };
+  }
+
   if (validatedFields.success) {
     const { email, password } = validatedFields.data;
 
@@ -29,17 +33,16 @@ export const login = async (
             redirectTo: '/onboarding',
           });
       }
+      return { success: 'success' };
     } catch (error) {
       if (error instanceof AuthError) {
         switch (error.type) {
           case 'CredentialsSignin':
-            return { error: 'Invalid credentials' };
+            return { error: 'Credenciales incorrectas' };
           default:
             return { error: 'An error occurred' };
         }
       }
     }
   }
-
-  return { error: 'Invalid data' };
 };

@@ -1,25 +1,21 @@
+import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getGifts } from '@/actions/getGifts';
+import { getWedding } from '@/actions/getWedding';
 import { Switch } from '@/components/ui/switch';
-import React from 'react';
+import { formatPrice } from '@/utils/format';
 import { IoIosLink } from 'react-icons/io';
 import { IoGiftOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
 import { PiWallet } from 'react-icons/pi';
-import { getWedding } from '@/actions/getWedding';
-import { getGifts } from '@/actions/getGifts';
-import { formatPrice } from '@/utils/format';
-import { User } from '@prisma/client';
 
-type DashboardHeaderProps = {
-  currentUser: User;
-};
-
-export default async function DashboardHeader({ currentUser }: DashboardHeaderProps) {
-
+export default async function DashboardHeader() {
+  const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
   const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
 
-  const totalPrice = gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
+  const totalPrice =
+    gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
   const formattedTotalPrice = formatPrice(totalPrice);
 
   return (

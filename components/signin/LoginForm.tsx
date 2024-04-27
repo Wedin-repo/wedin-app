@@ -37,7 +37,7 @@ export default function LoginForm() {
     if (validatedFields.success) {
       const response = await login(validatedFields.data);
 
-      if (response.error) {
+      if (response?.error) {
         toast({
           variant: 'destructive',
           title: 'Uh Oh! Error al iniciar sesión.',
