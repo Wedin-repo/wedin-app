@@ -1,4 +1,4 @@
-import { GetGiftParams } from '@/actions/getGift';
+import { GetGiftsParams } from '@/actions/getGifts';
 import { GetGiftListsParams } from '@/actions/getGiftLists';
 import Container from '@/components/Container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -19,7 +19,7 @@ const DEFAULT_TAB = TABS.predefinedGifts;
 
 type GetGiftSearchParams = {
   tab?: string;
-} & GetGiftParams &
+} & GetGiftsParams &
   GetGiftListsParams;
 
 type GiftsPageProps = {

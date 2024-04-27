@@ -5,6 +5,8 @@ export type GetGiftsParams = {
   giftListId?: string;
   wishListId?: string | null;
   name?: string;
+  page?: number;
+  itemsPerPage?: number;
 };
 
 export async function getGifts({
@@ -27,7 +29,7 @@ export async function getGifts({
       return gifts;
     }
 
-    const { category, giftListId, wishListId, name } = searchParams;
+    const { category, giftListId, wishListId, name, page, itemsPerPage = 15 /* default items per page */ } = searchParams;
 
     if (name) {
       query.name = {
@@ -50,16 +52,24 @@ export async function getGifts({
       };
     }
 
+    const skip = page && itemsPerPage ? (page - 1) * itemsPerPage : undefined;
+    const take = itemsPerPage || undefined;
+
     const gifts = await prisma.gift.findMany({
       where: query,
       orderBy: {
         createdAt: 'desc',
       },
+      /* skip,
+      take, */
     });
+
+    //const totalGiftsCount = page && itemsPerPage ? await prisma.gift.count({ where: query }) : undefined;
 
     if (!gifts) return null;
 
     return gifts;
+
   } catch (error: any) {
     console.error('Error retrieving gifts:', error);
     throw error;

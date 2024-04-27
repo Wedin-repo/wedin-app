@@ -1,14 +1,21 @@
 import { Suspense } from 'react';
 import { GetGiftsParams } from '@/actions/getGifts';
-import Gifts from '@/components/cards/dashboard';
+import { getWedding } from '@/actions/getWedding';
+import { User } from '@prisma/client';
 import SearchBar from '../../components/search-bar';
-import { Loader2 } from 'lucide-react';
+import Gifts from '@/components/cards/dashboard';
+import Pagination from '@/components/cards/dashboard/components/pagination';
+import Loader from '@/components/Loader';
 
 type AllGiftsProps = {
   searchParams: GetGiftsParams;
+  currentUser: User;
 };
 
-async function AllGifts({ searchParams }: AllGiftsProps) {
+async function AllGifts({ searchParams, currentUser }: AllGiftsProps) {
+  const wedding = await getWedding(currentUser?.id);
+  const wishListId = wedding?.wishListId;
+
   return (
     <>
       <div className="my-8">
@@ -16,9 +23,12 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
       </div>
 
       <div className="">
-        <Suspense fallback={<div className='min-h-[50vh] flex items-center justify-center'><Loader2 className="h-20 w-20 animate-spin text-secondaryBorderColor" /></div>}>
-          <Gifts searchParams={searchParams} />
+        <Suspense fallback={<Loader />}>
+          <Gifts searchParams={{ ...searchParams, wishListId: wishListId }} />
         </Suspense>
+      </div>
+      <div className="mt-5 flex w-full justify-center">
+        <Pagination totalPages={3} />
       </div>
     </>
   );

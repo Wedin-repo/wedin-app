@@ -4,7 +4,7 @@ import Categories from '../components/categories';
 import { GetGiftsParams } from '@/actions/getGifts';
 import Gifts from '@/components/cards/gifts';
 import SearchBar from '@/components/search-bar';
-import { Loader2 } from 'lucide-react';
+import Loader from '@/components/Loader';
 
 type AllGiftsProps = {
   searchParams: GetGiftsParams;
@@ -24,7 +24,7 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
       <Categories categories={categories} />
 
       <div className="flex justify-center items-center">
-        <Suspense fallback={<div className='min-h-[50vh] flex items-center justify-center'><Loader2 className="h-20 w-20 animate-spin text-secondaryBorderColor" /></div>}>
+        <Suspense fallback={<Loader />}>
           <Gifts searchParams={searchParams} />
         </Suspense>
       </div>

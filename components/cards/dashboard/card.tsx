@@ -22,7 +22,7 @@ const GiftCard = async ({ gift, wishListId }: GiftCard) => {
           <Image
             src={imageUrl || ringsLoader}
             height={90}
-            width={90}
+            width={350}
             alt={name}
             className="rounded-xl w-full h-full object-cover shadow"
           />

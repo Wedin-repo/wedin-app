@@ -59,6 +59,6 @@ export const deleteGiftFromWishList = async (
 
   return {
     status: 'Éxito! 🎁🗑️',
-    message: 'El regalo fue eliminado de tu lista.',
+    message: 'Regalo eliminado de tu lista.',
   };
 };

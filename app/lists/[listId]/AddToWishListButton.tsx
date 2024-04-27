@@ -41,7 +41,7 @@ const AddToWishListButton = ({
         }),
       });
       if (response.ok) {
-        window.location.href = '/dashboard';
+        window.location.href = '/gifts?tab=predefinedGifts';
         // router.push('/dashboard');
       } else {
         throw new Error('Failed to add gift to wishlist');

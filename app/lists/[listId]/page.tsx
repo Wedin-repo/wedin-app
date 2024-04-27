@@ -10,7 +10,7 @@ import { PiWallet } from 'react-icons/pi';
 import { formatPrice } from '@/utils/format';
 import { Suspense } from 'react';
 import Gifts from '@/components/cards/gifts';
-import { Loader2 } from 'lucide-react';
+import Loader from '@/components/Loader';
 
 type GiftListPageProps = {
   params: {
@@ -79,7 +79,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
         </div>
 
         <div className="flex justify-center items-center mt-6 sm:mt-10">
-          <Suspense fallback={<div className='min-h-[50vh] flex items-center justify-center'><Loader2 className="h-20 w-20 animate-spin text-secondaryBorderColor" /></div>}>
+          <Suspense fallback={<Loader />}>
             <Gifts searchParams={{ giftListId: listId }} hideButton />
           </Suspense>
         </div>

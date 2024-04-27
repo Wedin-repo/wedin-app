@@ -1,31 +1,27 @@
 import { redirect } from 'next/navigation';
-import Container from '@/components/Container';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
-import { getGifts, GetGiftsParams } from '@/actions/getGifts';
-import { formatPrice } from '@/utils/format';
+import { GetGiftsParams } from '@/actions/getGifts';
+import Container from '@/components/Container';
 import DashboardHeader from './dashboard-header';
 import AllGifts from './all-gifts';
 
-export default async function DashboardPage() {
+type DashboardPageProps = {
+  searchParams: GetGiftsParams;
+};
+
+export default async function DashboardPage({ searchParams }: DashboardPageProps) {
+    
   const currentUser = await getCurrentUser();
 
   if (!currentUser) redirect('/login');
-
-  const wedding = await getWedding(currentUser?.id);
-  const wishListId = wedding?.wishListId;
-  const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
-
-  const totalPrice = gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
-  const formattedTotalPrice = formatPrice(totalPrice);
 
   return (
     <Container>
       <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
 
-        <DashboardHeader quantity={gifts?.length} formattedTotalPrice={formattedTotalPrice} />
+        <DashboardHeader currentUser={currentUser} />
 
-        <AllGifts searchParams={{ wishListId: wishListId }} />
+        <AllGifts searchParams={searchParams} currentUser={currentUser} />
       </div>
     </Container>
   );

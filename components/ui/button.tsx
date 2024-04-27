@@ -22,6 +22,7 @@ const buttonVariants = cva(
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        undoButton: 'border gap-1 items-center !h-8 border-borderColor !px-3 hover:bg-primaryBackgroundColor hover:text-white',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         editGiftButton: 'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
         link: 'text-primary underline-offset-4 hover:underline',

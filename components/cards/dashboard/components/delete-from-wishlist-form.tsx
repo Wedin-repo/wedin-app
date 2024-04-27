@@ -3,15 +3,18 @@
 import { deleteGiftFromWishList } from '@/actions/delete-gift-from-wishlist';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import DeleteFromWishListButton from '@/components/cards/dashboard/components/delete-from-wishlist-button';
+import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
+import WishListFormButton from '../../gifts/components/add-to-wishlist-button';
 
 type RemoveFromWishListFormProps = {
   giftId: string;
   wishlistId?: string | null;
 };
 
-function RemoveFromWishListForm({ giftId, wishlistId }: RemoveFromWishListFormProps) {
+function RemoveFromWishListForm({
+  giftId,
+  wishlistId,
+}: RemoveFromWishListFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -21,15 +24,20 @@ function RemoveFromWishListForm({ giftId, wishlistId }: RemoveFromWishListFormPr
       return;
     }
 
-    const removeFromWishListWithId = deleteGiftFromWishList.bind(null, wishlistId);
+    const removeFromWishListWithId = deleteGiftFromWishList.bind(
+      null,
+      wishlistId
+    );
     const response = await removeFromWishListWithId(formData);
 
     toast({
       title: response.status,
       description: response.message,
       action: (
-        <FaRegTrashAlt
-          fontSize="46px"
+        <AddToWishListForm
+          giftId={giftId}
+          wishlistId={wishlistId}
+          variant='undoButton'
         />
       ),
       className: 'bg-white',
@@ -39,7 +47,7 @@ function RemoveFromWishListForm({ giftId, wishlistId }: RemoveFromWishListFormPr
   return (
     <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <DeleteFromWishListButton />
+      <WishListFormButton variant='deleteIconButton' />
     </form>
   );
 }

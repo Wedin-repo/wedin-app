@@ -4,20 +4,31 @@ import { IoIosLink } from 'react-icons/io';
 import { IoGiftOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
 import { PiWallet } from 'react-icons/pi';
+import { getWedding } from '@/actions/getWedding';
+import { getGifts } from '@/actions/getGifts';
+import { formatPrice } from '@/utils/format';
+import { User } from '@prisma/client';
 
 type DashboardHeaderProps = {
-  quantity: number | undefined;
-  formattedTotalPrice: string | null;
+  currentUser: User;
 };
 
-function DashboardHeader({ quantity, formattedTotalPrice }: DashboardHeaderProps) {
+export default async function DashboardHeader({ currentUser }: DashboardHeaderProps) {
+
+  const wedding = await getWedding(currentUser?.id);
+  const wishListId = wedding?.wishListId;
+  const gifts = await getGifts({ searchParams: { wishListId: wishListId } });
+
+  const totalPrice = gifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
+  const formattedTotalPrice = formatPrice(totalPrice);
+
   return (
     <div className="flex flex-col items-center gap-4 w-full">
       <h1 className="text-4xl font-semibold text-primaryTextColor">Mi lista</h1>
       <div className="flex items-center gap-3">
         <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-md flex items-center gap-2">
           <IoGiftOutline fontSize={'18px'} />
-          {quantity} regalos
+          {gifts?.length} regalos
         </div>
         <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-md flex items-center gap-2">
           <PiWallet fontSize={'18px'} />
@@ -41,5 +52,3 @@ function DashboardHeader({ quantity, formattedTotalPrice }: DashboardHeaderProps
     </div>
   );
 }
-
-export default DashboardHeader;
