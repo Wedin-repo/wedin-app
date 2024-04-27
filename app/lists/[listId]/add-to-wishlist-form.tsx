@@ -31,14 +31,14 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
         className: 'bg-white',
       });
 
-      throw new Error('Failed to add gift to wishlist');
+      return null;
     }
 
     router.push('/dashboard');
   };
   return (
     <form action={handleAddGiftsToWishList}>
-      <input id="giftIds" type="hidden" name="giftId" value={giftIds} />
+      <input id="giftIds" type="hidden" name="giftIds" value={giftIds} />
       <WishListFormButton variant="chooseGiftListButton" />
     </form>
   );

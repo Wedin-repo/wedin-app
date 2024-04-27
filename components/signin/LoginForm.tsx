@@ -22,7 +22,6 @@ import LoginFormButton from './login-form-button';
 export default function LoginForm() {
   const { toast } = useToast();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isMagicLinkLogin] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -43,7 +42,11 @@ export default function LoginForm() {
           title: 'Uh Oh! Error al iniciar sesión.',
           description: response.error,
         });
+
+        return null;
       }
+
+      window.location.href = '/dashboard';
     }
   }
 
@@ -73,42 +76,38 @@ export default function LoginForm() {
               )}
             />
           </div>
-          {!isMagicLinkLogin && (
-            <div className="flex flex-col gap-2">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contraseña</FormLabel>
-                    <FormControl>
-                      <div className="flex">
-                        <Input
-                          {...field}
-                          type={isPasswordVisible ? 'text' : 'password'}
-                          placeholder="TuContraseña!52419$"
-                        />
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setIsPasswordVisible(!isPasswordVisible)
-                          }
-                          className="ml-[-32px]"
-                        >
-                          {isPasswordVisible ? (
-                            <IoEyeOffOutline size={20} />
-                          ) : (
-                            <IoEyeOutline size={20} />
-                          )}
-                        </button>
-                      </div>
-                    </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-            </div>
-          )}
+          <div className="flex flex-col gap-2">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Contraseña</FormLabel>
+                  <FormControl>
+                    <div className="flex">
+                      <Input
+                        {...field}
+                        type={isPasswordVisible ? 'text' : 'password'}
+                        placeholder="TuContraseña!52419$"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                        className="ml-[-32px]"
+                      >
+                        {isPasswordVisible ? (
+                          <IoEyeOffOutline size={20} />
+                        ) : (
+                          <IoEyeOutline size={20} />
+                        )}
+                      </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage className="font-normal text-yellow-600" />
+                </FormItem>
+              )}
+            />
+          </div>
         </div>
 
         <LoginFormButton />

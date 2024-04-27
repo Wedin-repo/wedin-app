@@ -10,7 +10,7 @@ import {
 export default auth(req => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const isOnboarded = !!req.user?.onboarded;
+  // const isOnboarded = !!req.user?.onboarded;
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
@@ -24,13 +24,13 @@ export default auth(req => {
     return;
   }
 
-  if (isLoggedIn && !isOnboarded && isAuthRoute) {
-    return Response.redirect(new URL('/onboarding', nextUrl));
-  }
-
-  if (isLoggedIn && isOnboarded && (isAuthRoute || isNotOnboardedUserRoute)) {
-    return Response.redirect(new URL('/dashboard', nextUrl));
-  }
+  // if (isLoggedIn && !isOnboarded && isAuthRoute) {
+  //   return Response.redirect(new URL('/onboarding', nextUrl));
+  // }
+  //
+  // if (isLoggedIn && isOnboarded && (isAuthRoute || isNotOnboardedUserRoute)) {
+  //   return Response.redirect(new URL('/dashboard', nextUrl));
+  // }
 
   if (!isLoggedIn && isOnboardedRoute) {
     return Response.redirect(new URL('/login', nextUrl));

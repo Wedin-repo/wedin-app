@@ -7,7 +7,6 @@ import * as z from 'zod';
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
-  type = 'credentials',
   redirectTo = '/dashboard'
 ) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -20,22 +19,15 @@ export const login = async (
     const { email, password } = validatedFields.data;
 
     try {
-      switch (type) {
-        case 'credentials':
-          await signIn('credentials', {
-            email,
-            password,
-            redirectTo,
-          });
-          break;
-        default:
-          await signIn(type, {
-            redirectTo: '/onboarding',
-          });
-      }
-      return { success: 'success' };
+      await signIn('credentials', {
+        email,
+        password,
+      });
+      return { success: true };
     } catch (error) {
       if (error instanceof AuthError) {
+        console.log('error', error);
+
         switch (error.type) {
           case 'CredentialsSignin':
             return { error: 'Credenciales incorrectas' };

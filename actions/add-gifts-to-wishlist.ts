@@ -23,12 +23,21 @@ export const addGiftsToWishList = async (
   wishlistId: string,
   formData: FormData
 ) => {
-  const giftIds = formData.get('giftIds') as string[] | null;
+  const giftIds = formData.get('giftIds') as string | null;
 
-  if (giftIds === null || giftIds.length === 0) {
+  if (giftIds === null || !giftIds) {
     return {
       status: 'Error',
-      message: 'Invalid gift IDs',
+      message: 'Invalid gift Ids',
+    };
+  }
+
+  const arrayGiftIds = giftIds?.split(',');
+
+  if (arrayGiftIds === null || arrayGiftIds.length === 0) {
+    return {
+      status: 'Error',
+      message: 'Something went wrong. Please try again.',
     };
   }
 
@@ -37,7 +46,7 @@ export const addGiftsToWishList = async (
       where: { id: wishlistId },
       data: {
         gifts: {
-          connect: giftIds.map(giftId => ({ id: giftId })),
+          connect: arrayGiftIds.map(giftId => ({ id: giftId })),
         },
       },
     });
@@ -48,7 +57,7 @@ export const addGiftsToWishList = async (
     };
   }
 
-  revalidatePath('/', 'layout');
+  revalidatePath('/dashboard');
 
   return {
     status: 'Éxito! 🎁🎉',

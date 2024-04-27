@@ -35,19 +35,16 @@ export const {
           });
 
           if (!user) {
-            // throw new Error('No user found with this email');
             return null;
           }
 
           if (!user.password) {
-            // throw new Error('No password set for this user');
             return null;
           }
 
           const isValid = await bcrypt.compare(password, user.password);
 
           if (!isValid) {
-            // throw new Error('Invalid password');
             return null;
           }
 
@@ -58,9 +55,6 @@ export const {
       },
     }),
   ],
-  pages: {
-    signIn: '/register',
-  },
   debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
