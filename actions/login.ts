@@ -1,8 +1,11 @@
-import { LoginSchema } from '@/schemas';
+'use server';
+
 import { signIn } from '@/auth';
+import { LoginSchema } from '@/schemas';
+import { AuthError } from 'next-auth';
 import * as z from 'zod';
 
-export const Login = async (values: z.infer<typeof LoginSchema>) => {
+export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
 
   if (validatedFields.success) {
@@ -12,10 +15,19 @@ export const Login = async (values: z.infer<typeof LoginSchema>) => {
       await signIn('credentials', {
         email,
         password,
-        redirect: false,
+        redirectTo: '/dashboard',
       });
-    } catch (error) {}
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case 'CredentialsSignin':
+            return { error: 'Invalid credentials' };
+          default:
+            return { error: 'An error occurred' };
+        }
+      }
+    }
   }
 
-  return { error: 'Invalid credentials' };
+  return { error: 'Invalid data' };
 };

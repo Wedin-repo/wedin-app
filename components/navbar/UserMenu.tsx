@@ -5,7 +5,7 @@ import Avatar from '@/components/Avatar';
 import MenuItem from '@/components/MenuItem';
 import { Button } from '@/components/ui/button';
 import { User } from '@prisma/client';
-import { signOut } from 'next-auth/react';
+import { signOut } from '@/auth';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -81,7 +81,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             />
             <hr />
             <MenuItem
-              onClick={() => signOut()}
+              onClick={signOut}
               label="Cerrar sesión"
               icon={<MdLogout fontSize={'18px'} />}
             />

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { signIn } from 'next-auth/react';
+import { signIn } from '@/auth';
 
 export default function SingInFacebook() {
   return (

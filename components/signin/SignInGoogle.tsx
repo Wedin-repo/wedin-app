@@ -1,10 +1,12 @@
+// TODO: Change to form action
+
+import { signIn } from '@/auth';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
-import { signIn } from 'next-auth/react';
-import * as React from 'react';
+import { useState } from 'react';
 
 export default function SignInGoogle() {
-  const [isLoading, setisLoading] = React.useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   const handleSignIn = async () => {
     setisLoading(true);

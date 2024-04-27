@@ -1,14 +1,16 @@
 import prisma from '@/db/client';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-// import Email from 'next-auth/providers/email';
 import Facebook from 'next-auth/providers/facebook';
 import Google from 'next-auth/providers/google';
+import { LoginSchema } from '@/schemas';
 
 export const {
   handlers: { GET, POST },
   auth,
+  signIn,
+  signOut,
 } = NextAuth({
   providers: [
     Google({
@@ -21,56 +23,38 @@ export const {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       allowDangerousEmailAccountLinking: true,
     }),
-    // Email({
-    //   server: {
-    //     host: process.env.EMAIL_SERVER_HOST,
-    //     port: process.env.EMAIL_SERVER_PORT,
-    //     auth: {
-    //       user: process.env.EMAIL_SERVER_USER,
-    //       pass: process.env.EMAIL_SERVER_PASSWORD,
-    //     },
-    //   },
-    //   from: process.env.EMAIL_FROM,
-    // }),
     Credentials({
-      name: 'credentials',
-      credentials: {
-        email: { label: 'email', type: 'text' },
-        password: { label: 'password', type: 'password' },
-      },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Missing email or password');
+        const validatedFields = LoginSchema.safeParse(credentials);
+
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+
+          const user = await prisma.user.findUnique({
+            where: { email },
+          });
+
+          if (!user) {
+            // throw new Error('No user found with this email');
+            return null;
+          }
+
+          if (!user.password) {
+            // throw new Error('No password set for this user');
+            return null;
+          }
+
+          const isValid = await bcrypt.compare(password, user.password);
+
+          if (!isValid) {
+            // throw new Error('Invalid password');
+            return null;
+          }
+
+          return user;
         }
 
-        console.log('credentials', credentials);
-
-        console.log('email', credentials.email);
-
-        let user = {};
-
-        // const user = await prisma.user.findUnique({
-        //   where: { email: credentials.email },
-        // });
-
-        // if (!user) {
-        //   throw new Error('No user found with this email');
-        // }
-        //
-        // if (!user.password) {
-        //   throw new Error('No password set for this user');
-        // }
-        //
-        // const isValid = bcrypt.compare(
-        //   credentials.password,
-        //   user.password
-        // );
-        //
-        // if (!isValid) {
-        //   throw new Error('Invalid password');
-        // }
-
-        return user;
+        return null;
       },
     }),
   ],
