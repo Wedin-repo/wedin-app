@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import Footer from '@/components/footer/Footer';
+import Footer from '@/components/Footer';
 import NavBar from '@/components/navbar/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
