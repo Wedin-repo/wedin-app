@@ -28,7 +28,7 @@ const GiftCard = async ({ gift, wishListId }: GiftCardProps) => {
           height={90}
           width={90}
           alt={name}
-          className="rounded-xl w-full h-full object-cover shadow"
+          className="rounded-xl object-cover"
         />
         {isDefault && (
           <div className="absolute top-2 right-2 shadow-inner bg-white rounded-full p-1 transform translate-x-1/2 -translate-y-1/2 text-yellow-400 text-xs">

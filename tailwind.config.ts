@@ -9,6 +9,9 @@ const config = {
     './src/**/*.{ts,tsx}',
   ],
   prefix: '',
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   theme: {
     container: {
       center: true,
@@ -24,6 +27,8 @@ const config = {
         primaryBackgroundColor: '#444444',
         secondaryTextColor: '#595959',
         secondaryBackgroundColor: '#E7E7E7',
+        borderColor: '#E0E0E0',
+        secondaryBorderColor: '#B4B4B4',
       },
       borderRadius: {
         lg: 'var(--radius)',

@@ -32,7 +32,7 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
               width={500}
               height={0}
               alt={gift.name}
-              className="rounded-t-lg h-[252px] w-full object-cover"
+              className="rounded-t-xl h-[252px] w-full object-cover"
             />
           </CardHeader>
 
