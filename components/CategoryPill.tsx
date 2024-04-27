@@ -5,8 +5,7 @@ import qs from 'query-string';
 import { useCallback } from 'react';
 
 type CategoryPillProps = {
-  key: string;
-  id: string;
+  id?: string;
   label: string;
   selected?: boolean;
 };

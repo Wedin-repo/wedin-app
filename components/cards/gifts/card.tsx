@@ -10,6 +10,7 @@ import ringsLoader from '@/public/images/rings.svg';
 import { formatPrice } from '@/utils/format';
 import { Gift } from '@prisma/client';
 import Image from 'next/image';
+import { FaChevronRight } from 'react-icons/fa6';
 import GiftCardModal from './components/gift-modal';
 
 type GiftCardProps = {
@@ -24,11 +25,7 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
   const formattedPrice = formatPrice(Number(price));
 
   return (
-    <Card
-      className="flex flex-col p-0 cursor-pointer
-      transition duration-200 ease-in-out transform hover:scale-105
-      hover:shadow-2xl"
-    >
+    <Card>
       <CardHeader className="p-0">
         <div className="w-full flex items-center">
           <Image
@@ -41,12 +38,13 @@ async function GiftCard({ gift, hideButton = false }: GiftCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="p-4 pt-0">
-        <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
-        <p className="text-secondaryTextColor">{description}</p>
-        <h1 className="flex flex-grow items-end justify-end text-primaryTitleColor font-medium text-lg">
-          {formattedPrice}
-        </h1>
+      <CardContent className="p-4">
+        <p className="text-primaryTitleColor font-medium text-sm">{name}</p>
+        <p className="text-secondaryTextColor text-sm">{description}</p>
+        <div className="flex flex-grow items-end justify-between text-primaryTitleColor">
+          <p className="font-medium text-lg">{formattedPrice}</p>
+          <FaChevronRight fontSize="22" className="pb-1 block sm:hidden" />
+        </div>
       </CardContent>
 
       {!hideButton ||
