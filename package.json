@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write",
+      "git stage"
+    ]
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -62,7 +69,10 @@
     "autoprefixer": "^10.4.17",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
     "prisma": "^5.10.2",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
