@@ -8,7 +8,6 @@ const config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
   ],
-  prefix: '',
   future: {
     hoverOnlyWhenSupported: true,
   },
@@ -25,15 +24,15 @@ const config = {
       colors: {
         primaryTextColor: '#1A1A1A',
         primaryBackgroundColor: '#444444',
+        primaryTitleColor: '#464646',
+        primaryBorderColor: '#E0E0E0',
+
         secondaryTextColor: '#595959',
         secondaryBackgroundColor: '#E7E7E7',
-        borderColor: '#E0E0E0',
+        secondaryTitleColor: '#1C1C1C',
         secondaryBorderColor: '#B4B4B4',
-      },
-      borderRadius: {
-        lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+
+        tertiaryTextColor: '#696969',
       },
       keyframes: {
         'accordion-down': {

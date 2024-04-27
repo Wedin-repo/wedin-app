@@ -6,7 +6,7 @@ const cardVariants = cva('', {
   variants: {
     variant: {
       default:
-        'flex flex-col bg-white rounded-xl gap-0 p-0 transition duration-200 ease-in-out transform hover:scale-105 hover:shadow-2xl',
+        'flex flex-col cursor-pointer bg-white rounded-lg gap-0 p-0 transition duration-200 ease-in-out transform hover:scale-105 hover:shadow-2xl',
       dashboard:
         'border-b-[#848484] border-b pb-3 w-full flex items-center justify-between gap-4',
     },
@@ -44,7 +44,7 @@ const cardHeaderVariants = cva('', {
     variant: {
       default: 'flex flex-col space-y-1.5 p-2',
       dashboard:
-        'min-h-[90px] bg-borderColor rounded-xl min-w-[90px] flex itemscenter justify-center',
+        'min-h-[90px] bg-primaryBorderColor rounded-lg min-w-[90px] flex itemscenter justify-center',
     },
     size: {
       default: '',

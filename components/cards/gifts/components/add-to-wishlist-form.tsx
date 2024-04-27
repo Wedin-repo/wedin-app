@@ -32,7 +32,7 @@ function AddToWishListForm({
         <Button
           onClick={() => router.push('/dashboard')}
           variant="outline"
-          className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
+          className="gap-1 h-8 border-primaryBorderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
         >
           <IoGiftOutline />
           Ver lista
