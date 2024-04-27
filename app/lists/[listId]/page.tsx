@@ -68,7 +68,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
               </div>
             }
           >
-            <Gifts searchParams={{ giftListId: listId }} hideButton />
+            <Gifts searchParams={{ giftListId: listId }} />
           </Suspense>
         </div>
       </div>

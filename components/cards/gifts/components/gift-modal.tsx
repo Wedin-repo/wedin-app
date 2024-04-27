@@ -1,22 +1,27 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
-import { Gift } from '@prisma/client';
-import { IoAdd } from 'react-icons/io5';
-import AddToWishListForm from './add-to-wishlist-form';
-import { formatPrice } from '@/utils/format';
-import Image from 'next/image';
 import ringsLoader from '@/public/images/rings.svg';
+import { formatPrice } from '@/utils/format';
+import { Gift } from '@prisma/client';
+import Image from 'next/image';
 import { useState } from 'react';
+import { FaChevronRight } from 'react-icons/fa';
+import AddToWishListForm from './add-to-wishlist-form';
 
 type GiftCardModalProps = {
   gift: Gift;
-  wishlistId: string;
+  wishlistId?: string | null;
+  hideModal: boolean;
 };
 
-function GiftCardModal({ gift, wishlistId }: GiftCardModalProps) {
+function GiftCardModal({
+  gift,
+  wishlistId,
+  hideModal = false,
+}: GiftCardModalProps) {
   const { name, description, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
   const [isOpen, setIsOpen] = useState(false);
@@ -24,10 +29,26 @@ function GiftCardModal({ gift, wishlistId }: GiftCardModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant="primaryButton" onClick={() => setIsOpen(true)}>
-          Ver regalo
-          <IoAdd size={22} />
-        </Button>
+        <Card className={`${!hideModal && 'cursor-pointer'}`}>
+          <CardHeader className="w-full flex items-center p-0">
+            <Image
+              src={imageUrl || ringsLoader}
+              width={500}
+              height={0}
+              alt={gift.name}
+              className="rounded-t-lg h-[252px] w-full object-cover"
+            />
+          </CardHeader>
+
+          <CardContent className="p-4">
+            <p className="text-primaryTitleColor font-medium text-sm">{name}</p>
+            <p className="text-secondaryTextColor text-sm">{description}</p>
+            <div className="flex flex-grow items-end justify-between text-primaryTitleColor">
+              <p className="font-medium text-lg">{formattedPrice}</p>
+              <FaChevronRight fontSize="22" className="pb-1 block sm:hidden" />
+            </div>
+          </CardContent>
+        </Card>
       </DialogTrigger>
 
       <DialogContent className="bg-white !rounded-2xl">
