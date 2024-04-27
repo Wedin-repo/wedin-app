@@ -16,7 +16,7 @@ type GiftCardProps = {
   wishListId?: string | null;
 };
 
-const GiftCard = async ({ gift, wishListId }: GiftCardProps) => {
+const GiftCard = ({ gift, wishListId }: GiftCardProps) => {
   const { id, name, description, price, isDefault, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
 
