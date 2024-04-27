@@ -60,7 +60,7 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
           </div>
 
           <div className="w-full lg:w-1/2 flex flex-col h-full justify-around gap-4">
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
               <h1 className="text-3xl sm:text-2xl font-medium">{name}</h1>
               <p className="text-secondaryTextColor text-base">{description}</p>
             </div>
