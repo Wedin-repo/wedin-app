@@ -4,9 +4,9 @@ import Container from '@/components/Container';
 import UserMenu from '@/components/navbar/UserMenu';
 import { User } from '@prisma/client';
 import { usePathname } from 'next/navigation';
-import Logo from './Logo';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRouter } from 'next/navigation';
+import Logo from '@/components/Logo';
 
 type NavBarProps = {
   currentUser?: User | null;
@@ -57,7 +57,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
           <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
             <div className="flex gap-4 items-center">
               <div className="pb-4">
-                <Logo />
+                <Logo height={39} width={90} />
               </div>
 
               <Tabs

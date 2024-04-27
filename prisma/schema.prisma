@@ -48,7 +48,7 @@ model User {
   name             String?
   lastName         String?
   email            String?   @unique
-  password         String?
+  password         String
   emailVerified    DateTime?
   image            String?
   userType         UserType  @default(COUPLE)
@@ -109,7 +109,7 @@ model Gift {
   weddingId      String?  @db.ObjectId
   wishListIds    String[] @db.ObjectId
   imageUrl       String?
-  //price can be = > < 
+  //price can be = > <
   price          String
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -136,7 +136,7 @@ model GiftList {
 
 model Category {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
+  name String @unique
 }
 
 model Image {

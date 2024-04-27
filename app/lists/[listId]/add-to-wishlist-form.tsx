@@ -17,7 +17,7 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
   const { toast } = useToast();
 
   const handleAddGiftsToWishList = async (formData: FormData) => {
-    if (!wishlistId) return redirect('/register');
+    if (!wishlistId) return redirect('/login');
     if (!giftIds) throw new Error('Something went wrong');
 
     const addToWishListWithId = addGiftsToWishList.bind(null, wishlistId);

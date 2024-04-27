@@ -1,5 +1,7 @@
+// TODO refactor to use form action
 'use client';
 
+import { signIn } from '@/auth';
 import SingInFacebook from '@/components/signin/SignInFacebook';
 import SingInGoogle from '@/components/signin/SignInGoogle';
 import { Button } from '@/components/ui/button';
@@ -22,9 +24,9 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
+import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
-import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -35,25 +37,13 @@ import { LuPartyPopper } from 'react-icons/lu';
 import { MdErrorOutline } from 'react-icons/md';
 import { z } from 'zod';
 
-const formSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: 'Tu email no puede estar vacío' })
-    .email('Email inválido'),
-  password: z
-    .string()
-    .min(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
-    .max(255, { message: `Slow down cowboy, you're not Julian Assange` }),
-  eventType: z.string().optional(),
-});
-
 const RegisterRight = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof LoginSchema>>({
+    resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -90,7 +80,7 @@ const RegisterRight = () => {
     });
   }
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof LoginSchema>) {
     setIsLoading(true);
     const { email, password } = values;
 

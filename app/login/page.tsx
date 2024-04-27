@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import Logo from './Logo';
+import Logo from '@/components/Logo';
 import Login from './Login';
 import { redirect } from 'next/navigation';
 
