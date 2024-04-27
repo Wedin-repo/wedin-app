@@ -26,12 +26,10 @@ const config = {
         primaryBackgroundColor: '#444444',
         primaryTitleColor: '#464646',
         primaryBorderColor: '#E0E0E0',
-
         secondaryTextColor: '#595959',
         secondaryBackgroundColor: '#E7E7E7',
         secondaryTitleColor: '#1C1C1C',
         secondaryBorderColor: '#B4B4B4',
-
         tertiaryTextColor: '#696969',
       },
       keyframes: {
