@@ -16,7 +16,7 @@ function AddToWishListForm({
   giftId,
   wishlistId,
   setIsOpen,
-  variant
+  variant,
 }: AddToWishListFormProps) {
   const { toast } = useToast();
 
@@ -32,7 +32,7 @@ function AddToWishListForm({
         description: response.message,
         action: (
           <Button
-            onClick={() => window.location.href = '/dashboard'}
+            onClick={() => (window.location.href = '/dashboard')}
             variant="outline"
             className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
           >
@@ -41,7 +41,6 @@ function AddToWishListForm({
           </Button>
         ),
         className: 'bg-white',
-        duration: 2500,
       });
     }
 

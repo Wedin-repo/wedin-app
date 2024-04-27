@@ -26,9 +26,9 @@ const GiftCard = ({ gift, wishListId }: GiftCardProps) => {
         <Image
           src={imageUrl || ringsLoader}
           height={90}
-          width={350}
+          width={90}
           alt={name}
-          className="rounded-lg object-cover w-full h-full"
+          className="rounded-lg object-cover"
         />
         {isDefault && (
           <div className="absolute top-2 right-2 shadow-inner bg-white rounded-full p-1 transform translate-x-1/2 -translate-y-1/2 text-yellow-400 text-xs">
