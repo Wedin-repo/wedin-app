@@ -1,11 +1,8 @@
-import React from 'react';
-import { FC } from 'react';
-
 type ContainerProps = {
   children: React.ReactNode;
 };
 
-const Container: FC<ContainerProps> = ({ children }) => {
+const Container = ({ children }: ContainerProps) => {
   return (
     <div className="max-w-[2520px]" style={{ margin: '0 auto' }}>
       {children}

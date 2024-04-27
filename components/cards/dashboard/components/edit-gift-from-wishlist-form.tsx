@@ -8,12 +8,17 @@ type EditGiftFromWishListFormProps = {
   isLoading?: boolean;
 };
 
-function EditGiftFromWishListForm({isLoading}: EditGiftFromWishListFormProps) {
-
+function EditGiftFromWishListForm({
+  isLoading,
+}: EditGiftFromWishListFormProps) {
   return (
     <Button type="submit" variant="editGiftButton" disabled={isLoading}>
       Editar regalo
-      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <FiEdit3 fontSize={'16px'} />}
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        <FiEdit3 fontSize={'16px'} />
+      )}
     </Button>
   );
 }

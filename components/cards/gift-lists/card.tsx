@@ -1,9 +1,5 @@
-import Link from 'next/link';
 import { getGifts } from '@/actions/getGifts';
-import { GoArrowRight } from 'react-icons/go';
-import { Button } from '@/components/ui/button';
-import { Gift, GiftList } from '@prisma/client';
-import { formatPrice } from '@/utils/format';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -11,62 +7,61 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import Image from 'next/image';
 import ringsLoader from '@/public/images/rings.svg';
+import { formatPrice } from '@/utils/format';
+import { GiftList } from '@prisma/client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { FaChevronRight } from 'react-icons/fa';
 
 type GiftListCardProps = {
   giftList: GiftList;
 };
 
-const GiftListCard = async ({ giftList }: GiftListCardProps) => {
+async function GiftListCard({ giftList }: GiftListCardProps) {
   const { name, description, totalPrice, quantity, id } = giftList;
-
   const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
-
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
-    <div className="border-2 rounded-xl py-6 px-4 flex flex-col gap-5 max-w-[435px]">
-      <div className="relative">
+    <Card>
+      <CardHeader className="p-0 relative">
         <Carousel>
           <CarouselContent>
-            {gifts?.map((gift, index) => (
-              <CarouselItem key={index}>
-                <Image
-                  src={gift.imageUrl || ringsLoader}
-                  width={500}
-                  height={0}
-                  alt={gift.name}
-                  className="border rounded-2xl h-[252px] w-full object-cover shadow"
-                />
+            {gifts?.map(gift => (
+              <CarouselItem key={gift.id}>
+                <Link href={`/lists/${id}`}>
+                  <Image
+                    src={gift.imageUrl || ringsLoader}
+                    width={500}
+                    height={0}
+                    alt={gift.name}
+                    className="rounded-t-lg h-[252px] w-full object-cover"
+                  />
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <div className="bg-white rounded-full px-5 py-1.5 flex items-center justify-center mt-4 mr-4 absolute top-0 right-0">
+        <div className="bg-white rounded-full px-5 py-1.5 absolute top-2 right-0 mr-4">
           {quantity} regalos
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="flex flex-col flex-grow gap-1 w-full p-0">
-        <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
-
-        <p className="text-secondaryTextColor">{description}</p>
-        <span className="text-black text-xl flex flex-grow items-end">
-          {formattedPrice}
-        </span>
-      </div>
-
-      <Link href={`/lists/${id}`}>
-        <Button variant="primaryButton">
-          Ver lista
-          <GoArrowRight size={22} />
-        </Button>
-      </Link>
-    </div>
+      <CardContent className="p-4">
+        <Link href={`/lists/${id}`} className="flex flex-col flex-grow">
+          <p className="text-primaryTitleColor font-medium text-sm">{name}</p>
+          <p className="text-secondaryTextColor text-sm">{description}</p>
+          <div className="flex flex-grow items-end justify-between text-primaryTitleColor">
+            <p className="font-medium text-lg">{formattedPrice}</p>
+            <FaChevronRight fontSize="22" className="pb-1 block sm:hidden" />
+          </div>
+        </Link>
+      </CardContent>
+    </Card>
   );
-};
+}
 
 export default GiftListCard;

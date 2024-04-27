@@ -28,9 +28,13 @@ type EditGiftFormProps = {
   category: Category | null;
 };
 
-function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormProps) {
-  const { name, description, price, id, isDefault, wishListIds } =
-    gift;
+function EditGiftForm({
+  gift,
+  categories,
+  category,
+  wishlistId,
+}: EditGiftFormProps) {
+  const { name, description, price, id, isDefault, wishListIds } = gift;
   const [editedName, setEditedName] = useState(name);
   const [editedPrice, setEditedPrice] = useState(price);
   const [editedCategory, setEditedCategory] = useState(category?.name);
@@ -102,33 +106,36 @@ function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormPr
           />
         </div>
 
-  
-          <div>
-            <Label className="">Categoria</Label>
+        <div>
+          <Label className="">Categoria</Label>
 
-            <Select value={editedCategory} onValueChange={setEditedCategory}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                {categories?.map(category => (
-                  <div key={typeof category === 'string' ? category : category.id}>
-                    <SelectItem
-                      value={typeof category === 'string' ? category : category.name}
-                      className="cursor-pointer"
-                    >
-                      {typeof category === 'string' ? category : category.name}
-                    </SelectItem>
-                    {/* this is just a border for aesthetic purposes */}
-                    <div
-                      className="border border-b-secondaryBorderColor flex items-center w-5/6 justify-center"
-                      style={{ margin: '0 auto' }}
-                    ></div>
-                  </div>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <Select value={editedCategory} onValueChange={setEditedCategory}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              {categories?.map(category => (
+                <div
+                  key={typeof category === 'string' ? category : category.id}
+                >
+                  <SelectItem
+                    value={
+                      typeof category === 'string' ? category : category.name
+                    }
+                    className="cursor-pointer"
+                  >
+                    {typeof category === 'string' ? category : category.name}
+                  </SelectItem>
+                  {/* this is just a border for aesthetic purposes */}
+                  <div
+                    className="border border-b-secondaryBorderColor flex items-center w-5/6 justify-center"
+                    style={{ margin: '0 auto' }}
+                  ></div>
+                </div>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <div>
           <Label className="">Precio</Label>

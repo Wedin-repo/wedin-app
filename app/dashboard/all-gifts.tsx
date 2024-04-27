@@ -22,11 +22,10 @@ async function AllGifts({ searchParams, currentUser }: AllGiftsProps) {
         <SearchBar />
       </div>
 
-      <div className="">
-        <Suspense fallback={<Loader />}>
-          <Gifts searchParams={{ ...searchParams, wishListId: wishListId }} />
-        </Suspense>
-      </div>
+      <Suspense fallback={<Loader />}>
+        <Gifts searchParams={{ ...searchParams, wishListId: wishListId }} />
+      </Suspense>
+
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={3} />
       </div>

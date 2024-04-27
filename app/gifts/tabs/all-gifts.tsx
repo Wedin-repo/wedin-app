@@ -12,9 +12,10 @@ type AllGiftsProps = {
 
 async function AllGifts({ searchParams }: AllGiftsProps) {
   const categories = await getCategories();
+
   return (
-    <div className='px-6 sm:px-10'>
-      <div className='mb-4 sm:mb-6'>
+    <div className="px-6 sm:px-10">
+      <div className="mb-4 sm:mb-6">
         <SearchBar />
       </div>
       <p className="text-secondaryTextColor text-lg sm:text-xl mb-4 sm:mb-6">
@@ -23,11 +24,10 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
 
       <Categories categories={categories} />
 
-      <div className="flex justify-center items-center">
-        <Suspense fallback={<Loader />}>
-          <Gifts searchParams={searchParams} />
-        </Suspense>
-      </div>
+      <Suspense fallback={<Loader />}>
+        <Gifts searchParams={searchParams} />
+      </Suspense>
+      
     </div>
   );
 }
