@@ -22,7 +22,8 @@ const buttonVariants = cva(
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-        undoButton: 'border gap-1 items-center !h-8 border-borderColor !px-3 hover:bg-primaryBackgroundColor hover:text-white',
+        undoButton:
+          'border gap-1 items-center !h-8 border-borderColor !px-3 hover:bg-primaryBackgroundColor hover:text-white',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         editGiftButton:
           'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
@@ -35,6 +36,8 @@ const buttonVariants = cva(
           'bg-black rounded-full text-white font-normal hover:opacity-80 hover transition text-lg',
         uploadImageButton:
           'w-full bg-white flex items-center justify-center rounded-lg py-2 gap-2 text-black font-medium hover:opacity-60 hover transition',
+        logoutButton:
+          'px-3 py-3 hover:bg-neutral-100 transition flex gap-2 items-center',
       },
       size: {
         default: 'h-10 px-4 py-2',

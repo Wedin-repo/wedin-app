@@ -1,5 +1,3 @@
-'use client';
-
 import SingInFacebook from '@/components/signin/SignInFacebook';
 import SingInGoogle from '@/components/signin/SignInGoogle';
 import LoginForm from '@/components/signin/LoginForm';

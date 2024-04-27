@@ -1,7 +1,6 @@
-// TODO: Change this to use form Action
+'use client';
+
 import { login } from '@/actions/login';
-import { signIn } from '@/auth';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,8 +13,6 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Loader2 } from 'lucide-react';
-import email from 'next-auth/providers/email';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
@@ -24,7 +21,6 @@ import LoginFormButton from './login-form-button';
 
 export default function LoginForm() {
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isMagicLinkLogin] = useState(false);
 

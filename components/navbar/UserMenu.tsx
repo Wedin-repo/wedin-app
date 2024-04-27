@@ -1,16 +1,15 @@
 'use client';
 
-import useOutsideClick from '@/hooks/useOutsideClick';
 import Avatar from '@/components/Avatar';
-import MenuItem from '@/components/MenuItem';
 import { Button } from '@/components/ui/button';
+import useOutsideClick from '@/hooks/useOutsideClick';
 import { User } from '@prisma/client';
-import { signOut } from '@/auth';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
+import MenuItem from '@/components/MenuItem';
 
 type UserMenuProps = {
   currentUser?: User | null;
@@ -81,7 +80,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
             />
             <hr />
             <MenuItem
-              onClick={signOut}
+              variant="logoutButton"
               label="Cerrar sesión"
               icon={<MdLogout fontSize={'18px'} />}
             />

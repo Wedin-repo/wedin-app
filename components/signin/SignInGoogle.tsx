@@ -1,3 +1,5 @@
+'use client';
+
 // TODO: Change to form action
 
 import { signIn } from '@/auth';
