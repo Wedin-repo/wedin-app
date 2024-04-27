@@ -3,7 +3,7 @@ import { GetGiftsParams, getGifts } from '@/actions/getGifts';
 import { getWedding } from '@/actions/getWedding';
 import EmptyState from '@/components/EmptyState';
 import CardContainer from '../shared/card-container';
-import GiftCardModal from './components/gift-modal';
+import GiftCard from './card';
 
 type GiftsProps = {
   searchParams: GetGiftsParams;
@@ -21,12 +21,7 @@ async function Gifts({ searchParams }: GiftsProps) {
   return (
     <CardContainer>
       {gifts.map(gift => (
-        <GiftCardModal
-          key={gift.id}
-          gift={gift}
-          hideButton
-          wishlistId={wedding?.wishListId}
-        />
+        <GiftCard key={gift.id} gift={gift} wishlistId={wedding?.wishListId} />
       ))}
     </CardContainer>
   );
