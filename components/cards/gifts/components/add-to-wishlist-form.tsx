@@ -2,7 +2,7 @@ import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { IoGiftOutline } from 'react-icons/io5';
-import WishListFormButton from './add-to-wishlist-button';
+import WishListFormButton from './wishlist-form-button';
 
 type AddToWishListFormProps = {
   giftId: string;

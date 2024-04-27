@@ -4,7 +4,7 @@ import { deleteGiftFromWishList } from '@/actions/delete-gift-from-wishlist';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
-import WishListFormButton from '../../gifts/components/add-to-wishlist-button';
+import WishListFormButton from '../../gifts/components/wishlist-form-button';
 
 type RemoveFromWishListFormProps = {
   giftId: string;
