@@ -8,7 +8,7 @@ export async function getCategories() {
 
     return categories;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     // Maybe throw an error here?
     return null;
   }

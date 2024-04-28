@@ -22,7 +22,7 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
     const addToWishListWithId = addGiftsToWishList.bind(null, wishlistId);
     const response = await addToWishListWithId(formData);
 
-    if (response.status === 'Error') {
+    if (response?.status === 'Error') {
       toast({
         title: response.status,
         description: response.message,

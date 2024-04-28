@@ -24,8 +24,6 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
     searchParams: { categoryId: gift.categoryId },
   });
 
-  //console.log(category);
-
   if (!categories) return null;
 
   //const currentUser = await getCurrentUser();

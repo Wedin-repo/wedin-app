@@ -20,7 +20,7 @@ export async function getWedding(userId: string | undefined) {
 
     return wedding;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }

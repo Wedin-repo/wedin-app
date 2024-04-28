@@ -57,7 +57,7 @@ export const stepTwoUpdate = async (
 
       revalidatePath('/');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       return { error: 'Error al actualizar la boda' };
     }
   }

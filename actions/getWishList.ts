@@ -1,8 +1,6 @@
 import prisma from '@/db/client';
 
-export async function getWishList(
-  wishListId: string | null | undefined
-) {
+export async function getWishList(wishListId: string | null | undefined) {
   try {
     if (wishListId === null) return null;
     const wishList = await prisma.wishList.findFirst({
@@ -13,7 +11,7 @@ export async function getWishList(
 
     return wishList;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }

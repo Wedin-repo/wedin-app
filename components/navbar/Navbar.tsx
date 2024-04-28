@@ -59,14 +59,14 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
                 Agregar regalos
               </TabsTrigger>
               {currentUser && (
-                <TabsTrigger value="myList" className="!text-sm pb-4">
-                  Mi lista
-                </TabsTrigger>
-              )}
-              {currentUser && (
-                <TabsTrigger value="giftsRecieved" className="!text-sm pb-4">
-                  Regalos recibidos
-                </TabsTrigger>
+                <>
+                  <TabsTrigger value="myList" className="!text-sm pb-4">
+                    Mi lista
+                  </TabsTrigger>
+                  <TabsTrigger value="giftsRecieved" className="!text-sm pb-4">
+                    Regalos recibidos
+                  </TabsTrigger>
+                </>
               )}
             </TabsList>
           </Tabs>
