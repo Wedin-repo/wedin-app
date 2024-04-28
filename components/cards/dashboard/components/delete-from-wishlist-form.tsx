@@ -1,9 +1,9 @@
 'use client';
 
-import { deleteGiftFromWishList } from '@/actions/delete-gift-from-wishlist';
+import { deleteGiftFromWishList } from '@/actions/data/wishlist';
+import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
-import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
 import WishListFormButton from '../../gifts/components/wishlist-form-button';
 
 type RemoveFromWishListFormProps = {
@@ -37,7 +37,7 @@ function RemoveFromWishListForm({
         <AddToWishListForm
           giftId={giftId}
           wishlistId={wishlistId}
-          variant='undoButton'
+          variant="undoButton"
         />
       ),
       className: 'bg-white',
@@ -47,7 +47,7 @@ function RemoveFromWishListForm({
   return (
     <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <WishListFormButton variant='deleteIconButton' />
+      <WishListFormButton variant="deleteIconButton" />
     </form>
   );
 }

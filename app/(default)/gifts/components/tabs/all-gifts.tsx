@@ -1,4 +1,4 @@
-import { getCategories } from '@/actions/getCategories';
+import { getCategories } from '@/actions/data/category';
 import { GetGiftsParams } from '@/actions/getGifts';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';

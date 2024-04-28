@@ -1,4 +1,4 @@
-import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
+import { addGiftToWishList } from '@/actions/data/wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { redirect, useRouter } from 'next/navigation';

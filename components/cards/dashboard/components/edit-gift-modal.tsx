@@ -1,13 +1,12 @@
+import { getCategories, getCategory } from '@/actions/data/category';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { getWedding } from '@/actions/getWedding';
+import ImageUpload from '@/components/ImageUpload';
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Gift } from '@prisma/client';
-import { Button } from '@/components/ui/button';
 import { FiEdit3 } from 'react-icons/fi';
 import EditGiftForm from './edit-gift-form';
-import { getCategories } from '@/actions/getCategories';
-import { getCategory } from '@/actions/getCategory';
-import ImageUpload from '@/components/ImageUpload';
 
 type EditGiftModalProps = {
   gift: Gift;

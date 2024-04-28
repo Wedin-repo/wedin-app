@@ -1,6 +1,6 @@
 'use client';
 
-import { addGiftsToWishList } from '@/actions/add-gifts-to-wishlist';
+import { addGiftsToWishList } from '@/actions/data/wishlist';
 import WishListFormButton from '@/components/cards/gifts/components/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
 import { redirect, useRouter } from 'next/navigation';

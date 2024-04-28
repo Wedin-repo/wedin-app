@@ -1,9 +1,6 @@
+// server side get current user
 import { auth } from '@/auth';
 import prisma from '@/db/client';
-
-export async function getSession() {
-  return await auth();
-}
 
 export async function getCurrentUser() {
   try {
