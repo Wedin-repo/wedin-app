@@ -1,21 +1,14 @@
 'user client';
 
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { redirect } from 'next/navigation';
+import Logo from '@/components/Logo';
 import { CiImageOn } from 'react-icons/ci';
 import OnboardingForm from './onboarding-form';
-import Logo from '@/components/Logo';
 
 const OnboardingPage = async () => {
   const currentUser = await getCurrentUser();
 
-  if (!currentUser) {
-    redirect('/login');
-  }
-
-  if (currentUser && currentUser.isOnboarded === true) {
-    redirect('/gifts');
-  }
+  if (!currentUser) return null;
 
   return (
     <div className="flex-col lg:flex-row flex items-center justify-center w-full gap-4 px-4 sm:px-10 min-h-[82vh]">

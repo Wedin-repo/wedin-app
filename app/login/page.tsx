@@ -1,15 +1,7 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import Logo from '@/components/Logo';
 import Login from './Login';
-import { redirect } from 'next/navigation';
 
-const LoginPage = async () => {
-  const currentUser = await getCurrentUser();
-
-  if (currentUser) {
-    redirect('/dashboard');
-  }
-
+const LoginPage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-[82vh] text-black gap-16 px-4 sm:px-10">
       <Logo />

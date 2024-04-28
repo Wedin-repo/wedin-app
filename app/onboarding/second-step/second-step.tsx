@@ -62,7 +62,7 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
     setIsLoading(true);
     const formValues = form.getValues();
     const { weddingCountry, weddingCity, hasPYbankAccount } = formValues;
-    const userId = currentUser.id;
+    const userId = currentUser?.id;
 
     try {
       // TODO: Change this to Update Wedding

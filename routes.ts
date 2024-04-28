@@ -17,14 +17,14 @@ export const authRoutes: string[] = ['/login', '/register'];
   and onboarded user
  * @type {string[]}
  */
-export const onboardedRoutes: string[] = ['/dashboard'];
+export const privateRoutes: string[] = ['/dashboard'];
 
 /**
  * An array of routes that are accessible to the logged in user
    but not onboarded via the onboarding process
  * @type {string[]}
  */
-export const notOnboardedRoutes: string[] = ['/onboarding'];
+export const onboardingRoute: string[] = ['/onboarding'];
 
 /**
  * The prefix of API authentication routes

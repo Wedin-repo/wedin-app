@@ -2,7 +2,7 @@ import LoginForm from '@/components/signin/LoginForm';
 import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
 import Link from 'next/link';
 
-const LoginRight = () => {
+const Login = () => {
   return (
     <div className="w-full max-w-md p-0 lg:p-8 space-y-6 bg-white text-black">
       <p className="text-2xl text-center font-semibold text-primaryTextColor">
@@ -32,4 +32,4 @@ const LoginRight = () => {
   );
 };
 
-export default LoginRight;
+export default Login;
