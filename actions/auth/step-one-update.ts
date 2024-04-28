@@ -1,9 +1,9 @@
 'use server';
 
+import { auth } from '@/auth';
 import prisma from '@/db/client';
 import { StepOneSchema } from '@/schemas';
 import * as z from 'zod';
-import { getSession } from './getCurrentUser';
 
 export const stepOneUpdate = async (
   values: z.infer<typeof StepOneSchema> | null = null
@@ -54,7 +54,7 @@ export const stepOneUpdate = async (
       return { error: 'Error creado el usuario de tu pareja' };
     }
 
-    const session = await getSession();
+    const session = await auth();
 
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 

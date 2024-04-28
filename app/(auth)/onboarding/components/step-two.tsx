@@ -1,6 +1,6 @@
 'use client';
 
-import { stepTwoUpdate } from '@/actions/step-two-update';
+import { stepTwoUpdate } from '@/actions/auth/step-two-update';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {

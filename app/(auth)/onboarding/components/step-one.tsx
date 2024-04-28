@@ -1,4 +1,4 @@
-import { stepOneUpdate } from '@/actions/step-one-update';
+import { stepOneUpdate } from '@/actions/auth/step-one-update';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';

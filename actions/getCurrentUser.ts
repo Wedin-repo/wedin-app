@@ -7,7 +7,7 @@ export async function getSession() {
 
 export async function getCurrentUser() {
   try {
-    const session = await getSession();
+    const session = await auth();
 
     if (!session?.user?.email) return null;
 

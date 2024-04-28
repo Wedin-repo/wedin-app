@@ -1,7 +1,7 @@
 'use client';
 
-import { login } from '@/actions/login';
-import { register } from '@/actions/register';
+import { login } from '@/actions/auth/login';
+import { register } from '@/actions/auth/register';
 import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
 import { Button } from '@/components/ui/button';
 import {

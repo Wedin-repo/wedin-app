@@ -1,10 +1,10 @@
 'use server';
 
+import { auth } from '@/auth';
 import prisma from '@/db/client';
 import { StepTwoSchema } from '@/schemas';
-import * as z from 'zod';
-import { getSession } from './getCurrentUser';
 import { revalidatePath } from 'next/cache';
+import * as z from 'zod';
 
 export const stepTwoUpdate = async (
   values: z.infer<typeof StepTwoSchema> | null = null
@@ -23,7 +23,7 @@ export const stepTwoUpdate = async (
     const { weddingCountry, weddingCity, hasPYbankAccount } =
       validatedFields.data;
 
-    const session = await getSession();
+    const session = await auth();
 
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
