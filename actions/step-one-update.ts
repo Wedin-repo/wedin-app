@@ -58,6 +58,9 @@ export const stepOneUpdate = async (
 
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
+    console.log(!session?.user?.email);
+    console.log(session.user.email);
+
     try {
       groom = await prisma.user.update({
         where: {
@@ -69,7 +72,9 @@ export const stepOneUpdate = async (
           onboardingStep: 2,
         },
       });
+      console.log(groom);
     } catch (error) {
+      console.error(error);
       return { error: 'Error actualizando tu perfil' };
     }
 

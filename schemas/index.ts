@@ -1,4 +1,4 @@
-import * as z from 'zod';
+import { boolean, z } from 'zod';
 
 export const LoginSchema = z.object({
   email: z
@@ -49,4 +49,11 @@ export const StepOneSchema = z.object({
     .email('Email inválido'),
   weddingDate: z.date().optional(),
   isDecidingWeddingDate: z.boolean(),
+});
+
+export const StepTwoSchema = z.object({
+  weddingCountry: z.string(),
+  weddingCity: z.string(),
+  isDecidingWeddingCountryCity: boolean(),
+  hasPYbankAccount: z.boolean(),
 });

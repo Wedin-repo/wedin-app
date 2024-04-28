@@ -1,8 +1,8 @@
 'use client';
 
+import { stepTwoUpdate } from '@/actions/step-two-update';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useRouter } from 'next/navigation';
 import {
   Form,
   FormControl,
@@ -21,35 +21,24 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
+import { StepTwoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
-import { boolean, z } from 'zod';
+import { z } from 'zod';
 import { countries } from '../countries';
-import { makeAndHandleApiCall } from '../helper';
 
-const formSchema = z.object({
-  weddingCountry: z.string(),
-  weddingCity: z.string(),
-  isDecidingWeddingCountryCity: boolean(),
-  hasPYbankAccount: z.boolean(),
-});
-
-type SecondStepProps = {
-  currentUser: User;
-};
-
-const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
+const SecondStep = () => {
   const router = useRouter();
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof StepTwoSchema>>({
+    resolver: zodResolver(StepTwoSchema),
     defaultValues: {
       weddingCountry: '',
       weddingCity: '',
@@ -58,46 +47,26 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
     },
   });
 
-  const handleSubmitFinal = async () => {
+  const onSubmit = async (values: z.infer<typeof StepTwoSchema>) => {
     setIsLoading(true);
-    const formValues = form.getValues();
-    const { weddingCountry, weddingCity, hasPYbankAccount } = formValues;
-    const userId = currentUser?.id;
+    const validatedFields = StepTwoSchema.safeParse(values);
+    if (validatedFields.success) {
+      let response = await stepTwoUpdate(validatedFields.data);
 
-    try {
-      // TODO: Change this to Update Wedding
-      await makeAndHandleApiCall(
-        '/api/onboarding/updateWeddingCountryCity',
-        { userId, weddingCountry, weddingCity },
-        'No se pudo actualizar los detalles de la boda.'
-      );
-      // TODO: Change this to Update user
-      // api/onboarding/updateUser/route.ts
-      await makeAndHandleApiCall(
-        '/api/onboarding/updateUserBankAccount',
-        { userId, hasPYbankAccount },
-        'No se pudo actualizar la información del usuario.'
-      );
-
-      window.location.href = '/gifts';
-    } catch (error) {
-      console.error('API call failed:', error);
-      if (error instanceof Error) {
+      if (response?.error) {
         toast({
           variant: 'destructive',
-          title: 'Uh Oh! Algo salió mal.',
-          description: error.message,
+          title: 'Error al completar el paso 2',
+          description: response.error,
         });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Uh Oh! Algo salió mal.',
-          description: 'An unexpected error occurred.',
-        });
+
+        setIsLoading(false);
+        return null;
       }
-    } finally {
-      setIsLoading(false);
     }
+
+    router.push('/dashboard');
+    setIsLoading(false);
   };
 
   const handleIsDecidingCountryCity = (value: boolean | string) => {
@@ -115,7 +84,7 @@ const SecondStep: React.FC<SecondStepProps> = ({ currentUser }) => {
       </p>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleSubmitFinal)}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col items-start w-full gap-6"
         >
           {!isDecidingWeddingCountryCity ? (

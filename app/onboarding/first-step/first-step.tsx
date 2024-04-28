@@ -1,4 +1,4 @@
-import { stepOneUpdate } from '@/actions/update-user';
+import { stepOneUpdate } from '@/actions/step-one-update';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -60,7 +60,7 @@ const FirstStep = ({ onNextStep }: FirstStepProps) => {
       if (response?.error) {
         toast({
           variant: 'destructive',
-          title: 'Error al registrar usuario.',
+          title: 'Error al completar el paso 1',
           description: response.error,
         });
 
