@@ -1,4 +1,3 @@
-// TODO refactor to use form action
 'use client';
 
 import { login } from '@/actions/login';

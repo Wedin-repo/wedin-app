@@ -8,11 +8,11 @@ import Gifts from '@/components/cards/dashboard';
 import Pagination from '@/components/cards/dashboard/components/pagination';
 import SearchBar from '../../components/search-bar';
 
-type AllGiftsProps = {
+type WishlistGiftsProps = {
   searchParams: GetGiftsParams;
 };
 
-async function AllGifts({ searchParams }: AllGiftsProps) {
+async function WishlistGifts({ searchParams }: WishlistGiftsProps) {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
@@ -34,4 +34,4 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
   );
 }
 
-export default AllGifts;
+export default WishlistGifts;

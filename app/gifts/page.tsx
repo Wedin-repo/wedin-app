@@ -1,13 +1,13 @@
-import { GetGiftsParams } from '@/actions/getGifts';
 import { GetGiftListsParams } from '@/actions/getGiftLists';
+import { GetGiftsParams } from '@/actions/getGifts';
 import Container from '@/components/Container';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import GiftHeader from './gifts-header';
-import AllGifts from './tabs/all-gifts';
-import PredefinedGifts from './tabs/predefined-gifts';
+import GiftHeader from './components/gifts-header';
+import AllGifts from './components/tabs/all-gifts';
+import PredefinedGifts from './components/tabs/predefined-gifts';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',

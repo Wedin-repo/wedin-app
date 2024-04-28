@@ -3,7 +3,7 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import Logo from '@/components/Logo';
 import { CiImageOn } from 'react-icons/ci';
-import OnboardingForm from './onboarding-form';
+import OnboardingForm from './components/onboarding-form';
 
 export default async function OnboardingPage() {
   const currentUser = await getCurrentUser();

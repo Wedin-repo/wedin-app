@@ -27,7 +27,6 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
       <Suspense fallback={<Loader />}>
         <Gifts searchParams={searchParams} />
       </Suspense>
-      
     </div>
   );
 }

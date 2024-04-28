@@ -3,8 +3,7 @@
 import { addGiftsToWishList } from '@/actions/add-gifts-to-wishlist';
 import WishListFormButton from '@/components/cards/gifts/components/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { useRouter } from 'next/navigation';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa';
 
 type AddToWishlistFormProps = {

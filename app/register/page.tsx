@@ -1,6 +1,6 @@
 import Logo from '@/components/Logo';
-import RegisterLeft from './RegisterLeft';
-import RegisterRight from './RegisterRight';
+import RegisterRight from './components/register-right';
+import RegisterLeft from './components/register-left';
 
 export default async function RegisterPage() {
   return (
