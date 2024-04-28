@@ -1,26 +1,17 @@
-import { redirect } from 'next/navigation';
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import { GetGiftsParams } from '@/actions/getGiftsPagination';
-import { auth } from '@/auth';
-import Container from '@/components/Container';
-import AllGifts from './all-gifts';
-import DashboardHeader from './dashboard-header';
+import { GetGiftsParams } from '@/actions/getGifts';
+import DashboardHeader from './components/dashboard-header';
+import WishlistGifts from './components/wishlist-gifts';
 
 type DashboardPageProps = {
   searchParams: GetGiftsParams;
 };
 
-export default async function DashboardPage({ searchParams }: DashboardPageProps) {
-  const session = await auth();
-
-  console.log('session', JSON.stringify(session));
+export default function DashboardPage({ searchParams }: DashboardPageProps) {
   return (
-    <Container>
-      <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
-        <DashboardHeader />
+    <div className="min-h-[90vh] flex flex-col justify-start mt-12 sm:mt-12 px-4 sm:px-10">
+      <DashboardHeader />
 
-        <AllGifts searchParams={searchParams} />
-      </div>
-    </Container>
+      <WishlistGifts searchParams={searchParams} />
+    </div>
   );
 }

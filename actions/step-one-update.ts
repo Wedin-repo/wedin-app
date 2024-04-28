@@ -58,9 +58,6 @@ export const stepOneUpdate = async (
 
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
-    console.log(!session?.user?.email);
-    console.log(session.user.email);
-
     try {
       groom = await prisma.user.update({
         where: {
@@ -69,10 +66,8 @@ export const stepOneUpdate = async (
         data: {
           name: name,
           lastName: lastName,
-          onboardingStep: 2,
         },
       });
-      console.log(groom);
     } catch (error) {
       console.error(error);
       return { error: 'Error actualizando tu perfil' };
@@ -94,6 +89,21 @@ export const stepOneUpdate = async (
         },
       });
     } catch (error) {
+      console.error(error);
+      return { error: 'Error actualizando tu perfil' };
+    }
+
+    try {
+      await prisma.user.update({
+        where: {
+          email: session.user.email,
+        },
+        data: {
+          onboardingStep: 2,
+        },
+      });
+    } catch (error) {
+      console.error(error);
       return { error: 'Error actualizando tu perfil' };
     }
   }

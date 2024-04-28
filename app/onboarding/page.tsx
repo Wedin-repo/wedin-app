@@ -5,7 +5,7 @@ import Logo from '@/components/Logo';
 import { CiImageOn } from 'react-icons/ci';
 import OnboardingForm from './onboarding-form';
 
-const OnboardingPage = async () => {
+export default async function OnboardingPage() {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) return null;
@@ -25,6 +25,4 @@ const OnboardingPage = async () => {
       </div>
     </div>
   );
-};
-
-export default OnboardingPage;
+}

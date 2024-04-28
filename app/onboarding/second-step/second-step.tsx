@@ -1,6 +1,7 @@
 'use client';
 
 import { stepTwoUpdate } from '@/actions/step-two-update';
+import { auth } from '@/auth';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -30,12 +31,14 @@ import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
 import { z } from 'zod';
 import { countries } from '../countries';
+import { useSession } from 'next-auth/react';
 
 const SecondStep = () => {
   const router = useRouter();
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
+  const { data: session, update } = useSession();
 
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
@@ -65,8 +68,16 @@ const SecondStep = () => {
       }
     }
 
-    router.push('/dashboard');
+    await update({
+      ...session,
+      user: {
+        ...session?.user,
+        isOnboarded: true,
+      },
+    });
+
     setIsLoading(false);
+    router.push('/dashboard');
   };
 
   const handleIsDecidingCountryCity = (value: boolean | string) => {

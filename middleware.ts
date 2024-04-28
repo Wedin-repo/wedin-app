@@ -18,7 +18,7 @@ export default auth(req => {
   const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = onboardingRoute.includes(nextUrl.pathname);
 
-  if (isApiAuthRoute || isOnboarded) {
+  if (isApiAuthRoute) {
     return;
   }
 

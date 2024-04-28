@@ -4,6 +4,7 @@ import prisma from '@/db/client';
 import { StepTwoSchema } from '@/schemas';
 import * as z from 'zod';
 import { getSession } from './getCurrentUser';
+import { revalidatePath } from 'next/cache';
 
 export const stepTwoUpdate = async (
   values: z.infer<typeof StepTwoSchema> | null = null
@@ -37,6 +38,7 @@ export const stepTwoUpdate = async (
         },
       });
     } catch (error) {
+      console.error(error);
       return { error: 'Error al actualizar tu usuario' };
     }
 
@@ -52,7 +54,10 @@ export const stepTwoUpdate = async (
           city: weddingCity,
         },
       });
+
+      revalidatePath('/');
     } catch (error) {
+      console.log(error);
       return { error: 'Error al actualizar la boda' };
     }
   }

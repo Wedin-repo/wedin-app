@@ -7,18 +7,16 @@ import { usePathname } from 'next/navigation';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 
 type NavBarProps = {
   currentUser?: User | null;
 };
 
 export const NavBar = ({ currentUser }: NavBarProps) => {
-  const session = useSession();
+  // const session = useSession();
   const router = useRouter();
   const pathname = usePathname();
-
-  console.log('NavBar', session);
 
   let menuValue = 'addGifts';
 
