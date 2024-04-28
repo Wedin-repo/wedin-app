@@ -7,6 +7,7 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  callbacks: {},
   debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',

@@ -1,6 +1,5 @@
-import SingInFacebook from '@/components/signin/SignInFacebook';
-import SingInGoogle from '@/components/signin/SignInGoogle';
 import LoginForm from '@/components/signin/LoginForm';
+import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
 import Link from 'next/link';
 
 const LoginRight = () => {
@@ -18,8 +17,8 @@ const LoginRight = () => {
 
       <div className="flex flex-col items-center justify-center gap-2">
         <span className="text-secondaryTextColor">O inicia sesión con</span>
-        <SingInFacebook />
-        <SingInGoogle />
+        <SociaMediaLoginForm socialMedia="google" />
+        <SociaMediaLoginForm socialMedia="facebook" />
       </div>
 
       <Link

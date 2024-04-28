@@ -1,13 +1,16 @@
 'use client';
 
 import { login } from '@/actions/login';
-import LoginFormButton from './login-form-button';
 import { useToast } from '../ui/use-toast';
+import LoginFormButton from './login-form-button';
 
-export default function SignInGoogle() {
+type SocialMediaLoginFormType = {
+  socialMedia: 'google' | 'facebook';
+};
+function SociaMediaLoginForm({ socialMedia }: SocialMediaLoginFormType) {
   const { toast } = useToast();
   const handleSignIn = async () => {
-    const response = await login('google');
+    const response = await login(socialMedia);
 
     if (response?.error) {
       toast({
@@ -20,7 +23,9 @@ export default function SignInGoogle() {
 
   return (
     <form action={handleSignIn}>
-      <LoginFormButton variant="socialMediaLoginButton" />
+      <LoginFormButton variant="socialMediaLoginButton" label={socialMedia} />
     </form>
   );
 }
+
+export default SociaMediaLoginForm;
