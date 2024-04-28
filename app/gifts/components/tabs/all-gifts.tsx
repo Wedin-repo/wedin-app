@@ -1,10 +1,10 @@
 import { getCategories } from '@/actions/getCategories';
-import { Suspense } from 'react';
-import Categories from '../components/categories';
 import { GetGiftsParams } from '@/actions/getGifts';
+import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';
 import SearchBar from '@/components/search-bar';
-import Loader from '@/components/Loader';
+import { Suspense } from 'react';
+import Categories from '../categories';
 
 type AllGiftsProps = {
   searchParams: GetGiftsParams;

@@ -1,10 +1,10 @@
-import { GetGiftListsParams } from '@/actions/getGiftLists';
 import { getCategories } from '@/actions/getCategories';
-import { Suspense } from 'react';
-import Categories from '../components/categories';
+import { GetGiftListsParams } from '@/actions/getGiftLists';
+import Loader from '@/components/Loader';
 import GiftLists from '@/components/cards/gift-lists';
 import SearchBar from '@/components/search-bar';
-import Loader from '@/components/Loader';
+import { Suspense } from 'react';
+import Categories from '../categories';
 
 type PredefinedGiftsProps = {
   searchParams: GetGiftListsParams;

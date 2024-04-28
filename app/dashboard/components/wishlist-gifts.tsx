@@ -6,7 +6,7 @@ import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
 // import Pagination from '@/components/cards/dashboard/components/pagination';
 import Pagination from '@/components/cards/dashboard/components/pagination';
-import SearchBar from '../../components/search-bar';
+import SearchBar from '@/components/search-bar';
 
 type WishlistGiftsProps = {
   searchParams: GetGiftsParams;
