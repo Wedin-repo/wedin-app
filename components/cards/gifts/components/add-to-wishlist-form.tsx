@@ -1,7 +1,7 @@
 import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishListFormButton from './wishlist-form-button';
 
@@ -18,6 +18,7 @@ function AddToWishListForm({
   setIsOpen,
   variant,
 }: AddToWishListFormProps) {
+  const router = useRouter();
   const { toast } = useToast();
 
   const handleAddGiftToWishList = async (formData: FormData) => {
@@ -32,7 +33,7 @@ function AddToWishListForm({
         description: response.message,
         action: (
           <Button
-            onClick={() => (window.location.href = '/dashboard')}
+            onClick={() => router.push('/dashboard')}
             variant="outline"
             className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
           >

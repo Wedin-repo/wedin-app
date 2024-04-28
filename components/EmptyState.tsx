@@ -2,16 +2,19 @@
 
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { FC } from 'react';
 import { MdErrorOutline } from 'react-icons/md';
 
-type Props = {
+type EmptyStateProps = {
   title?: string;
   subtitle?: string;
   showReset?: boolean;
 };
 
-const EmptyState: FC<Props> = ({ title = '', subtitle = '', showReset }) => {
+const EmptyState = ({
+  title = '',
+  subtitle = '',
+  showReset,
+}: EmptyStateProps) => {
   const router = useRouter();
 
   return (

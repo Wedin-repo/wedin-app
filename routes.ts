@@ -13,7 +13,7 @@ export const publicRoutes: string[] = ['/gifts', '/lists', '/weddings'];
 export const authRoutes: string[] = ['/login', '/register'];
 
 /**
- * An array of routes that are accessible to the logged in user
+ * An array of routes that are accessible to the logged in
   and onboarded user
  * @type {string[]}
  */
@@ -21,7 +21,7 @@ export const protectedRoutes: string[] = ['/dashboard'];
 
 /**
  * An array of routes that are accessible to the logged in user
-   but not onboarded via the onboarding process
+   but not onboarded
  * @type {string[]}
  */
 export const onboardingRoute: string[] = ['/onboarding'];
