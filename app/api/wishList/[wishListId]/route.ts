@@ -55,7 +55,10 @@ export async function DELETE(
 
     revalidatePath(`/dashboard`);
 
-    return new Response(JSON.stringify(result), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify(result), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error removing gift from wishlist:', error);
     return new Response('Failed to remove gift from wishlist', { status: 500 });

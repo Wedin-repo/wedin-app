@@ -1,7 +1,6 @@
 'use client';
 
 import { stepTwoUpdate } from '@/actions/step-two-update';
-import { auth } from '@/auth';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
@@ -25,13 +24,13 @@ import { toast } from '@/components/ui/use-toast';
 import { StepTwoSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
 import { z } from 'zod';
 import { countries } from '../countries';
-import { useSession } from 'next-auth/react';
 
 const SecondStep = () => {
   const router = useRouter();
