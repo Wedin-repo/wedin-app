@@ -21,6 +21,7 @@ import LoginFormButton from './login-form-button';
 
 export default function LoginForm() {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const form = useForm<z.infer<typeof LoginSchema>>({
@@ -32,6 +33,7 @@ export default function LoginForm() {
   });
 
   async function handleLogin(values: z.infer<typeof LoginSchema>) {
+    setIsLoading(true);
     const validatedFields = LoginSchema.safeParse(values);
     if (validatedFields.success) {
       const response = await login('credentials', validatedFields.data);
@@ -44,6 +46,7 @@ export default function LoginForm() {
         });
       }
     }
+    setIsLoading(false);
   }
 
   return (
@@ -106,7 +109,7 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <LoginFormButton />
+        <LoginFormButton isLoading={isLoading} />
       </form>
     </Form>
   );

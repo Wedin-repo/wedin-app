@@ -3,21 +3,19 @@ import {
   apiAuthPrefix,
   authRoutes,
   onboardingRoute,
-  privateRoutes,
+  protectedRoutes,
   publicRoutes,
 } from '@/routes';
 
 export default auth(req => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  // const isOnboarded = !!req.user?.onboarded;
   const isOnboarded = true;
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
 
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-  const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
+  const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = onboardingRoute.includes(nextUrl.pathname);
 
   if (isApiAuthRoute || isPublicRoute) {
@@ -39,7 +37,7 @@ export default auth(req => {
     }
   }
 
-  if (!isLoggedIn && (isPrivateRoute || isOnboardingRoute)) {
+  if (!isLoggedIn && (isProtectedRoute || isOnboardingRoute)) {
     return Response.redirect(new URL('/login', nextUrl));
   }
 });

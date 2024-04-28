@@ -4,6 +4,7 @@
 import { signIn } from '@/auth';
 import SingInFacebook from '@/components/signin/SignInFacebook';
 import SingInGoogle from '@/components/signin/SignInGoogle';
+import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -237,8 +238,8 @@ const RegisterRight = () => {
 
       <div className="flex flex-col items-center justify-center gap-2">
         <span className="text-secondaryTextColor">O registate con</span>
-        <SingInFacebook />
-        <SingInGoogle />
+        <SociaMediaLoginForm socialMedia="google" />
+        <SociaMediaLoginForm socialMedia="facebook" />
       </div>
 
       <Link

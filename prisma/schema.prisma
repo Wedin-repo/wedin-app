@@ -51,7 +51,7 @@ model User {
   password         String
   emailVerified    DateTime?
   image            String?
-  userType         UserType  @default(COUPLE)
+  role             UserType  @default(COUPLE)
   isOnboarded      Boolean   @default(false)
   hasPYbankAccount Boolean   @default(false)
   isMagicLinkLogin Boolean   @default(false)

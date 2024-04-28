@@ -17,7 +17,7 @@ export const authRoutes: string[] = ['/login', '/register'];
   and onboarded user
  * @type {string[]}
  */
-export const privateRoutes: string[] = ['/dashboard'];
+export const protectedRoutes: string[] = ['/dashboard'];
 
 /**
  * An array of routes that are accessible to the logged in user
