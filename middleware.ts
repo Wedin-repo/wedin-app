@@ -23,7 +23,6 @@ export default auth(req => {
   }
 
   if (isLoggedIn && !isOnboarded && (isPublicRoute || isProtectedRoute)) {
-    console.log('redirecting to onboarding');
     return Response.redirect(new URL('/onboarding', nextUrl));
   }
 
