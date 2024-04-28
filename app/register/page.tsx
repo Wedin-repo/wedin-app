@@ -1,8 +1,8 @@
-import Logo from './Logo';
 import RegisterRight from './RegisterRight';
 import RegisterLeft from './RegisterLeft';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { redirect } from 'next/navigation';
+import Logo from '@/components/Logo';
 
 const RegisterPage = async () => {
   const currentUser = await getCurrentUser();
