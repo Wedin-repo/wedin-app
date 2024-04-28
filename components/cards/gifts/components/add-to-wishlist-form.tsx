@@ -33,7 +33,7 @@ function AddToWishListForm({
         description: response.message,
         action: (
           <Button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => router.push('/dashboard?page=1')}
             variant="outline"
             className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
           >
