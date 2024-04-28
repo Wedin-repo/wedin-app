@@ -1,12 +1,11 @@
 'use client';
 
 import Container from '@/components/Container';
-import UserMenu from '@/components/navbar/UserMenu';
-import { User } from '@prisma/client';
-import { usePathname } from 'next/navigation';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
+import UserMenu from '@/components/navbar/UserMenu';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { User } from '@prisma/client';
+import { usePathname, useRouter } from 'next/navigation';
 // import { useSession } from 'next-auth/react';
 
 type NavBarProps = {
