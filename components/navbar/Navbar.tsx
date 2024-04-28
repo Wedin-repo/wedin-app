@@ -41,7 +41,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   };
 
   return (
-    <div className="fixed w-full bg-white z-10 pt-4 px-6 sm:px-10">
+    <div className="fixed w-full bg-white z-10 pt-4 px-6 shadow-sm sm:px-10">
       <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
         <div className="flex gap-4 items-center">
           <div className="pb-4">

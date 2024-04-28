@@ -48,7 +48,7 @@ export const {
       return true;
     },
     async session({ session, token }) {
-      if (session.user && token.isOnboarded && token.role) {
+      if (session.user && token.role) {
         session.user.role = token.role;
         session.user.isOnboarded = token.isOnboarded;
       }
@@ -57,15 +57,15 @@ export const {
     async jwt({ token }) {
       if (!token || !token.email) return token;
 
-      const user = await getUserbyEmail(token.email);
+      const currentUser = await getUserbyEmail(token.email);
 
-      if (!user || !user.isOnboarded) return token;
+      if (!currentUser) return token;
 
-      token.isOnboarded = user.isOnboarded;
+      token.isOnboarded = currentUser.isOnboarded;
 
-      if (!user.role) return token;
+      if (!currentUser.role) return token;
 
-      token.role = user.role;
+      token.role = currentUser.role;
 
       return token;
     },

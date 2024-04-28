@@ -27,11 +27,11 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-type FirstStepProps = {
+type StepOneProps = {
   onNextStep: () => void;
 };
 
-const FirstStep = ({ onNextStep }: FirstStepProps) => {
+const StepOne = ({ onNextStep }: StepOneProps) => {
   const [isDecidingWeddingDate, setIsDecidingWeddingDate] = useState<
     boolean | string
   >(false);
@@ -81,7 +81,7 @@ const FirstStep = ({ onNextStep }: FirstStepProps) => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <p className="text-2xl sm:text-3xl text-primaryTextColor text-center font-medium">
         Antes de empezar, necesitamos unos datos
       </p>
@@ -114,7 +114,7 @@ const FirstStep = ({ onNextStep }: FirstStepProps) => {
             )}
           />
 
-          <div className="flex gap-2 w-full">
+          <div className="flex gap-2">
             <div className="w-full">
               <FormField
                 control={form.control}
@@ -155,7 +155,7 @@ const FirstStep = ({ onNextStep }: FirstStepProps) => {
             </div>
           </div>
 
-          <div className="flex gap-2 w-full">
+          <div className="flex gap-2">
             <div className="w-full">
               <FormField
                 control={form.control}
@@ -214,7 +214,7 @@ const FirstStep = ({ onNextStep }: FirstStepProps) => {
             )}
           />
 
-          <div className="flex flex-col items-center gap-2 w-full">
+          <div className="flex flex-col items-center gap-2">
             <div className="font-medium text-sm flex flex-col sm:flex-row items-start justify-start w-full">
               Fecha de la boda &nbsp;
               <span className="font-normal text-sm text-[#64748B]">
@@ -321,4 +321,4 @@ const FirstStep = ({ onNextStep }: FirstStepProps) => {
   );
 };
 
-export default FirstStep;
+export default StepOne;

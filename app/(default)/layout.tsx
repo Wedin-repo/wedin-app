@@ -13,7 +13,7 @@ export default async function DefaultLayout({
   return (
     <>
       <NavBar currentUser={currentUser} />
-      <div className="pt-16 pb-8" />
+      <div className="pt-16" />
       <Container>{children}</Container>
       <Footer />
     </>

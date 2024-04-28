@@ -2,8 +2,8 @@
 
 import { User } from '@prisma/client';
 import { useState } from 'react';
-import FirstStep from './first-step';
-import SecondStep from './second-step';
+import StepOne from './step-one';
+import StepTwo from './step-two';
 
 type OnboardingFormProps = {
   currentUser?: User;
@@ -16,9 +16,9 @@ export default function OnboardingForm({ currentUser }: OnboardingFormProps) {
 
   return (
     <>
-      {currentPage === 1 && <FirstStep onNextStep={() => setCurrentPage(2)} />}
+      {currentPage === 1 && <StepOne onNextStep={() => setCurrentPage(2)} />}
 
-      {currentPage === 2 && <SecondStep />}
+      {currentPage === 2 && <StepTwo />}
     </>
   );
 }

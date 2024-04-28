@@ -32,7 +32,7 @@ import { FaArrowRight } from 'react-icons/fa6';
 import { z } from 'zod';
 import { countries } from '../countries';
 
-const SecondStep = () => {
+const StepTwo = () => {
   const router = useRouter();
   const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
     React.useState<boolean | string>(false);
@@ -95,7 +95,7 @@ const SecondStep = () => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-start w-full gap-6"
+          className="flex flex-col items-start gap-6"
         >
           {!isDecidingWeddingCountryCity ? (
             <>
@@ -251,4 +251,4 @@ const SecondStep = () => {
   );
 };
 
-export default SecondStep;
+export default StepTwo;
