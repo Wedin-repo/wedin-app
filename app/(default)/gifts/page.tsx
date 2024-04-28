@@ -1,4 +1,4 @@
-import { GetGiftListsParams } from '@/actions/getGiftLists';
+import { GetGiftListsParams } from '@/actions/data/giftlist';
 import { GetGiftsParams } from '@/actions/getGifts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
