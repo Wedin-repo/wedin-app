@@ -12,9 +12,6 @@ export default auth(req => {
   const isLoggedIn = !!req.auth;
   const isOnboarded = isLoggedIn ? req.auth?.user.isOnboarded ?? false : false;
 
-  console.log('isLoggedIn', isLoggedIn);
-  console.log('isOnboarded', isOnboarded);
-
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
@@ -31,25 +28,20 @@ export default auth(req => {
 
   if (isLoggedIn && isAuthRoute) {
     if (isOnboarded) {
-      console.log('heelo1');
       return Response.redirect(new URL('/dashboard', nextUrl));
     }
     if (!isOnboarded) {
-      console.log('heelo2');
       return Response.redirect(new URL('/onboarding', nextUrl));
     }
   }
 
   if (isLoggedIn && isOnboardingRoute) {
     if (isOnboarded) {
-      console.log('heelo3');
-
       return Response.redirect(new URL('/dashboard', nextUrl));
     }
   }
 
   if (!isLoggedIn && (isProtectedRoute || isOnboardingRoute)) {
-    console.log('heelo4 ');
     return Response.redirect(new URL('/login', nextUrl));
   }
 });

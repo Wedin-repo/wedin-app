@@ -3,7 +3,6 @@
 import prisma from '@/db/client';
 import { LoginSchema } from '@/schemas';
 import bcrypt from 'bcryptjs';
-import { AuthError } from 'next-auth';
 import * as z from 'zod';
 
 export const register = async (
@@ -16,7 +15,6 @@ export const register = async (
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
-    console.log('validatedFields', validatedFields);
     return { error: 'Campos inválidos' };
   }
 

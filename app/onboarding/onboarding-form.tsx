@@ -14,12 +14,7 @@ const OnboardingForm = ({ currentUser }: OnboardingFormProps) => {
 
   return (
     <>
-      {currentPage === 1 && (
-        <FirstStep
-          currentUser={currentUser}
-          onNextStep={() => setCurrentPage(2)}
-        />
-      )}
+      {currentPage === 1 && <FirstStep onNextStep={() => setCurrentPage(2)} />}
 
       {currentPage === 2 && <SecondStep currentUser={currentUser} />}
     </>

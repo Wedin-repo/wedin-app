@@ -1,3 +1,4 @@
+import { stepOneUpdate } from '@/actions/update-user';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -17,68 +18,27 @@ import {
 } from '@/components/ui/popover';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
+import { StepOneSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { User } from '@prisma/client';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { makeAndHandleApiCall } from '../helper';
-
-const formSchema = z.object({
-  weddingUrl: z
-    .string()
-    .min(1, { message: 'La dirección de tu espacio no puede estar vacío' })
-    .min(3, {
-      message: 'La dirección de tu espacio debe contener al menos 3 caracteres',
-    })
-    .max(255, {
-      message:
-        'La dirección de tu espacio debe contener un máximo de 255 caracteres',
-    }),
-  name: z
-    .string()
-    .min(1, { message: 'El nombre no puede estar vacío' })
-    .min(2, { message: 'Nombre muy corto' })
-    .max(255, { message: 'Nombre muy largo' }),
-  lastName: z
-    .string()
-    .min(1, { message: 'El apellido no puede estar vacío' })
-    .min(2, { message: 'Apellido muy corto' })
-    .max(255, { message: 'Apellido muy largo' }),
-  partnerName: z
-    .string()
-    .min(1, { message: 'El nombre de tu pareja no puede estar vacío' })
-    .min(2, { message: 'Nombre muy corto' })
-    .max(255, { message: 'Nombre muy largo' }),
-  partnerLastName: z
-    .string()
-    .min(1, { message: 'El apellido de tu pareja no puede estar vacío' })
-    .min(2, { message: 'Apellido muy corto' })
-    .max(255, { message: 'Apellido muy largo' }),
-  partnerEmail: z
-    .string()
-    .min(1, { message: 'El email de tu pareja no puede estar vacío' })
-    .email('Email inválido'),
-  weddingDate: z.date().optional(),
-  isDecidingWeddingDate: z.boolean(),
-});
 
 type FirstStepProps = {
   onNextStep: () => void;
-  currentUser: User;
 };
 
-const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
+const FirstStep = ({ onNextStep }: FirstStepProps) => {
   const [isDecidingWeddingDate, setIsDecidingWeddingDate] = useState<
     boolean | string
   >(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof StepOneSchema>>({
+    resolver: zodResolver(StepOneSchema),
     defaultValues: {
       weddingUrl: '',
       name: '',
@@ -91,59 +51,26 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
     },
   });
 
-  const handleSubmit = async () => {
+  const onSubmit = async (values: z.infer<typeof StepOneSchema>) => {
     setIsLoading(true);
-    const formValues = form.getValues();
-    const {
-      name,
-      lastName,
-      weddingUrl,
-      weddingDate,
-      partnerEmail,
-      partnerName,
-      partnerLastName,
-    } = formValues;
-    const userId = currentUser?.id;
+    const validatedFields = StepOneSchema.safeParse(values);
+    if (validatedFields.success) {
+      let response = await stepOneUpdate(validatedFields.data);
 
-    try {
-      await makeAndHandleApiCall(
-        '/api/onboarding/updateUser',
-        { userId, name, lastName, onboardingStep: 2 },
-        'No se pudo actualizar la información del usuario.'
-      );
-      // change to createWedding and updateWedding
-      await makeAndHandleApiCall(
-        '/api/onboarding/createWeddingAndBride',
-        {
-          userId,
-          weddingDate,
-          weddingUrl,
-          partnerEmail,
-          partnerName,
-          partnerLastName,
-        },
-        'No se pudo actualizar los detalles de la boda.'
-      );
-
-      onNextStep();
-    } catch (error) {
-      console.error('API call failed:', error);
-      if (error instanceof Error) {
+      if (response?.error) {
         toast({
           variant: 'destructive',
-          title: 'Uh Oh! Algo salió mal.',
-          description: error.message,
+          title: 'Error al registrar usuario.',
+          description: response.error,
         });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Uh Oh! Algo salió mal.',
-          description: 'An unexpected error occurred.',
-        });
+
+        setIsLoading(false);
+        return null;
       }
-    } finally {
-      setIsLoading(false);
     }
+
+    setIsLoading(false);
+    onNextStep();
   };
 
   const handleIsDecidingChange = (value: boolean | string) => {
@@ -160,7 +87,7 @@ const FirstStep: React.FC<FirstStepProps> = ({ onNextStep, currentUser }) => {
       </p>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(handleSubmit)}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-4"
         >
           <FormField

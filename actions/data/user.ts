@@ -25,3 +25,25 @@ export const updateVerifiedOn = async (email: string) => {
     return null;
   }
 };
+
+export const updateUserById = async (
+  userId: string,
+  name: string,
+  lastName: string,
+  onboardingStep: number
+) => {
+  try {
+    await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name: name,
+        lastName: lastName,
+        onboardingStep: onboardingStep,
+      },
+    });
+  } catch (error) {
+    return null;
+  }
+};
