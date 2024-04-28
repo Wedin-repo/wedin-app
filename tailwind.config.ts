@@ -31,6 +31,7 @@ const config = {
         secondaryTitleColor: '#1C1C1C',
         secondaryBorderColor: '#B4B4B4',
         tertiaryTextColor: '#696969',
+        borderColor: '#E0E0E0',
       },
       keyframes: {
         'accordion-down': {

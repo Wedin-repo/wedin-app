@@ -12,20 +12,22 @@ type GiftsProps = {
 };
 
 async function Gifts({ searchParams }: GiftsProps) {
-  console.log(searchParams);
-  const { gifts, totalGiftsCount } = (await getGiftsPagination({
-    searchParams,
-  })) as { gifts: Gift[]; totalGiftsCount: number };
+  const response = await getGiftsPagination({ searchParams });
 
-  console.log('total gift count', totalGiftsCount);
-  if (!gifts) return null;
-
-  const totalGifts = gifts?.length;
-  const itemsPerPage = 10;
-  const totalPages = Math.ceil(totalGifts / itemsPerPage);
-
-  if (gifts?.length === 0 || !gifts)
+  if (!response) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
+  }
+
+  const { gifts, totalGiftsCount } = response as {
+    gifts: Gift[];
+    totalGiftsCount: number;
+  };
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(totalGiftsCount / itemsPerPage);
+
+  if (gifts.length === 0) {
+    return <EmptyState title="No se encontraron resultados" />;
+  }
 
   return (
     <div className="flex flex-col gap-5">

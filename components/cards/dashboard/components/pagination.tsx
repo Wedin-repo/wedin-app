@@ -31,9 +31,9 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
             href={`#${currentPage - 1}`}
             onClick={e => {
               e.preventDefault();
-              setPage(currentPage - 1);
+              if (currentPage > 1) setPage(currentPage - 1);
             }}
-            className="hover:bg-borderColor transition-colors"
+            className={`hover:bg-borderColor transition-colors ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : ''}`}
           />
         </PaginationItem>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
@@ -61,9 +61,9 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
             href={`#${currentPage + 1}`}
             onClick={e => {
               e.preventDefault();
-              setPage(currentPage + 1);
+              if (currentPage < totalPages) setPage(currentPage + 1);
             }}
-            className="hover:bg-borderColor transition-colors"
+            className={`hover:bg-borderColor transition-colors ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : ''}`}
           />
         </PaginationItem>
       </PaginationContent>
