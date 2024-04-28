@@ -1,11 +1,9 @@
-import {
-  GetGiftsParams,
-  getGiftsPagination,
-} from '@/actions/getGiftsPagination';
+import { GetGiftsParams, getGifts } from '@/actions/data/gift';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/cards/dashboard/components/pagination';
 import GiftCard from './card';
 import { Gift } from '@prisma/client';
+import { getGiftsPagination } from '@/actions/getGiftsPagination';
 
 type GiftsProps = {
   searchParams: GetGiftsParams;

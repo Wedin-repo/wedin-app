@@ -1,6 +1,6 @@
 import { getCategories, getCategory } from '@/actions/data/category';
+import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
 import ImageUpload from '@/components/ImageUpload';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';

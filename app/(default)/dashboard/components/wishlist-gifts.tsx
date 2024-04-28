@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import { GetGiftsParams } from '@/actions/getGiftsPagination';
+import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
 // import Pagination from '@/components/cards/dashboard/components/pagination';

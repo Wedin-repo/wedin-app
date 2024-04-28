@@ -1,4 +1,4 @@
-import { getGifts } from '@/actions/getGifts';
+import { getGifts } from '@/actions/data/gift';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Carousel,

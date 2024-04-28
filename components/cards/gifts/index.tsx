@@ -1,6 +1,6 @@
+import { GetGiftsParams, getGifts } from '@/actions/data/gift';
+import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { GetGiftsParams, getGifts } from '@/actions/getGifts';
-import { getWedding } from '@/actions/getWedding';
 import EmptyState from '@/components/EmptyState';
 import CardContainer from '../shared/card-container';
 import GiftCard from './card';

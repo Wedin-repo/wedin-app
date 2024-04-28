@@ -1,7 +1,7 @@
+import { getGifts } from '@/actions/data/gift';
+import { getGiftList } from '@/actions/data/giftlist';
+import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getGiftList } from '@/actions/getGiftList';
-import { getGifts } from '@/actions/getGifts';
-import { getWedding } from '@/actions/getWedding';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';
 import { formatPrice } from '@/utils/format';

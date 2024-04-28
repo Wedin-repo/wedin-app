@@ -1,10 +1,7 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { Gift } from '@prisma/client';
-import { formatPrice } from '@/utils/format';
-import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';
-import { Category } from '@prisma/client';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -13,13 +10,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { formatPrice } from '@/utils/format';
+import { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { editGiftInWishList } from '@/actions/data/wishlist';
-import { FaCheck } from 'react-icons/fa6';
-import { toast } from '@/components/ui/use-toast';
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
+import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';
 
 type EditGiftFormProps = {
   gift: Gift;

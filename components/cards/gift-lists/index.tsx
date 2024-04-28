@@ -1,7 +1,7 @@
-import { GetGiftListsParams, getGiftLists } from '@/actions/getGiftLists';
 import EmptyState from '@/components/EmptyState';
 import GiftListCard from './card';
 import CardContainer from '../shared/card-container';
+import { GetGiftListsParams, getGiftLists } from '@/actions/data/giftlist';
 
 type GiftListsProps = {
   searchParams: GetGiftListsParams;

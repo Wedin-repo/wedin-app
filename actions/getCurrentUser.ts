@@ -1,4 +1,5 @@
 // server side get current user
+
 import { auth } from '@/auth';
 import prisma from '@/db/client';
 

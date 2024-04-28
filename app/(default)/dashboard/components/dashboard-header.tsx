@@ -1,6 +1,6 @@
+import { getGifts } from '@/actions/data/gift';
+import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getGifts } from '@/actions/getGifts';
-import { getWedding } from '@/actions/getWedding';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/utils/format';
 import { IoIosLink } from 'react-icons/io';
