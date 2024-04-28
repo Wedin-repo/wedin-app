@@ -26,6 +26,17 @@ export const {
   signOut,
 } = NextAuth({
   callbacks: {
+    async signIn({ user }) {
+      if (!user || !user.email) return true;
+
+      const existingUser = await getUserbyEmail(user.email);
+
+      if (!existingUser || !existingUser.emailVerified) {
+        return true;
+      }
+
+      return true;
+    },
     async session({ session, token }) {
       if (session.user && token.isOnboarded && token.role) {
         session.user.role = token.role;

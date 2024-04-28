@@ -17,8 +17,8 @@ const Login = () => {
 
       <div className="flex flex-col items-center justify-center gap-2">
         <span className="text-secondaryTextColor">O inicia sesión con</span>
-        <SociaMediaLoginForm socialMedia="google" />
-        <SociaMediaLoginForm socialMedia="facebook" />
+        <SociaMediaLoginForm provider="google" />
+        <SociaMediaLoginForm provider="facebook" />
       </div>
 
       <Link

@@ -1,30 +1,33 @@
 'use client';
 
-import { login } from '@/actions/login';
-import { useToast } from '../ui/use-toast';
+import { signIn } from 'next-auth/react';
+import { useState } from 'react';
 import LoginFormButton from './login-form-button';
 
 type SocialMediaLoginFormType = {
-  socialMedia: 'google' | 'facebook';
+  provider: 'google' | 'facebook';
+  callbackUrl?: string;
 };
-function SociaMediaLoginForm({ socialMedia }: SocialMediaLoginFormType) {
-  const { toast } = useToast();
-  const handleSignIn = async () => {
-    const response = await login(socialMedia);
+function SociaMediaLoginForm({
+  provider,
+  callbackUrl = '/dashboard',
+}: SocialMediaLoginFormType) {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleSignIn = () => {
+    setIsLoading(true);
 
-    if (response?.error) {
-      toast({
-        variant: 'destructive',
-        title: 'Uh Oh! Error al iniciar sesión.',
-        description: response.error,
-      });
-    }
+    signIn(provider, { callbackUrl: callbackUrl });
+
+    setIsLoading(false);
   };
 
   return (
-    <form action={handleSignIn}>
-      <LoginFormButton variant="socialMediaLoginButton" label={socialMedia} />
-    </form>
+    <LoginFormButton
+      variant="socialMediaLoginButton"
+      label={provider}
+      isLoading={isLoading}
+      handleSignIn={handleSignIn}
+    />
   );
 }
 

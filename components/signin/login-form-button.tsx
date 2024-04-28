@@ -1,25 +1,28 @@
 import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter } from '@/utils/format';
 import { Loader2 } from 'lucide-react';
-import { useFormStatus } from 'react-dom';
 
 type LoginFormButtonProps = {
   variant?: string;
   label?: string;
   isLoading?: boolean;
+  handleSignIn?: () => void;
 };
 
 export default function LoginFormButton({
   variant,
   label,
   isLoading, // we use this because the login is using on submit and not action
+  handleSignIn, // we use this because the login is using on submit and not action
 }: LoginFormButtonProps) {
-  const { pending } = useFormStatus();
-
   if (variant === 'socialMediaLoginButton') {
     return (
-      <Button type="submit" variant="socialMediaLoginButton" disabled={pending}>
-        {pending ? (
+      <Button
+        onClick={handleSignIn}
+        variant="socialMediaLoginButton"
+        disabled={isLoading}
+      >
+        {isLoading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
           `${capitalizeFirstLetter(label)}`
