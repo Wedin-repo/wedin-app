@@ -1,7 +1,4 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import { auth } from '@/auth';
-import Footer from '@/components/Footer';
-import NavBar from '@/components/navbar/Navbar';
 import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
@@ -20,7 +17,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
   const session = await auth();
 
   return (
@@ -28,9 +24,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <Toaster />
-          <NavBar currentUser={currentUser} />
-          <div className="pt-16 pb-10">{children}</div>
-          <Footer />
+          {children}
         </body>
       </html>
     </SessionProvider>

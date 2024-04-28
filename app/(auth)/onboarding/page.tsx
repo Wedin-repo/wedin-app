@@ -11,7 +11,7 @@ export default async function OnboardingPage() {
   if (!currentUser) return null;
 
   return (
-    <div className="flex-col lg:flex-row flex items-center justify-center w-full gap-4 px-4 sm:px-10 min-h-[82vh]">
+    <div className="flex flex-col items-center justify-center lg:flex-row w-full gap-4 px-4 sm:px-10 min-h-[82vh]">
       <div className="w-2/5 hidden lg:flex items-center justify-center">
         <div className="bg-secondaryBackgroundColor w-full h-[600px] flex items-center justify-center rounded-xl">
           <CiImageOn fontSize={'54px'} color="#A1A1AA" />

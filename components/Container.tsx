@@ -3,11 +3,7 @@ type ContainerProps = {
 };
 
 const Container = ({ children }: ContainerProps) => {
-  return (
-    <div className="max-w-[2520px]" style={{ margin: '0 auto' }}>
-      {children}
-    </div>
-  );
+  return <div className="max-w-[2520px]">{children}</div>;
 };
 
 export default Container;

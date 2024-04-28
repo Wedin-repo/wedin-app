@@ -6,11 +6,13 @@ import FirstStep from './first-step';
 import SecondStep from './second-step';
 
 type OnboardingFormProps = {
-  currentUser: User;
+  currentUser?: User;
 };
 
 export default function OnboardingForm({ currentUser }: OnboardingFormProps) {
-  const [currentPage, setCurrentPage] = useState(currentUser.onboardingStep);
+  const [currentPage, setCurrentPage] = useState(
+    currentUser?.onboardingStep || 1
+  );
 
   return (
     <>
