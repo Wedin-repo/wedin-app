@@ -1,11 +1,10 @@
-import { Suspense } from 'react';
-import { GetGiftsParams } from '@/actions/getGiftsPagination';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
+import { GetGiftsParams } from '@/actions/getGiftsPagination';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
+import { Suspense } from 'react';
 // import Pagination from '@/components/cards/dashboard/components/pagination';
-import Pagination from '@/components/cards/dashboard/components/pagination';
 import SearchBar from '@/components/search-bar';
 
 type WishlistGiftsProps = {

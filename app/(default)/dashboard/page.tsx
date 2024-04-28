@@ -1,4 +1,4 @@
-import { GetGiftsParams } from '@/actions/getGifts';
+import { GetGiftsParams } from '@/actions/getGiftsPagination';
 import DashboardHeader from './components/dashboard-header';
 import WishlistGifts from './components/wishlist-gifts';
 
