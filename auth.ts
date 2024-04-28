@@ -29,8 +29,7 @@ export const {
     signIn: '/login',
   },
   events: {
-    async linkAccount({ user, profile, account }) {
-      console.log('linkAccount', user, profile, account);
+    async linkAccount({ user }) {
       if (!user.email) return;
 
       await updateVerifiedOn(user.email);
@@ -67,6 +66,7 @@ export const {
       if (!user.role) return token;
 
       token.role = user.role;
+
       return token;
     },
   },

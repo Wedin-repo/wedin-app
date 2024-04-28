@@ -1,7 +1,8 @@
 // TODO refactor to use form action
 'use client';
 
-import { signIn } from '@/auth';
+import { login } from '@/actions/login';
+import { register } from '@/actions/register';
 import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,16 +14,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { toast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
@@ -30,14 +22,13 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { IoIosHeartEmpty } from 'react-icons/io';
-import { IoEyeOffOutline, IoEyeOutline, IoGiftOutline } from 'react-icons/io5';
-import { LuPartyPopper } from 'react-icons/lu';
+import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { MdErrorOutline } from 'react-icons/md';
 import { z } from 'zod';
 
 const RegisterRight = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -50,54 +41,41 @@ const RegisterRight = () => {
     },
   });
 
-  async function registerUser(email: string, password: string) {
-    return await fetch('/api/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-  }
-
-  async function loginUser(email: string, password: string) {
-    signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    }).then(callback => {
-      if (callback?.ok) {
-        router.push('/onboarding');
-      }
-    });
-  }
-
-  function showErrorToast(title: string, description: string) {
-    toast({
-      variant: 'destructive',
-      title: title,
-      description: description,
-      action: <MdErrorOutline fontSize={'52px'} />,
-    });
-  }
-
   async function onSubmit(values: z.infer<typeof LoginSchema>) {
     setIsLoading(true);
-    const { email, password } = values;
+    const validatedFields = LoginSchema.safeParse(values);
+    if (validatedFields.success) {
+      let response = await register(validatedFields.data);
 
-    const registerResponse = await registerUser(email, password);
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error al registrar usuario.',
+          description: response.error,
+        });
 
-    if (!registerResponse.ok) {
-      const data = await registerResponse.json();
-      const errorMessage =
-        data.error === 'Email already in use'
-          ? 'Este email ya está registrado.'
-          : 'Ocurrió un error al crear tu cuenta, intenta de vuelta.';
+        setIsLoading(false);
+        return null;
+      }
 
-      showErrorToast('Uh oh! Algo salió mal.', errorMessage);
-      setIsLoading(false);
-      return;
+      response = await login(
+        'credentials',
+        validatedFields.data,
+        '/onboarding'
+      );
+
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error al iniciar sesión.',
+          description: response.error,
+          action: <MdErrorOutline fontSize={'52px'} />,
+        });
+
+        setIsLoading(false);
+        return null;
+      }
     }
-
-    loginUser(email, password);
 
     setIsLoading(false);
   }
@@ -168,56 +146,8 @@ const RegisterRight = () => {
                 )}
               />
             </div>
-
-            <div className="flex flex-col gap-2" style={{ display: 'block' }}>
-              <FormField
-                control={form.control}
-                name="eventType"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <Label>Tipo de evento</Label>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona el tipo de evento" />
-                      </SelectTrigger>
-                      <SelectContent className="z-10 bg-white">
-                        <SelectGroup>
-                          <SelectItem
-                            value="wedding"
-                            className="border-b-[1px]"
-                            defaultChecked
-                          >
-                            <div className="flex items-center gap-2 cursor-pointer">
-                              <IoIosHeartEmpty fontSize={'18px'} />
-                              <span>Boda</span>
-                            </div>
-                          </SelectItem>
-                          <SelectItem
-                            value="birthday"
-                            className="border-b-[1px]"
-                          >
-                            <div className="flex items-center gap-2 cursor-pointer">
-                              <IoGiftOutline fontSize={'18px'} />
-                              <span>Cumpleaños</span>
-                            </div>
-                          </SelectItem>
-                          <SelectItem value="other">
-                            <div className="flex items-center gap-2 cursor-pointer">
-                              <LuPartyPopper fontSize={'18px'} />
-                              <span>Otros</span>
-                            </div>
-                          </SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormItem>
-                )}
-              />
-            </div>
           </div>
+
           <Button
             type="submit"
             variant="primaryButton"
