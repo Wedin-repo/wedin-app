@@ -64,8 +64,6 @@ export async function getGiftsPagination({
 
     const totalGiftsCount = await prisma.gift.count({ where: query });
 
-    if (!gifts || !totalGiftsCount) return null;
-
     return {
       gifts,
       totalGiftsCount,

@@ -13,9 +13,14 @@ function SearchBar({}: SearchProps) {
   const searchParams = useSearchParams();
   const debounce = useDebounceCallback(handleSearchTitle, 1000);
   const name = searchParams.get('name') ?? '';
+  const page = searchParams.get('page') ?? '';
 
   function handleSearchTitle(value: string) {
     const sp = new URLSearchParams(searchParams);
+
+    if (page > '1') {
+      sp.set('page', '1');
+    }
 
     if (value.trim() === '') {
       sp.delete('name');

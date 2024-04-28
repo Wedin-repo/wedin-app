@@ -14,7 +14,11 @@ type GiftsProps = {
 async function Gifts({ searchParams }: GiftsProps) {
   const response = await getGiftsPagination({ searchParams });
 
-  if (!response) {
+  if (
+    !response ||
+    ((response as { totalGiftsCount: number }).totalGiftsCount === 0 &&
+      !searchParams.name)
+  ) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
@@ -22,11 +26,12 @@ async function Gifts({ searchParams }: GiftsProps) {
     gifts: Gift[];
     totalGiftsCount: number;
   };
-  const itemsPerPage = 10;
+
+  const itemsPerPage = 15;
   const totalPages = Math.ceil(totalGiftsCount / itemsPerPage);
 
-  if (gifts.length === 0) {
-    return <EmptyState title="No se encontraron resultados" />;
+  if (gifts.length === 0 && searchParams.name) {
+    return <EmptyState /* tryAgain */ title="No se encontraron regalos" />;
   }
 
   return (
@@ -38,7 +43,7 @@ async function Gifts({ searchParams }: GiftsProps) {
           wishListId={searchParams.wishListId}
         />
       ))}
-      <div className="mt-5 flex w-full justify-center">
+      <div className="m-5 flex w-full justify-center">
         <Pagination totalPages={totalPages} />
       </div>
     </div>

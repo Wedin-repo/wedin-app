@@ -13,7 +13,7 @@ export default auth(req => {
   const isOnboarded = isLoggedIn ? req.auth?.user.isOnboarded ?? false : false;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  //const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = onboardingRoute.includes(nextUrl.pathname);
@@ -22,7 +22,7 @@ export default auth(req => {
     return;
   }
 
-  if (isLoggedIn && !isOnboarded && (isPublicRoute || isProtectedRoute)) {
+  if (isLoggedIn && !isOnboarded && !isOnboardingRoute) {
     return Response.redirect(new URL('/onboarding', nextUrl));
   }
 
