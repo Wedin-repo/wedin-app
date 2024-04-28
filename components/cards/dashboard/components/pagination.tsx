@@ -33,7 +33,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
               e.preventDefault();
               setPage(currentPage - 1);
             }}
-            className='hover:bg-borderColor transition-colors'
+            className="hover:bg-borderColor transition-colors"
           />
         </PaginationItem>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
@@ -45,7 +45,11 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
                 setPage(page);
               }}
               isActive={currentPage === page}
-              className={currentPage === page ? 'p-2 h-8 w-9 bg-borderColor' : 'border border-borderColor p-2 h-8 w-9 hover:bg-borderColor transition-colors'}
+              className={
+                currentPage == page
+                  ? 'p-2 h-8 w-9 bg-borderColor'
+                  : 'border border-borderColor p-2 h-8 w-9 hover:bg-borderColor transition-colors'
+              }
             >
               {page}
             </PaginationLink>
@@ -59,7 +63,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
               e.preventDefault();
               setPage(currentPage + 1);
             }}
-            className='hover:bg-borderColor transition-colors'
+            className="hover:bg-borderColor transition-colors"
           />
         </PaginationItem>
       </PaginationContent>

@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
-import { GetGiftsParams } from '@/actions/getGifts';
+import { GetGiftsParams } from '@/actions/getGiftsPagination';
 import { getWedding } from '@/actions/getWedding';
 import { User } from '@prisma/client';
 import SearchBar from '../../components/search-bar';
 import Gifts from '@/components/cards/dashboard';
-import Pagination from '@/components/cards/dashboard/components/pagination';
+// import Pagination from '@/components/cards/dashboard/components/pagination';
 import Loader from '@/components/Loader';
 
 type AllGiftsProps = {
@@ -26,9 +26,9 @@ async function AllGifts({ searchParams, currentUser }: AllGiftsProps) {
         <Gifts searchParams={{ ...searchParams, wishListId: wishListId }} />
       </Suspense>
 
-      <div className="mt-5 flex w-full justify-center">
+      {/* <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={3} />
-      </div>
+      </div> */}
     </>
   );
 }

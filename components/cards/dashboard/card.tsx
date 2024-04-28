@@ -22,11 +22,11 @@ const GiftCard = ({ gift, wishListId }: GiftCardProps) => {
 
   return (
     <Card variant="dashboard" size="dashboard">
-      <CardHeader variant="dashboard" className="relative">
+      <CardHeader variant="dashboard" className="relative w-[90px]">
         <Image
           src={imageUrl || ringsLoader}
           height={90}
-          width={90}
+          width={350}
           alt={name}
           className="rounded-lg object-cover"
         />
