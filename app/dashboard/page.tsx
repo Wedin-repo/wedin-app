@@ -12,6 +12,7 @@ type DashboardPageProps = {
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const session = await auth();
+
   console.log('session', JSON.stringify(session));
   return (
     <Container>

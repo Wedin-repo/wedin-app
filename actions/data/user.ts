@@ -13,3 +13,15 @@ export const getUserbyEmail = async (email: string) => {
     return null;
   }
 };
+
+export const updateVerifiedOn = async (email: string) => {
+  try {
+    const currentUser = await prisma.user.update({
+      where: { email: email },
+      data: { emailVerified: new Date() },
+    });
+    return currentUser;
+  } catch (error) {
+    return null;
+  }
+};

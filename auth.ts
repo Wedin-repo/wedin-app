@@ -1,4 +1,4 @@
-import { getUserbyEmail } from '@/actions/data/user';
+import { getUserbyEmail, updateVerifiedOn } from '@/actions/data/user';
 import NextAuth, { DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import authOptions from './auth.config';
@@ -25,6 +25,17 @@ export const {
   signIn,
   signOut,
 } = NextAuth({
+  pages: {
+    signIn: '/login',
+  },
+  events: {
+    async linkAccount({ user, profile, account }) {
+      console.log('linkAccount', user, profile, account);
+      if (!user.email) return;
+
+      await updateVerifiedOn(user.email);
+    },
+  },
   callbacks: {
     async signIn({ user }) {
       if (!user || !user.email) return true;
