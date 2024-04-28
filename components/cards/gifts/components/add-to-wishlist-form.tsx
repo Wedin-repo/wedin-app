@@ -1,7 +1,7 @@
 import { addGiftToWishList } from '@/actions/add-gift-to-wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { redirect, useRouter } from 'next/navigation';
+import { redirect } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishListFormButton from './wishlist-form-button';
 

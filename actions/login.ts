@@ -6,9 +6,31 @@ import { AuthError } from 'next-auth';
 import * as z from 'zod';
 
 export const login = async (
-  values: z.infer<typeof LoginSchema>,
+  type = 'credentials',
+  values: z.infer<typeof LoginSchema> | null = null,
   redirectTo = '/dashboard'
 ) => {
+  if (values === undefined || values === null) {
+    try {
+      await signIn(type, {
+        redirectTo,
+      });
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case 'AccessDenied':
+            return { error: 'Credenciales incorrectas' };
+          default:
+            return { error: 'An error occurred' };
+        }
+      }
+
+      throw error;
+    }
+
+    return;
+  }
+
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -19,15 +41,13 @@ export const login = async (
     const { email, password } = validatedFields.data;
 
     try {
-      await signIn('credentials', {
+      await signIn(type, {
         email,
         password,
+        redirectTo,
       });
-      return { success: true };
     } catch (error) {
       if (error instanceof AuthError) {
-        console.log('error', error);
-
         switch (error.type) {
           case 'CredentialsSignin':
             return { error: 'Credenciales incorrectas' };
@@ -35,6 +55,8 @@ export const login = async (
             return { error: 'An error occurred' };
         }
       }
+
+      throw error;
     }
   }
 };

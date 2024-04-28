@@ -34,7 +34,7 @@ export default function LoginForm() {
   async function handleLogin(values: z.infer<typeof LoginSchema>) {
     const validatedFields = LoginSchema.safeParse(values);
     if (validatedFields.success) {
-      const response = await login(validatedFields.data);
+      const response = await login('credentials', validatedFields.data);
 
       if (response?.error) {
         toast({
@@ -42,11 +42,7 @@ export default function LoginForm() {
           title: 'Uh Oh! Error al iniciar sesión.',
           description: response.error,
         });
-
-        return null;
       }
-
-      window.location.href = '/dashboard';
     }
   }
 

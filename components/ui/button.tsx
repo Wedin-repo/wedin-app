@@ -38,6 +38,8 @@ const buttonVariants = cva(
           'w-full bg-white flex items-center justify-center rounded-lg py-2 gap-2 text-black font-medium hover:opacity-60 hover transition',
         logoutButton:
           'px-3 py-3 hover:bg-neutral-100 transition flex gap-2 items-center',
+        socialMediaLoginButton:
+          'bg-secondaryBackgroundColor text-tertiaryTextColor py-1.5 px-6 rounded-lg w-[208px] hover:opacity-80 transition-all',
       },
       size: {
         default: 'h-10 px-4 py-2',
