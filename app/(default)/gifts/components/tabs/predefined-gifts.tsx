@@ -1,5 +1,5 @@
 import { getCategories } from '@/actions/data/category';
-import { GetGiftListsParams } from '@/actions/getGiftLists';
+import { GetGiftListsParams } from '@/actions/data/giftlist';
 import Loader from '@/components/Loader';
 import GiftLists from '@/components/cards/gift-lists';
 import SearchBar from '@/components/search-bar';
