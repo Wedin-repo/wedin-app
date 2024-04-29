@@ -50,7 +50,9 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
               e.preventDefault();
               if (currentPage > 1) setPage(currentPage - 1);
             }}
-            className={`hover:bg-borderColor transition-colors ${currentPage === 1 ? 'cursor-not-allowed opacity-50' : ''}`}
+            className={`hover:bg-borderColor transition-colors ${
+              currentPage === 1 ? 'cursor-not-allowed opacity-50' : ''
+            }`}
           />
         </PaginationItem>
         {paginationRange().map((page, index, arr) => (
@@ -82,7 +84,9 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
               e.preventDefault();
               if (currentPage < totalPages) setPage(currentPage + 1);
             }}
-            className={`hover:bg-borderColor transition-colors ${currentPage === totalPages ? 'cursor-not-allowed opacity-50' : ''}`}
+            className={`hover:bg-borderColor transition-colors ${
+              currentPage === totalPages ? 'cursor-not-allowed opacity-50' : ''
+            }`}
           />
         </PaginationItem>
       </PaginationContent>

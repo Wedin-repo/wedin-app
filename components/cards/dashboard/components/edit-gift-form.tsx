@@ -122,7 +122,7 @@ function EditGiftForm({
                   </SelectItem>
                   {/* this is just a border for aesthetic purposes */}
                   <div
-                    className="border border-b-secondaryBorderColor flex items-center w-5/6 justify-center"
+                    className="flex justify-center items-center w-5/6 border border-b-secondaryBorderColor"
                     style={{ margin: '0 auto' }}
                   ></div>
                 </div>
@@ -142,8 +142,8 @@ function EditGiftForm({
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <Label className="font-normal text-base">
+        <div className="flex justify-between items-center">
+          <Label className="text-base font-normal">
             Marcar como el que más queremos ⭐️
           </Label>
           <Switch
@@ -152,12 +152,12 @@ function EditGiftForm({
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <Label className="font-normal text-base">Regalo grupal</Label>
+        <div className="flex justify-between items-center">
+          <Label className="text-base font-normal">Regalo grupal</Label>
           <Switch checked={isGroupGift} onCheckedChange={setIsGroupGift} />
         </div>
       </div>
-      <div className="w-full flex justify-center mt-4 sm:mt-8">
+      <div className="flex justify-center mt-4 w-full sm:mt-8">
         <EditGiftFromWishListForm isLoading={isLoading} />
       </div>
     </form>

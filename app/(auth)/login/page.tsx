@@ -3,11 +3,11 @@ import Login from './Login';
 
 const LoginPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full text-black gap-16 px-4 sm:px-10">
+    <div className="flex flex-col gap-16 justify-center items-center px-4 h-full text-black sm:px-10">
       <Logo />
 
-      <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4">
-        <div className="w-full lg:w-2/5 flex items-center justify-center">
+      <div className="flex flex-col gap-4 justify-center items-center w-full lg:flex-row">
+        <div className="flex justify-center items-center w-full lg:w-2/5">
           <Login />
         </div>
       </div>

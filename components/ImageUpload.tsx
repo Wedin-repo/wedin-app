@@ -53,7 +53,9 @@ function ImageUpload() {
       <div className="bg-secondaryBackgroundColor rounded-xl p-4 flex flex-col gap-3">
         {error && <p className="text-red-500 text-sm">{error}</p>}
         <div
-          className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-secondaryTextColor ${error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'}`}
+          className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-secondaryTextColor ${
+            error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'
+          }`}
         >
           {previewUrl ? (
             <Image
