@@ -18,7 +18,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
   if (variant === 'undoButton') {
     return (
       <Button type="submit" variant="undoButton" disabled={pending}>
-        {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <GrUndo />}
+        {pending ? <Loader2 className="w-4 h-4 animate-spin" /> : <GrUndo />}
         Deshacer
       </Button>
     );
@@ -33,7 +33,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
         disabled={pending}
       >
         {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <FaRegTrashAlt fontSize={'16px'} />
         )}
@@ -51,7 +51,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
       >
         Elegir lista
         {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <GoArrowRight fontSize={'24px'} />
         )}
@@ -63,7 +63,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
     <Button type="submit" variant="primaryButton" disabled={pending}>
       Agregar a mi lista
       {pending ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
         <IoAdd size={22} />
       )}

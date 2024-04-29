@@ -35,13 +35,13 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
       return null;
     } else {
       toast({
-        title: 'lista agregada kp',
-        description: `se agregaron ${giftIds?.length} regalos a tu lista kp`,
+        title: 'Lista agregada',
+        description: `Se agregaron ${giftIds?.length} regalos a tu lista`,
         action: (
           <Button
             onClick={() => router.push('/dashboard?page=1')}
             variant="outline"
-            className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
+            className="gap-1 px-3 h-8 hover:text-white border-borderColor hover:bg-primaryBackgroundColor"
           >
             <IoGiftOutline />
             Ver lista

@@ -13,28 +13,24 @@ function SearchBar({}: SearchProps) {
   const searchParams = useSearchParams();
   const debounce = useDebounceCallback(handleSearchTitle, 1000);
   const name = searchParams.get('name') ?? '';
-  const page = searchParams.get('page') ?? '';
 
   function handleSearchTitle(value: string) {
     const sp = new URLSearchParams(searchParams);
-
-    if (page > '1') {
-      sp.set('page', '1');
-    }
 
     if (value.trim() === '') {
       sp.delete('name');
     } else {
       sp.set('name', value);
+      sp.set('page', '1');
     }
     router.push(`${pathname}?${sp.toString()}`);
   }
 
   return (
-    <div className="bg-secondaryBackgroundColor w-full md:w-auto py-1.5 pl-4 pr-1.5 rounded-full flex items-center gap-2">
+    <div className="flex gap-2 items-center py-1.5 pr-1.5 pl-4 my-8 w-full rounded-full md:w-auto bg-secondaryBackgroundColor">
       <BiSearch fontSize={'22px'} />
       <Input
-        className="bg-transparent border-0 rounded-full pl-2 focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="pl-2 bg-transparent rounded-full border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="Buscar"
         onChange={e => debounce(e.target.value)}
         defaultValue={name}

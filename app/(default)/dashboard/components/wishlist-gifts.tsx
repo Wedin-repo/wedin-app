@@ -1,6 +1,4 @@
-import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import { GetGiftsParams } from '@/actions/getGiftsPagination';
+import { GetGiftsParams } from '@/actions/data/gift';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
 import SearchBar from '@/components/search-bar';
@@ -10,11 +8,7 @@ type WishlistGiftsProps = {
   searchParams: GetGiftsParams;
 };
 
-async function WishlistGifts({ searchParams }: WishlistGiftsProps) {
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
-  const wishListId = wedding?.wishListId;
-
+function WishlistGifts({ searchParams }: WishlistGiftsProps) {
   return (
     <>
       <div className="my-8">
@@ -22,7 +16,7 @@ async function WishlistGifts({ searchParams }: WishlistGiftsProps) {
       </div>
 
       <Suspense fallback={<Loader />}>
-        <Gifts searchParams={{ ...searchParams, wishListId: wishListId }} />
+        <Gifts searchParams={searchParams} />
       </Suspense>
     </>
   );

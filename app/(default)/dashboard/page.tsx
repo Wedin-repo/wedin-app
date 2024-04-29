@@ -3,7 +3,9 @@ import DashboardHeader from './components/dashboard-header';
 import WishlistGifts from './components/wishlist-gifts';
 
 type DashboardPageProps = {
-  searchParams: GetGiftsParams;
+  searchParams: {
+    page?: string;
+  };
 };
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {

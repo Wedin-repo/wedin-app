@@ -65,7 +65,7 @@ function EditGiftForm({
     formData.append('price', editedPrice);
     formData.append('isFavoriteGift', isFavoriteGift.toString());
     formData.append('isGroupGift', isGroupGift.toString());
-    console.log(formData.values.toString());
+    // console.log(formData.values.toString());
 
     /* const editGiftWithId = editGiftInWishList.bind(null, wishlistId || '');
     const response = await editGiftWithId(formData);
