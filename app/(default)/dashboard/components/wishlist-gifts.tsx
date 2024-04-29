@@ -3,9 +3,8 @@ import { getCurrentUser } from '@/actions/getCurrentUser';
 import { GetGiftsParams } from '@/actions/getGiftsPagination';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
-import { Suspense } from 'react';
-// import Pagination from '@/components/cards/dashboard/components/pagination';
 import SearchBar from '@/components/search-bar';
+import { Suspense } from 'react';
 
 type WishlistGiftsProps = {
   searchParams: GetGiftsParams;
@@ -25,10 +24,6 @@ async function WishlistGifts({ searchParams }: WishlistGiftsProps) {
       <Suspense fallback={<Loader />}>
         <Gifts searchParams={{ ...searchParams, wishListId: wishListId }} />
       </Suspense>
-
-      {/* <div className="mt-5 flex w-full justify-center">
-        <Pagination totalPages={3} />
-      </div> */}
     </>
   );
 }
