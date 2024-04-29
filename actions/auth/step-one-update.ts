@@ -59,11 +59,16 @@ export const stepOneUpdate = async (
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
     try {
-      groom = await prisma.user.update({
+      groom = await prisma.user.upsert({
         where: {
-          email: session.user.email,
+          email: session.user.email, // This checks if a user exists with this email
         },
-        data: {
+        update: {
+          name: name,
+          lastName: lastName,
+        },
+        create: {
+          email: session.user.email, // Include email in the creation if not exists
           name: name,
           lastName: lastName,
         },

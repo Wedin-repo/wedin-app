@@ -54,12 +54,8 @@ export const {
       return true;
     },
     async session({ session, token }) {
-      if (token.isValid === false) {
-        session.user.isValid = false;
-      }
-
       if (session.user) {
-        session.user.isValid = true;
+        //session.user.isValid = token.isValid;
         session.user.role = token.role;
         session.user.isOnboarded = token.isOnboarded;
       }
@@ -72,7 +68,8 @@ export const {
       const currentUser = await getUserbyEmail(token.email);
 
       if (!currentUser) {
-        token.isValid = false;
+        // console.log("user not found");
+        //token.isValid = false;
         return token;
       }
 
