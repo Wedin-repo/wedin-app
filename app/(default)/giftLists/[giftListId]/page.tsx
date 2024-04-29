@@ -11,7 +11,7 @@ import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
 
 export type GiftListSearchParams = {
-  listId: string;
+  giftListId: string;
 };
 
 type GiftListPageProps = {
@@ -19,11 +19,11 @@ type GiftListPageProps = {
 };
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
-  const { listId } = params;
+  const { giftListId } = params;
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
-  const giftList = await getGiftList(listId);
-  const gifts = await getGifts({ searchParams: { giftListId: listId } });
+  const giftList = await getGiftList(giftListId);
+  const gifts = await getGifts({ searchParams: { giftListId } });
   const giftIds = gifts?.map(gift => gift.id);
 
   if (!giftList) return null;
@@ -61,7 +61,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
       <div className="mt-6 sm:mt-10">
         <Suspense fallback={<Loader />}>
-          <Gifts searchParams={{ giftListId: listId }} />
+          <Gifts searchParams={{ giftListId }} />
         </Suspense>
       </div>
     </div>

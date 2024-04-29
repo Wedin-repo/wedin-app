@@ -1,14 +1,14 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
+import { GiftListSearchParams } from '@/app/(default)/giftLists/[giftListId]/page';
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
-import { GiftListPageProps } from '@/app/(default)/lists/[listId]/page';
 import EmptyState from '@/components/EmptyState';
 import CardContainer from '../shared/card-container';
 import GiftCard from './card';
 
 type GiftsProps = {
-  searchParams: GiftPageSearchParams & GiftListPageProps;
+  searchParams: GiftPageSearchParams & GiftListSearchParams;
 };
 
 async function Gifts({ searchParams }: GiftsProps) {

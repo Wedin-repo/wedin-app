@@ -27,7 +27,7 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
     <Card>
       <CardHeader className="relative p-0">
         <Carousel>
-          <Link href={`/lists/${id}`}>
+          <Link href={`/giftLists/${id}`}>
             <CarouselContent>
               {gifts?.map(gift => (
                 <CarouselItem key={gift.id}>
@@ -51,7 +51,7 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
       </CardHeader>
 
       <CardContent className="p-4">
-        <Link href={`/lists/${id}`} className="flex flex-col flex-grow">
+        <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
           <p className="text-sm font-medium text-primaryTitleColor">{name}</p>
           <p className="text-sm text-secondaryTextColor">{description}</p>
           <div className="flex flex-grow justify-between items-end text-primaryTitleColor">

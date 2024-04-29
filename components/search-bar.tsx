@@ -46,7 +46,7 @@ function SearchBar({ scrollValue = 200 }: SearchBarProps) {
   }
 
   return (
-    <div className="flex gap-2 items-center py-1.5 pr-1.5 pl-4 my-8 mx-8 rounded-full md:w-auto bg-secondaryBackgroundColor">
+    <div className="flex gap-2 items-center py-1.5 pr-1.5 pl-4 my-8 rounded-full md:w-auto bg-secondaryBackgroundColor">
       <BiSearch fontSize={'22px'} />
       <Input
         className="pl-2 bg-transparent rounded-full border-0 focus-visible:ring-0 focus-visible:ring-offset-0"

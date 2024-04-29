@@ -1,7 +1,6 @@
 'use server';
 
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
-import { GiftListSearchParams } from '@/app/(default)/lists/[listId]/page';
 import prisma from '@/db/client';
 
 export type GetGiftsParams = {
