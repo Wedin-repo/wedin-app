@@ -6,7 +6,7 @@ import StepOne from './step-one';
 import StepTwo from './step-two';
 
 type OnboardingFormProps = {
-  currentUser?: User;
+  currentUser?: User | null;
 };
 
 export default function OnboardingForm({ currentUser }: OnboardingFormProps) {
