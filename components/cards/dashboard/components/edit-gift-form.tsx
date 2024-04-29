@@ -143,7 +143,7 @@ function EditGiftForm({
         </div>
 
         <div className="flex items-center justify-between">
-          <Label className="font-normal text-md">
+          <Label className="font-normal text-base">
             Marcar como el que más queremos ⭐️
           </Label>
           <Switch
@@ -153,7 +153,7 @@ function EditGiftForm({
         </div>
 
         <div className="flex items-center justify-between">
-          <Label className="font-normal text-md">Regalo grupal</Label>
+          <Label className="font-normal text-base">Regalo grupal</Label>
           <Switch checked={isGroupGift} onCheckedChange={setIsGroupGift} />
         </div>
       </div>

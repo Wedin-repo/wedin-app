@@ -19,6 +19,7 @@ export type GiftPageSearchParams = {
   tab?: string;
   name?: string;
   page?: string;
+  category?: string;
 };
 
 type GiftsPageProps = {
@@ -72,8 +73,8 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
-        <div className="mx-8">
-          <SearchBar scrollValue={170} />
+        <div className="mx-6">
+          <SearchBar />
         </div>
 
         <TabsContent value={TABS.predefinedGifts}>

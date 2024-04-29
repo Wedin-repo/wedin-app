@@ -1,3 +1,4 @@
+import SearchBar from '@/components/search-bar';
 import DashboardHeader from './components/dashboard-header';
 import WishlistGifts from './components/wishlist-gifts';
 
@@ -14,6 +15,8 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
   return (
     <div className="flex flex-col justify-start px-4 mt-12 sm:px-10 sm:mt-12 min-h-[90vh]">
       <DashboardHeader />
+
+      <SearchBar scrollValue={200} scrollValueMobile={250} />
 
       <WishlistGifts searchParams={searchParams} />
     </div>

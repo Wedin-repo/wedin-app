@@ -23,6 +23,8 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
   const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
   const formattedPrice = formatPrice(Number(totalPrice));
 
+  if (!gifts || gifts.length === 0) return null;
+
   return (
     <Card>
       <CardHeader className="relative p-0">

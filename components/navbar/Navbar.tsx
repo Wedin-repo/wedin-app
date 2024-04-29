@@ -5,16 +5,29 @@ import UserMenu from '@/components/navbar/UserMenu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User } from '@prisma/client';
 import { usePathname, useRouter } from 'next/navigation';
+import { Session } from 'next-auth';
+import { signOut } from 'next-auth/react';
+import { useEffect } from 'react';
 
 type NavBarProps = {
   currentUser?: User | null;
+  session: Session | null;
 };
 
-export const NavBar = ({ currentUser }: NavBarProps) => {
+export const NavBar = ({ currentUser, session }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
   let menuValue = 'addGifts';
+
+  // The only case where this will run or the session.user.valid == false
+  // is when you are logged in but the user have been deleted from our db
+  // this will sign out the user
+  useEffect(() => {
+    if (session?.user.isValid === false) {
+      signOut();
+    }
+  }, [session]);
 
   if (pathname.includes('/gifts-received')) {
     menuValue = 'giftsRecieved';
@@ -41,20 +54,20 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   };
 
   return (
-    <div className="fixed w-full bg-white z-10 pt-4 px-6 shadow-sm sm:px-10">
-      <div className="flex flex-row items-center justify-between gap-3 md:gap-0">
+    <div className="fixed z-10 px-6 pt-4 w-full bg-white shadow-sm sm:px-10">
+      <div className="flex flex-row gap-3 justify-between items-center md:gap-0">
         <div className="flex gap-4 items-center">
           <div className="pb-4">
             <Logo height={39} width={90} />
           </div>
 
           <Tabs
-            className="mb-[-8px] hidden sm:block"
+            className="hidden sm:block mb-[-8px]"
             defaultValue="addGifts"
             onValueChange={handleTabChange}
             value={menuValue}
           >
-            <TabsList className="gap-4 overflow-x-auto overflow-y-hidden">
+            <TabsList className="overflow-x-auto overflow-y-hidden gap-4">
               <TabsTrigger value="addGifts" className="!text-sm pb-4">
                 Agregar regalos
               </TabsTrigger>

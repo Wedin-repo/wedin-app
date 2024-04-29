@@ -6,11 +6,11 @@ async function GiftHeader() {
   return (
     <>
       {currentUser ? (
-        <h1 className="text-3xl sm:text-4xl font-semibold text-primaryTextColor px-10 mt-8 sm:mt-12 flex w-full items-center justify-center">
+        <h1 className="flex justify-center items-center px-10 mt-8 w-full text-4xl font-medium sm:mt-12 sm:text-5xl text-primaryTextColor">
           Agregar regalos
         </h1>
       ) : (
-        <h1 className="text-4xl sm:text-5xl font-medium text-primaryTextColor px-10 mt-8 sm:mt-12">
+        <h1 className="px-10 mt-8 text-4xl font-medium sm:mt-12 sm:text-5xl text-primaryTextColor">
           Créa tu lista de regalos
         </h1>
       )}

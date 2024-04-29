@@ -8,7 +8,7 @@ import CardContainer from '../shared/card-container';
 import GiftCard from './card';
 
 type GiftsProps = {
-  searchParams: GiftPageSearchParams & Partial<GiftListSearchParams>;
+  searchParams: GiftPageSearchParams | GiftListSearchParams;
 };
 
 async function Gifts({ searchParams }: GiftsProps) {

@@ -28,19 +28,21 @@ const GiftCard = ({ gift, wishListId }: GiftCardProps) => {
           height={90}
           width={350}
           alt={name}
-          className="rounded-lg object-cover"
+          className="object-cover rounded-lg"
         />
         {isDefault && (
-          <div className="absolute top-2 right-2 shadow-inner bg-white rounded-full p-1 transform translate-x-1/2 -translate-y-1/2 text-yellow-400 text-xs">
+          <div className="absolute top-2 right-2 p-1 text-xs text-yellow-400 bg-white rounded-full shadow-inner transform translate-x-1/2 -translate-y-1/2">
             ⭐️
           </div>
         )}
       </CardHeader>
 
       <CardContent variant="dashboard">
-        <h1 className="text-primaryTitleColor font-medium text-lg">{name}</h1>
-        <p className="text-sm text-secondaryTextColor">{description}</p>
-        <span className="text-black text-lg">{formattedPrice}</span>
+        <p className="text-lg font-medium text-primaryTitleColor">{name}</p>
+        <p className="hidden text-sm sm:block text-secondaryTextColor">
+          {description}
+        </p>
+        <span className="text-lg text-black">{formattedPrice}</span>
       </CardContent>
 
       <CardFooter variant="dashboard">

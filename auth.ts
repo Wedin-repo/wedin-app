@@ -8,6 +8,11 @@ declare module 'next-auth' {
     user: {
       isOnboarded: boolean;
       role: string;
+      // This is to check for weird cases where we do have a session
+      // but the we do not have the user e.g if you where logged in
+      // but the db has benn cleared you will still have a session
+      // but no user if is valid is false we want to logout the user
+      isValid?: boolean;
     } & DefaultSession['user'];
   }
 }
@@ -16,6 +21,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     isOnboarded: boolean;
     role: string;
+    isValid: boolean;
   }
 }
 
@@ -48,10 +54,16 @@ export const {
       return true;
     },
     async session({ session, token }) {
-      if (session.user && token.role) {
+      if (token.isValid === false) {
+        session.user.isValid = false;
+      }
+
+      if (session.user) {
+        session.user.isValid = true;
         session.user.role = token.role;
         session.user.isOnboarded = token.isOnboarded;
       }
+
       return session;
     },
     async jwt({ token }) {
@@ -59,12 +71,13 @@ export const {
 
       const currentUser = await getUserbyEmail(token.email);
 
-      if (!currentUser) return token;
+      if (!currentUser) {
+        token.isValid = false;
+        return token;
+      }
 
+      token.name = currentUser.name;
       token.isOnboarded = currentUser.isOnboarded;
-
-      if (!currentUser.role) return token;
-
       token.role = currentUser.role;
 
       return token;

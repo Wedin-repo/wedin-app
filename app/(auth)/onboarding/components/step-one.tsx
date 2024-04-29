@@ -295,7 +295,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                       />
                     </FormControl>
                     <div className="!m-0">
-                      <FormLabel className="text-sm font-normal cursor-pointer sm:text-md">
+                      <FormLabel className="text-sm font-normal cursor-pointer sm:text-base">
                         Aún estamos decidiendo
                       </FormLabel>
                     </div>
