@@ -1,20 +1,20 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useDebounceCallback } from 'usehooks-ts';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ChangeEvent } from 'react';
 import { BiSearch } from 'react-icons/bi';
+import { useDebounceCallback } from 'usehooks-ts';
 
-type SearchProps = {
+type SearchBarProps = {
+  scrollValue?: number;
 };
 
-function SearchBar({}: SearchProps) {
+function SearchBar({ scrollValue = 200 }: SearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-
-  const debounce = useDebounceCallback(handleSearchTitle, 1000)
-
+  const debounce = useDebounceCallback(handleSearchTitle, 1000);
   const name = searchParams.get('name') ?? '';
 
   function handleSearchTitle(value: string) {
@@ -24,17 +24,35 @@ function SearchBar({}: SearchProps) {
       sp.delete('name');
     } else {
       sp.set('name', value);
+      sp.set('page', '1');
     }
-    router.push(`${pathname}?${sp.toString()}`);
+
+    router.push(`${pathname}?${sp.toString()}`, { scroll: false });
+  }
+
+  function handleScroll() {
+    // Check if the current scroll position is within 5 pixels of the target
+    if (Math.abs(window.scrollY - scrollValue) > 5) {
+      window.scrollTo({
+        top: scrollValue,
+        behavior: 'smooth',
+      });
+    }
+  }
+
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    handleScroll();
+    debounce(e.target.value);
   }
 
   return (
-    <div className="bg-[#F2F2F2] w-full md:w-auto py-1.5 pl-4 pr-1.5 rounded-full flex items-center gap-2">
+    <div className="flex gap-2 items-center py-1.5 pr-1.5 pl-4 my-8 rounded-full md:w-auto bg-secondaryBackgroundColor">
       <BiSearch fontSize={'22px'} />
       <Input
-        className="bg-transparent border-0 rounded-full text-md pl-2 text-primaryTextColor focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="pl-2 bg-transparent rounded-full border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="Buscar"
-        onChange={(e) => debounce(e.target.value)}
+        onFocus={handleScroll} // Trigger scroll when the input is focused
+        onChange={handleInputChange} // Also trigger scroll when typing
         defaultValue={name}
       />
     </div>

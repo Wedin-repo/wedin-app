@@ -1,10 +1,9 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import Footer from '@/components/footer/Footer';
-import NavBar from '@/components/navbar/Navbar';
+import { auth } from '@/auth';
 import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
+import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
-import './globals.css';
+import '../styles/global.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -18,15 +17,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const currentUser = await getCurrentUser();
+  const session = await auth();
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Toaster />
-        <NavBar currentUser={currentUser} />
-        <div className="pt-16 pb-10">{children}</div>
-        <Footer />
+        <SessionProvider session={session}>
+          <Toaster />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

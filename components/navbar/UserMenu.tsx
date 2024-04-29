@@ -1,24 +1,21 @@
 'use client';
 
-import useLoginModal from '@/app/hooks/useLoginModal';
-import useOutsideClick from '@/app/hooks/useOutsideClick';
-import useRegisterModal from '@/app/hooks/useRegisterModal';
+import Avatar from '@/components/Avatar';
+import { Button } from '@/components/ui/button';
+import useOutsideClick from '@/hooks/useOutsideClick';
 import { User } from '@prisma/client';
-import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
-import Avatar from '../Avatar';
-import MenuItem from '../MenuItem';
-import { MdLogout } from 'react-icons/md';
 import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
-import { Button } from '@/components/ui/button';
+import { MdLogout } from 'react-icons/md';
+import MenuItem from '@/components/MenuItem';
 
 type UserMenuProps = {
   currentUser?: User | null;
 };
 
-const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+const UserMenu = ({ currentUser }: UserMenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const toggleOpen = useCallback(() => {
@@ -26,20 +23,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
   }, [isOpen]);
 
   const router = useRouter();
-  const registerModal = useRegisterModal();
-  const loginModal = useLoginModal();
 
   useOutsideClick(dropdownRef, () => setIsOpen(false), isOpen);
-
-  const handleLoginModal = useCallback(() => {
-    loginModal.open();
-    toggleOpen();
-  }, [toggleOpen, loginModal]);
-
-  const handleRegisterModal = useCallback(() => {
-    registerModal.open();
-    toggleOpen();
-  }, [toggleOpen, registerModal]);
 
   const handleClick = (url: string) => {
     router.push(url);
@@ -51,7 +36,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       {currentUser ? (
         <div className="flex flex-row items-center gap-4">
           <div className="hidden md:block text-sm">
-            {`Hola ${currentUser.name || currentUser.email}!`}
+            {`Hola ${currentUser?.name || currentUser?.email}!`}
           </div>
           <div
             className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
@@ -81,34 +66,24 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
       )}
 
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-[40vw] md:w-11/12 bg-white overflow-hidden right-0 top-12 text-sm">
+        <div className="absolute rounded-xl shadow-md bg-white overflow-hidden right-0 top-12 text-sm">
           <div className="flex flex-col cursor-pointer">
-            {currentUser ? (
-              <>
-                <MenuItem
-                  // TODO: Fix this ??
-                  onClick={() => handleClick('/dashboard')}
-                  label="Mis regalos"
-                  icon={<IoGiftOutline fontSize={'18px'} />}
-                />
-                <MenuItem
-                  onClick={() => handleClick('/dashboard')}
-                  label="Mi perfil"
-                  icon={<IoSettingsOutline fontSize={'18px'} />}
-                />
-                <hr />
-                <MenuItem
-                  onClick={() => signOut()}
-                  label="Cerrar sesión"
-                  icon={<MdLogout fontSize={'18px'} />}
-                />
-              </>
-            ) : (
-              <>
-                <MenuItem onClick={handleLoginModal} label="Ingresar" />
-                <MenuItem onClick={handleRegisterModal} label="Register" />
-              </>
-            )}
+            <MenuItem
+              onClick={() => handleClick('/dashboard')}
+              label="Mis regalos"
+              icon={<IoGiftOutline fontSize={'18px'} />}
+            />
+            <MenuItem
+              onClick={() => handleClick('/dashboard')}
+              label="Mi perfil"
+              icon={<IoSettingsOutline fontSize={'18px'} />}
+            />
+            <hr />
+            <MenuItem
+              variant="logoutButton"
+              label="Cerrar sesión"
+              icon={<MdLogout fontSize={'18px'} />}
+            />
           </div>
         </div>
       )}

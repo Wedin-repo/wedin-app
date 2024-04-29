@@ -22,13 +22,24 @@ const buttonVariants = cva(
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+        undoButton:
+          'border gap-1 items-center !h-8 border-borderColor !px-3 hover:bg-primaryBackgroundColor hover:text-white',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
-        editGiftButton: 'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
+        editGiftButton:
+          'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
         link: 'text-primary underline-offset-4 hover:underline',
-        deleteIconButton: 'border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl',
-        editIconButton: 'border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl',
-        emptyStateButton: 'bg-black rounded-full text-white font-normal hover:opacity-80 hover transition text-lg',
-        uploadImageButton: 'w-full bg-white flex items-center justify-center rounded-lg py-2 gap-2 text-black font-medium hover:opacity-60 hover transition'
+        deleteIconButton:
+          'border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl',
+        editIconButton:
+          'border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl',
+        emptyStateButton:
+          'bg-black rounded-full text-white font-normal hover:opacity-80 hover transition text-lg',
+        uploadImageButton:
+          'w-full bg-white flex items-center justify-center rounded-lg py-2 gap-2 text-black font-medium hover:opacity-60 hover transition',
+        logoutButton:
+          'px-3 py-3 hover:bg-neutral-100 transition flex gap-2 items-center',
+        socialMediaLoginButton:
+          'bg-secondaryBackgroundColor text-tertiaryTextColor py-1.5 px-6 rounded-lg w-[208px] hover:opacity-80 transition-all',
       },
       size: {
         default: 'h-10 px-4 py-2',

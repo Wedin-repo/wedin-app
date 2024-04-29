@@ -1,10 +1,7 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { Gift } from '@prisma/client';
-import { formatPrice } from '@/utils/format';
-import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';
-import { Category } from '@prisma/client';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -13,13 +10,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { formatPrice } from '@/utils/format';
+import { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
-import { Label } from '@/components/ui/label';
-import { editGiftInWishList } from '@/actions/edit-gift-from-wishlist';
-import { FaCheck } from 'react-icons/fa6';
-import { toast } from '@/components/ui/use-toast';
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
+import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -28,9 +22,13 @@ type EditGiftFormProps = {
   category: Category | null;
 };
 
-function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormProps) {
-  const { name, description, price, id, isDefault, wishListIds } =
-    gift;
+function EditGiftForm({
+  gift,
+  categories,
+  category,
+  wishlistId,
+}: EditGiftFormProps) {
+  const { name, description, price, id, isDefault, wishListIds } = gift;
   const [editedName, setEditedName] = useState(name);
   const [editedPrice, setEditedPrice] = useState(price);
   const [editedCategory, setEditedCategory] = useState(category?.name);
@@ -67,7 +65,7 @@ function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormPr
     formData.append('price', editedPrice);
     formData.append('isFavoriteGift', isFavoriteGift.toString());
     formData.append('isGroupGift', isGroupGift.toString());
-    console.log(formData.values.toString());
+    // console.log(formData.values.toString());
 
     /* const editGiftWithId = editGiftInWishList.bind(null, wishlistId || '');
     const response = await editGiftWithId(formData);
@@ -102,33 +100,36 @@ function EditGiftForm({ gift, categories, category, wishlistId }: EditGiftFormPr
           />
         </div>
 
-  
-          <div>
-            <Label className="">Categoria</Label>
+        <div>
+          <Label className="">Categoria</Label>
 
-            <Select value={editedCategory} onValueChange={setEditedCategory}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                {categories?.map(category => (
-                  <div key={typeof category === 'string' ? category : category.id}>
-                    <SelectItem
-                      value={typeof category === 'string' ? category : category.name}
-                      className="cursor-pointer"
-                    >
-                      {typeof category === 'string' ? category : category.name}
-                    </SelectItem>
-                    {/* this is just a border for aesthetic purposes */}
-                    <div
-                      className="border border-b-secondaryBorderColor flex items-center w-5/6 justify-center"
-                      style={{ margin: '0 auto' }}
-                    ></div>
-                  </div>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <Select value={editedCategory} onValueChange={setEditedCategory}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              {categories?.map(category => (
+                <div
+                  key={typeof category === 'string' ? category : category.id}
+                >
+                  <SelectItem
+                    value={
+                      typeof category === 'string' ? category : category.name
+                    }
+                    className="cursor-pointer"
+                  >
+                    {typeof category === 'string' ? category : category.name}
+                  </SelectItem>
+                  {/* this is just a border for aesthetic purposes */}
+                  <div
+                    className="border border-b-secondaryBorderColor flex items-center w-5/6 justify-center"
+                    style={{ margin: '0 auto' }}
+                  ></div>
+                </div>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
 
         <div>
           <Label className="">Precio</Label>

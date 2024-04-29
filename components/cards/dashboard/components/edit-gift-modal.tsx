@@ -1,33 +1,30 @@
+import { getCategories, getCategory } from '@/actions/data/category';
+import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { getWedding } from '@/actions/getWedding';
+import ImageUpload from '@/components/ImageUpload';
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Gift } from '@prisma/client';
-import EditGiftFromWishListForm from '@/components/cards/dashboard/components/edit-gift-from-wishlist-form';
-import { Button } from '@/components/ui/button';
 import { FiEdit3 } from 'react-icons/fi';
 import EditGiftForm from './edit-gift-form';
-import { getCategories } from '@/actions/getCategories';
-import { getCategory } from '@/actions/getCategory';
-import ImageUpload from '@/components/ImageUpload';
 
 type EditGiftModalProps = {
   gift: Gift;
 };
 
 async function EditGiftModal({ gift }: EditGiftModalProps) {
-
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
 
   //const { name, description, price, id } = gift;
   const categories = await getCategories();
 
-  const category = await getCategory({ searchParams: { categoryId: gift.categoryId } });
-
-  //console.log(category);
+  const category = await getCategory({
+    searchParams: { categoryId: gift.categoryId },
+  });
 
   if (!categories) return null;
-  
+
   //const currentUser = await getCurrentUser();
   //const wedding = await getWedding(currentUser?.id);
 
@@ -45,8 +42,13 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
             <ImageUpload />
           </div>
 
-          <div className='w-full lg:w-1/2'>
-            <EditGiftForm gift={gift} categories={categories} category={category} wishlistId={wedding?.wishListId} />
+          <div className="w-full lg:w-1/2">
+            <EditGiftForm
+              gift={gift}
+              categories={categories}
+              category={category}
+              wishlistId={wedding?.wishListId}
+            />
             {/* <EditGiftFromWishListForm giftId={id} /> */}
           </div>
         </div>
