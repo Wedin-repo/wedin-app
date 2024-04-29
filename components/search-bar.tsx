@@ -2,12 +2,11 @@
 
 import { Input } from '@/components/ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ChangeEvent } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { useDebounceCallback } from 'usehooks-ts';
 
-type SearchProps = {};
-
-function SearchBar({}: SearchProps) {
+function SearchBar() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -23,7 +22,24 @@ function SearchBar({}: SearchProps) {
       sp.set('name', value);
       sp.set('page', '1');
     }
-    router.push(`${pathname}?${sp.toString()}`);
+
+    router.push(`${pathname}?${sp.toString()}`, { scroll: false });
+  }
+
+  function handleScroll() {
+    const targetScrollY = 200;
+    // Check if the current scroll position is within 5 pixels of the target
+    if (Math.abs(window.scrollY - targetScrollY) > 5) {
+      window.scrollTo({
+        top: targetScrollY,
+        behavior: 'smooth',
+      });
+    }
+  }
+
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    handleScroll();
+    debounce(e.target.value);
   }
 
   return (
@@ -32,7 +48,8 @@ function SearchBar({}: SearchProps) {
       <Input
         className="pl-2 bg-transparent rounded-full border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
         placeholder="Buscar"
-        onChange={e => debounce(e.target.value)}
+        onFocus={handleScroll} // Trigger scroll when the input is focused
+        onChange={handleInputChange} // Also trigger scroll when typing
         defaultValue={name}
       />
     </div>

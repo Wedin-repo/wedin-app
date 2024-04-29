@@ -1,9 +1,9 @@
 import { GetGiftsParams, getGifts } from '@/actions/data/gift';
+import { getWedding } from '@/actions/data/wedding';
+import { getCurrentUser } from '@/actions/getCurrentUser';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/cards/dashboard/components/pagination';
 import GiftCard from './card';
-import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 
 type GiftsProps = {
   searchParams: GetGiftsParams;
@@ -25,7 +25,7 @@ async function Gifts({ searchParams }: GiftsProps) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
-  const itemsPerPage = 3;
+  const itemsPerPage = 8;
   const { page = '1', name } = searchParams;
 
   // This also takes into account when the
@@ -49,10 +49,15 @@ async function Gifts({ searchParams }: GiftsProps) {
       {paginatedFilteredWishlistGift.map(gift => (
         <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
       ))}
-      {totalPages > 1 && (
+      {totalPages > 1 ? (
         <div className="flex justify-center m-5 w-full">
           <Pagination totalPages={totalPages} />
         </div>
+      ) : (
+        /* This is so that the space leave by
+         * not having the pagination is covered
+         * it is consistent */
+        <div className="h-[72px]" />
       )}
     </div>
   );
