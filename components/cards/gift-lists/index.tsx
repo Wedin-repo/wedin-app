@@ -1,10 +1,11 @@
+import { getGiftLists } from '@/actions/data/giftlist';
+import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
-import GiftListCard from './card';
 import CardContainer from '../shared/card-container';
-import { GetGiftListsParams, getGiftLists } from '@/actions/data/giftlist';
+import GiftListCard from './card';
 
 type GiftListsProps = {
-  searchParams: GetGiftListsParams;
+  searchParams: GiftPageSearchParams;
 };
 
 async function GiftLists({ searchParams }: GiftListsProps) {

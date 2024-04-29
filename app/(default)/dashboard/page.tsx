@@ -1,11 +1,13 @@
-import { GetGiftsParams } from '@/actions/data/gift';
 import DashboardHeader from './components/dashboard-header';
 import WishlistGifts from './components/wishlist-gifts';
 
+export type DashboardSearchParams = {
+  page?: string;
+  name?: string;
+};
+
 type DashboardPageProps = {
-  searchParams: {
-    page?: string;
-  };
+  searchParams: DashboardSearchParams;
 };
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {

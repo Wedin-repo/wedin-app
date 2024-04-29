@@ -10,10 +10,12 @@ import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
 
+export type GiftListSearchParams = {
+  listId: string;
+};
+
 type GiftListPageProps = {
-  params: {
-    listId: string;
-  };
+  params: GiftListSearchParams;
 };
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
@@ -30,18 +32,18 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
-    <div className="flex flex-col min-h-[90vh] justify-start mt-12 sm:mt-12 px-6 sm:px-10">
-      <div className="flex flex-col w-full items-center gap-4">
-        <div className="flex flex-col items-center gap-3 w-full ">
-          <h1 className="text-4xl font-medium text-primaryTextColor text-center">
+    <div className="flex flex-col justify-start px-6 mt-12 sm:px-10 sm:mt-12 min-h-[90vh]">
+      <div className="flex flex-col gap-4 items-center w-full">
+        <div className="flex flex-col gap-3 items-center w-full">
+          <h1 className="text-4xl font-medium text-center text-primaryTextColor">
             {name}
           </h1>
-          <div className="flex items-center gap-3">
-            <div className="bg-secondaryBackgroundColor rounded-full py-1.5 px-4 flex items-center gap-2">
+          <div className="flex gap-3 items-center">
+            <div className="flex gap-2 items-center py-1.5 px-4 rounded-full bg-secondaryBackgroundColor">
               <IoGiftOutline fontSize={'18px'} />
               {quantity} regalos
             </div>
-            <div className="bg-secondaryBackgroundColor rounded-full py-1.5 px-4 flex items-center gap-2">
+            <div className="flex gap-2 items-center py-1.5 px-4 rounded-full bg-secondaryBackgroundColor">
               <PiWallet fontSize={'18px'} />
               {formattedPrice}
             </div>
@@ -49,7 +51,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
           <p className="text-xl text-center">{description}</p>
         </div>
 
-        <div className="w-full flex justify-center">
+        <div className="flex justify-center w-full">
           <AddToWishlistForm
             wishlistId={wedding?.wishListId}
             giftIds={giftIds}

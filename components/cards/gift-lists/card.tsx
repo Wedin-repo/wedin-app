@@ -25,38 +25,38 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
 
   return (
     <Card>
-      <CardHeader className="p-0 relative">
+      <CardHeader className="relative p-0">
         <Carousel>
-          <CarouselContent>
-            {gifts?.map(gift => (
-              <CarouselItem key={gift.id}>
-                <Link href={`/lists/${id}`}>
+          <Link href={`/lists/${id}`}>
+            <CarouselContent>
+              {gifts?.map(gift => (
+                <CarouselItem key={gift.id}>
                   <Image
                     src={gift.imageUrl || ringsLoader}
                     width={500}
                     height={0}
                     alt={gift.name}
-                    className="rounded-t-lg h-[252px] w-full object-cover"
+                    className="object-cover w-full rounded-t-lg h-[252px]"
                   />
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Link>
           <CarouselPrevious />
           <CarouselNext />
         </Carousel>
-        <div className="bg-white rounded-full px-5 py-1.5 absolute top-2 right-0 mr-4">
+        <div className="absolute right-0 top-2 py-1.5 px-5 mr-4 bg-white rounded-full">
           {quantity} regalos
         </div>
       </CardHeader>
 
       <CardContent className="p-4">
         <Link href={`/lists/${id}`} className="flex flex-col flex-grow">
-          <p className="text-primaryTitleColor font-medium text-sm">{name}</p>
-          <p className="text-secondaryTextColor text-sm">{description}</p>
-          <div className="flex flex-grow items-end justify-between text-primaryTitleColor">
-            <p className="font-medium text-lg">{formattedPrice}</p>
-            <FaChevronRight fontSize="22" className="pb-1 block sm:hidden" />
+          <p className="text-sm font-medium text-primaryTitleColor">{name}</p>
+          <p className="text-sm text-secondaryTextColor">{description}</p>
+          <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
+            <p className="text-lg font-medium">{formattedPrice}</p>
+            <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />
           </div>
         </Link>
       </CardContent>

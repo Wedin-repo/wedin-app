@@ -1,13 +1,12 @@
 import { getCategories } from '@/actions/data/category';
-import { GetGiftsParams } from '@/actions/getGifts';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';
-import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
+import { GiftPageSearchParams } from '../../page';
 import Categories from '../categories';
 
 type AllGiftsProps = {
-  searchParams: GetGiftsParams;
+  searchParams: GiftPageSearchParams;
 };
 
 async function AllGifts({ searchParams }: AllGiftsProps) {
@@ -15,10 +14,7 @@ async function AllGifts({ searchParams }: AllGiftsProps) {
 
   return (
     <div className="px-6 sm:px-10">
-      <div className="mb-4 sm:mb-6">
-        <SearchBar />
-      </div>
-      <p className="text-secondaryTextColor text-lg sm:text-xl mb-4 sm:mb-6">
+      <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
         Elegí los productos que más te gusten y empezá a armar tu lista
       </p>
 

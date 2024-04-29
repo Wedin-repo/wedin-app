@@ -1,3 +1,4 @@
+import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import prisma from '@/db/client';
 
 export async function getGiftList(giftListId: string) {
@@ -20,7 +21,7 @@ export async function getGiftList(giftListId: string) {
 export type GetGiftListsParams = {
   category?: string;
   name?: string;
-};
+} & GiftPageSearchParams;
 
 export async function getGiftLists({
   searchParams,

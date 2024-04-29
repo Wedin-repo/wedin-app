@@ -1,11 +1,11 @@
-import { GetGiftsParams } from '@/actions/data/gift';
 import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/dashboard';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
+import { DashboardSearchParams } from '../page';
 
 type WishlistGiftsProps = {
-  searchParams: GetGiftsParams;
+  searchParams: DashboardSearchParams;
 };
 
 function WishlistGifts({ searchParams }: WishlistGiftsProps) {

@@ -6,7 +6,11 @@ import { ChangeEvent } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { useDebounceCallback } from 'usehooks-ts';
 
-function SearchBar() {
+type SearchBarProps = {
+  scrollValue?: number;
+};
+
+function SearchBar({ scrollValue = 200 }: SearchBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,11 +31,10 @@ function SearchBar() {
   }
 
   function handleScroll() {
-    const targetScrollY = 200;
     // Check if the current scroll position is within 5 pixels of the target
-    if (Math.abs(window.scrollY - targetScrollY) > 5) {
+    if (Math.abs(window.scrollY - scrollValue) > 5) {
       window.scrollTo({
-        top: targetScrollY,
+        top: scrollValue,
         behavior: 'smooth',
       });
     }
@@ -43,7 +46,7 @@ function SearchBar() {
   }
 
   return (
-    <div className="flex gap-2 items-center py-1.5 pr-1.5 pl-4 my-8 w-full rounded-full md:w-auto bg-secondaryBackgroundColor">
+    <div className="flex gap-2 items-center py-1.5 pr-1.5 pl-4 my-8 mx-8 rounded-full md:w-auto bg-secondaryBackgroundColor">
       <BiSearch fontSize={'22px'} />
       <Input
         className="pl-2 bg-transparent rounded-full border-0 focus-visible:ring-0 focus-visible:ring-offset-0"

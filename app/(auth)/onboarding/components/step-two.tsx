@@ -88,14 +88,14 @@ const StepTwo = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6">
-      <p className="text-2xl sm:text-3xl text-primaryTextColor text-center font-medium">
+    <div className="flex flex-col gap-6 w-full">
+      <p className="text-2xl font-medium text-center sm:text-3xl text-primaryTextColor">
         Donde te casas?
       </p>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col items-start gap-6"
+          className="flex flex-col gap-6 items-start"
         >
           {!isDecidingWeddingCountryCity ? (
             <>
@@ -114,12 +114,12 @@ const StepTwo = () => {
                           <SelectValue placeholder="País donde te casas" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-white max-h-60">
+                      <SelectContent className="max-h-60 bg-white">
                         {countries.map(country => (
                           <SelectItem
                             key={country.id}
                             value={country.name}
-                            className="border-b-[1px] cursor-pointer"
+                            className="cursor-pointer border-b-[1px]"
                             style={{ margin: '0 auto' }}
                           >
                             {country.name}
@@ -178,7 +178,7 @@ const StepTwo = () => {
             control={form.control}
             name="isDecidingWeddingCountryCity"
             render={({ field }) => (
-              <FormItem className="flex items-center gap-2">
+              <FormItem className="flex gap-2 items-center">
                 <FormControl>
                   <Checkbox
                     checked={field.value}
@@ -189,7 +189,7 @@ const StepTwo = () => {
                   />
                 </FormControl>
                 <div className="!m-0">
-                  <FormLabel className="font-normal text-md cursor-pointer">
+                  <FormLabel className="font-normal cursor-pointer text-md">
                     Aún estamos decidiendo
                   </FormLabel>
                 </div>
@@ -212,19 +212,19 @@ const StepTwo = () => {
                       defaultValue={field.value ? 'true' : 'false'}
                       className="flex gap-6"
                     >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
                           <RadioGroupItem value="true" />
                         </FormControl>
-                        <FormLabel className="font-normal text-md cursor-pointer">
+                        <FormLabel className="font-normal cursor-pointer text-md">
                           Si
                         </FormLabel>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-y-0 space-x-3">
                         <FormControl>
                           <RadioGroupItem value="false" />
                         </FormControl>
-                        <FormLabel className="font-normal text-md cursor-pointer">
+                        <FormLabel className="font-normal cursor-pointer text-md">
                           No
                         </FormLabel>
                       </FormItem>
@@ -239,7 +239,7 @@ const StepTwo = () => {
             <Button variant="onboardingButton" disabled={isLoading}>
               Continuar
               {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
                 <FaArrowRight />
               )}

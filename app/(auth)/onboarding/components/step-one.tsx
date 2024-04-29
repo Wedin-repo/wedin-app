@@ -82,7 +82,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <p className="text-2xl sm:text-3xl text-primaryTextColor text-center font-medium">
+      <p className="text-2xl font-medium text-center sm:text-3xl text-primaryTextColor">
         Antes de empezar, necesitamos unos datos
       </p>
       <Form {...form}>
@@ -101,7 +101,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                       ¿Qué dirección quieres para tu espacio? Escribe la
                       dirección para comprobar su disponibilidad
                     </p>
-                    <div className="flex items-center gap-3">
+                    <div className="flex gap-3 items-center">
                       <div className="bg-[#9CA3AF] rounded-lg h-10 px-4 flex items-center justify-center text-white text-sm font-medium">
                         wedin.app/
                       </div>
@@ -214,15 +214,15 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
             )}
           />
 
-          <div className="flex flex-col items-center gap-2">
-            <div className="font-medium text-sm flex flex-col sm:flex-row items-start justify-start w-full">
+          <div className="flex flex-col gap-2 items-center">
+            <div className="flex flex-col justify-start items-start w-full text-sm font-medium sm:flex-row">
               Fecha de la boda &nbsp;
               <span className="font-normal text-sm text-[#64748B]">
                 (No te preocupes, puede cambiarlo mas adelante)
               </span>
             </div>
 
-            <div className="w-full flex items-center gap-6">
+            <div className="flex gap-6 items-center w-full">
               {!isDecidingWeddingDate ? (
                 <FormField
                   control={form.control}
@@ -244,12 +244,12 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                               ) : (
                                 <span className="text-[#94A3B8]">dd/mm/aa</span>
                               )}
-                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              <CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
                             </Button>
                           </FormControl>
                         </PopoverTrigger>
                         <PopoverContent
-                          className="w-auto p-0 bg-white"
+                          className="p-0 w-auto bg-white"
                           align="start"
                         >
                           <Calendar
@@ -276,7 +276,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                     )}
                   >
                     <span className="text-[#94A3B8]">dd/mm/aa</span>
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    <CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
                   </Button>
                 </div>
               )}
@@ -284,7 +284,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                 control={form.control}
                 name="isDecidingWeddingDate"
                 render={({ field }) => (
-                  <FormItem className="flex items-center gap-2">
+                  <FormItem className="flex gap-2 items-center">
                     <FormControl>
                       <Checkbox
                         checked={field.value}
@@ -295,7 +295,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                       />
                     </FormControl>
                     <div className="!m-0">
-                      <FormLabel className="font-normal text-sm sm:text-md cursor-pointer">
+                      <FormLabel className="text-sm font-normal cursor-pointer sm:text-md">
                         Aún estamos decidiendo
                       </FormLabel>
                     </div>
@@ -312,7 +312,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
               disabled={isLoading}
             >
               Registrarme
-              {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+              {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
             </Button>
           </div>
         </form>

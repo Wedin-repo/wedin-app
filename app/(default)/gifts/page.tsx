@@ -1,5 +1,3 @@
-import { GetGiftListsParams } from '@/actions/data/giftlist';
-import { GetGiftsParams } from '@/actions/getGifts';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
@@ -7,6 +5,7 @@ import { PiCouchLight } from 'react-icons/pi';
 import GiftHeader from './components/gifts-header';
 import AllGifts from './components/tabs/all-gifts';
 import PredefinedGifts from './components/tabs/predefined-gifts';
+import SearchBar from '@/components/search-bar';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',
@@ -16,13 +15,14 @@ const TABS = {
 
 const DEFAULT_TAB = TABS.predefinedGifts;
 
-type GetGiftSearchParams = {
+export type GiftPageSearchParams = {
   tab?: string;
-} & GetGiftsParams &
-  GetGiftListsParams;
+  name?: string;
+  page?: string;
+};
 
 type GiftsPageProps = {
-  searchParams: GetGiftSearchParams;
+  searchParams: GiftPageSearchParams;
 };
 
 const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
@@ -30,7 +30,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
-    <div className="min-h-[90vh] flex flex-col justify-start">
+    <div className="flex flex-col justify-start min-h-[90vh]">
       <GiftHeader />
 
       <Tabs defaultValue={DEFAULT_TAB} value={currentTab}>
@@ -72,6 +72,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
+        <SearchBar />
         <TabsContent value={TABS.predefinedGifts}>
           <PredefinedGifts searchParams={searchParams} />
         </TabsContent>

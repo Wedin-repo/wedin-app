@@ -1,23 +1,19 @@
 import { getCategories } from '@/actions/data/category';
-import { GetGiftListsParams } from '@/actions/data/giftlist';
+import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import Loader from '@/components/Loader';
 import GiftLists from '@/components/cards/gift-lists';
-import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
 import Categories from '../categories';
 
 type PredefinedGiftsProps = {
-  searchParams: GetGiftListsParams;
+  searchParams: GiftPageSearchParams;
 };
 
 async function PredefinedGifts({ searchParams }: PredefinedGiftsProps) {
   const categories = await getCategories();
   return (
     <div className="px-6 sm:px-10">
-      <div className="mb-4 sm:mb-6">
-        <SearchBar />
-      </div>
-      <p className="text-secondaryTextColor text-lg sm:text-xl mb-4 sm:mb-6">
+      <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
         Comenzá con una lista pre-definida, podes personalizarla más adelante
       </p>
 

@@ -1,12 +1,13 @@
-import { GetGiftsParams, getGifts } from '@/actions/data/gift';
+import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
+import { DashboardSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/cards/dashboard/components/pagination';
 import GiftCard from './card';
 
 type GiftsProps = {
-  searchParams: GetGiftsParams;
+  searchParams: DashboardSearchParams;
 };
 
 async function Gifts({ searchParams }: GiftsProps) {
