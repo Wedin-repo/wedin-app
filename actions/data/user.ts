@@ -1,4 +1,3 @@
-// TODO: able to get user by id email
 import { ErrorResponse } from '@/auth';
 import prisma from '@/db/client';
 import { User } from '@prisma/client';
@@ -55,7 +54,7 @@ export const updateUserById = async (
   }
 };
 
-export const upsertUser = async (email: string, provider: string) => {
+export const upsertUser = async (email: string, provider?: string) => {
   try {
     return await prisma.user.upsert({
       where: {
@@ -66,8 +65,10 @@ export const upsertUser = async (email: string, provider: string) => {
       },
       create: {
         email: email,
-        provider: provider,
+        // provider: provider,
       },
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error('Error upserting user:', error, provider);
+  }
 };
