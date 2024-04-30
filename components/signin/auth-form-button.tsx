@@ -2,19 +2,19 @@ import { Button } from '@/components/ui/button';
 import { capitalizeFirstLetter } from '@/utils/format';
 import { Loader2 } from 'lucide-react';
 
-type LoginFormButtonProps = {
+type AuthFormButtonProps = {
   variant?: string;
   label?: string;
   isLoading?: boolean;
   handleSignIn?: () => void;
 };
 
-export default function LoginFormButton({
+export default function AuthFormButton({
   variant,
-  label,
+  label = 'Iniciar sesión',
   isLoading, // we use this because the login is using on submit and not action
   handleSignIn, // we use this because the login is using on submit and not action
-}: LoginFormButtonProps) {
+}: AuthFormButtonProps) {
   if (variant === 'socialMediaLoginButton') {
     return (
       <Button
@@ -23,7 +23,7 @@ export default function LoginFormButton({
         disabled={isLoading}
       >
         {isLoading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           `${capitalizeFirstLetter(label)}`
         )}
@@ -38,8 +38,8 @@ export default function LoginFormButton({
       className="rounded-lg"
       disabled={isLoading}
     >
-      Iniciar sesión
-      {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
+      {label}
+      {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
     </Button>
   );
 }

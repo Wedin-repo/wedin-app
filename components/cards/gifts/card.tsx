@@ -30,7 +30,7 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
             <Image
               src={imageUrl || ringsLoader}
               width={500}
-              height={0}
+              height={500}
               alt={gift.name}
               className="object-cover w-full rounded-t-lg h-[252px]"
             />

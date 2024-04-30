@@ -2,7 +2,7 @@
 
 import { signIn } from 'next-auth/react';
 import { useState } from 'react';
-import LoginFormButton from './login-form-button';
+import AuthFormButton from './auth-form-button';
 
 type SocialMediaLoginFormType = {
   provider: 'google' | 'facebook';
@@ -22,7 +22,7 @@ function SociaMediaLoginForm({
   };
 
   return (
-    <LoginFormButton
+    <AuthFormButton
       variant="socialMediaLoginButton"
       label={provider}
       isLoading={isLoading}
