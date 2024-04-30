@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const RegisterRight = () => {
   return (
-    <div className="flex flex-col justify-around w-[440px] h-[600px]">
+    <div className="flex flex-col justify-around h-[600px]">
       <p className="text-2xl font-semibold text-center sm:text-3xl">
         Registrate en 3 minutos y creá tu lista de regalos
       </p>
@@ -25,7 +25,7 @@ const RegisterRight = () => {
 
       <Link
         href="/login"
-        className="flex justify-center items-center mt-6 text-secondaryTextColor"
+        className="flex justify-center items-center text-secondaryTextColor"
       >
         Ya tenés una cuenta?&nbsp;
         <span className="text-indigo-600 hover:underline">Ingresá aquí</span>
