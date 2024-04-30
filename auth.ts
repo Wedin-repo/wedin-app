@@ -1,18 +1,26 @@
-import { getUserbyEmail, updateVerifiedOn } from '@/actions/data/user';
+import {
+  updateVerifiedOn,
+  getUserByEmail,
+  upsertUser,
+} from '@/actions/data/user';
 import NextAuth, { DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import authOptions from './auth.config';
+
+export type ErrorResponse = {
+  error: string;
+};
+
+function isError(response: any): response is ErrorResponse {
+  return (response as ErrorResponse).error !== undefined;
+}
 
 declare module 'next-auth' {
   interface Session {
     user: {
       isOnboarded: boolean;
-      role: string;
-      // This is to check for weird cases where we do have a session
-      // but the we do not have the user e.g if you where logged in
-      // but the db has benn cleared you will still have a session
-      // but no user if is valid is false we want to logout the user
-      isValid?: boolean;
+      role?: string;
+      isExistingUser?: boolean;
     } & DefaultSession['user'];
   }
 }
@@ -21,7 +29,7 @@ declare module 'next-auth/jwt' {
   interface JWT {
     isOnboarded: boolean;
     role: string;
-    isValid: boolean;
+    isExistingUser?: boolean;
   }
 }
 
@@ -42,20 +50,25 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user }) {
-      if (!user || !user.email) return true;
+    async signIn({ user, account }) {
+      if (!user || !user.email) return false;
 
-      const existingUser = await getUserbyEmail(user.email);
-
-      if (!existingUser || !existingUser.emailVerified) {
-        return true;
+      if (account && account.type !== 'credentials' && user?.email) {
+        await upsertUser(user.email, account.type);
       }
+
+      // const existingUser = await getUserbyEmail(user.email);
+      //
+      // if (!existingUser || !existingUser.emailVerified) {
+      //   return true;
+      // }
 
       return true;
     },
     async session({ session, token }) {
       if (session.user) {
-        //session.user.isValid = token.isValid;
+        session.user.name = token.name;
+        session.user.isExistingUser = token.isExistingUser;
         session.user.role = token.role;
         session.user.isOnboarded = token.isOnboarded;
       }
@@ -65,17 +78,25 @@ export const {
     async jwt({ token }) {
       if (!token || !token.email) return token;
 
-      const currentUser = await getUserbyEmail(token.email);
+      const response = await getUserByEmail(token.email);
 
-      if (!currentUser) {
-        // console.log("user not found");
-        //token.isValid = false;
+      if (isError(response)) {
+        switch (response.error) {
+          case 'User not found':
+            token.isExistingUser = false;
+            break;
+          default:
+            // You might decide to leave isExistingUser unchanged if it's an internal error
+            return token;
+            break;
+        }
         return token;
       }
 
-      token.name = currentUser.name;
-      token.isOnboarded = currentUser.isOnboarded;
-      token.role = currentUser.role;
+      token.name = response.name;
+      token.isOnboarded = response.isOnboarded;
+      token.role = response.role;
+      token.isExistingUser = true;
 
       return token;
     },
@@ -83,7 +104,7 @@ export const {
   debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60,
+    maxAge: 60 * 60 * 24,
   },
   secret: process.env.NEXTAUTH_SECRET,
   ...authOptions,
