@@ -1,16 +1,22 @@
 // TODO: able to get user by id email
+import { ErrorResponse } from '@/auth';
 import prisma from '@/db/client';
+import { User } from '@prisma/client';
 
-export const getUserbyEmail = async (email: string) => {
+export const getUserByEmail = async (
+  email: string
+): Promise<User | ErrorResponse> => {
   try {
     const currentUser = await prisma.user.findUnique({
-      where: {
-        email: email,
-      },
+      where: { email },
     });
-    return currentUser;
-  } catch (error) {
-    return null;
+    if (currentUser === null) {
+      return { error: 'User not found' }; // Use return instead of throw to control flow
+    }
+    return currentUser as User; // Type assertion as User
+  } catch (error: any) {
+    console.error('Error getting user by email:', error);
+    return { error: 'InternalError' };
   }
 };
 
@@ -46,4 +52,21 @@ export const updateUserById = async (
   } catch (error) {
     return null;
   }
+};
+
+export const upsertUser = async (email: string, provider: string) => {
+  try {
+    return await prisma.user.upsert({
+      where: {
+        email: email,
+      },
+      update: {
+        email: email,
+      },
+      create: {
+        email: email,
+        provider: provider,
+      },
+    });
+  } catch (error) {}
 };

@@ -1,5 +1,3 @@
-'user client';
-
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import Logo from '@/components/Logo';
 import { CiImageOn } from 'react-icons/ci';

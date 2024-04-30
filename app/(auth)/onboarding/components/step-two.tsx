@@ -189,7 +189,7 @@ const StepTwo = () => {
                   />
                 </FormControl>
                 <div className="!m-0">
-                  <FormLabel className="font-normal cursor-pointer text-base">
+                  <FormLabel className="text-base font-normal cursor-pointer">
                     Aún estamos decidiendo
                   </FormLabel>
                 </div>
@@ -216,7 +216,7 @@ const StepTwo = () => {
                         <FormControl>
                           <RadioGroupItem value="true" />
                         </FormControl>
-                        <FormLabel className="font-normal cursor-pointer text-base">
+                        <FormLabel className="text-base font-normal cursor-pointer">
                           Si
                         </FormLabel>
                       </FormItem>
@@ -224,7 +224,7 @@ const StepTwo = () => {
                         <FormControl>
                           <RadioGroupItem value="false" />
                         </FormControl>
-                        <FormLabel className="font-normal cursor-pointer text-base">
+                        <FormLabel className="text-base font-normal cursor-pointer">
                           No
                         </FormLabel>
                       </FormItem>

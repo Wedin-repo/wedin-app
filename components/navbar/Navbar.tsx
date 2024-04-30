@@ -4,30 +4,32 @@ import Logo from '@/components/Logo';
 import UserMenu from '@/components/navbar/UserMenu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { User } from '@prisma/client';
-import { usePathname, useRouter } from 'next/navigation';
 import { Session } from 'next-auth';
-import { signOut } from 'next-auth/react';
-import { useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 
 type NavBarProps = {
   currentUser?: User | null;
-  session: Session | null;
+  session?: Session | null;
 };
 
-export const NavBar = ({ currentUser, session }: NavBarProps) => {
+export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
+
+  // console.log('navbar layout currentUser', currentUser?.isOnboarded);
+  // console.log('navbar layout session', session?.user.isOnboarded);
 
   let menuValue = 'addGifts';
 
   // The only case where this will run or the session.user.valid == false
   // is when you are logged in but the user have been deleted from our db
   // this will sign out the user
-  useEffect(() => {
-    if (session?.user.isValid === false) {
-      signOut();
-    }
-  }, [session]);
+  // useEffect(() => {
+  //   if (session && !currentUser) {
+  //     signOut();
+  //     router.push('/login');
+  //   }
+  // }, [session, currentUser, router]);
 
   if (pathname.includes('/gifts-received')) {
     menuValue = 'giftsRecieved';

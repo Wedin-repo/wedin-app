@@ -3,7 +3,9 @@ import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { DashboardSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
+import Loader from '@/components/Loader';
 import Pagination from '@/components/cards/dashboard/components/pagination';
+import { Suspense } from 'react';
 import GiftCard from './card';
 
 type GiftsProps = {
@@ -47,9 +49,12 @@ async function Gifts({ searchParams }: GiftsProps) {
 
   return (
     <div className="flex flex-col gap-5">
-      {paginatedFilteredWishlistGift.map(gift => (
-        <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
-      ))}
+      <Suspense fallback={<Loader />}>
+        {paginatedFilteredWishlistGift.map(gift => (
+          <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
+        ))}
+      </Suspense>
+
       {totalPages > 1 ? (
         <div className="flex justify-center m-5 w-full">
           <Pagination totalPages={totalPages} />
