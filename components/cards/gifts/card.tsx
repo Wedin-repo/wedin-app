@@ -26,58 +26,60 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Card>
-          <CardHeader className="w-full flex items-center p-0">
+          <CardHeader className="flex items-center p-0 w-full">
             <Image
               src={imageUrl || ringsLoader}
               width={500}
               height={0}
               alt={gift.name}
-              className="rounded-t-lg h-[252px] w-full object-cover"
+              className="object-cover w-full rounded-t-lg h-[252px]"
             />
           </CardHeader>
 
           <CardContent className="p-4">
-            <p className="text-primaryTitleColor font-medium text-sm">{name}</p>
-            <p className="text-secondaryTextColor text-sm">{description}</p>
-            <div className="flex flex-grow items-end justify-between text-primaryTitleColor">
-              <p className="font-medium text-lg">{formattedPrice}</p>
-              <FaChevronRight fontSize="22" className="pb-1 block sm:hidden" />
+            <p className="text-lg text-primaryTitleColor">{name}</p>
+            <p className="hidden text-base text-secondaryTextColor">
+              {description}
+            </p>
+            <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
+              <p className="text-lg font-medium">{formattedPrice}</p>
+              <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />
             </div>
           </CardContent>
         </Card>
       </DialogTrigger>
 
       <DialogContent className="bg-white rounded-xl">
-        <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
+        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:gap-8 lg:flex-row lg:pt-0">
           <div className="w-full lg:w-1/2">
             <Image
               src={imageUrl || ringsLoader}
               width={500}
               height={342}
               alt={gift.name}
-              className="border rounded-xl h-[242px] sm:h-[342px] w-full object-cover"
+              className="object-cover w-full rounded-xl border h-[242px] sm:h-[342px]"
             />
           </div>
 
-          <div className="w-full lg:w-1/2 flex flex-col h-full justify-around gap-4">
+          <div className="flex flex-col gap-4 justify-around w-full h-full lg:w-1/2">
             <div className="flex flex-col gap-2">
-              <h1 className="text-3xl sm:text-2xl font-medium">{name}</h1>
-              <p className="text-secondaryTextColor text-base">{description}</p>
+              <h1 className="text-3xl font-medium sm:text-2xl">{name}</h1>
+              <p className="text-base text-secondaryTextColor">{description}</p>
             </div>
 
-            <div className="flex flex-col text-base sm:text-lg gap-3">
-              <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-3 text-base sm:text-lg">
+              <div className="flex justify-between items-center">
                 <p>Marcar como el que más queremos ⭐️</p>
                 <Switch id="favorite-gift" />
               </div>
-              <div className="flex items-center justify-between">
+              <div className="flex justify-between items-center">
                 <p>Regalo grupal</p>
                 <Switch id="group-gift" />
               </div>
             </div>
 
             <div className="flex flex-col">
-              <span className="text-2xl text-secondaryTitleColor font-medium">
+              <span className="text-2xl font-medium text-secondaryTitleColor">
                 {formattedPrice}
               </span>
             </div>

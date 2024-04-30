@@ -13,7 +13,7 @@ const Categories = ({ categories }: CategoryProps) => {
   const currentCategory = params?.get('category');
 
   return (
-    <div className="flex overflow-x-auto overflow-y-hidden gap-3 items-start py-2 mb-6">
+    <div className="flex overflow-x-auto overflow-y-hidden gap-3 items-start py-2 mb-6 no-scrollbar">
       <CategoryPill
         key="all-gifts"
         id="all-gifts"

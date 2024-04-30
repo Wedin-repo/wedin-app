@@ -13,7 +13,7 @@ type DashboardPageProps = {
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {
   return (
-    <div className="flex flex-col justify-start px-4 mt-12 sm:px-10 sm:mt-12 min-h-[90vh]">
+    <div className="flex flex-col justify-start mt-12 sm:mt-12 min-h-[90vh]">
       <DashboardHeader />
 
       <SearchBar scrollValue={200} scrollValueMobile={250} />

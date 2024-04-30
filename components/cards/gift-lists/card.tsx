@@ -52,16 +52,18 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="p-4">
-        <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
-          <p className="text-sm font-medium text-primaryTitleColor">{name}</p>
-          <p className="text-sm text-secondaryTextColor">{description}</p>
+      <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
+        <CardContent className="p-4">
+          <p className="text-lg text-secondaryTextColor">{name}</p>
+          <p className="hidden text-sm text-secondaryTextColor">
+            {description}
+          </p>
           <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
-            <p className="text-lg font-medium">{formattedPrice}</p>
+            <p className="text-lg">{formattedPrice}</p>
             <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />
           </div>
-        </Link>
-      </CardContent>
+        </CardContent>
+      </Link>
     </Card>
   );
 }

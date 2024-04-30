@@ -1,5 +1,5 @@
 export default function RegisterLeft() {
   return (
-    <div className="border rounded-2xl w-full h-[506px] border-[#C0C0C0]"></div>
+    <div className="rounded-xl border w-full h-[600px] bg-secondaryBackgroundColor"></div>
   );
 }

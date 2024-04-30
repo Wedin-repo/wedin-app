@@ -1,9 +1,10 @@
+import { getCategories } from '@/actions/data/category';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import GiftHeader from './components/gifts-header';
+import Categories from './components/categories';
 import AllGifts from './components/tabs/all-gifts';
 import PredefinedGifts from './components/tabs/predefined-gifts';
 
@@ -27,15 +28,17 @@ type GiftsPageProps = {
 };
 
 const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
+  const categories = await getCategories();
   const { tab = '' } = searchParams;
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
     <div className="flex flex-col justify-start min-h-[90vh]">
-      <GiftHeader />
-
+      <h1 className="flex justify-center items-center my-8 w-full text-4xl font-medium sm:text-5xl text-primaryTextColor">
+        Agregar regalos
+      </h1>
       <Tabs defaultValue={DEFAULT_TAB} value={currentTab}>
-        <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] px-4 sm:px-10 overflow-x-auto overflow-y-hidden">
+        <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] overflow-x-auto overflow-y-hidden no-scrollbar">
           <TabsTrigger value={TABS.predefinedGifts} asChild>
             <Link
               href={{
@@ -73,15 +76,24 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
-        <div className="mx-6">
-          <SearchBar />
-        </div>
+        <SearchBar />
 
         <TabsContent value={TABS.predefinedGifts}>
+          <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
+            Comenzá con una lista pre-definida, podes personalizarla más
+            adelante
+          </p>
+
+          <Categories categories={categories} />
           <PredefinedGifts searchParams={searchParams} />
         </TabsContent>
 
         <TabsContent value={TABS.allGifts}>
+          <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
+            Elegí los productos que más te gusten y empezá a armar tu lista
+          </p>
+
+          <Categories categories={categories} />
           <AllGifts searchParams={searchParams} />
         </TabsContent>
       </Tabs>

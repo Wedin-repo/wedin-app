@@ -10,10 +10,11 @@ export const getUserByEmail = async (
     const currentUser = await prisma.user.findUnique({
       where: { email },
     });
+
     if (currentUser === null) {
       return { error: 'User not found' }; // Use return instead of throw to control flow
     }
-    return currentUser as User; // Type assertion as User
+    return currentUser;
   } catch (error: any) {
     console.error('Error getting user by email:', error);
     return { error: 'InternalError' };

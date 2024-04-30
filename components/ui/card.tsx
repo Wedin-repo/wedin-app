@@ -14,7 +14,7 @@ const cardVariants = cva('', {
         'border-b-[#848484] border-b pb-3 w-full flex items-normal sm:items-center justify-between gap-4',
     },
     size: {
-      default: 'h-[400px]',
+      default: 'h-[360px]',
       dashboard: '',
     },
   },
