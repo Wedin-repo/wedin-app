@@ -53,7 +53,7 @@ export default function LoginForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleLogin)}
-        className=" flex flex-col gap-8"
+        className="flex flex-col gap-8 text-base"
       >
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
