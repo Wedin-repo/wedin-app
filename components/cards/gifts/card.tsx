@@ -37,12 +37,12 @@ function GiftCard({ gift, wishlistId }: GiftCardProps) {
           </CardHeader>
 
           <CardContent className="p-4">
-            <p className="text-lg text-primaryTitleColor">{name}</p>
+            <p className="text-base text-secondaryTextColor">{name}</p>
             <p className="hidden text-base text-secondaryTextColor">
               {description}
             </p>
             <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
-              <p className="text-lg font-medium">{formattedPrice}</p>
+              <p className="text-lg">{formattedPrice}</p>
               <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />
             </div>
           </CardContent>

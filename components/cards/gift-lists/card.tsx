@@ -54,7 +54,7 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
 
       <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
         <CardContent className="p-4">
-          <p className="text-lg text-secondaryTextColor">{name}</p>
+          <p className="text-base text-secondaryTextColor">{name}</p>
           <p className="hidden text-sm text-secondaryTextColor">
             {description}
           </p>
