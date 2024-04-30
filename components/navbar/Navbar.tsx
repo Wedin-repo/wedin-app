@@ -25,7 +25,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   // is when you are logged in but the user have been deleted from our db
   // this will sign out the user
   // useEffect(() => {
-  //   if (session && !currentUser) {
+  //   if (session && !currentUser)   {
   //     signOut();
   //     router.push('/login');
   //   }

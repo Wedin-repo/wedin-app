@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { z } from 'zod';
-import LoginFormButton from './login-form-button';
+import AuthFormButton from './auth-form-button';
 
 export default function LoginForm() {
   const { toast } = useToast();
@@ -66,7 +66,7 @@ export default function LoginForm() {
                   <FormControl>
                     <Input
                       placeholder="tucorreo@wedin.app"
-                      className="!mt-1.5 text-base"
+                      className="!mt-1.5"
                       {...field}
                     />
                   </FormControl>
@@ -75,6 +75,7 @@ export default function LoginForm() {
               )}
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <FormField
               control={form.control}
@@ -87,7 +88,6 @@ export default function LoginForm() {
                       <Input
                         type={isPasswordVisible ? 'text' : 'password'}
                         placeholder="TuContraseña!52419$"
-                        className="text-base"
                         {...field}
                       />
                       <button
@@ -110,7 +110,7 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <LoginFormButton isLoading={isLoading} />
+        <AuthFormButton isLoading={isLoading} />
       </form>
     </Form>
   );

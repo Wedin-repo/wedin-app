@@ -1,18 +1,37 @@
-import Logo from '@/components/Logo';
-import Login from './Login';
+import LoginForm from '@/components/signin/login-form';
+import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
+import Link from 'next/link';
 
-const LoginPage = () => {
+export default function LoginPage() {
   return (
-    <div className="flex flex-col justify-center items-center px-4 h-full sm:px-10 text-foreground">
-      <Logo height={38} />
+    <div className="flex flex-col gap-4 justify-around items-center lg:flex-row w-[440px] h-[600px]">
+      <div className="flex flex-col justify-around w-full h-full">
+        <p className="text-2xl font-semibold text-center sm:text-3xl">
+          Ingresá a tu lista
+        </p>
 
-      <div className="flex flex-col gap-4 justify-center items-center w-full lg:flex-row">
-        <div className="flex justify-center items-center w-full lg:w-2/5">
-          <Login />
+        <LoginForm />
+
+        <div className="flex flex-col justify-between items-center py-8">
+          <span className="w-1/2 border border-b" />
         </div>
+
+        <div className="flex flex-col gap-2 justify-center items-center">
+          <span className="text-secondaryTextColor">O inicia sesión con</span>
+          <SociaMediaLoginForm provider="google" />
+          <SociaMediaLoginForm provider="facebook" />
+        </div>
+
+        <Link
+          href="/register"
+          className="flex justify-center items-center text-secondaryTextColor"
+        >
+          No tenes una cuenta?&nbsp;
+          <span className="text-indigo-600 hover:underline">
+            Registrate aquí
+          </span>
+        </Link>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}
