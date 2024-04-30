@@ -6,7 +6,7 @@ export default async function DefaultLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col gap-8 justify-center items-center h-[100vh] w-[85%]">
+    <div className="flex flex-col gap-8 justify-center items-center h-[100vh]">
       <Logo height={38} />
       {children}
     </div>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function LoginPage() {
   return (
-    <div className="flex flex-col gap-4 justify-around items-center lg:flex-row h-[600px] sm:w-[440px]">
+    <div className="flex flex-col gap-4 justify-around items-center lg:flex-row h-[600px] sm:w-[440px] w-[85%]">
       <div className="flex flex-col justify-around w-full h-full">
         <p className="text-2xl font-semibold text-center sm:text-3xl">
           Ingresá a tu lista
