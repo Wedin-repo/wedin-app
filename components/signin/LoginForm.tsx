@@ -53,7 +53,7 @@ export default function LoginForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleLogin)}
-        className="flex flex-col gap-8 text-base"
+        className="flex flex-col gap-8"
       >
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
@@ -66,7 +66,7 @@ export default function LoginForm() {
                   <FormControl>
                     <Input
                       placeholder="tucorreo@wedin.app"
-                      className="!mt-1.5"
+                      className="!mt-1.5 text-base"
                       {...field}
                     />
                   </FormControl>
@@ -85,9 +85,10 @@ export default function LoginForm() {
                   <FormControl>
                     <div className="flex">
                       <Input
-                        {...field}
                         type={isPasswordVisible ? 'text' : 'password'}
                         placeholder="TuContraseña!52419$"
+                        className="text-base"
+                        {...field}
                       />
                       <button
                         type="button"
