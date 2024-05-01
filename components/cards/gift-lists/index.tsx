@@ -1,6 +1,8 @@
 import { getGiftLists } from '@/actions/data/giftlist';
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
+import Loader from '@/components/Loader';
+import { Suspense } from 'react';
 import CardContainer from '../shared/card-container';
 import GiftListCard from './card';
 
@@ -16,9 +18,11 @@ async function GiftLists({ searchParams }: GiftListsProps) {
 
   return (
     <CardContainer>
-      {giftLists.map(giftList => (
-        <GiftListCard key={giftList.id} giftList={giftList} />
-      ))}
+      <Suspense fallback={<Loader />}>
+        {giftLists.map(giftList => (
+          <GiftListCard key={giftList.id} giftList={giftList} />
+        ))}
+      </Suspense>
     </CardContainer>
   );
 }

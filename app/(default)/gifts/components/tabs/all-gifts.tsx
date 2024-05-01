@@ -1,6 +1,4 @@
-import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';
-import { Suspense } from 'react';
 import { GiftPageSearchParams } from '../../page';
 
 type AllGiftsProps = {
@@ -8,11 +6,7 @@ type AllGiftsProps = {
 };
 
 async function AllGifts({ searchParams }: AllGiftsProps) {
-  return (
-    <Suspense fallback={<Loader />}>
-      <Gifts searchParams={searchParams} />
-    </Suspense>
-  );
+  return <Gifts searchParams={searchParams} />;
 }
 
 export default AllGifts;

@@ -2,10 +2,8 @@ import { getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import Loader from '@/components/Loader';
 import Gifts from '@/components/cards/gifts';
 import { formatPrice } from '@/utils/format';
-import { Suspense } from 'react';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
@@ -60,9 +58,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
       </div>
 
       <div className="mt-6 sm:mt-10">
-        <Suspense fallback={<Loader />}>
-          <Gifts searchParams={{ giftListId }} />
-        </Suspense>
+        <Gifts searchParams={{ giftListId }} />
       </div>
     </div>
   );

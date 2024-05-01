@@ -4,6 +4,8 @@ import { getCurrentUser } from '@/actions/getCurrentUser';
 import { GiftListSearchParams } from '@/app/(default)/giftLists/[giftListId]/page';
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
+import Loader from '@/components/Loader';
+import { Suspense } from 'react';
 import CardContainer from '../shared/card-container';
 import GiftCard from './card';
 
@@ -22,9 +24,15 @@ async function Gifts({ searchParams }: GiftsProps) {
 
   return (
     <CardContainer>
-      {gifts.map(gift => (
-        <GiftCard key={gift.id} gift={gift} wishlistId={wedding?.wishListId} />
-      ))}
+      <Suspense fallback={<Loader />}>
+        {gifts.map(gift => (
+          <GiftCard
+            key={gift.id}
+            gift={gift}
+            wishlistId={wedding?.wishListId}
+          />
+        ))}
+      </Suspense>
     </CardContainer>
   );
 }
