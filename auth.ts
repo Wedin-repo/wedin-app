@@ -51,11 +51,11 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (!user || !user.email) return false;
+      // if (!user || !user.email) return false;
 
-      if (account && account.type !== 'credentials' && user?.email) {
-        await upsertUser(user.email, account.type);
-      }
+      // if (account && account.type !== 'credentials' && user?.email) {
+      //   await upsertUser(user.email, account.type);
+      // }
 
       // const existingUser = await getUserbyEmail(user.email);
       //

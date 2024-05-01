@@ -30,7 +30,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
-    <div className="flex flex-col justify-start mt-12 sm:px-10 sm:mt-12 min-h-[90vh]">
+    <div className="flex flex-col justify-start mt-12 sm:px-10 sm:mt-12">
       <div className="flex flex-col gap-4 items-center w-full">
         <div className="flex flex-col gap-3 items-center w-full">
           <h1 className="text-4xl font-medium text-center text-primaryTextColor">

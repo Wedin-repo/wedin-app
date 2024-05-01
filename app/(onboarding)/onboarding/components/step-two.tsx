@@ -88,7 +88,7 @@ const StepTwo = () => {
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full">
+    <div className="flex flex-col gap-6 sm:w-[600px]">
       <p className="text-2xl font-medium text-center sm:text-3xl text-primaryTextColor">
         Donde te casas?
       </p>
@@ -174,7 +174,7 @@ const StepTwo = () => {
           />
 
           <div className="flex flex-col gap-4">
-            <p className="max-w-sm">
+            <p className="">
               Tenés cuenta bancária en Paraguay para recibir el valor de los
               regalos?
             </p>

@@ -81,7 +81,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 sm:w-[682px]">
       <p className="text-2xl font-medium text-center sm:text-3xl text-primaryTextColor">
         Antes de empezar, necesitamos unos datos
       </p>

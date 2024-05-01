@@ -21,7 +21,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} sm:min-h-[100vh]`}>
         <SessionProvider session={session}>
           <Toaster />
           {children}

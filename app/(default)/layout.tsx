@@ -11,11 +11,11 @@ export default async function DefaultLayout({
   const currentUser = await getCurrentUser();
 
   return (
-    <>
+    <div className="sm:flex sm:flex-col sm:min-h-[100vh]">
       <NavBar currentUser={currentUser} />
       <div className="pt-16" />
       <Container>{children}</Container>
       <Footer />
-    </>
+    </div>
   );
 }

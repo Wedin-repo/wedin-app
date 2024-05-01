@@ -5,8 +5,10 @@ import Facebook from 'next-auth/providers/facebook';
 import Google from 'next-auth/providers/google';
 import { LoginSchema } from '@/schemas';
 import { NextAuthConfig } from 'next-auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
 
 const authOptions: NextAuthConfig = {
+  adapter: PrismaAdapter(prisma),
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
