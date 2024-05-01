@@ -26,10 +26,12 @@ const buttonVariants = cva(
           'border gap-1 items-center !h-8 border-borderColor !px-3 hover:bg-primaryBackgroundColor hover:text-white',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         editGiftButton:
-          'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
+          'w-full bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
         link: 'text-primary underline-offset-4 hover:underline',
-        deleteIconButton:
-          'border border-[#484848] hover:border-red-600 hover:bg-red-600 transition-colors hover:text-white rounded-xl',
+        deleteGiftIconButton:
+          'border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl',
+        deleteGiftButton:
+          'border border-[#0F172A] w-full bg-white flex items-center justify-center rounded-lg py-2 gap-3 text-[#0F172A] font-medium hover transition hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white',
         editIconButton:
           'border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl',
         emptyStateButton:

@@ -46,7 +46,7 @@ function ImageUpload() {
     <div className="flex flex-col gap-1.5">
       <Label>
         Imagen del regalo
-        <span className="!text-xs font-normal text-secondaryTextColor">
+        <span className="!text-xs font-normal text-secondaryTextColor ml-1">
           372px por 322px
         </span>
       </Label>

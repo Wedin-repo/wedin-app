@@ -13,7 +13,7 @@ import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
-import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';
+import WishListFormButton from '../../gifts/components/wishlist-form-button';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -157,8 +157,9 @@ function EditGiftForm({
           <Switch checked={isGroupGift} onCheckedChange={setIsGroupGift} />
         </div>
       </div>
-      <div className="flex justify-center mt-4 w-full sm:mt-8">
-        <EditGiftFromWishListForm isLoading={isLoading} />
+      <div className="flex flex-col gap-3 items-center justify-center w-full mt-4">
+        <WishListFormButton variant="deleteGiftButton" />
+        <WishListFormButton variant="editGiftButton" />
       </div>
     </form>
   );

@@ -47,7 +47,7 @@ function RemoveFromWishListForm({
   return (
     <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <WishListFormButton variant="deleteIconButton" />
+      <WishListFormButton variant="deleteGiftIconButton" />
     </form>
   );
 }
