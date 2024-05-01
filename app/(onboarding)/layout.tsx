@@ -1,6 +1,4 @@
-import Logo from '@/components/Logo';
-
-export default async function OnboardingLayout({
+export default function OnboardingLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

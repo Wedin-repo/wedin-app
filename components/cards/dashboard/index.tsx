@@ -26,7 +26,7 @@ export default async function Gifts({ searchParams }: GiftsProps) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 8;
   const { page = '1', name } = searchParams;
 
   // This also takes into account when the

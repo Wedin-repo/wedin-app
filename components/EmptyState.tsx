@@ -6,21 +6,15 @@ import { MdErrorOutline } from 'react-icons/md';
 
 type EmptyStateProps = {
   title?: string;
-  subtitle?: string;
   showReset?: boolean;
   tryAgain?: boolean;
 };
 
-const EmptyState = ({
-  title = '',
-  subtitle = '',
-  showReset,
-  tryAgain,
-}: EmptyStateProps) => {
+const EmptyState = ({ title = '', showReset, tryAgain }: EmptyStateProps) => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-center h-[50vh] sm:h-[60vh]">
+    <div className="flex flex-col gap-2 justify-center items-center h-[50vh] sm:h-[78vh]">
       <div className="flex flex-col gap-4 items-center">
         <div className="flex justify-center items-center w-36 h-36 rounded-full bg-borderColor">
           <MdErrorOutline fontSize={'66px'} />

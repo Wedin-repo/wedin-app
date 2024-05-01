@@ -97,82 +97,58 @@ const StepTwo = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="flex flex-col gap-6 items-start"
         >
-          {!isDecidingWeddingCountryCity ? (
-            <>
-              <FormField
-                control={form.control}
-                name="weddingCountry"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>País</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="País donde te casas" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-60 bg-white">
-                        {countries.map(country => (
-                          <SelectItem
-                            key={country.id}
-                            value={country.name}
-                            className="cursor-pointer border-b-[1px]"
-                            style={{ margin: '0 auto' }}
-                          >
-                            {country.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="weddingCity"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Ciudad</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="San Bernardino"
-                        className="!mt-1.5"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-            </>
-          ) : (
-            <>
+          <FormField
+            control={form.control}
+            name="weddingCountry"
+            render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>País</FormLabel>
-                <Select disabled>
+                <Select
+                  disabled={!!isDecidingWeddingCountryCity}
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="País donde te casas" />
                     </SelectTrigger>
                   </FormControl>
+                  <SelectContent className="max-h-60 bg-white">
+                    {countries.map(country => (
+                      <SelectItem
+                        key={country.id}
+                        value={country.name}
+                        className="cursor-pointer border-b-[1px]"
+                        style={{ margin: '0 auto' }}
+                      >
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
                 </Select>
+                <FormMessage className="font-normal text-yellow-600" />
               </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="weddingCity"
+            render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Ciudad</FormLabel>
                 <FormControl>
                   <Input
-                    disabled
                     placeholder="San Bernardino"
+                    disabled={!!isDecidingWeddingCountryCity}
                     className="!mt-1.5"
+                    {...field}
                   />
                 </FormControl>
+                <FormMessage className="font-normal text-yellow-600" />
               </FormItem>
-            </>
-          )}
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -196,6 +172,7 @@ const StepTwo = () => {
               </FormItem>
             )}
           />
+
           <div className="flex flex-col gap-4">
             <p className="max-w-sm">
               Tenés cuenta bancária en Paraguay para recibir el valor de los
