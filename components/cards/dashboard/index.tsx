@@ -3,16 +3,14 @@ import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { DashboardSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
-import Loader from '@/components/Loader';
 import Pagination from '@/components/cards/dashboard/components/pagination';
-import { Suspense } from 'react';
 import GiftCard from './card';
 
 type GiftsProps = {
   searchParams: DashboardSearchParams;
 };
 
-async function Gifts({ searchParams }: GiftsProps) {
+export default async function Gifts({ searchParams }: GiftsProps) {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
@@ -28,7 +26,7 @@ async function Gifts({ searchParams }: GiftsProps) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 6;
   const { page = '1', name } = searchParams;
 
   // This also takes into account when the
@@ -49,11 +47,9 @@ async function Gifts({ searchParams }: GiftsProps) {
 
   return (
     <div className="flex flex-col gap-5">
-      <Suspense fallback={<Loader />}>
-        {paginatedFilteredWishlistGift.map(gift => (
-          <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
-        ))}
-      </Suspense>
+      {paginatedFilteredWishlistGift.map(gift => (
+        <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
+      ))}
 
       {totalPages > 1 ? (
         <div className="flex justify-center m-5 w-full">
@@ -68,5 +64,3 @@ async function Gifts({ searchParams }: GiftsProps) {
     </div>
   );
 }
-
-export default Gifts;

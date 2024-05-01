@@ -1,8 +1,6 @@
 import { getGiftLists } from '@/actions/data/giftlist';
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
-import Loader from '@/components/Loader';
-import { Suspense } from 'react';
 import CardContainer from '../shared/card-container';
 import GiftListCard from './card';
 
@@ -10,7 +8,7 @@ type GiftListsProps = {
   searchParams: GiftPageSearchParams;
 };
 
-async function GiftLists({ searchParams }: GiftListsProps) {
+export default async function GiftLists({ searchParams }: GiftListsProps) {
   const giftLists = await getGiftLists({ searchParams });
 
   if (giftLists?.length === 0 || !giftLists)
@@ -18,13 +16,9 @@ async function GiftLists({ searchParams }: GiftListsProps) {
 
   return (
     <CardContainer>
-      <Suspense fallback={<Loader />}>
-        {giftLists.map(giftList => (
-          <GiftListCard key={giftList.id} giftList={giftList} />
-        ))}
-      </Suspense>
+      {giftLists.map(giftList => (
+        <GiftListCard key={giftList.id} giftList={giftList} />
+      ))}
     </CardContainer>
   );
 }
-
-export default GiftLists;

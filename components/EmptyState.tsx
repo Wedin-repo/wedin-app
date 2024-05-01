@@ -20,12 +20,12 @@ const EmptyState = ({
   const router = useRouter();
 
   return (
-    <div className="h-[50vh] sm:h-[60vh] flex flex-col gap-2 justify-center items-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-36 w-36 bg-borderColor rounded-full flex justify-center items-center">
+    <div className="flex flex-col gap-2 justify-center items-center h-[50vh] sm:h-[60vh]">
+      <div className="flex flex-col gap-4 items-center">
+        <div className="flex justify-center items-center w-36 h-36 rounded-full bg-borderColor">
           <MdErrorOutline fontSize={'66px'} />
         </div>
-        <h1 className="text-3xl font-normal text-black max-w-sm text-center">
+        <h1 className="max-w-sm text-3xl font-normal text-center text-black">
           {title}
         </h1>
       </div>

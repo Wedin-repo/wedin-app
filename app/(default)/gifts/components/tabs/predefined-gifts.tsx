@@ -1,4 +1,3 @@
-import { getCategories } from '@/actions/data/category';
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import GiftLists from '@/components/cards/gift-lists';
 

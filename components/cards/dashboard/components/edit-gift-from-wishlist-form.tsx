@@ -15,7 +15,7 @@ function EditGiftFromWishListForm({
     <Button type="submit" variant="editGiftButton" disabled={isLoading}>
       Editar regalo
       {isLoading ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+        <Loader2 className="w-4 h-4 animate-spin" />
       ) : (
         <FiEdit3 fontSize={'16px'} />
       )}
