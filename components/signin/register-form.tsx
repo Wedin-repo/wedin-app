@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { LoginSchema, RegisterSchema } from '@/schemas';
+import { RegisterSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -29,16 +29,14 @@ export default function RegisterForm() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      email: '',
-      password: '',
       eventType: 'wedding',
     },
   });
 
   async function handleRegister(values: z.infer<typeof RegisterSchema>) {
     setIsLoading(true);
+    const validatedFields = RegisterSchema.safeParse(values);
 
-    const validatedFields = LoginSchema.safeParse(values);
     if (validatedFields.success) {
       let response = await register(validatedFields.data);
 
@@ -126,6 +124,27 @@ export default function RegisterForm() {
                           <IoEyeOutline size={20} />
                         )}
                       </button>
+                    </div>
+                  </FormControl>
+                  <FormMessage className="font-normal text-yellow-600" />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirma tu contraseña</FormLabel>
+                  <FormControl>
+                    <div className="flex">
+                      <Input
+                        {...field}
+                        type={isPasswordVisible ? 'text' : 'password'}
+                        placeholder="**********"
+                      />
                     </div>
                   </FormControl>
                   <FormMessage className="font-normal text-yellow-600" />

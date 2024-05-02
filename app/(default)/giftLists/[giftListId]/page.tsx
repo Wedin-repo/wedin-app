@@ -2,7 +2,7 @@ import { GetGiftsParams, getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import Gifts from '@/components/cards/gifts';
+import GiftsCards from '@/components/cards/gifts';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
@@ -58,7 +58,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
       </div>
 
       <div className="mt-6 sm:mt-10">
-        <Gifts searchParams={{ giftListId }} hideModal={true} />
+        <GiftsCards searchParams={{ giftListId }} hideModal={true} />
       </div>
     </div>
   );
