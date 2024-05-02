@@ -1,11 +1,11 @@
 import GiftsModals from '@/components/modal/gifts';
-import { GiftPageSearchParams } from '../../page';
+import { GetGiftsSerachParams } from '../../page';
 
 type AllGiftsProps = {
-  searchParams: GiftPageSearchParams;
+  searchParams: GetGiftsSerachParams;
 };
 
-function AllGifts({ searchParams }: AllGiftsProps) {
+async function AllGifts({ searchParams }: AllGiftsProps) {
   return <GiftsModals searchParams={searchParams} />;
 }
 

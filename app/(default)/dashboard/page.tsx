@@ -3,14 +3,12 @@ import DashboardGifts from '@/components/cards/dashboard';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
 import DashboardHeader from './components/dashboard-header';
+import { GetGiftsParams } from '@/actions/data/gift';
 
-export type DashboardSearchParams = {
-  page?: string;
-  name?: string;
-};
+export type DashboardPageSearchParams = Pick<GetGiftsParams, 'name' | 'page'>;
 
 type DashboardPageProps = {
-  searchParams: DashboardSearchParams;
+  searchParams: DashboardPageSearchParams;
 };
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {

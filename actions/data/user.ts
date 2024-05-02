@@ -1,3 +1,5 @@
+'use server';
+
 import { ErrorResponse } from '@/auth';
 import prisma from '@/db/client';
 import { User } from '@prisma/client';

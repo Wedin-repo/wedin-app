@@ -1,3 +1,5 @@
+'use server';
+
 import prisma from '@/db/client';
 
 export async function getWedding(userId: string | undefined) {

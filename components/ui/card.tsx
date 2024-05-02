@@ -2,9 +2,6 @@ import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
-// flex flex-col justify-between items-normal
-// flex flex-col flex-grow gap-1 w-full justify-start
-
 const cardVariants = cva('', {
   variants: {
     variant: {

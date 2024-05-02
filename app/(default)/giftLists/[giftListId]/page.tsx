@@ -1,4 +1,4 @@
-import { getGifts } from '@/actions/data/gift';
+import { GetGiftsParams, getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
@@ -8,16 +8,16 @@ import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
 
-export type GiftListSearchParams = {
-  giftListId: string;
-};
+export type GiftListPageParams = Pick<GetGiftsParams, 'giftListId'>;
 
 type GiftListPageProps = {
-  params: GiftListSearchParams;
+  params: GiftListPageParams;
 };
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
   const { giftListId } = params;
+  if (!giftListId) return null;
+
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const giftList = await getGiftList(giftListId);
