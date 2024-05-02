@@ -7,7 +7,7 @@ export default async function DefaultLayout({
 }>) {
   return (
     <div className="flex flex-col gap-8 justify-center items-center h-[100vh]">
-      <Logo height={38} />
+      <Logo />
       {children}
     </div>
   );

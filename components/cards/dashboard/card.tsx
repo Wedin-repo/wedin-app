@@ -6,8 +6,8 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/card';
+import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import { formatPrice } from '@/utils/format';
 import { Gift } from '@prisma/client';
 import Image from 'next/image';
 

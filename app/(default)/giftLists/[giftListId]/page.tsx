@@ -3,7 +3,7 @@ import { getGiftList } from '@/actions/data/giftlist';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import Gifts from '@/components/cards/gifts';
-import { formatPrice } from '@/utils/format';
+import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';

@@ -14,7 +14,7 @@ export default async function OnboardingPage() {
       <div className="flex justify-center items-center">
         {/* This width w \as added because for some reason the step two form did not grow*/}
         <div className="flex flex-col gap-8 items-center">
-          <Logo height={38} />
+          <Logo />
           <OnboardingForm currentUser={currentUser} />
         </div>
       </div>

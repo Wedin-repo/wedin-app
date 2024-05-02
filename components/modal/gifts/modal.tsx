@@ -3,8 +3,8 @@
 import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
+import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import { formatPrice } from '@/utils/format';
 import { Gift } from '@prisma/client';
 import Image from 'next/image';
 import { useState } from 'react';

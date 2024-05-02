@@ -60,7 +60,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
       <div className="flex flex-row gap-3 justify-between items-center md:gap-0">
         <div className="flex gap-4 items-center">
           <div className="pb-4">
-            <Logo height={39} width={90} />
+            <Logo width={90} />
           </div>
 
           <Tabs

@@ -50,8 +50,8 @@ function ImageUpload() {
           372px por 322px
         </span>
       </Label>
-      <div className="bg-secondaryBackgroundColor rounded-xl p-4 flex flex-col gap-3">
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+      <div className="flex flex-col gap-3 p-4 rounded-xl bg-secondaryBackgroundColor">
+        {error && <p className="text-sm text-red-500">{error}</p>}
         <div
           className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-secondaryTextColor ${
             error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'
@@ -61,7 +61,7 @@ function ImageUpload() {
             <Image
               src={previewUrl}
               alt="Vista previa de la imagen seleccionada"
-              className="max-h-full max-w-full rounded-xl object-cover"
+              className="object-cover max-w-full max-h-full rounded-xl"
             />
           ) : (
             <IoImageOutline fontSize={'24px'} />

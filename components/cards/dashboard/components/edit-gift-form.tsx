@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { formatPrice } from '@/utils/format';
+import { formatPrice } from '@/lib/utils';
 import { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
 import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';

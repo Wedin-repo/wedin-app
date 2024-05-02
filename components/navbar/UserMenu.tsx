@@ -1,7 +1,6 @@
 'use client';
 
-import Avatar from '@/components/Avatar';
-import MenuItem from '@/components/MenuItem';
+import MenuItem from '@/components/navbar/MenuItem';
 import { Button } from '@/components/ui/button';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import { User } from '@prisma/client';
@@ -10,6 +9,7 @@ import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
+import Avatar from './Avatar';
 
 type UserMenuProps = {
   currentUser?: User | null;

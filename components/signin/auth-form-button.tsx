@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { capitalizeFirstLetter } from '@/utils/format';
+import { capitalizeFirstLetter } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
 type AuthFormButtonProps = {
