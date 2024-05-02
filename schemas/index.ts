@@ -63,8 +63,8 @@ export const StepOneSchema = z.object({
 });
 
 export const StepTwoSchema = z.object({
-  weddingCountry: z.string(),
-  weddingCity: z.string(),
+  weddingCountry: z.string().optional(),
+  weddingCity: z.string().optional(),
   isDecidingWeddingCountryCity: boolean(),
   hasPYbankAccount: z.boolean(),
 });

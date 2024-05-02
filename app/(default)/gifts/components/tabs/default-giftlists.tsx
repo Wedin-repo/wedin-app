@@ -1,12 +1,12 @@
 import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import GiftLists from '@/components/cards/gift-lists';
 
-type PredefinedGiftsProps = {
+type DefaultGiftListsProps = {
   searchParams: GiftPageSearchParams;
 };
 
-async function PredefinedGifts({ searchParams }: PredefinedGiftsProps) {
+async function DefaultGiftLists({ searchParams }: DefaultGiftListsProps) {
   return <GiftLists searchParams={searchParams} />;
 }
 
-export default PredefinedGifts;
+export default DefaultGiftLists;

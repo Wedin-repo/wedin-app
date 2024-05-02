@@ -42,8 +42,6 @@ const StepTwo = () => {
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
     defaultValues: {
-      weddingCountry: '',
-      weddingCity: '',
       isDecidingWeddingCountryCity: false,
       hasPYbankAccount: true,
     },
@@ -65,18 +63,18 @@ const StepTwo = () => {
         setIsLoading(false);
         return null;
       }
+
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          isOnboarded: true,
+        },
+      });
+
+      setIsLoading(false);
+      router.push('/dashboard');
     }
-
-    await update({
-      ...session,
-      user: {
-        ...session?.user,
-        isOnboarded: true,
-      },
-    });
-
-    setIsLoading(false);
-    router.push('/dashboard');
   };
 
   const handleIsDecidingCountryCity = (value: boolean | string) => {
