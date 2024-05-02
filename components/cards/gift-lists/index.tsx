@@ -1,24 +1,24 @@
-import { GetGiftListsParams, getGiftLists } from '@/actions/getGiftLists';
+import { getGiftLists } from '@/actions/data/giftlist';
+import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
+import CardContainer from '../shared/card-container';
 import GiftListCard from './card';
-import { getGifts } from '@/actions/getGifts';
 
 type GiftListsProps = {
-  searchParams: GetGiftListsParams;
+  searchParams: GiftPageSearchParams;
 };
 
-async function GiftLists({searchParams}: GiftListsProps) {
-  const giftLists = await getGiftLists({searchParams});
+export default async function GiftLists({ searchParams }: GiftListsProps) {
+  const giftLists = await getGiftLists({ searchParams });
 
-  if (giftLists?.length === 0 || !giftLists) return <EmptyState title='No se encontraron listas pré-definidas' />;
+  if (giftLists?.length === 0 || !giftLists)
+    return <EmptyState title="No se encontraron listas pré-definidas" />;
 
   return (
-    <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-5 gap-8'>
-      {giftLists?.map(giftList => (
+    <CardContainer>
+      {giftLists.map(giftList => (
         <GiftListCard key={giftList.id} giftList={giftList} />
       ))}
-    </div>
+    </CardContainer>
   );
 }
-
-export default GiftLists;

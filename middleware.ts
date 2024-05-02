@@ -1,32 +1,47 @@
-import { cookies } from 'next/headers';
-import { NextRequest, NextResponse } from 'next/server';
+import {
+  apiAuthPrefix,
+  authRoutes,
+  onboardingRoute,
+  protectedRoutes,
+  publicRoutes,
+} from '@/routes';
+import { auth } from './auth';
 
-export function middleware(request: NextRequest) {
-  // const sessionToken =
-  //   request.cookies.get('next-auth.session-token') ||
-  //   request.cookies.get('_vercel_jwt')?.value;
-  // const { pathname } = request.nextUrl;
+export default auth(req => {
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+  const isOnboarded = isLoggedIn ? req.auth?.user.isOnboarded ?? false : false;
+  const isExistingUser = isLoggedIn
+    ? req.auth?.user.isExistingUser ?? false
+    : false;
 
-  // const cookieStore = cookies();
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
+  const isOnboardingRoute = onboardingRoute.includes(nextUrl.pathname);
 
-  /* console.log(
-    cookieStore
-      .getAll()
-      .map(cookie => console.log('cookie', cookie.name, cookie.value))
-  );
+  if (isApiAuthRoute) {
+    return;
+  }
 
-  console.log('request', request);
-  console.log('cookies', request.cookies.get('_vercel_jwt')?.value);
-  console.log('sessionToken', sessionToken);
-  console.log('redirect?', !sessionToken && pathname === '/'); */
+  if (isLoggedIn && !isExistingUser) {
+    return Response.redirect(new URL('/api/auth/signout', nextUrl));
+  }
 
-  // if (!sessionToken && pathname === '/') {
-  //   return NextResponse.redirect(new URL('/gifts', request.url));
-  // }
+  if (isLoggedIn && !isOnboarded && !isOnboardingRoute) {
+    return Response.redirect(new URL('/onboarding', nextUrl));
+  }
 
-  return NextResponse.next();
-}
+  if (isLoggedIn && isOnboarded && (isAuthRoute || isOnboardingRoute)) {
+    return Response.redirect(new URL('/dashboard', nextUrl));
+  }
+
+  if (!isLoggedIn && (isProtectedRoute || isOnboardingRoute)) {
+    return Response.redirect(new URL('/login', nextUrl));
+  }
+});
 
 export const config = {
-  matcher: ['/'],
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 };

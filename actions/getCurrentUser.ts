@@ -1,20 +1,17 @@
-import prisma from '@/db/client';
-import { getServerSession } from 'next-auth/next';
-import { authOptions } from '@/utils/auth';
+// server side get current user
 
-export async function getSession() {
-  return await getServerSession(authOptions);
-}
+import { auth } from '@/auth';
+import prisma from '@/db/client';
 
 export async function getCurrentUser() {
   try {
-    const session = await getSession();
+    const session = await auth();
 
     if (!session?.user?.email) return null;
 
     const currentUser = await prisma.user.findUnique({
       where: {
-        email: session.user.email as string,
+        email: session.user.email,
       },
     });
 
@@ -22,7 +19,7 @@ export async function getCurrentUser() {
 
     return currentUser;
   } catch (error: any) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }

@@ -1,16 +1,9 @@
-import React from 'react';
-import { FC } from 'react';
-
 type ContainerProps = {
   children: React.ReactNode;
 };
 
-const Container: FC<ContainerProps> = ({ children }) => {
-  return (
-    <div className="max-w-[2520px]" style={{ margin: '0 auto' }}>
-      {children}
-    </div>
-  );
+const Container = ({ children }: ContainerProps) => {
+  return <div className="px-6 my-4 sm:px-10">{children}</div>;
 };
 
 export default Container;

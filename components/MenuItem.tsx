@@ -1,11 +1,28 @@
-import type { NextPage } from 'next';
+import logout from '@/actions/auth/logout';
+import { Button } from '@/components/ui/button';
 
-type Props = {
-  onClick: () => void;
+type MenuItemProps = {
+  variant?: 'logoutButton';
+  onClick?: () => void;
   label: string;
   icon?: any;
 };
-const MenuItem: NextPage<Props> = ({ onClick, label, icon }) => {
+const MenuItem = ({ onClick, label, icon, variant }: MenuItemProps) => {
+  const handleLogout = async () => {
+    await logout();
+  };
+
+  if (variant === 'logoutButton') {
+    return (
+      <form action={handleLogout}>
+        <Button type="submit" variant="logoutButton">
+          {icon}
+          {label}
+        </Button>
+      </form>
+    );
+  }
+
   return (
     <div
       onClick={onClick}
