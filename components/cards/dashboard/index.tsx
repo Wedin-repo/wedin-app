@@ -4,13 +4,15 @@ import { getCurrentUser } from '@/actions/getCurrentUser';
 import { DashboardSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/cards/dashboard/components/pagination';
-import GiftCard from './card';
+import DashboardGiftCard from './card';
 
-type GiftsProps = {
+type DashboardGiftsProps = {
   searchParams: DashboardSearchParams;
 };
 
-export default async function Gifts({ searchParams }: GiftsProps) {
+export default async function DashboardGifts({
+  searchParams,
+}: DashboardGiftsProps) {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
@@ -48,7 +50,7 @@ export default async function Gifts({ searchParams }: GiftsProps) {
   return (
     <div className="flex flex-col gap-5">
       {paginatedFilteredWishlistGift.map(gift => (
-        <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
+        <DashboardGiftCard key={gift.id} gift={gift} wishListId={wishListId} />
       ))}
 
       {totalPages > 1 ? (

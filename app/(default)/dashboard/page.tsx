@@ -1,8 +1,8 @@
 import Loader from '@/components/Loader';
+import DashboardGifts from '@/components/cards/dashboard';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
 import DashboardHeader from './components/dashboard-header';
-import WishlistGifts from './components/wishlist-gifts';
 
 export type DashboardSearchParams = {
   page?: string;
@@ -21,7 +21,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
       <SearchBar scrollValue={200} scrollValueMobile={250} />
 
       <Suspense fallback={<Loader />}>
-        <WishlistGifts searchParams={searchParams} />
+        <DashboardGifts searchParams={searchParams} />
       </Suspense>
     </div>
   );

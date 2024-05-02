@@ -8,7 +8,7 @@ import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import Categories from './components/categories';
 import AllGifts from './components/tabs/all-gifts';
-import DefaultGiftLists from './components/tabs/predefined-giftlists';
+import DefaultGiftLists from './components/tabs/default-giftlists';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',
@@ -35,7 +35,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
-    <div className="flex flex-col justify-start min-h-[90vh]">
+    <div className="flex flex-col justify-start">
       <h1 className="flex justify-center items-center my-8 w-full text-4xl font-medium sm:text-5xl text-primaryTextColor">
         Agregar regalos
       </h1>

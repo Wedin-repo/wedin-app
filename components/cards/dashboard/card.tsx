@@ -11,12 +11,12 @@ import { formatPrice } from '@/utils/format';
 import { Gift } from '@prisma/client';
 import Image from 'next/image';
 
-type GiftCardProps = {
+type DashboardGiftCardProps = {
   gift: Gift;
   wishListId?: string | null;
 };
 
-const GiftCard = ({ gift, wishListId }: GiftCardProps) => {
+const DashboardGiftCard = ({ gift, wishListId }: DashboardGiftCardProps) => {
   const { id, name, description, price, isDefault, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
 
@@ -53,4 +53,4 @@ const GiftCard = ({ gift, wishListId }: GiftCardProps) => {
   );
 };
 
-export default GiftCard;
+export default DashboardGiftCard;

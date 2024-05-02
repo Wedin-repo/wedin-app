@@ -58,7 +58,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
       </div>
 
       <div className="mt-6 sm:mt-10">
-        <Gifts searchParams={{ giftListId }} />
+        <Gifts searchParams={{ giftListId }} hideModal={true} />
       </div>
     </div>
   );
