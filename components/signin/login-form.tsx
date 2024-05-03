@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
+import Link from 'next/link';
 
 export default function LoginForm() {
   const { toast } = useToast();
@@ -110,7 +111,17 @@ export default function LoginForm() {
           </div>
         </div>
 
-        <AuthFormButton isLoading={isLoading} />
+        <div className="flex flex-col gap-2">
+          <Link
+            href="/password-reset"
+            className="flex justify-start text-secondaryTextColor"
+          >
+            <span className="text-indigo-600 hover:underline">
+              Se me olvidó la contraseña
+            </span>
+          </Link>
+          <AuthFormButton isLoading={isLoading} />
+        </div>
       </form>
     </Form>
   );

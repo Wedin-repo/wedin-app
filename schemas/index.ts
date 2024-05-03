@@ -11,6 +11,8 @@ export const LoginSchema = z.object({
     .max(255, { message: `Slow down cowboy, you're not Julian Assange` }),
 });
 
+export const PasswordRecoverySchema = LoginSchema.pick({ email: true });
+
 export const RegisterSchema = z
   .object({
     email: z
