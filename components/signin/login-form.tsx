@@ -13,12 +13,12 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
-import Link from 'next/link';
 
 export default function LoginForm() {
   const { toast } = useToast();
@@ -113,7 +113,7 @@ export default function LoginForm() {
 
         <div className="flex flex-col gap-2">
           <Link
-            href="/password-recovery"
+            href="/password-reset"
             className="flex justify-start text-secondaryTextColor"
           >
             <span className="text-indigo-600 hover:underline">

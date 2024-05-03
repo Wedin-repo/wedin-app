@@ -75,7 +75,7 @@ export default function NewPasswordForm() {
                     <Input
                       {...field}
                       type={isPasswordVisible ? 'text' : 'password'}
-                      placeholder="Wedin!538461$"
+                      placeholder="TuContraseña!52419$"
                     />
                     <button
                       type="button"

@@ -45,7 +45,6 @@ export const register = async (
   }
 
   const verificationToken = await generateVerificationToken(email);
-  // catch errors
 
   await sendVericationEmail(verificationToken.email, verificationToken.token);
 };

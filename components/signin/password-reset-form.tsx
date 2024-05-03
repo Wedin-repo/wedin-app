@@ -42,6 +42,14 @@ export default function PasswordResetForm() {
         });
       }
     }
+
+    toast({
+      variant: 'default',
+      title: 'Exito!',
+      description:
+        'Se le ha enviado un correo con un link para restablecer su contraseña',
+    });
+
     setIsLoading(false);
   }
 

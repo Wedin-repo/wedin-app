@@ -48,16 +48,15 @@ export const login = async (
       return { error: 'Usuario no encontrado' };
     }
 
-    if (!existingUser.emailVerified) {
-      const verificatiotionToken = await generateVerificationToken(email);
-
-      // catch errors
-      // Send email
-
-      // return
-      //   error: 'Email no verificado, se ha enviado un correo de confirmacion',
-      // };
-    }
+    // if (!existingUser.emailVerified) {
+    //   const verificatiotionToken = await generateVerificationToken(email);
+    //
+    //   // Send email
+    //
+    //   // return
+    //   //   error: 'Email no verificado, se ha enviado un correo de confirmacion',
+    //   // };
+    // }
 
     if (existingUser.password === null) {
       return { error: 'Deberias de ingresar sin contrasenha' };

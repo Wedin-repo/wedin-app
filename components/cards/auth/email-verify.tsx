@@ -1,9 +1,9 @@
 'use client';
 
 import { newVerification } from '@/actions/data/verification-token';
-import Loader from '@/components/Loader';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { Check, X, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -15,6 +15,8 @@ export default function EmailVerifyCard({}: EmailVerifyCardProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
   const [status, setStatus] = useState('Verificando Email');
   const token = searchParams.get('token');
 
@@ -26,7 +28,7 @@ export default function EmailVerifyCard({}: EmailVerifyCardProps) {
         description: 'No se ha encontrado el token en la url',
         duration: 5000,
       });
-
+      setError(true);
       setIsLoading(false);
       return;
     }
@@ -40,9 +42,13 @@ export default function EmailVerifyCard({}: EmailVerifyCardProps) {
         description: response.error,
         duration: 5000,
       });
+      setError(true);
+      setIsLoading(false);
     }
 
     setIsLoading(false);
+    setSuccess(true);
+    setError(false);
     setStatus('Email verificado correctamente, redireccionando...');
     router.push('/login');
   }, [router, toast, token]);
@@ -53,12 +59,20 @@ export default function EmailVerifyCard({}: EmailVerifyCardProps) {
 
   return (
     <Card
-      className="text-center cursor-auto"
       variant="emailVerification"
       size="emailVerification"
+      className="text-center cursor-auto"
     >
-      <CardHeader>{isLoading && <Loader />}</CardHeader>
-      <CardContent className="p-4">
+      <CardHeader variant="emailVerification">
+        <div className="flex justify-center items-center">
+          {isLoading && (
+            <Loader2 className="w-20 h-20 animate-spin text-secondaryBorderColor" />
+          )}
+          {error && <X className="w-20 h-20 text-red-600 animate-in" />}
+          {success && <Check className="w-20 h-20 text-green-600 animate-in" />}
+        </div>
+      </CardHeader>
+      <CardContent className="gap-4 justify-center p-4">
         {status}
         <Link
           href="/login"
