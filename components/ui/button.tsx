@@ -29,7 +29,7 @@ const buttonVariants = cva(
           'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
         link: 'text-primary underline-offset-4 hover:underline',
         deleteIconButton:
-          'border border-[#484848] hover:border-red-500 hover:bg-red-500 transition-colors hover:text-white rounded-xl',
+          'border border-[#484848] hover:border-red-600 hover:bg-red-600 transition-colors hover:text-white rounded-xl',
         editIconButton:
           'border border-[#484848] hover:bg-primaryBackgroundColor transition-colors hover:text-white rounded-xl',
         emptyStateButton:

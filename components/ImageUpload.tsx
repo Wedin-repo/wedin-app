@@ -51,10 +51,10 @@ function ImageUpload() {
         </span>
       </Label>
       <div className="flex flex-col gap-3 p-4 rounded-xl bg-secondaryBackgroundColor">
-        {error && <p className="text-sm text-red-500">{error}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
         <div
           className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-secondaryTextColor ${
-            error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'
+            error ? 'border-red-600 text-red-600' : 'border-secondaryTextColor'
           }`}
         >
           {previewUrl ? (

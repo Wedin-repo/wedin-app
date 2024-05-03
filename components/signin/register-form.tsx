@@ -94,7 +94,7 @@ export default function RegisterForm() {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
@@ -127,7 +127,7 @@ export default function RegisterForm() {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
@@ -149,7 +149,7 @@ export default function RegisterForm() {
                       />
                     </div>
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />

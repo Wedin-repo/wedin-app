@@ -90,7 +90,7 @@ export default function NewPasswordForm() {
                     </button>
                   </div>
                 </FormControl>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />
@@ -112,7 +112,7 @@ export default function NewPasswordForm() {
                     />
                   </div>
                 </FormControl>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />
