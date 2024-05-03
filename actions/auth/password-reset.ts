@@ -30,7 +30,6 @@ export const passwordReset = async (
 
     try {
       passwordResetToken = await generatePasswordResetToken(email);
-      // catch errors
     } catch (error) {
       return { error: 'Error generando token de recuperación de contraseña' };
     }

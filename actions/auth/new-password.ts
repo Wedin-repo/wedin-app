@@ -4,11 +4,25 @@ import prisma from '@/db/client';
 import { NewPasswordSchema } from '@/schemas';
 import bcrypt from 'bcryptjs';
 import * as z from 'zod';
+import { getPasswordTokenResetByEmail } from '../data/password-token';
 
 export const newPassword = async (
   values: z.infer<typeof NewPasswordSchema>,
-  email: string
+  email: string,
+  token: string
 ) => {
+  const passwordResetToken = await getPasswordTokenResetByEmail(email);
+
+  if (!passwordResetToken || passwordResetToken.token !== token) {
+    return { error: 'No hay un token de verificación asociado a este email' };
+    // generate new token -> go to /password-reset
+  }
+
+  if (passwordResetToken.expires < new Date()) {
+    return { error: 'El token ha expirado' };
+    // generate new token -> go to /password-reset
+  }
+
   const validatedFields = NewPasswordSchema.safeParse(values);
 
   if (!validatedFields.success) {

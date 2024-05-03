@@ -31,12 +31,12 @@ export const generatePasswordResetToken = async (email: string) => {
   const existingToken = await getPasswordTokenResetByEmail(email);
 
   if (existingToken) {
-    await prisma.verificationToken.delete({
+    await prisma.passwordResetToken.delete({
       where: { id: existingToken.id },
     });
   }
 
-  const verificationToken = await prisma.verificationToken.create({
+  const passwordResetToken = await prisma.passwordResetToken.create({
     data: {
       email,
       token,
@@ -44,5 +44,5 @@ export const generatePasswordResetToken = async (email: string) => {
     },
   });
 
-  return verificationToken;
+  return passwordResetToken;
 };

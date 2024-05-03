@@ -13,31 +13,34 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { NewPasswordSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
-export default function NewPasswordForm() {
-  const searchParams = useSearchParams();
+type NewPasswordFormProps = {
+  email: string;
+  token: string;
+};
+
+export default function NewPasswordForm({
+  email,
+  token,
+}: NewPasswordFormProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const email = searchParams.get('email');
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const newPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
   });
 
-  if (!email) return null;
-
   async function handleNewPassword(values: z.infer<typeof NewPasswordSchema>) {
     setIsLoading(true);
     const validatedFields = NewPasswordSchema.safeParse(values);
 
     if (validatedFields.success && email) {
-      const response = await newPassword(validatedFields.data, email);
+      const response = await newPassword(validatedFields.data, email, token);
 
       if (response?.error) {
         toast({
