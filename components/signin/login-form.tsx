@@ -116,9 +116,7 @@ export default function LoginForm() {
             href="/password-reset"
             className="flex justify-start text-secondaryTextColor"
           >
-            <span className="text-indigo-600 hover:underline">
-              Se me olvidó la contraseña
-            </span>
+            <span className="text-indigo-600">Se me olvidó la contraseña</span>
           </Link>
           <AuthFormButton isLoading={isLoading} />
         </div>

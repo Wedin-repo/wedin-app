@@ -18,7 +18,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
-export default function PasswordResetForm() {
+type PasswordResetFormProps = {
+  isProviderLogin: (provider: 'google' | 'facebook') => void;
+};
+
+export default function PasswordResetForm(props: PasswordResetFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,26 +35,53 @@ export default function PasswordResetForm() {
   ) {
     setIsLoading(true);
     const validatedFields = PasswordResetSchema.safeParse(values);
+
+    if (!validatedFields.success) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
+        description: 'Por favor ingrese datos válidos',
+      });
+      setIsLoading(false);
+      return;
+    }
+
     if (validatedFields.success) {
       const response = await passwordReset(validatedFields.data);
+
+      if (response?.provider) {
+        toast({
+          variant: 'destructive',
+          title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
+          description: response.error,
+          duration: 5000,
+        });
+        props.isProviderLogin(response.provider);
+        setIsLoading(false);
+        return;
+      }
 
       if (response?.error) {
         toast({
           variant: 'destructive',
           title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
           description: response.error,
+          duration: 5000,
         });
+        setIsLoading(false);
+        return;
       }
+
+      toast({
+        variant: 'default',
+        title: 'Exito!',
+        description:
+          'Se le ha enviado un correo con un link para restablecer su contraseña',
+        duration: 5000,
+      });
+
+      setIsLoading(false);
     }
-
-    toast({
-      variant: 'default',
-      title: 'Exito!',
-      description:
-        'Se le ha enviado un correo con un link para restablecer su contraseña',
-    });
-
-    setIsLoading(false);
   }
 
   return (

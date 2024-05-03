@@ -26,6 +26,17 @@ export const passwordReset = async (
       return { error: 'No hay una cuenta asociada a este email' };
     }
 
+    const existingUserAccount = await prisma.account.findFirst({
+      where: { userId: existingUser.id },
+    });
+
+    if (existingUserAccount) {
+      return {
+        error: `No se puede recuperar la contraseña de una cuenta de ${existingUserAccount.provider}`,
+        provider: existingUserAccount.provider as 'google' | 'facebook',
+      };
+    }
+
     let passwordResetToken;
 
     try {
