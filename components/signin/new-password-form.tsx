@@ -11,13 +11,18 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { NewPasswordSchema } from '@/schemas';
+import { LoginSchema, NewPasswordSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { X } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { z } from 'zod';
+import { Card, CardContent, CardHeader } from '../ui/card';
 import AuthFormButton from './auth-form-button';
+import { login } from '@/actions/auth/login';
 
 type NewPasswordFormProps = {
   email: string;
@@ -28,36 +33,144 @@ export default function NewPasswordForm({
   email,
   token,
 }: NewPasswordFormProps) {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const { toast } = useToast();
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [redirect, setRedirect] = useState('');
   const newPasswordForm = useForm<z.infer<typeof NewPasswordSchema>>({
     resolver: zodResolver(NewPasswordSchema),
   });
 
   async function handleNewPassword(values: z.infer<typeof NewPasswordSchema>) {
     setIsLoading(true);
+    if (!email) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
+        description: 'No se ha encontrado el email en la url',
+        duration: 5000,
+      });
+
+      setRedirect('/password-reset');
+      setIsLoading(true);
+
+      return;
+    }
+
     const validatedFields = NewPasswordSchema.safeParse(values);
 
-    if (validatedFields.success && email) {
-      const response = await newPassword(validatedFields.data, email, token);
+    if (!validatedFields.success) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
+        description: 'Contraseñas no coinciden o son inválidas',
+        duration: 5000,
+      });
 
-      if (response?.error) {
-        toast({
-          variant: 'destructive',
-          title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
-          description: response.error,
-        });
-      }
+      return;
+    }
+
+    const response = await newPassword(validatedFields.data, email, token);
+
+    if (!response) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
+        duration: 5000,
+      });
+
+      setErrorMessage('Error al tratar de recuperar tu contraseña');
+      setIsLoading(false);
+      setRedirect('/password-reset');
+
+      return;
+    }
+
+    if (response.error) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de recuperar tu contraseña',
+        duration: 5000,
+        description: response.error,
+      });
+
+      setErrorMessage(response.error);
+    }
+
+    if (response.redirect) {
+      setRedirect(response.redirect);
     }
 
     toast({
       variant: 'default',
       title: 'Contraseña actualizada!',
-      description: 'La contraseña ha sido actualizada con éxito! Inicia sesión',
+      description: 'Iniciando sesión...',
+      duration: 5000,
     });
 
+    const validatedLoginData = LoginSchema.safeParse({
+      ...validatedFields.data,
+      email,
+    });
+
+    if (!validatedLoginData.success) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de iniciar sesión',
+        duration: 5000,
+      });
+
+      setErrorMessage('Error al tratar de iniciar sesión');
+      setRedirect('/login');
+      setIsLoading(false);
+
+      return;
+    }
+
+    const loginResponse = await login('credentials', validatedLoginData.data);
+
+    if (loginResponse?.error) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh Oh! Error al tratar de iniciar sesión',
+        duration: 5000,
+      });
+
+      setErrorMessage('Error al tratar de iniciar sesión');
+      setRedirect('/login');
+      setIsLoading(false);
+
+      return;
+    }
+
     setIsLoading(false);
+    return;
+  }
+
+  if (errorMessage && redirect) {
+    return (
+      <Card
+        variant="emailVerification"
+        size="emailVerification"
+        className="text-center cursor-auto sm:w-full"
+      >
+        <CardHeader variant="emailVerification">
+          <div className="flex justify-center items-center">
+            <X className="w-20 h-20 text-red-600 animate-in" />
+          </div>
+        </CardHeader>
+        <CardContent className="gap-4 justify-center p-4">
+          <p>{errorMessage}</p>
+          <Link
+            href={`${redirect}`}
+            className="flex justify-center items-center text-secondaryTextColor"
+          >
+            <span className="text-indigo-600">Volver a intentar</span>
+          </Link>
+        </CardContent>
+      </Card>
+    );
   }
 
   return (
@@ -125,8 +238,8 @@ export default function NewPasswordForm({
           isLoading={isLoading}
           label={
             isLoading
-              ? `Actualizando de contrasenha`
-              : `Confirmar nueva contrasenha`
+              ? `Actualizando de contraseña`
+              : `Confirmar nueva contraseña`
           }
         />
       </form>

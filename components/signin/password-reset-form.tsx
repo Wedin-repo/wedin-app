@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 type PasswordResetFormProps = {
   isProviderLogin: (provider: 'google' | 'facebook') => void;
@@ -25,6 +26,7 @@ type PasswordResetFormProps = {
 
 export default function PasswordResetForm(props: PasswordResetFormProps) {
   const { toast } = useToast();
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const passwordResetForm = useForm<z.infer<typeof PasswordResetSchema>>({
@@ -80,6 +82,11 @@ export default function PasswordResetForm(props: PasswordResetFormProps) {
           'Se le ha enviado un correo con un link para restablecer su contraseña',
         duration: 5000,
       });
+
+      // Temporary delete when email is implemented
+      if (response?.resetLink) {
+        router.push(response.resetLink);
+      }
 
       setIsLoading(false);
     }

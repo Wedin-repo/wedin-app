@@ -50,7 +50,10 @@ export const passwordReset = async (
         passwordResetToken.email,
         passwordResetToken.token
       );
-      console.log(response);
+      // Temporary delete when email is implemented
+      return {
+        resetLink: response,
+      };
     } catch (error) {
       return {
         error: 'Error enviando el correo de recuperación de contraseña',

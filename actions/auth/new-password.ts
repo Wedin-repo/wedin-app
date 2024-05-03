@@ -14,13 +14,14 @@ export const newPassword = async (
   const passwordResetToken = await getPasswordTokenResetByEmail(email);
 
   if (!passwordResetToken || passwordResetToken.token !== token) {
-    return { error: 'No hay un token de verificación asociado a este email' };
-    // generate new token -> go to /password-reset
+    return {
+      error: 'No hay un token de verificación asociado a este email',
+      redirect: '/password-reset',
+    };
   }
 
   if (passwordResetToken.expires < new Date()) {
-    return { error: 'El token ha expirado' };
-    // generate new token -> go to /password-reset
+    return { error: 'El token ha expirado', redirect: '/password-reset' };
   }
 
   const validatedFields = NewPasswordSchema.safeParse(values);
@@ -38,7 +39,10 @@ export const newPassword = async (
     });
 
     if (!existingUser) {
-      return { error: 'No hay una cuenta asociada a este email' };
+      return {
+        error: 'No hay una cuenta asociada a este email',
+        redirect: '/register',
+      };
     }
 
     try {
@@ -46,9 +50,11 @@ export const newPassword = async (
         where: { email },
         data: { password: hashedPassword },
       });
+      return { success: 'Contraseña actualizada' };
     } catch (error) {
       return {
-        error: 'Error actualizando la contraseña',
+        error: 'Error actualizando contraseña por favor genere link otra vez',
+        redirect: '/password-reset',
       };
     }
   }

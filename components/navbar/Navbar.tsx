@@ -16,9 +16,6 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // console.log('navbar layout currentUser', currentUser?.isOnboarded);
-  // console.log('navbar layout session', session?.user.isOnboarded);
-
   let menuValue = 'addGifts';
 
   // The only case where this will run or the session.user.valid == false

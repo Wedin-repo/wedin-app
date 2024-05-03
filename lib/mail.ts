@@ -14,7 +14,7 @@ export const sendVericationEmail = async (email: string, token: string) => {
 };
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
-  const passwordResetLink = `http://localhost:3000/new-password?token=${token}&email=${email}`;
+  const passwordResetLink = `/new-password?token=${token}&email=${email}`;
   return passwordResetLink;
 
   // await resend.emails.send({

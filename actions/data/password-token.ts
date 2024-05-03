@@ -28,13 +28,15 @@ export const newPasswordReset = async (token: string) => {
   const existingToken = await getPasswordResetTokenByToken(token);
 
   if (!existingToken) {
-    return { error: 'Token expirado' };
+    return { error: 'Token invalido' };
+    // generate new token -> go to /password-reset
   }
 
   const existinguser = await getLoginUserByEmail(existingToken.email);
 
   if (!existinguser) {
     return { error: 'Usuario no encontrado' };
+    // generate new token -> go to /password-reset
   }
 
   try {
