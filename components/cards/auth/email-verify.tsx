@@ -46,9 +46,9 @@ export default function EmailVerifyCard({}: EmailVerifyCardProps) {
       setIsLoading(false);
     }
 
-    setIsLoading(false);
     setSuccess(true);
     setError(false);
+    setIsLoading(false);
     setStatus('Email verificado correctamente, redireccionando...');
     router.push('/login');
   }, [router, toast, token]);
