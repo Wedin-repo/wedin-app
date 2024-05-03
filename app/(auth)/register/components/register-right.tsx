@@ -1,7 +1,7 @@
 'use client';
 
 import RegisterForm from '@/components/signin/register-form';
-import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
+import SociaMediaLoginButton from '@/components/signin/socia-media-login-form';
 import Link from 'next/link';
 
 const RegisterRight = () => {
@@ -19,8 +19,8 @@ const RegisterRight = () => {
 
       <div className="flex flex-col gap-2 justify-center items-center">
         <span className="text-secondaryTextColor">O registate con</span>
-        <SociaMediaLoginForm provider="google" callbackUrl="/onboarding" />
-        <SociaMediaLoginForm provider="facebook" callbackUrl="/onboarding" />
+        <SociaMediaLoginButton provider="google" callbackUrl="/onboarding" />
+        <SociaMediaLoginButton provider="facebook" callbackUrl="/onboarding" />
       </div>
 
       <Link
