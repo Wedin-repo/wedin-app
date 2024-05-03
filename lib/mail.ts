@@ -1,16 +1,16 @@
 import { Resend } from 'resend';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const sendVericationEmail = async (email: string, token: string) => {
   const confirmationLink = `http://localhost:3000/email-verify?token=${token}&email=${email}`;
 
-  await resend.emails.send({
-    from: 'onboarding@resend.dev',
-    to: email,
-    subject: 'Verify your email',
-    html: `<p>Click the link below to verify your <a href="${confirmationLink}">email address</a></p>`,
-  });
+  // await resend.emails.send({
+  //   from: 'onboarding@resend.dev',
+  //   to: email,
+  //   subject: 'Verify your email',
+  //   html: `<p>Click the link below to verify your <a href="${confirmationLink}">email address</a></p>`,
+  // });
 };
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
