@@ -95,3 +95,17 @@ export const StepTwoSchema = z.object({
   isDecidingWeddingCountryCity: boolean(),
   hasPYbankAccount: z.boolean(),
 });
+
+export const GiftSchema = z.object({
+  id: z.string(),
+  name: z
+    .string()
+    .min(1, { message: 'El nombre del regalo no puede estar vacío' })
+    .max(60, { message: 'El nombre del regalo es demasiado largo' }),
+  categoryId: z.string().min(1, { message: 'Debes seleccionar una categoría' }),
+  price: z
+    .string()
+    .regex(/^\d+(\.\d{1,2})?$/, { message: 'Introduce un precio válido' }),
+  isFavoriteGift: z.boolean(),
+  isGroupGift: z.boolean(),
+});

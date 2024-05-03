@@ -19,6 +19,25 @@ export const getErrorMessage = (error: unknown): string => {
   return message;
 };
 
+async function validateGiftAndWishlist(giftId: string, wishlistId: string) {
+  const gift = await prisma.gift.findUnique({ where: { id: giftId } });
+  const wishlist = await prisma.wishList.findUnique({
+    where: { id: wishlistId },
+  });
+  if (!gift || !wishlist) throw new Error('Gift or Wishlist not found');
+  return { gift, wishlist };
+}
+
+async function validateCategory(categoryId: string) {
+  const category = await prisma.category.findUnique({
+    where: { id: categoryId },
+  });
+  if (!category) throw new Error('Invalid category ID');
+}
+
+const isValidPrice = (price: string): boolean =>
+  /^\d+(\.\d{1,2})?$/.test(price);
+
 export const addGiftToWishList = async (
   wishlistId: string,
   formData: FormData
@@ -153,57 +172,79 @@ export const deleteGiftFromWishList = async (
   };
 };
 
-export const editGiftInWishList = async (
+export const editOrCreateGift = async (
   wishlistId: string,
   formData: FormData
 ) => {
-  const giftId = formData.get('giftId') as string | null;
-  const newName = formData.get('name') as string | null;
-  const newCategory = formData.get('category') as string | null;
-  const price = formData.get('price') as string | null;
-  const isFavoriteGift = formData.get('isFavoriteGift') as boolean | null;
-  const isGroupGift = formData.get('isGroupGift') as boolean | null;
-
-  if (!giftId) {
-    return {
-      status: 'Error',
-      message: 'Invalid gift ID',
-    };
-  }
-
-  if (!wishlistId) {
-    return {
-      status: 'Error',
-      message: 'Wishlist not found',
-    };
-  }
-
-  const updateData: any = {};
-  if (newName) updateData.name = newName;
-  if (newCategory) updateData.category = newCategory;
-  if (price) updateData.price = Number(price);
-  if (isFavoriteGift) updateData.isDefault = isFavoriteGift;
-  if (isGroupGift) updateData.isGroupGift = isGroupGift;
-
   try {
-    await prisma.gift.update({
-      where: { id: giftId },
-      data: updateData,
-    });
-  } catch (error: unknown) {
-    return {
-      status: 'Error',
-      message: getErrorMessage(error),
+    const {
+      giftId,
+      newName,
+      newCategoryId,
+      price,
+      isFavoriteGift,
+      isGroupGift,
+    } = parseFormData(formData);
+    if (!giftId || !wishlistId)
+      throw new Error('Invalid or missing gift ID or wishlist ID');
+
+    await validateCategory(newCategoryId ?? '');
+    if (!isValidPrice(price ?? '')) throw new Error('Invalid price format');
+
+    const { gift, wishlist } = await validateGiftAndWishlist(
+      giftId,
+      wishlistId
+    );
+
+    const newGiftData = {
+      name: newName ?? gift.name,
+      categoryId: newCategoryId ?? gift.categoryId,
+      price: price ?? gift.price,
+      isFavoriteGift,
+      isGroupGift,
+      isDefault: false,
+      isEditedVersion: true,
+      sourceGiftId: gift.id,
+      description: 'a new gift creater by user',
+      giftListId: '507f1f77bcf86cd799439011',
     };
+
+    const response = gift.isDefault
+      ? await prisma.gift.create({ data: { ...newGiftData } })
+      : await prisma.gift.update({
+          where: { id: giftId },
+          data: newGiftData,
+        });
+
+    await prisma.wishList.update({
+      where: { id: wishlistId },
+      data: {
+        gifts: {
+          connect: { id: response.id },
+        },
+      },
+    });
+
+    revalidatePath('/dashboard');
+    return {
+      status: 'Success',
+      message: 'Updated gift in wishlist successfully',
+    };
+  } catch (error) {
+    return { status: 'Error', message: getErrorMessage(error) };
   }
-
-  revalidatePath('/dashboard');
-
-  return {
-    status: 'Success',
-    message: 'Updated gift in wishlist successfully',
-  };
 };
+
+function parseFormData(formData: FormData) {
+  return {
+    giftId: formData.get('giftId') as string | null,
+    newName: formData.get('name') as string | null,
+    newCategoryId: formData.get('categoryId') as string | null,
+    price: formData.get('price') as string | null,
+    isFavoriteGift: formData.get('isFavoriteGift') === 'true',
+    isGroupGift: formData.get('isGroupGift') === 'true',
+  };
+}
 
 export async function getWishList(wishListId: string | null | undefined) {
   try {

@@ -110,10 +110,13 @@ model Gift {
   wishListIds    String[] @db.ObjectId
   imageUrl       String?
   //price can be = > <
-  price          String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  isFavoriteGift Boolean  @default(false)
+  price           String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  isFavoriteGift  Boolean  @default(false)
+  isGroupGift     Boolean  @default(false)
+  isEditedVersion Boolean  @default(false)
+  sourceGiftId    String?  @db.ObjectId
 
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
   giftlist  GiftList?  @relation(fields: [giftListId], references: [id])

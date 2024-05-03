@@ -8,7 +8,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IoImageOutline } from 'react-icons/io5';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
-function ImageUpload() {
+type ImageUploadProps = {
+  imgUrl?: string | null;
+};
+
+function ImageUpload({ imgUrl }: ImageUploadProps) {
+  //console.log(imgUrl);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -53,13 +58,15 @@ function ImageUpload() {
       <div className="flex flex-col gap-3 p-4 rounded-xl bg-secondaryBackgroundColor">
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div
-          className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-secondaryTextColor ${
-            error ? 'border-red-600 text-red-600' : 'border-secondaryTextColor'
+          className={`border-dashed rounded-xl border-2 h-[242px] md:h-[372px] flex items-center justify-center text-secondaryTextColor ${
+            error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'
           }`}
         >
           {previewUrl ? (
             <Image
-              src={previewUrl}
+              src={imgUrl || previewUrl}
+              width={500}
+              height={324}
               alt="Vista previa de la imagen seleccionada"
               className="object-cover max-w-full max-h-full rounded-xl"
             />
