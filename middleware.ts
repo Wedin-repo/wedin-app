@@ -21,25 +21,25 @@ export default auth(req => {
   const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = onboardingRoute.includes(nextUrl.pathname);
 
-  if (isApiAuthRoute) {
-    return;
-  }
-
-  if (isLoggedIn && !isExistingUser) {
-    return Response.redirect(new URL('/api/auth/signout', nextUrl));
-  }
-
-  if (isLoggedIn && !isOnboarded && !isOnboardingRoute) {
-    return Response.redirect(new URL('/onboarding', nextUrl));
-  }
-
-  if (isLoggedIn && isOnboarded && (isAuthRoute || isOnboardingRoute)) {
-    return Response.redirect(new URL('/dashboard', nextUrl));
-  }
-
-  if (!isLoggedIn && (isProtectedRoute || isOnboardingRoute)) {
-    return Response.redirect(new URL('/login', nextUrl));
-  }
+  // if (isApiAuthRoute) {
+  //   return;
+  // }
+  //
+  // if (isLoggedIn && !isExistingUser) {
+  //   return Response.redirect(new URL('/api/auth/signout', nextUrl));
+  // }
+  //
+  // if (isLoggedIn && !isOnboarded && !isOnboardingRoute) {
+  //   return Response.redirect(new URL('/onboarding', nextUrl));
+  // }
+  //
+  // if (isLoggedIn && isOnboarded && (isAuthRoute || isOnboardingRoute)) {
+  //   return Response.redirect(new URL('/dashboard', nextUrl));
+  // }
+  //
+  // if (!isLoggedIn && (isProtectedRoute || isOnboardingRoute)) {
+  //   return Response.redirect(new URL('/login', nextUrl));
+  // }
 });
 
 export const config = {

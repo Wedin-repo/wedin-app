@@ -69,6 +69,7 @@ export default function RegisterForm() {
         return null;
       }
     }
+
     setIsLoading(false);
   }
 
@@ -105,7 +106,7 @@ export default function RegisterForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Creá una contraseña</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <div className="flex">
                       <Input
@@ -131,6 +132,7 @@ export default function RegisterForm() {
               )}
             />
           </div>
+
           <div className="flex flex-col gap-2">
             <FormField
               control={form.control}
@@ -142,7 +144,7 @@ export default function RegisterForm() {
                     <div className="flex">
                       <Input
                         {...field}
-                        type={isPasswordVisible ? 'text' : 'password'}
+                        type="password"
                         placeholder="**********"
                       />
                     </div>
