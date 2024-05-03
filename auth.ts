@@ -11,7 +11,7 @@ export type ErrorResponse = {
   error: string;
 };
 
-function isError(response: any): response is ErrorResponse {
+export function isError(response: any): response is ErrorResponse {
   return (response as ErrorResponse).error !== undefined;
 }
 
@@ -40,7 +40,8 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: '/login',
+    signIn: '(auth)/login',
+    error: '(auth)/error',
   },
   events: {
     async linkAccount({ user }) {
@@ -51,11 +52,9 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }) {
-      // if (!user || !user.email) return false;
+      if (!user || !user.email) return false;
 
-      // if (account && account.type !== 'credentials' && user?.email) {
-      //   await upsertUser(user.email, account.type);
-      // }
+      if (account && account.type !== 'credentials') return true;
 
       // const existingUser = await getUserbyEmail(user.email);
       //
@@ -104,7 +103,7 @@ export const {
   debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 60 * 24, // 24 hours
   },
   secret: process.env.NEXTAUTH_SECRET,
   ...authOptions,

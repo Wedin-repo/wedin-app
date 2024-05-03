@@ -9,10 +9,13 @@ const cardVariants = cva('', {
         'flex flex-col gap-0 p-0 bg-white rounded-lg shadow-xl transition duration-200 ease-in-out transform cursor-pointer hover:scale-105',
       dashboard:
         'border-b-[#848484] border-b pb-3 w-full flex items-normal sm:items-center justify-between gap-4',
+      emailVerification:
+        'flex flex-col gap-4 p-4 bg-white rounded-lg shadow-lg',
     },
     size: {
       default: 'h-[360px]',
       dashboard: '',
+      emailVerification: 'w-full sm:w-[400px]',
     },
   },
   defaultVariants: {

@@ -1,9 +1,11 @@
 'use server';
 
 import { signIn } from '@/auth';
+import { generateVerificationToken } from '@/lib/tokens';
 import { LoginSchema } from '@/schemas';
 import { AuthError } from 'next-auth';
 import * as z from 'zod';
+import { getLoginUserByEmail } from '../data/user';
 
 export const login = async (
   type = 'credentials',
@@ -39,6 +41,26 @@ export const login = async (
 
   if (validatedFields.success) {
     const { email, password } = validatedFields.data;
+
+    const existingUser = await getLoginUserByEmail(email);
+
+    if (!existingUser) {
+      return { error: 'Usuario no encontrado' };
+    }
+
+    if (!existingUser.emailVerified) {
+      const verificatiotionToken = await generateVerificationToken(email);
+
+      // Send email
+
+      // return
+      //   error: 'Email no verificado, se ha enviado un correo de confirmacion',
+      // };
+    }
+
+    if (existingUser.password === null) {
+      return { error: 'Deberias de ingresar sin contrasenha' };
+    }
 
     try {
       await signIn(type, {

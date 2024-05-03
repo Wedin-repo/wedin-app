@@ -1,12 +1,12 @@
 'use server';
 
-import { LoginSchema, PasswordRecoverySchema } from '@/schemas';
+import { LoginSchema, PasswordResetSchema } from '@/schemas';
 import prisma from '@/db/client';
 import { AuthError } from 'next-auth';
 import * as z from 'zod';
 
-export const passwordRecovery = async (
-  values: z.infer<typeof PasswordRecoverySchema>
+export const passwordReset = async (
+  values: z.infer<typeof PasswordResetSchema>
 ) => {
   const validatedFields = LoginSchema.safeParse(values);
 

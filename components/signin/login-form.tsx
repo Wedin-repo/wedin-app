@@ -36,13 +36,13 @@ export default function LoginForm() {
   async function handleLogin(values: z.infer<typeof LoginSchema>) {
     setIsLoading(true);
     const validatedFields = LoginSchema.safeParse(values);
+
     if (validatedFields.success) {
       const response = await login('credentials', validatedFields.data);
 
       if (response?.error) {
         toast({
           variant: 'destructive',
-          title: 'Uh Oh! Error al iniciar sesión.',
           description: response.error,
         });
       }
@@ -113,7 +113,7 @@ export default function LoginForm() {
 
         <div className="flex flex-col gap-2">
           <Link
-            href="/password-reset"
+            href="/password-recovery"
             className="flex justify-start text-secondaryTextColor"
           >
             <span className="text-indigo-600 hover:underline">

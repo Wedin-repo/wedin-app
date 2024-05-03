@@ -5,15 +5,12 @@ import { Gift } from '@prisma/client';
 import Image from 'next/image';
 import { FaChevronRight } from 'react-icons/fa';
 
-type CardComponenetProps = {
+type GiftCardProps = {
   gift: Gift;
   hideModal?: boolean;
 };
 
-export default function GiftCard({
-  gift,
-  hideModal = false,
-}: CardComponenetProps) {
+export default function GiftCard({ gift, hideModal = false }: GiftCardProps) {
   const { name, description, price, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
 

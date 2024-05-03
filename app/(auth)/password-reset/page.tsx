@@ -1,4 +1,4 @@
-import PasswordRecorveryForm from '@/components/signin/password-recovery-form';
+import PasswordResetForm from '@/components/signin/password-reset-form';
 
 export default function PasswordResetPage() {
   return (
@@ -8,7 +8,7 @@ export default function PasswordResetPage() {
           Ingresá a tu correo
         </p>
 
-        <PasswordRecorveryForm />
+        <PasswordResetForm />
       </div>
     </div>
   );

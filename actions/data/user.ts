@@ -22,6 +22,16 @@ export const getUserByEmail = async (
   }
 };
 
+export const getLoginUserByEmail = async (email: string) => {
+  try {
+    return await prisma.user.findUnique({
+      where: { email },
+    });
+  } catch (error) {
+    return null;
+  }
+};
+
 export const updateVerifiedOn = async (email: string) => {
   try {
     const currentUser = await prisma.user.update({

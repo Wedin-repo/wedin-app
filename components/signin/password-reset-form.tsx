@@ -1,6 +1,6 @@
 'use client';
 
-import { passwordRecovery } from '@/actions/auth/password-recorvery';
+import { passwordReset } from '@/actions/auth/password-reset';
 import {
   Form,
   FormControl,
@@ -11,28 +11,27 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { PasswordRecoverySchema } from '@/schemas';
+import { PasswordResetSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
-export default function PasswordRecorveryForm() {
+export default function PasswordResetForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-
-  const form = useForm<z.infer<typeof PasswordRecoverySchema>>({
-    resolver: zodResolver(PasswordRecoverySchema),
+  const passwordResetForm = useForm<z.infer<typeof PasswordResetSchema>>({
+    resolver: zodResolver(PasswordResetSchema),
   });
 
   async function handlePasswordRecorvery(
-    values: z.infer<typeof PasswordRecoverySchema>
+    values: z.infer<typeof PasswordResetSchema>
   ) {
     setIsLoading(true);
-    const validatedFields = PasswordRecoverySchema.safeParse(values);
+    const validatedFields = PasswordResetSchema.safeParse(values);
     if (validatedFields.success) {
-      const response = await passwordRecovery(validatedFields.data);
+      const response = await passwordReset(validatedFields.data);
 
       if (response?.error) {
         toast({
@@ -46,15 +45,15 @@ export default function PasswordRecorveryForm() {
   }
 
   return (
-    <Form {...form}>
+    <Form {...passwordResetForm}>
       <form
-        onSubmit={form.handleSubmit(handlePasswordRecorvery)}
+        onSubmit={passwordResetForm.handleSubmit(handlePasswordRecorvery)}
         className="flex flex-col gap-8"
       >
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <FormField
-              control={form.control}
+              control={passwordResetForm.control}
               name="email"
               render={({ field }) => (
                 <FormItem>

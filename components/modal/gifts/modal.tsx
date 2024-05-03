@@ -9,14 +9,14 @@ import { Gift } from '@prisma/client';
 import Image from 'next/image';
 import { useState } from 'react';
 
-type GiftCardProps = {
+type GiftModalProps = {
   gift: Gift;
   wishlistId?: string | null;
   hideModal?: boolean;
   children: React.ReactNode;
 };
 
-function GiftModal({ gift, wishlistId, children }: GiftCardProps) {
+function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
   const { name, description, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
   const [isOpen, setIsOpen] = useState(false);

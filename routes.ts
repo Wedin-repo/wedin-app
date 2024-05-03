@@ -5,9 +5,11 @@
  */
 export const publicRoutes: string[] = [
   '/gifts',
-  '/lists',
   '/weddings',
   '/giftLists',
+  '/',
+  '/verify-email',
+  '/password-reset',
 ];
 
 /**
