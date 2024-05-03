@@ -3,6 +3,7 @@
 import PasswordResetForm from '@/components/signin/password-reset-form';
 import SociaMediaLoginButton from '@/components/signin/socia-media-login-form';
 import { capitalizeFirstLetter } from '@/lib/utils';
+import { MoveDown } from 'lucide-react';
 import { useState } from 'react';
 
 export default function PasswordResetPage() {
@@ -20,7 +21,8 @@ export default function PasswordResetPage() {
 
         {providerLogin && (
           <div className="flex flex-col gap-8 items-center">
-            <p className="text-xl text-center">Ingresa con</p>
+            <p className="text-xl text-center">Click para iniciar sesion</p>
+            <MoveDown className="animate-bounce" />
             <SociaMediaLoginButton provider={providerLogin} />
           </div>
         )}

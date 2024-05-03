@@ -17,6 +17,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import AuthFormButton from './auth-form-button';
+import Link from 'next/link';
 
 type PasswordResetFormProps = {
   isProviderLogin: (provider: 'google' | 'facebook') => void;
@@ -112,12 +113,23 @@ export default function PasswordResetForm(props: PasswordResetFormProps) {
           </div>
         </div>
 
-        <AuthFormButton
-          isLoading={isLoading}
-          label={
-            isLoading ? `Enviando link a tu correo` : `Enviar link a tu Correo`
-          }
-        />
+        <div className="flex flex-col gap-2">
+          <Link
+            href="/login"
+            className="flex justify-start items-start text-secondaryTextColor"
+          >
+            <span className="text-indigo-600">Volvé a iniciar sesión</span>
+          </Link>
+
+          <AuthFormButton
+            isLoading={isLoading}
+            label={
+              isLoading
+                ? `Enviando link a tu correo`
+                : `Enviar link a tu Correo`
+            }
+          />
+        </div>
       </form>
     </Form>
   );
