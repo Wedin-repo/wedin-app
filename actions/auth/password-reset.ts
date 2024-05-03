@@ -1,14 +1,15 @@
 'use server';
 
-import { LoginSchema, PasswordResetSchema } from '@/schemas';
 import prisma from '@/db/client';
-import { AuthError } from 'next-auth';
+import { sendPasswordResetEmail } from '@/lib/mail';
+import { generatePasswordResetToken } from '@/lib/tokens';
+import { PasswordResetSchema } from '@/schemas';
 import * as z from 'zod';
 
 export const passwordReset = async (
   values: z.infer<typeof PasswordResetSchema>
 ) => {
-  const validatedFields = LoginSchema.safeParse(values);
+  const validatedFields = PasswordResetSchema.safeParse(values);
 
   if (!validatedFields.success) {
     return { error: 'Campos inválidos' };
@@ -25,19 +26,25 @@ export const passwordReset = async (
       return { error: 'No hay una cuenta asociada a este email' };
     }
 
-    try {
-      // Send email with password recovery link
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case 'CredentialsSignin':
-            return { error: 'Credenciales incorrectas' };
-          default:
-            return { error: 'An error occurred' };
-        }
-      }
+    let passwordResetToken;
 
-      throw error;
+    try {
+      passwordResetToken = await generatePasswordResetToken(email);
+      // catch errors
+    } catch (error) {
+      return { error: 'Error generando token de recuperación de contraseña' };
+    }
+
+    try {
+      const response = await sendPasswordResetEmail(
+        passwordResetToken.email,
+        passwordResetToken.token
+      );
+      console.log(response);
+    } catch (error) {
+      return {
+        error: 'Error enviando el correo de recuperación de contraseña',
+      };
     }
   }
 };

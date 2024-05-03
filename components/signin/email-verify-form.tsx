@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import AuthFormButton from './auth-form-button';
 import { Form, useForm } from 'react-hook-form';
-import { PasswordRecoverySchema } from '@/schemas';
+import { PasswordResetSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useToast } from '../ui/use-toast';
@@ -16,8 +16,8 @@ function EmailVerifyForm({}: EmailVerifyFormProps) {
   const { toast } = useToast();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<z.infer<typeof PasswordRecoverySchema>>({
-    resolver: zodResolver(PasswordRecoverySchema),
+  const form = useForm<z.infer<typeof PasswordResetSchema>>({
+    resolver: zodResolver(PasswordResetSchema),
   });
   const token = searchParams.get('token');
 

@@ -21,11 +21,12 @@ import AuthFormButton from './auth-form-button';
 export default function PasswordResetForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+
   const passwordResetForm = useForm<z.infer<typeof PasswordResetSchema>>({
     resolver: zodResolver(PasswordResetSchema),
   });
 
-  async function handlePasswordRecorvery(
+  async function handlePasswordReset(
     values: z.infer<typeof PasswordResetSchema>
   ) {
     setIsLoading(true);
@@ -47,7 +48,7 @@ export default function PasswordResetForm() {
   return (
     <Form {...passwordResetForm}>
       <form
-        onSubmit={passwordResetForm.handleSubmit(handlePasswordRecorvery)}
+        onSubmit={passwordResetForm.handleSubmit(handlePasswordReset)}
         className="flex flex-col gap-8"
       >
         <div className="flex flex-col gap-4">
@@ -72,7 +73,12 @@ export default function PasswordResetForm() {
           </div>
         </div>
 
-        <AuthFormButton isLoading={isLoading} label="Enviar link a tu Correo" />
+        <AuthFormButton
+          isLoading={isLoading}
+          label={
+            isLoading ? `Enviando link a tu correo` : `Enviar link a tu Correo`
+          }
+        />
       </form>
     </Form>
   );

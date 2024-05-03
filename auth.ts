@@ -1,8 +1,4 @@
-import {
-  updateVerifiedOn,
-  getUserByEmail,
-  upsertUser,
-} from '@/actions/data/user';
+import { getUserByEmail, updateVerifiedOn } from '@/actions/data/user';
 import NextAuth, { DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import authOptions from './auth.config';

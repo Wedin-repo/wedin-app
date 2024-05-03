@@ -8,8 +8,7 @@ export const publicRoutes: string[] = [
   '/weddings',
   '/giftLists',
   '/',
-  '/verify-email',
-  '/password-reset',
+  '/email-verfiy',
 ];
 
 /**
@@ -17,7 +16,12 @@ export const publicRoutes: string[] = [
   and use to login and register
  * @type {string[]}
  */
-export const authRoutes: string[] = ['/login', '/register'];
+export const authRoutes: string[] = [
+  '/login',
+  '/register',
+  '/password-reset',
+  '/new-password',
+];
 
 /**
  * An array of routes that are accessible to the logged in
