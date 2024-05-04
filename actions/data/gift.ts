@@ -5,7 +5,7 @@ import prisma from '@/db/client';
 export type GetGiftsParams = {
   category?: string;
   giftListId?: string;
-  wishListId?: string | null;
+  wishListId?: string;
   itemsPerPage?: number;
   page?: string;
   name?: string;

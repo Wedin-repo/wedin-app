@@ -25,6 +25,20 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+  // // Setup debouncing for email input changes
+  // const handleEmailSearch = async (email: string) => {
+  //   const response = await fetch(`/api/users?email=${email}`);
+  //   console.log(response); // Here you might want to handle the response properly
+  // };
+  //
+  // // useDebounceCallback to delay the handleEmailSearch execution
+  // const debounce = useDebounceCallback(value => handleEmailSearch(value), 1000);
+  //
+  // // This function is triggered on every input change
+  // function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+  //   debounce(e.target.value);
+  // }
+
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -50,6 +64,8 @@ export default function LoginForm() {
     setIsLoading(false);
   }
 
+  // we might need to get rid of the form in order to introduce
+  // start login by magic link
   return (
     <Form {...form}>
       <form
@@ -87,9 +103,9 @@ export default function LoginForm() {
                   <FormControl>
                     <div className="flex">
                       <Input
+                        {...field}
                         type={isPasswordVisible ? 'text' : 'password'}
                         placeholder="TuContraseña!52419$"
-                        {...field}
                       />
                       <button
                         type="button"

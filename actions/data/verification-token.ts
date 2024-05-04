@@ -4,7 +4,7 @@ import { getLoginUserByEmail } from './user';
 export const getVerificationTokenByEmail = async (email: string) => {
   try {
     const verificationToken = await prisma.verificationToken.findFirst({
-      where: { email },
+      where: { identifier: email },
     });
     return verificationToken;
   } catch (error) {
@@ -31,7 +31,7 @@ export const newVerification = async (token: string) => {
     return { error: 'Token expirado' };
   }
 
-  const existinguser = await getLoginUserByEmail(existingToken.email);
+  const existinguser = await getLoginUserByEmail(existingToken.identifier);
 
   if (!existinguser) {
     return { error: 'Usuario no encontrado' };
@@ -39,7 +39,7 @@ export const newVerification = async (token: string) => {
 
   try {
     await prisma.user.update({
-      where: { email: existingToken.email },
+      where: { email: existingToken.identifier },
       data: { emailVerified: new Date() },
     });
   } catch (error) {

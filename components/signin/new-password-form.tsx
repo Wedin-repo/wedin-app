@@ -237,9 +237,7 @@ export default function NewPasswordForm({
         <AuthFormButton
           isLoading={isLoading}
           label={
-            isLoading
-              ? `Actualizando de contraseña`
-              : `Confirmar nueva contraseña`
+            isLoading ? `Actualizando contraseña` : `Confirmar nueva contraseña`
           }
         />
       </form>
