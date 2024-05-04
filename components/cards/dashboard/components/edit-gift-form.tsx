@@ -29,14 +29,17 @@ import ImageUpload from '@/components/ImageUpload';
 import { toast } from '@/components/ui/use-toast';
 import { FaCheck } from 'react-icons/fa6';
 import { z } from 'zod';
+import { formatPrice } from '@/utils/format';
 
 type EditGiftFormProps = {
   gift: Gift;
-  wishlistId?: string | null;
+  wishlistId: string;
   categories?: Category[] | null;
 };
 
 function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
+  const formattedPrice = formatPrice(Number(gift.price));
+
   const form = useForm({
     resolver: zodResolver(GiftSchema),
     defaultValues: {
@@ -46,55 +49,41 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
       price: gift.price.toString(),
       isFavoriteGift: gift.isFavoriteGift,
       isGroupGift: gift.isGroupGift,
+      wishListId: wishlistId,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+    // if nothing is changed in values, just close the modal
+
     const validatedFields = GiftSchema.safeParse(values);
-    //console.log(validatedFields);
+
+    console.log(validatedFields);
 
     if (validatedFields.success) {
-      if (wishlistId) {
-        const formData = new FormData();
-        formData.append('giftId', gift.id);
-        formData.append('wishlistId', wishlistId);
-        formData.append('name', validatedFields.data.name);
-        formData.append('categoryId', validatedFields.data.categoryId);
-        formData.append('price', validatedFields.data.price);
-        formData.append(
-          'isFavoriteGift',
-          validatedFields.data.isFavoriteGift.toString()
-        );
-        formData.append(
-          'isGroupGift',
-          validatedFields.data.isGroupGift.toString()
-        );
-        try {
-          const response = await editOrCreateGift(wishlistId, formData);
-          console.log('wishlist id:', wishlistId);
-          console.log('formData:', validatedFields.data);
+      try {
+        const response = await editOrCreateGift(validatedFields.data); // add hidden input with wishListId and only send 'validatedFields.data'
 
-          if (response.status === 'Error') {
-            toast({
-              title: 'Error',
-              description: response.message,
-              className: 'bg-white',
-            });
-          } else {
-            toast({
-              title: 'Success',
-              description: 'Gift successfully updated',
-              className: 'bg-white',
-            });
-          }
-        } catch (error: any) {
+        if (response.status === 'Error') {
           toast({
             title: 'Error',
-            description:
-              error.message || 'An error occurred while updating the gift.',
+            description: response.message,
+            className: 'bg-white',
+          });
+        } else {
+          toast({
+            title: 'Success',
+            description: 'Gift successfully updated',
             className: 'bg-white',
           });
         }
+      } catch (error: any) {
+        toast({
+          title: 'Error',
+          description:
+            error.message || 'An error occurred while updating the gift.',
+          className: 'bg-white',
+        });
       }
     } else {
       toast({
@@ -178,7 +167,7 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
                     <FormLabel>Precio</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder={gift.price}
+                        placeholder={formattedPrice}
                         type="number"
                         min="0"
                         className="!mt-0"
@@ -215,7 +204,7 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
                 render={({ field }) => (
                   <FormItem className="flex justify-between items-center">
                     <FormLabel className="text-base font-normal">
-                      Regalo grupal
+                      Regalo grupal 🎁
                     </FormLabel>
                     <FormControl className="!mt-0">
                       <Switch
@@ -229,13 +218,14 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
               />
             </div>
             <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
-              <div className="w-full">
+              <WishListFormButton variant="deleteGiftButton" />
+              {/* <div className="w-full">
                 <RemoveFromWishListForm
                   giftId={gift.id}
                   wishlistId={wishlistId}
                   variant="deleteGiftButton"
                 />
-              </div>
+              </div> */}
               <WishListFormButton variant="editGiftButton" />
             </div>
           </div>

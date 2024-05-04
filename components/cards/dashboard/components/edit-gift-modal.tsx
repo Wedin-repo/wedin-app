@@ -15,6 +15,8 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
 
+  if (!wedding?.wishListId) return null;
+
   const categories = await getCategories();
 
   /* const category = await getCategory({
@@ -37,7 +39,6 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
           categories={categories}
           wishlistId={wedding?.wishListId}
         />
-        {/* <EditGiftFromWishListForm giftId={id} /> */}
       </DialogContent>
     </Dialog>
   );

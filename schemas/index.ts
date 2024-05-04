@@ -105,7 +105,11 @@ export const GiftSchema = z.object({
   categoryId: z.string().min(1, { message: 'Debes seleccionar una categoría' }),
   price: z
     .string()
-    .regex(/^\d+(\.\d{1,2})?$/, { message: 'Introduce un precio válido' }),
+    .regex(/^\d+(\.\d{1,2})?$/, { message: 'Introduce un precio válido' })
+    .max(8, {
+      message: 'El precio no puede ser mayor de PYG 99,999,999',
+    }),
   isFavoriteGift: z.boolean(),
   isGroupGift: z.boolean(),
+  wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
 });

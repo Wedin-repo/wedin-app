@@ -100,15 +100,15 @@ model WishList {
 }
 
 model Gift {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  description    String
-  giftListId     String?  @db.ObjectId
-  isDefault      Boolean  @default(false)
-  categoryId     String   @db.ObjectId
-  weddingId      String?  @db.ObjectId
-  wishListIds    String[] @db.ObjectId
-  imageUrl       String?
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String
+  giftListId      String?   @db.ObjectId
+  isDefault       Boolean  @default(false)
+  categoryId      String   @db.ObjectId
+  weddingId       String?  @db.ObjectId
+  wishListIds     String[] @db.ObjectId
+  imageUrl        String?
   //price can be = > <
   price           String
   createdAt       DateTime @default(now())
@@ -119,7 +119,7 @@ model Gift {
   sourceGiftId    String?  @db.ObjectId
 
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
-  giftlist  GiftList?  @relation(fields: [giftListId], references: [id])
+  giftlist  GiftList?   @relation(fields: [giftListId], references: [id])
   images    Image[]
 }
 

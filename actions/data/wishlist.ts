@@ -2,6 +2,8 @@
 
 import prisma from '@/db/client';
 import { revalidatePath } from 'next/cache';
+import { GiftSchema } from '@/schemas';
+import * as z from 'zod';
 
 export const getErrorMessage = (error: unknown): string => {
   let message: string;
@@ -34,9 +36,6 @@ async function validateCategory(categoryId: string) {
   });
   if (!category) throw new Error('Invalid category ID');
 }
-
-const isValidPrice = (price: string): boolean =>
-  /^\d+(\.\d{1,2})?$/.test(price);
 
 export const addGiftToWishList = async (
   wishlistId: string,
@@ -173,54 +172,66 @@ export const deleteGiftFromWishList = async (
 };
 
 export const editOrCreateGift = async (
-  wishlistId: string,
-  formData: FormData
+  formData: z.infer<typeof GiftSchema> | null = null
 ) => {
   try {
-    const {
-      giftId,
-      newName,
-      newCategoryId,
-      price,
-      isFavoriteGift,
-      isGroupGift,
-    } = parseFormData(formData);
-    if (!giftId || !wishlistId)
-      throw new Error('Invalid or missing gift ID or wishlist ID');
+    const validatedFields = GiftSchema.safeParse(formData);
 
-    await validateCategory(newCategoryId ?? '');
-    if (!isValidPrice(price ?? '')) throw new Error('Invalid price format');
+    if (!validatedFields.success) {
+      return { error: 'Campos inválidos' };
+    }
+
+    await validateCategory(validatedFields.data.categoryId);
 
     const { gift, wishlist } = await validateGiftAndWishlist(
-      giftId,
-      wishlistId
+      validatedFields.data.id,
+      validatedFields.data.wishListId
     );
 
     const newGiftData = {
-      name: newName ?? gift.name,
-      categoryId: newCategoryId ?? gift.categoryId,
-      price: price ?? gift.price,
-      isFavoriteGift,
-      isGroupGift,
+      name: validatedFields.data.name ?? gift.name,
+      categoryId: validatedFields.data.categoryId ?? gift.categoryId,
+      price: validatedFields.data.price ?? gift.price,
+      isFavoriteGift: validatedFields.data.isFavoriteGift,
+      isGroupGift: validatedFields.data.isGroupGift,
       isDefault: false,
       isEditedVersion: true,
-      sourceGiftId: gift.id,
-      description: 'a new gift creater by user',
-      giftListId: '507f1f77bcf86cd799439011',
+      sourceGiftId: validatedFields.data.id,
+      description: 'a new gift creater by user', // TODO: inform product about description issue
     };
 
-    const response = gift.isDefault
-      ? await prisma.gift.create({ data: { ...newGiftData } })
-      : await prisma.gift.update({
-          where: { id: giftId },
-          data: newGiftData,
-        });
+    let response;
+
+    if (gift.isDefault) {
+      response = await prisma.gift.create({
+        data: { ...newGiftData },
+      });
+    }
+
+    if (!gift.isDefault) {
+      response = await prisma.gift.update({
+        where: { id: validatedFields.data.id },
+        data: newGiftData,
+      });
+    }
+
+    if (gift.isDefault) {
+      await prisma.wishList.update({
+        where: { id: validatedFields.data.wishListId },
+        data: {
+          gifts: {
+            disconnect: { id: validatedFields.data.id },
+            connect: { id: response?.id },
+          },
+        },
+      });
+    }
 
     await prisma.wishList.update({
-      where: { id: wishlistId },
+      where: { id: validatedFields.data.wishListId },
       data: {
         gifts: {
-          connect: { id: response.id },
+          connect: { id: response?.id },
         },
       },
     });
@@ -234,17 +245,6 @@ export const editOrCreateGift = async (
     return { status: 'Error', message: getErrorMessage(error) };
   }
 };
-
-function parseFormData(formData: FormData) {
-  return {
-    giftId: formData.get('giftId') as string | null,
-    newName: formData.get('name') as string | null,
-    newCategoryId: formData.get('categoryId') as string | null,
-    price: formData.get('price') as string | null,
-    isFavoriteGift: formData.get('isFavoriteGift') === 'true',
-    isGroupGift: formData.get('isGroupGift') === 'true',
-  };
-}
 
 export async function getWishList(wishListId: string | null | undefined) {
   try {
