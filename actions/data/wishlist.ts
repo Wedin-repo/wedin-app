@@ -197,7 +197,7 @@ export const editOrCreateGift = async (
       isDefault: false,
       isEditedVersion: true,
       sourceGiftId: validatedFields.data.id,
-      description: 'a new gift creater by user', // TODO: inform product about description issue
+      description: 'a new gift creater by user', // TODO: inform UX about description issue
     };
 
     let response;
@@ -206,16 +206,6 @@ export const editOrCreateGift = async (
       response = await prisma.gift.create({
         data: { ...newGiftData },
       });
-    }
-
-    if (!gift.isDefault) {
-      response = await prisma.gift.update({
-        where: { id: validatedFields.data.id },
-        data: newGiftData,
-      });
-    }
-
-    if (gift.isDefault) {
       await prisma.wishList.update({
         where: { id: validatedFields.data.wishListId },
         data: {
@@ -227,14 +217,20 @@ export const editOrCreateGift = async (
       });
     }
 
-    await prisma.wishList.update({
-      where: { id: validatedFields.data.wishListId },
-      data: {
-        gifts: {
-          connect: { id: response?.id },
+    if (!gift.isDefault) {
+      response = await prisma.gift.update({
+        where: { id: validatedFields.data.id },
+        data: newGiftData,
+      });
+      await prisma.wishList.update({
+        where: { id: validatedFields.data.wishListId },
+        data: {
+          gifts: {
+            connect: { id: response?.id },
+          },
         },
-      },
-    });
+      });
+    }
 
     revalidatePath('/dashboard');
     return {

@@ -1,4 +1,7 @@
-import { getCategories, getCategory } from '@/actions/data/category';
+//'use client';
+
+//import { useState } from 'react';
+import { getCategories } from '@/actions/data/category';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { Button } from '@/components/ui/button';
@@ -9,26 +12,23 @@ import EditGiftForm from './edit-gift-form';
 
 type EditGiftModalProps = {
   gift: Gift;
+  //hideModal?: boolean;
 };
 
 async function EditGiftModal({ gift }: EditGiftModalProps) {
+  //const [isOpen, setIsOpen] = useState(false);
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
-
-  if (!wedding?.wishListId) return null;
+  const wishListId = wedding?.wishListId;
+  if (!wishListId) return null;
 
   const categories = await getCategories();
-
-  /* const category = await getCategory({
-    searchParams: { categoryId: gift.categoryId },
-  }); */
-
   if (!categories) return null;
 
   return (
-    <Dialog>
-      <DialogTrigger asChild className="">
-        <Button type="submit" variant="editIconButton" size="iconButton">
+    <Dialog /* open={isOpen} onOpenChange={setIsOpen} */>
+      <DialogTrigger asChild>
+        <Button type="button" variant="editIconButton" size="iconButton">
           <FiEdit3 fontSize={'16px'} />
         </Button>
       </DialogTrigger>
@@ -37,7 +37,8 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
         <EditGiftForm
           gift={gift}
           categories={categories}
-          wishlistId={wedding?.wishListId}
+          wishlistId={wishListId}
+          //setIsOpen={setIsOpen}
         />
       </DialogContent>
     </Dialog>

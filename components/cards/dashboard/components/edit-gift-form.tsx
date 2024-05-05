@@ -30,14 +30,21 @@ import { toast } from '@/components/ui/use-toast';
 import { FaCheck } from 'react-icons/fa6';
 import { z } from 'zod';
 import { formatPrice } from '@/utils/format';
+import { DialogClose } from '@/components/ui/dialog';
 
 type EditGiftFormProps = {
   gift: Gift;
   wishlistId: string;
   categories?: Category[] | null;
+  setIsOpen?: (value: boolean) => void;
 };
 
-function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
+function EditGiftForm({
+  gift,
+  categories,
+  setIsOpen,
+  wishlistId,
+}: EditGiftFormProps) {
   const formattedPrice = formatPrice(Number(gift.price));
 
   const form = useForm({
@@ -53,16 +60,19 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
     },
   });
 
+  const { formState } = form;
+
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
-    // if nothing is changed in values, just close the modal
+    if (!Object.keys(formState.dirtyFields).length) {
+      console.log('No changes made');
+      return;
+    }
 
     const validatedFields = GiftSchema.safeParse(values);
 
-    console.log(validatedFields);
-
     if (validatedFields.success) {
       try {
-        const response = await editOrCreateGift(validatedFields.data); // add hidden input with wishListId and only send 'validatedFields.data'
+        const response = await editOrCreateGift(validatedFields.data);
 
         if (response.status === 'Error') {
           toast({
@@ -72,8 +82,8 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
           });
         } else {
           toast({
-            title: 'Success',
-            description: 'Gift successfully updated',
+            title: 'Éxito! 🎁🎉',
+            description: 'Regalo actualizado kp',
             className: 'bg-white',
           });
         }
@@ -91,6 +101,10 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
         description: 'Please check your input and try again.',
         className: 'bg-white',
       });
+    }
+
+    if (setIsOpen) {
+      setIsOpen(false);
     }
   };
 
@@ -218,7 +232,12 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
               />
             </div>
             <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
-              <WishListFormButton variant="deleteGiftButton" />
+              <DialogClose className="w-full">
+                <WishListFormButton variant="deleteGiftButton" />
+              </DialogClose>
+              <DialogClose className="w-full">
+                <WishListFormButton variant="editGiftButton" />
+              </DialogClose>
               {/* <div className="w-full">
                 <RemoveFromWishListForm
                   giftId={gift.id}
@@ -226,7 +245,6 @@ function EditGiftForm({ gift, categories, wishlistId }: EditGiftFormProps) {
                   variant="deleteGiftButton"
                 />
               </div> */}
-              <WishListFormButton variant="editGiftButton" />
             </div>
           </div>
         </div>
