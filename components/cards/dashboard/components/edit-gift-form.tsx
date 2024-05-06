@@ -30,7 +30,6 @@ import { toast } from '@/components/ui/use-toast';
 import { FaCheck } from 'react-icons/fa6';
 import { z } from 'zod';
 import { formatPrice } from '@/utils/format';
-import { DialogClose } from '@/components/ui/dialog';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -232,12 +231,12 @@ function EditGiftForm({
               />
             </div>
             <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
-              <DialogClose className="w-full">
+              <div className="w-full">
                 <WishListFormButton variant="deleteGiftButton" />
-              </DialogClose>
-              <DialogClose className="w-full">
+              </div>
+              <div className="w-full">
                 <WishListFormButton variant="editGiftButton" />
-              </DialogClose>
+              </div>
               {/* <div className="w-full">
                 <RemoveFromWishListForm
                   giftId={gift.id}

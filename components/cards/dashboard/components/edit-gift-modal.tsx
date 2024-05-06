@@ -12,7 +12,6 @@ import EditGiftForm from './edit-gift-form';
 
 type EditGiftModalProps = {
   gift: Gift;
-  //hideModal?: boolean;
 };
 
 async function EditGiftModal({ gift }: EditGiftModalProps) {
