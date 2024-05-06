@@ -37,9 +37,8 @@ export default async function DashboardGifts({
   const itemsPerPage = 8;
   const { page = '1', name } = searchParams;
 
-  // This also takes into account when the
-  // name is empty so it regurns all the gifts
-  // when that happens
+  // This also takes into account when the name 
+  // is empty so it regurns all the gifts when that happens
   const filteredWishlistGifts = await getGifts({
     searchParams: { ...searchParams, wishListId },
   });
@@ -64,9 +63,8 @@ export default async function DashboardGifts({
           <Pagination totalPages={totalPages} />
         </div>
       ) : (
-        /* This is so that the space leave by
-         * not having the pagination is covered
-         * it is consistent */
+        /* This is so that the space leave by not 
+        having the pagination is covered  it is consistent */
         <div className="h-[72px]" />
       )}
     </div>
