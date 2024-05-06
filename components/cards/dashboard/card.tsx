@@ -11,6 +11,9 @@ import ringsLoader from '@/public/images/rings.svg';
 import { Gift } from '@prisma/client';
 import { getCategory } from '@/actions/data/category';
 import Image from 'next/image';
+import { getCategories } from '@/actions/data/category';
+import { getWedding } from '@/actions/data/wedding';
+import { getCurrentUser } from '@/actions/getCurrentUser';
 
 type DashboardGiftCardProps = {
   gift: Gift;
@@ -31,8 +34,11 @@ const DashboardGiftCard = async ({
     isFavoriteGift,
     isGroupGift,
   } = gift;
-  const formattedPrice = formatPrice(Number(price));
 
+  const categories = await getCategories();
+  if (!categories) return null;
+
+  const formattedPrice = formatPrice(Number(price));
   const category = await getCategory({ searchParams: { categoryId } });
 
   return (
@@ -73,7 +79,11 @@ const DashboardGiftCard = async ({
       </CardContent>
 
       <CardFooter variant="dashboard">
-        <EditGiftModal gift={gift} />
+        <EditGiftModal
+          gift={gift}
+          categories={categories}
+          wishListId={wishListId}
+        />
         <RemoveFromWishListForm giftId={id} wishlistId={wishListId} />
       </CardFooter>
     </Card>

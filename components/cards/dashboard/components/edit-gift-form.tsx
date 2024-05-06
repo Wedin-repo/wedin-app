@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GiftSchema } from '@/schemas/index';
@@ -22,14 +23,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
-//import { formatPrice } from '@/utils/format';
-import RemoveFromWishListForm from './delete-from-wishlist-form';
-import WishListFormButton from '../../gifts/components/wishlist-form-button';
+import { deleteGiftFromWishList } from '@/actions/data/wishlist';
 import ImageUpload from '@/components/ImageUpload';
-import { toast } from '@/components/ui/use-toast';
-import { FaCheck } from 'react-icons/fa6';
 import { z } from 'zod';
+import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/utils/format';
+import { Button } from '@/components/ui/button';
+import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
+import { FaRegTrashAlt } from 'react-icons/fa';
+import { Loader2 } from 'lucide-react';
+import { FiEdit3 } from 'react-icons/fi';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -44,6 +47,8 @@ function EditGiftForm({
   setIsOpen,
   wishlistId,
 }: EditGiftFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   const formattedPrice = formatPrice(Number(gift.price));
 
   const form = useForm({
@@ -62,8 +67,13 @@ function EditGiftForm({
   const { formState } = form;
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+    setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
       console.log('No changes made');
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+      setIsLoading(false);
       return;
     }
 
@@ -105,6 +115,41 @@ function EditGiftForm({
     if (setIsOpen) {
       setIsOpen(false);
     }
+    setIsLoading(false);
+  };
+
+  const handleRemoveGiftFromWishList = async () => {
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('content', gift.id);
+    try {
+      const response = await deleteGiftFromWishList(wishlistId, formData);
+      toast({
+        title: response.status,
+        description: response.message,
+        action: (
+          <AddToWishListForm
+            giftId={gift.id}
+            wishlistId={wishlistId}
+            variant="undoButton"
+          />
+        ),
+        className: 'bg-white',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description:
+          error.message ||
+          'An error occurred while deleting the gift from the wishlist.',
+        className: 'bg-white',
+      });
+    }
+
+    if (setIsOpen) {
+      setIsOpen(false);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -232,18 +277,34 @@ function EditGiftForm({
             </div>
             <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
               <div className="w-full">
-                <WishListFormButton variant="deleteGiftButton" />
+                <Button
+                  type="button"
+                  onClick={handleRemoveGiftFromWishList}
+                  variant="deleteGiftButton"
+                  disabled={isLoading}
+                >
+                  Eliminar regalo
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <FaRegTrashAlt fontSize={'16px'} />
+                  )}
+                </Button>
               </div>
               <div className="w-full">
-                <WishListFormButton variant="editGiftButton" />
+                <Button
+                  type="submit"
+                  variant="editGiftButton"
+                  disabled={isLoading}
+                >
+                  Editar regalo
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <FiEdit3 fontSize={'16px'} />
+                  )}
+                </Button>
               </div>
-              {/* <div className="w-full">
-                <RemoveFromWishListForm
-                  giftId={gift.id}
-                  wishlistId={wishlistId}
-                  variant="deleteGiftButton"
-                />
-              </div> */}
             </div>
           </div>
         </div>

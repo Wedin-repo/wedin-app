@@ -13,7 +13,6 @@ type ImageUploadProps = {
 };
 
 function ImageUpload({ imgUrl }: ImageUploadProps) {
-  //console.log(imgUrl);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -71,7 +70,13 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
               className="object-cover max-w-full max-h-full rounded-xl"
             />
           ) : (
-            <IoImageOutline fontSize={'24px'} />
+            <Image
+              src={imgUrl || ''}
+              width={500}
+              height={324}
+              alt="Vista previa de la imagen seleccionada"
+              className="max-h-full max-w-full rounded-xl object-cover"
+            />
           )}
         </div>
         <div className="">
@@ -83,9 +88,13 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
             onChange={handleFileChange}
             accept="image/*"
           />
-          <Button variant="uploadImageButton" onClick={handleButtonClick}>
+          <Button
+            type="button"
+            variant="uploadImageButton"
+            onClick={handleButtonClick}
+          >
             <MdOutlineFileUpload fontSize={'18px'} />
-            {previewUrl ? 'Cambiar imagen' : 'Subir imagen'}
+            {imgUrl ? 'Cambiar imagen' : 'Subir imagen'}
           </Button>
         </div>
       </div>

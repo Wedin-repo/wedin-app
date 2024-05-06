@@ -3,7 +3,7 @@ import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { DashboardPageSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
-import Pagination from '@/components/cards/dashboard/components/pagination';
+import Pagination from '@/components/Pagination';
 import DashboardGiftCard from './card';
 
 type DashboardGiftsProps = {

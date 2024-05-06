@@ -1,31 +1,24 @@
-//'use client';
+'use client';
 
-//import { useState } from 'react';
-import { getCategories } from '@/actions/data/category';
-import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Gift } from '@prisma/client';
+import { Category, Gift, User, Wedding } from '@prisma/client';
 import { FiEdit3 } from 'react-icons/fi';
 import EditGiftForm from './edit-gift-form';
 
 type EditGiftModalProps = {
   gift: Gift;
+  categories?: Category[];
+  wishListId?: string | null;
 };
 
-async function EditGiftModal({ gift }: EditGiftModalProps) {
-  //const [isOpen, setIsOpen] = useState(false);
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
-  const wishListId = wedding?.wishListId;
+function EditGiftModal({ gift, wishListId, categories }: EditGiftModalProps) {
+  const [isOpen, setIsOpen] = useState(false);
   if (!wishListId) return null;
 
-  const categories = await getCategories();
-  if (!categories) return null;
-
   return (
-    <Dialog /* open={isOpen} onOpenChange={setIsOpen} */>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button type="button" variant="editIconButton" size="iconButton">
           <FiEdit3 fontSize={'16px'} />
@@ -37,7 +30,7 @@ async function EditGiftModal({ gift }: EditGiftModalProps) {
           gift={gift}
           categories={categories}
           wishlistId={wishListId}
-          //setIsOpen={setIsOpen}
+          setIsOpen={setIsOpen}
         />
       </DialogContent>
     </Dialog>
