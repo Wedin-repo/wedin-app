@@ -12,6 +12,9 @@ export default async function DashboardHeader() {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
+
+  if (!wishListId) return null;
+
   const wishlistGifts = await getGifts({
     searchParams: { wishListId: wishListId },
   });

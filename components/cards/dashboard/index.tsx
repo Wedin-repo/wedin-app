@@ -17,6 +17,12 @@ export default async function DashboardGifts({
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
 
+  if (!wishListId) {
+    return (
+      <EmptyState showReset title="No se ha creado una lista de regalos" />
+    );
+  }
+
   // This is to count is just for the case that when
   // the user had not add any gift to the wishlist
   // and not because the filters are not returning any gift

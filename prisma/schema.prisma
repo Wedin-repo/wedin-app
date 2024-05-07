@@ -103,7 +103,7 @@ model Gift {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   name           String
   description    String
-  giftListId     String   @db.ObjectId
+  giftListId     String?  @db.ObjectId
   isDefault      Boolean  @default(false)
   categoryId     String   @db.ObjectId
   weddingId      String?  @db.ObjectId
@@ -116,7 +116,7 @@ model Gift {
   isFavoriteGift Boolean  @default(false)
 
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
-  giftlist  GiftList   @relation(fields: [giftListId], references: [id])
+  giftlist  GiftList?  @relation(fields: [giftListId], references: [id])
   images    Image[]
 }
 
