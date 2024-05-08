@@ -83,7 +83,6 @@ export const {
           default:
             // You might decide to leave isExistingUser unchanged if it's an internal error
             return token;
-            break;
         }
         return token;
       }
