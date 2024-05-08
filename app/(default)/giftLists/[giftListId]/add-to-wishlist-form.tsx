@@ -37,7 +37,7 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
       return null;
     } else {
       toast({
-        title: 'Lista agregada! 🎁🎉',
+        title: 'Lista agregada',
         description: `Se agregaron ${giftIds?.length} regalos a tu lista`,
         action: (
           <Button

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useFormStatus } from 'react-dom';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import { FiEdit3 } from 'react-icons/fi';
 import { GoArrowRight } from 'react-icons/go';
 import { GrUndo } from 'react-icons/gr';
 import { IoAdd } from 'react-icons/io5';
@@ -25,11 +24,11 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
     );
   }
 
-  if (variant === 'deleteGiftIconButton') {
+  if (variant === 'deleteIconButton') {
     return (
       <Button
         type="submit"
-        variant="deleteGiftIconButton"
+        variant="deleteIconButton"
         size="iconButton"
         disabled={pending}
       >
@@ -55,32 +54,6 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
           <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <GoArrowRight fontSize={'24px'} />
-        )}
-      </Button>
-    );
-  }
-
-  if (variant === 'editGiftButton') {
-    return (
-      <Button type="submit" variant="editGiftButton" disabled={pending}>
-        Editar regalo
-        {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <FiEdit3 fontSize={'16px'} />
-        )}
-      </Button>
-    );
-  }
-
-  if (variant === 'deleteGiftButton') {
-    return (
-      <Button type="submit" variant="deleteGiftButton" disabled={pending}>
-        Eliminar regalo
-        {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <FaRegTrashAlt fontSize={'16px'} />
         )}
       </Button>
     );

@@ -8,11 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IoImageOutline } from 'react-icons/io5';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
-type ImageUploadProps = {
-  imgUrl?: string | null;
-};
-
-function ImageUpload({ imgUrl }: ImageUploadProps) {
+function ImageUpload() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -50,33 +46,25 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
     <div className="flex flex-col gap-1.5">
       <Label>
         Imagen del regalo
-        <span className="!text-xs font-normal text-secondaryTextColor ml-1">
+        <span className="!text-xs font-normal text-secondaryTextColor">
           372px por 322px
         </span>
       </Label>
       <div className="flex flex-col gap-3 p-4 rounded-xl bg-secondaryBackgroundColor">
         {error && <p className="text-sm text-red-600">{error}</p>}
         <div
-          className={`border-dashed rounded-xl border-2 h-[242px] md:h-[372px] flex items-center justify-center text-secondaryTextColor ${
-            error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'
+          className={`border-dashed rounded-xl border-2 h-[212px] md:h-[324px] flex items-center justify-center text-secondaryTextColor ${
+            error ? 'border-red-600 text-red-600' : 'border-secondaryTextColor'
           }`}
         >
           {previewUrl ? (
             <Image
-              src={imgUrl || previewUrl}
-              width={500}
-              height={324}
+              src={previewUrl}
               alt="Vista previa de la imagen seleccionada"
               className="object-cover max-w-full max-h-full rounded-xl"
             />
           ) : (
-            <Image
-              src={imgUrl || ''}
-              width={500}
-              height={324}
-              alt="Vista previa de la imagen seleccionada"
-              className="max-h-full max-w-full rounded-xl object-cover"
-            />
+            <IoImageOutline fontSize={'24px'} />
           )}
         </div>
         <div className="">
@@ -88,13 +76,9 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
             onChange={handleFileChange}
             accept="image/*"
           />
-          <Button
-            type="button"
-            variant="uploadImageButton"
-            onClick={handleButtonClick}
-          >
+          <Button variant="uploadImageButton" onClick={handleButtonClick}>
             <MdOutlineFileUpload fontSize={'18px'} />
-            {imgUrl ? 'Cambiar imagen' : 'Subir imagen'}
+            {previewUrl ? 'Cambiar imagen' : 'Subir imagen'}
           </Button>
         </div>
       </div>
