@@ -9,11 +9,13 @@ import WishListFormButton from '../../gifts/components/wishlist-form-button';
 type RemoveFromWishListFormProps = {
   giftId: string;
   wishlistId?: string | null;
+  variant?: string;
 };
 
 function RemoveFromWishListForm({
   giftId,
   wishlistId,
+  variant = 'deleteGiftIconButton',
 }: RemoveFromWishListFormProps) {
   const { toast } = useToast();
   const router = useRouter();
@@ -47,7 +49,7 @@ function RemoveFromWishListForm({
   return (
     <form action={handleRemoveGiftFromWishList} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <WishListFormButton variant="deleteIconButton" />
+      <WishListFormButton variant={variant} />
     </form>
   );
 }

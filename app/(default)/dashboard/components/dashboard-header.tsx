@@ -26,7 +26,7 @@ export default async function DashboardHeader() {
   return (
     <div className="flex flex-col gap-4 items-center w-full">
       <h1 className="text-4xl font-semibold text-primaryTextColor">Mi lista</h1>
-      <div className="flex gap-3 items-center">
+      <div className="flex flex-col sm:flex-row gap-3 items-center">
         <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-base flex items-center gap-2">
           <IoGiftOutline fontSize={'18px'} />
           {wishlistGifts?.length} regalos

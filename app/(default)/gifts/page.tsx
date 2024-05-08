@@ -11,6 +11,7 @@ import { PiCouchLight } from 'react-icons/pi';
 import Categories from './components/categories';
 import AllGifts from './components/tabs/all-gifts';
 import DefaultGiftLists from './components/tabs/default-giftlists';
+import CreateGift from './components/tabs/create-gift';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',
@@ -73,7 +74,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <TabsTrigger value={TABS.createGift} asChild>
             <Link
               href={{
-                query: { tab: 'create-gift' },
+                query: { tab: TABS.createGift },
               }}
               className="flex gap-2 items-center"
             >
@@ -83,9 +84,9 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
-        <SearchBar />
-
         <TabsContent value={TABS.predefinedGifts}>
+          <SearchBar />
+
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
             Comenzá con una lista pre-definida, podes personalizarla más
             adelante
@@ -99,6 +100,8 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
         </TabsContent>
 
         <TabsContent value={TABS.allGifts}>
+          <SearchBar />
+
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
             Elegí los productos que más te gusten y empezá a armar tu lista
           </p>
@@ -107,6 +110,12 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
 
           <Suspense fallback={<Loader />}>
             <AllGifts searchParams={searchParams} />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value={TABS.createGift}>
+          <Suspense fallback={<Loader />}>
+            <CreateGift />
           </Suspense>
         </TabsContent>
       </Tabs>

@@ -1,166 +1,148 @@
-'use client';
-
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { formatPrice } from '@/lib/utils';
-import { Category, Gift } from '@prisma/client';
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import EditGiftFromWishListForm from './edit-gift-from-wishlist-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { GiftSchema } from '@/schemas/index';
+import { editOrCreateGift } from '@/actions/data/wishlist';
+import { Category, Gift } from '@prisma/client';
+import { deleteGiftFromWishList } from '@/actions/data/wishlist';
+import { z } from 'zod';
+import { useToast } from '@/components/ui/use-toast';
+import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
+
+import GiftForm from '@/components/GiftForm';
+import { formatPrice } from '@/lib/utils';
 
 type EditGiftFormProps = {
   gift: Gift;
-  wishlistId?: string | null;
-  categories?: string[] | Category[] | null;
-  category: Category | null;
+  wishlistId: string;
+  categories?: Category[] | null;
+  setIsOpen?: (value: boolean) => void;
 };
 
 function EditGiftForm({
   gift,
   categories,
-  category,
+  setIsOpen,
   wishlistId,
 }: EditGiftFormProps) {
-  const { name, description, price, id, isDefault, wishListIds } = gift;
-  const [editedName, setEditedName] = useState(name);
-  const [editedPrice, setEditedPrice] = useState(price);
-  const [editedCategory, setEditedCategory] = useState(category?.name);
-  const [isFavoriteGift, setIsFavoriteGift] = useState(isDefault);
-  const [isGroupGift, setIsGroupGift] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  
+  const form = useForm({
+    resolver: zodResolver(GiftSchema),
+    defaultValues: {
+      id: gift.id,
+      name: gift.name,
+      categoryId: gift.categoryId,
+      price: gift.price.toString(),
+      isFavoriteGift: gift.isFavoriteGift,
+      isGroupGift: gift.isGroupGift,
+      wishListId: wishlistId,
+    },
+  });
 
-  const formattedPrice = formatPrice(Number(price));
-
-  const handlePriceInput = (event: any) => {
-    const value = event.target.value.replace(/\D/g, '');
-    const formattedInput = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    setEditedPrice(formattedInput);
-  };
-
-  const handlePriceKeyPress = (event: any) => {
-    if (
-      !/[0-9]/.test(event.key) &&
-      event.keyCode !== 8 &&
-      event.keyCode !== 46
-    ) {
-      event.preventDefault();
+  const { formState } = form;
+  
+  if (!categories) return null;
+  
+  const formattedPrice = formatPrice(Number(gift.price));
+  
+  const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+    setIsLoading(true);
+    if (!Object.keys(formState.dirtyFields).length) {
+      console.log('No changes made');
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+      setIsLoading(false);
+      return;
     }
+
+    const validatedFields = GiftSchema.safeParse(values);
+
+    if (validatedFields.success) {
+      try {
+        const response = await editOrCreateGift(validatedFields.data);
+
+        if (response.status === 'Error') {
+          toast({
+            title: 'Error',
+            description: response.message,
+            className: 'bg-white',
+          });
+        } else {
+          toast({
+            title: 'Éxito! 🎁🎉',
+            description: 'Regalo actualizado.',
+            className: 'bg-white',
+          });
+        }
+      } catch (error: any) {
+        toast({
+          title: 'Error',
+          description:
+            error.message || 'An error occurred while updating the gift.',
+          className: 'bg-white',
+        });
+      }
+    } else {
+      toast({
+        title: 'Validation Error',
+        description: 'Please check your input and try again.',
+        className: 'bg-white',
+      });
+    }
+
+    if (setIsOpen) {
+      setIsOpen(false);
+    }
+    setIsLoading(false);
   };
 
-  //console.log(category);
-
-  const handleSubmit = async () => {
+  const handleRemoveGiftFromWishList = async () => {
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('giftId', id);
-    formData.append('name', editedName);
-    formData.append('category', editedCategory ?? '');
-    formData.append('price', editedPrice);
-    formData.append('isFavoriteGift', isFavoriteGift.toString());
-    formData.append('isGroupGift', isGroupGift.toString());
-    // console.log(formData.values.toString());
+    formData.append('content', gift.id);
+    try {
+      const response = await deleteGiftFromWishList(wishlistId, formData);
+      toast({
+        title: response.status,
+        description: response.message,
+        action: (
+          <AddToWishListForm
+            giftId={gift.id}
+            wishlistId={wishlistId}
+            variant="undoButton"
+          />
+        ),
+        className: 'bg-white',
+      });
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description:
+          error.message ||
+          'An error occurred while deleting the gift from the wishlist.',
+        className: 'bg-white',
+      });
+    }
 
-    /* const editGiftWithId = editGiftInWishList.bind(null, wishlistId || '');
-    const response = await editGiftWithId(formData);
-
-    console.log('first', formData.values);
-    console.log(response);
-
-    toast({
-      title: response.status,
-      description: response.message,
-      action: (
-        <FaCheck
-          color={response.status === 'Error' ? 'red' : 'green'}
-          fontSize="36px"
-        />
-      ),
-      className: 'bg-white',
-    }); */
+    if (setIsOpen) {
+      setIsOpen(false);
+    }
     setIsLoading(false);
   };
 
   return (
-    <form action={handleSubmit}>
-      <div className="flex flex-col gap-3 sm:gap-5">
-        <div>
-          <Label className="">Nombre</Label>
-          <Input
-            value={editedName}
-            onChange={e => setEditedName(e.target.value)}
-            placeholder={name}
-            type="text"
-          />
-        </div>
-
-        <div>
-          <Label className="">Categoria</Label>
-
-          <Select value={editedCategory} onValueChange={setEditedCategory}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              {categories?.map(category => (
-                <div
-                  key={typeof category === 'string' ? category : category.id}
-                >
-                  <SelectItem
-                    value={
-                      typeof category === 'string' ? category : category.name
-                    }
-                    className="cursor-pointer"
-                  >
-                    {typeof category === 'string' ? category : category.name}
-                  </SelectItem>
-                  {/* this is just a border for aesthetic purposes */}
-                  <div
-                    className="flex justify-center items-center w-5/6 border border-b-secondaryBorderColor"
-                    style={{ margin: '0 auto' }}
-                  ></div>
-                </div>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div>
-          <Label className="">Precio</Label>
-          <Input
-            type="text"
-            placeholder={formattedPrice}
-            value={editedPrice}
-            onInput={handlePriceInput}
-            onKeyPress={handlePriceKeyPress}
-          />
-        </div>
-
-        <div className="flex justify-between items-center">
-          <Label className="text-base font-normal">
-            Marcar como el que más queremos ⭐️
-          </Label>
-          <Switch
-            checked={isFavoriteGift}
-            onCheckedChange={setIsFavoriteGift}
-          />
-        </div>
-
-        <div className="flex justify-between items-center">
-          <Label className="text-base font-normal">Regalo grupal</Label>
-          <Switch checked={isGroupGift} onCheckedChange={setIsGroupGift} />
-        </div>
-      </div>
-      <div className="flex justify-center mt-4 w-full sm:mt-8">
-        <EditGiftFromWishListForm isLoading={isLoading} />
-      </div>
-    </form>
+    <GiftForm
+      form={form}
+      gift={gift}
+      categories={categories}
+      isLoading={isLoading}
+      onSubmit={onSubmit}
+      handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
+      formattedPrice={formattedPrice}
+    />
   );
 }
 
