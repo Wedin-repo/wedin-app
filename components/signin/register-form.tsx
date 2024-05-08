@@ -18,7 +18,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { MdErrorOutline } from 'react-icons/md';
-import { z } from 'zod';
+import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
 export default function RegisterForm() {
@@ -52,9 +52,9 @@ export default function RegisterForm() {
       }
 
       response = await login(
-        'credentials',
         validatedFields.data,
-        '/onboarding'
+        '/onboarding',
+        'credentials'
       );
 
       if (response?.error) {

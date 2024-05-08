@@ -3,7 +3,8 @@
 import { auth } from '@/auth';
 import prisma from '@/db/client';
 import { StepOneSchema } from '@/schemas';
-import * as z from 'zod';
+import type { User, WishList } from '@prisma/client';
+import type * as z from 'zod';
 
 export const stepOneUpdate = async (
   values: z.infer<typeof StepOneSchema> | null = null
@@ -29,7 +30,9 @@ export const stepOneUpdate = async (
       weddingDate,
     } = validatedFields.data;
 
-    let bride, groom, wishlist;
+    let bride: User;
+    let groom: User;
+    let wishlist: WishList;
 
     try {
       bride = await prisma.user.upsert({

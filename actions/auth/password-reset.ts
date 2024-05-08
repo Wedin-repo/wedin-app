@@ -4,7 +4,8 @@ import prisma from '@/db/client';
 import { sendPasswordResetEmail } from '@/lib/mail';
 import { generatePasswordResetToken } from '@/lib/tokens';
 import { PasswordResetSchema } from '@/schemas';
-import * as z from 'zod';
+import type { PasswordResetToken } from '@prisma/client';
+import type * as z from 'zod';
 
 export const passwordReset = async (
   values: z.infer<typeof PasswordResetSchema>
@@ -37,7 +38,7 @@ export const passwordReset = async (
       };
     }
 
-    let passwordResetToken;
+    let passwordResetToken: PasswordResetToken;
 
     try {
       passwordResetToken = await generatePasswordResetToken(email);

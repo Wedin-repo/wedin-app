@@ -17,7 +17,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import { z } from 'zod';
+import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
 export default function LoginForm() {
@@ -52,7 +52,7 @@ export default function LoginForm() {
     const validatedFields = LoginSchema.safeParse(values);
 
     if (validatedFields.success) {
-      const response = await login('credentials', validatedFields.data);
+      const response = await login(validatedFields.data, 'credentials');
 
       if (response?.error) {
         toast({

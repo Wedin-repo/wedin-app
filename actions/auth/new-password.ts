@@ -3,7 +3,7 @@
 import prisma from '@/db/client';
 import { NewPasswordSchema } from '@/schemas';
 import bcrypt from 'bcryptjs';
-import * as z from 'zod';
+import type * as z from 'zod';
 import { getPasswordTokenResetByEmail } from '../data/password-token';
 
 export const newPassword = async (

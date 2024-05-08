@@ -7,13 +7,7 @@ import { RegisterSchema } from '@/schemas';
 import bcrypt from 'bcryptjs';
 import type * as z from 'zod';
 
-export const register = async (
-  values: z.infer<typeof RegisterSchema> | null = null
-) => {
-  if (values === undefined || values === null) {
-    return { error: 'Algo salio mal! reintanta' };
-  }
-
+export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const validatedFields = RegisterSchema.safeParse(values);
 
   if (!validatedFields.success) {

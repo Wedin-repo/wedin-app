@@ -128,7 +128,7 @@ export default function NewPasswordForm({
       return;
     }
 
-    const loginResponse = await login('credentials', validatedLoginData.data);
+    const loginResponse = await login(validatedLoginData.data, 'credentials');
 
     if (loginResponse?.error) {
       toast({

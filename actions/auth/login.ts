@@ -4,35 +4,14 @@ import { signIn } from '@/auth';
 import { generateVerificationToken } from '@/lib/tokens';
 import { LoginSchema } from '@/schemas';
 import { AuthError } from 'next-auth';
-import * as z from 'zod';
+import type * as z from 'zod';
 import { getLoginUserByEmail } from '../data/user';
 
 export const login = async (
-  type = 'credentials',
-  values: z.infer<typeof LoginSchema> | null = null,
-  redirectTo = '/dashboard'
+  values: z.infer<typeof LoginSchema>,
+  redirectTo = '/dashboard',
+  type = 'credentials'
 ) => {
-  if (values === undefined || values === null) {
-    try {
-      await signIn(type, {
-        redirectTo,
-      });
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case 'AccessDenied':
-            return { error: 'Credenciales incorrectas' };
-          default:
-            return { error: 'An error occurred' };
-        }
-      }
-
-      throw error;
-    }
-
-    return;
-  }
-
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
