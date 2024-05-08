@@ -4,41 +4,7 @@ import prisma from '@/db/client';
 import { revalidatePath } from 'next/cache';
 import { GiftSchema } from '@/schemas';
 import * as z from 'zod';
-
-export const getErrorMessage = (error: unknown): string => {
-  let message: string;
-
-  if (error instanceof Error) {
-    message = error.message;
-  } else if (error && typeof error === 'object' && 'message' in error) {
-    message = String(error.message);
-  } else if (typeof error === 'string') {
-    message = error;
-  } else {
-    message = 'Something went wrong';
-  }
-
-  return message;
-};
-
-export async function validateGiftAndWishlist(
-  giftId: string,
-  wishlistId: string
-) {
-  const gift = await prisma.gift.findUnique({ where: { id: giftId } });
-  const wishlist = await prisma.wishList.findUnique({
-    where: { id: wishlistId },
-  });
-  if (!gift || !wishlist) throw new Error('Gift or Wishlist not found');
-  return { gift, wishlist };
-}
-
-export async function validateCategory(categoryId: string) {
-  const category = await prisma.category.findUnique({
-    where: { id: categoryId },
-  });
-  if (!category) throw new Error('Invalid category ID');
-}
+import { getErrorMessage, validateGiftAndWishlist, validateCategory } from './helper';
 
 export const addGiftToWishList = async (
   wishlistId: string,
@@ -192,9 +158,9 @@ export const editOrCreateGift = async (
     );
 
     const newGiftData = {
-      name: validatedFields.data.name ?? gift.name,
-      categoryId: validatedFields.data.categoryId ?? gift.categoryId,
-      price: validatedFields.data.price ?? gift.price,
+      name: validatedFields.data.name,
+      categoryId: validatedFields.data.categoryId,
+      price: validatedFields.data.price,
       isFavoriteGift: validatedFields.data.isFavoriteGift,
       isGroupGift: validatedFields.data.isGroupGift,
       isDefault: false,

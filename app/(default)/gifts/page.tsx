@@ -114,10 +114,6 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
         </TabsContent>
 
         <TabsContent value={TABS.createGift}>
-          {/* <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
-            Crea tu regalo kp
-          </p> */}
-
           <Suspense fallback={<Loader />}>
             <CreateGift />
           </Suspense>

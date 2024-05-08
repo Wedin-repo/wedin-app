@@ -1,5 +1,4 @@
-'use client';
-
+import { UseFormReturn } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -29,7 +28,7 @@ import { Category, Gift } from '@prisma/client';
 import { z } from 'zod';
 
 type GiftFormProps = {
-  form: any;
+  form:  UseFormReturn<z.infer<typeof GiftSchema>>;
   gift?: Gift;
   categories: Category[] | null;
   isLoading: boolean;

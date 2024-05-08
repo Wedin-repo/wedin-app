@@ -13,8 +13,10 @@ async function CreateGift() {
   if (!categories) return null;
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <CreateGiftForm wishlistId={wishListId} categories={categories} />
+    <div className="w-full min-h-[60vh] flex items-center justify-center">
+      <div className='max-w-7xl'>
+        <CreateGiftForm wishlistId={wishListId} categories={categories} />
+      </div>
     </div>
   );
 }

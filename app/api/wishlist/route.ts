@@ -5,7 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import {
   validateGiftAndWishlist,
   validateCategory,
-} from '@/actions/data/wishlist';
+} from '@/actions/data/helper';
 import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas';
 
 export async function POST(req: Request, res: Response) {

@@ -1,7 +1,5 @@
-'use client';
-
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GiftSchema } from '@/schemas/index';
 import { editOrCreateGift } from '@/actions/data/wishlist';
@@ -9,10 +7,10 @@ import { Category, Gift } from '@prisma/client';
 import { deleteGiftFromWishList } from '@/actions/data/wishlist';
 import { z } from 'zod';
 import { useToast } from '@/components/ui/use-toast';
-import { formatPrice } from '@/utils/format';
 import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
 
 import GiftForm from '@/components/GiftForm';
+import { formatPrice } from '@/lib/utils';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -29,10 +27,7 @@ function EditGiftForm({
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const formattedPrice = formatPrice(Number(gift.price));
-
-  if (!categories) return null;
-
+  
   const form = useForm({
     resolver: zodResolver(GiftSchema),
     defaultValues: {
@@ -47,7 +42,11 @@ function EditGiftForm({
   });
 
   const { formState } = form;
-
+  
+  if (!categories) return null;
+  
+  const formattedPrice = formatPrice(Number(gift.price));
+  
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
@@ -74,7 +73,7 @@ function EditGiftForm({
         } else {
           toast({
             title: 'Éxito! 🎁🎉',
-            description: 'Regalo actualizado kp',
+            description: 'Regalo actualizado.',
             className: 'bg-white',
           });
         }
