@@ -27,12 +27,9 @@ import { z } from 'zod';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/utils/format';
 import { Button } from '@/components/ui/button';
-import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
-import { FaRegTrashAlt } from 'react-icons/fa';
 import { Loader2 } from 'lucide-react';
-import { FiEdit3 } from 'react-icons/fi';
 import { createGiftToWishList } from '@/actions/data/wishlist';
-import { redirect, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 
 type CreateGiftFormProps = {

@@ -9,11 +9,11 @@ import {
 import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas';
 
 export async function POST(req: Request, res: Response) {
-  const { wishlistId, giftId } = req.body;
+  /* const { wishlistId, giftId } = req.body;
 
   if (typeof giftId !== 'string' || typeof wishlistId !== 'string') {
     throw new Error('Invalid parameters');
-  }
+  } */
 
   try {
     console.log('hello db');

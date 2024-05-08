@@ -1,4 +1,3 @@
-// actions/data/wishlist.ts
 'use server';
 
 import prisma from '@/db/client';
