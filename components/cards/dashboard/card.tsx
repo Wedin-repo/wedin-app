@@ -12,8 +12,6 @@ import { Gift } from '@prisma/client';
 import { getCategory } from '@/actions/data/category';
 import Image from 'next/image';
 import { getCategories } from '@/actions/data/category';
-import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 
 type DashboardGiftCardProps = {
   gift: Gift;

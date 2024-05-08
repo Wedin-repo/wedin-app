@@ -113,3 +113,8 @@ export const GiftSchema = z.object({
   isGroupGift: z.boolean(),
   wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
 });
+
+export const RemoveGiftFromWishListSchema = z.object({
+  wishlistId: z.string(),
+  giftId: z.string(),
+});

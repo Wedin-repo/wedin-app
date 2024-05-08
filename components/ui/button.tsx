@@ -12,6 +12,8 @@ const buttonVariants = cva(
         primaryButton:
           'rounded-full hover:opacity-80 hover transition w-full flex items-center justify-center gap-3 bg-primaryBackgroundColor text-white text-base font-medium',
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+        saveAndCreateButton:
+          'rounded-lg hover:opacity-80 hover transition w-full flex items-center justify-center gap-3 bg-[#292524] text-white text-base font-medium',
         onboardingButton:
           'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
         chooseGiftListButton:

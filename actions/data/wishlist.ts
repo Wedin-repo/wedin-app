@@ -1,3 +1,4 @@
+// actions/data/wishlist.ts
 'use server';
 
 import prisma from '@/db/client';
@@ -21,7 +22,10 @@ export const getErrorMessage = (error: unknown): string => {
   return message;
 };
 
-async function validateGiftAndWishlist(giftId: string, wishlistId: string) {
+export async function validateGiftAndWishlist(
+  giftId: string,
+  wishlistId: string
+) {
   const gift = await prisma.gift.findUnique({ where: { id: giftId } });
   const wishlist = await prisma.wishList.findUnique({
     where: { id: wishlistId },
@@ -30,7 +34,7 @@ async function validateGiftAndWishlist(giftId: string, wishlistId: string) {
   return { gift, wishlist };
 }
 
-async function validateCategory(categoryId: string) {
+export async function validateCategory(categoryId: string) {
   const category = await prisma.category.findUnique({
     where: { id: categoryId },
   });
@@ -236,6 +240,56 @@ export const editOrCreateGift = async (
     return {
       status: 'Success',
       message: 'Updated gift in wishlist successfully',
+    };
+  } catch (error) {
+    return { status: 'Error', message: getErrorMessage(error) };
+  }
+};
+
+export const createGiftToWishList = async (
+  formData: z.infer<typeof GiftSchema> | null = null
+) => {
+  try {
+    const validatedFields = GiftSchema.safeParse(formData);
+
+    if (!validatedFields.success) {
+      return { error: 'Invalid fields' };
+    }
+
+    // Validate category
+    await validateCategory(validatedFields.data.categoryId);
+
+    // Create the new gift
+    const newGift = await prisma.gift.create({
+      data: {
+        name: validatedFields.data.name,
+        categoryId: validatedFields.data.categoryId,
+        price: validatedFields.data.price,
+        isFavoriteGift: validatedFields.data.isFavoriteGift,
+        isGroupGift: validatedFields.data.isGroupGift,
+        isDefault: false,
+        isEditedVersion: false,
+        description: 'a new gift creater by user', // TODO: inform UX about description issue
+      },
+    });
+
+    // Connect the new gift to the wishlist
+    await prisma.wishList.update({
+      where: { id: validatedFields.data.wishListId },
+      data: {
+        gifts: {
+          connect: { id: newGift.id },
+        },
+      },
+    });
+
+    // Revalidate the cache
+    revalidatePath('/gifts?tab=predefinedGifts');
+
+    return {
+      status: 'Success',
+      message: 'Regalo creado y agregado a tu lista.',
+      gift: newGift,
     };
   } catch (error) {
     return { status: 'Error', message: getErrorMessage(error) };
