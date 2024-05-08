@@ -4,33 +4,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { GiftSchema } from '@/schemas/index';
-import { Input } from '@/components/ui/input';
 import { Category, Gift } from '@prisma/client';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Switch } from '@/components/ui/switch';
-import ImageUpload from '@/components/ImageUpload';
 import { z } from 'zod';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/utils/format';
 import { Button } from '@/components/ui/button';
-import { Loader2 } from 'lucide-react';
 import { createGiftToWishList } from '@/actions/data/wishlist';
 import { useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
+import GiftForm from '@/components/GiftForm';
 
 type CreateGiftFormProps = {
   wishlistId: string;
@@ -42,6 +24,8 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   const router = useRouter();
   const { toast } = useToast();
   //const formattedPrice = formatPrice(Number(gift.price));
+
+  if (!categories) return null;
 
   const form = useForm({
     resolver: zodResolver(GiftSchema),
@@ -109,142 +93,12 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
-          <div className="w-full lg:w-1/2">
-            <ImageUpload />
-          </div>
-          <div className="w-full lg:w-1/2">
-            <div className="flex flex-col gap-3 sm:gap-5">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Nombre</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Nombre del regalo"
-                        className="!mt-0"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="categoryId"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="!mb-[-5px]">Categoria</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className="!mt-0">
-                          <SelectValue placeholder="Selecciona una categoria" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="max-h-60 bg-white">
-                        {categories?.map(category => (
-                          <div key={category.id}>
-                            <SelectItem
-                              value={category.id}
-                              className="cursor-pointer"
-                            >
-                              {category.name}
-                            </SelectItem>
-                            {/* this is just a border for aesthetic purposes */}
-                            <div
-                              className="flex justify-center items-center w-5/6 border border-b-secondaryBorderColor"
-                              style={{ margin: '0 auto' }}
-                            ></div>
-                          </div>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="price"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Precio</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Valor del regalo"
-                        type="number"
-                        min="1"
-                        className="!mt-0"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="isFavoriteGift"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between items-center">
-                    <FormLabel className="text-base font-normal">
-                      Marcar como el que más queremos ⭐️
-                    </FormLabel>
-                    <FormControl className="!mt-0">
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="isGroupGift"
-                render={({ field }) => (
-                  <FormItem className="flex justify-between items-center">
-                    <FormLabel className="text-base font-normal">
-                      Regalo grupal 🎁
-                    </FormLabel>
-                    <FormControl className="!mt-0">
-                      <Switch
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
-              <Button
-                type="submit"
-                variant="saveAndCreateButton"
-                disabled={isLoading}
-              >
-                Guardar y agregar regalo
-                {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </Form>
+    <GiftForm
+      form={form}
+      categories={categories}
+      isLoading={isLoading}
+      onSubmit={onSubmit}
+    />
   );
 }
 
