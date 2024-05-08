@@ -4,14 +4,14 @@ import { signIn } from 'next-auth/react';
 import { useState } from 'react';
 import AuthFormButton from './auth-form-button';
 
-type SocialMediaLoginFormType = {
+type SocialMediaLoginButtonType = {
   provider: 'google' | 'facebook';
   callbackUrl?: string;
 };
-function SociaMediaLoginForm({
+function SociaMediaLoginButton({
   provider,
   callbackUrl = '/dashboard',
-}: SocialMediaLoginFormType) {
+}: SocialMediaLoginButtonType) {
   const [isLoading, setIsLoading] = useState(false);
   const handleSignIn = () => {
     setIsLoading(true);
@@ -31,4 +31,4 @@ function SociaMediaLoginForm({
   );
 }
 
-export default SociaMediaLoginForm;
+export default SociaMediaLoginButton;

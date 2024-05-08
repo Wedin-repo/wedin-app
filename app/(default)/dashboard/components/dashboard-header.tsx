@@ -2,7 +2,7 @@ import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { Switch } from '@/components/ui/switch';
-import { formatPrice } from '@/utils/format';
+import { formatPrice } from '@/lib/utils';
 import { IoIosLink } from 'react-icons/io';
 import { IoGiftOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
@@ -12,6 +12,9 @@ export default async function DashboardHeader() {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
+
+  if (!wishListId) return null;
+
   const wishlistGifts = await getGifts({
     searchParams: { wishListId: wishListId },
   });

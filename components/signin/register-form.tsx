@@ -12,13 +12,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { LoginSchema, RegisterSchema } from '@/schemas';
+import { RegisterSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { MdErrorOutline } from 'react-icons/md';
-import { z } from 'zod';
+import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
 export default function RegisterForm() {
@@ -29,16 +29,14 @@ export default function RegisterForm() {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      email: '',
-      password: '',
       eventType: 'wedding',
     },
   });
 
   async function handleRegister(values: z.infer<typeof RegisterSchema>) {
     setIsLoading(true);
+    const validatedFields = RegisterSchema.safeParse(values);
 
-    const validatedFields = LoginSchema.safeParse(values);
     if (validatedFields.success) {
       let response = await register(validatedFields.data);
 
@@ -54,9 +52,9 @@ export default function RegisterForm() {
       }
 
       response = await login(
-        'credentials',
         validatedFields.data,
-        '/onboarding'
+        '/onboarding',
+        'credentials'
       );
 
       if (response?.error) {
@@ -71,6 +69,7 @@ export default function RegisterForm() {
         return null;
       }
     }
+
     setIsLoading(false);
   }
 
@@ -95,7 +94,7 @@ export default function RegisterForm() {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
@@ -107,13 +106,13 @@ export default function RegisterForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Creá una contraseña</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
                     <div className="flex">
                       <Input
                         {...field}
                         type={isPasswordVisible ? 'text' : 'password'}
-                        placeholder="Wedin!538461$"
+                        placeholder="TuContraseña!52419$"
                       />
                       <button
                         type="button"
@@ -128,7 +127,29 @@ export default function RegisterForm() {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <FormField
+              control={form.control}
+              name="passwordConfirmation"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Confirma tu contraseña</FormLabel>
+                  <FormControl>
+                    <div className="flex">
+                      <Input
+                        {...field}
+                        type="password"
+                        placeholder="**********"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />

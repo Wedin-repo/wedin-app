@@ -109,7 +109,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                     </div>
                   </div>
                 </FormControl>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />
@@ -129,7 +129,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -148,7 +148,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -170,7 +170,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -189,7 +189,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -209,7 +209,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />
@@ -262,7 +262,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
                           />
                         </PopoverContent>
                       </Popover>
-                      <FormMessage className="font-normal text-yellow-600" />
+                      <FormMessage className="font-normal text-red-600" />
                     </FormItem>
                   )}
                 />

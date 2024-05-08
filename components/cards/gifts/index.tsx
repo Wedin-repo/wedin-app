@@ -1,16 +1,15 @@
 import { getGifts } from '@/actions/data/gift';
-import { GiftListSearchParams } from '@/app/(default)/giftLists/[giftListId]/page';
-import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
+import type { GiftListPageParams } from '@/app/(default)/giftLists/[giftListId]/page';
 import EmptyState from '@/components/EmptyState';
 import CardContainer from '../shared/card-container';
 import GiftCard from './card';
 
 type GiftsProps = {
-  searchParams: GiftPageSearchParams | GiftListSearchParams;
-  hideModal?: boolean;
+  searchParams: GiftListPageParams;
+  hideCursor?: boolean;
 };
 
-async function Gifts({ searchParams, hideModal = false }: GiftsProps) {
+async function GiftsCards({ searchParams, hideCursor = false }: GiftsProps) {
   const gifts = await getGifts({ searchParams });
 
   if (gifts?.length === 0 || !gifts)
@@ -19,10 +18,10 @@ async function Gifts({ searchParams, hideModal = false }: GiftsProps) {
   return (
     <CardContainer>
       {gifts.map(gift => (
-        <GiftCard key={gift.id} gift={gift} hideModal={hideModal} />
+        <GiftCard key={gift.id} gift={gift} hideCursor={hideCursor} />
       ))}
     </CardContainer>
   );
 }
 
-export default Gifts;
+export default GiftsCards;

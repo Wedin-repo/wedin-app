@@ -1,24 +1,21 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import { formatPrice } from '@/utils/format';
-import { Gift } from '@prisma/client';
+import type { Gift } from '@prisma/client';
 import Image from 'next/image';
 import { FaChevronRight } from 'react-icons/fa';
 
-type CardComponenetProps = {
+type GiftCardProps = {
   gift: Gift;
-  hideModal?: boolean;
+  hideCursor?: boolean;
 };
 
-export default function GiftCard({
-  gift,
-  hideModal = false,
-}: CardComponenetProps) {
+export default function GiftCard({ gift, hideCursor = false }: GiftCardProps) {
   const { name, description, price, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
 
   return (
-    <Card className={`${hideModal && 'cursor-auto'}`}>
+    <Card className={`${hideCursor && 'cursor-auto'}`}>
       <CardHeader className="flex items-center p-0 w-full">
         <Image
           src={imageUrl || ringsLoader}

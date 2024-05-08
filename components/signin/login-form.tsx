@@ -13,16 +13,31 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import { LoginSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
+import Link from 'next/link';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import { z } from 'zod';
+import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 
 export default function LoginForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  // // Setup debouncing for email input changes
+  // const handleEmailSearch = async (email: string) => {
+  //   const response = await fetch(`/api/users?email=${email}`);
+  //   console.log(response); // Here you might want to handle the response properly
+  // };
+  //
+  // // useDebounceCallback to delay the handleEmailSearch execution
+  // const debounce = useDebounceCallback(value => handleEmailSearch(value), 1000);
+  //
+  // // This function is triggered on every input change
+  // function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+  //   debounce(e.target.value);
+  // }
 
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
@@ -35,13 +50,13 @@ export default function LoginForm() {
   async function handleLogin(values: z.infer<typeof LoginSchema>) {
     setIsLoading(true);
     const validatedFields = LoginSchema.safeParse(values);
+
     if (validatedFields.success) {
-      const response = await login('credentials', validatedFields.data);
+      const response = await login(validatedFields.data, 'credentials');
 
       if (response?.error) {
         toast({
           variant: 'destructive',
-          title: 'Uh Oh! Error al iniciar sesión.',
           description: response.error,
         });
       }
@@ -49,6 +64,8 @@ export default function LoginForm() {
     setIsLoading(false);
   }
 
+  // we might need to get rid of the form in order to introduce
+  // start login by magic link
   return (
     <Form {...form}>
       <form
@@ -70,7 +87,7 @@ export default function LoginForm() {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
@@ -86,9 +103,9 @@ export default function LoginForm() {
                   <FormControl>
                     <div className="flex">
                       <Input
+                        {...field}
                         type={isPasswordVisible ? 'text' : 'password'}
                         placeholder="TuContraseña!52419$"
-                        {...field}
                       />
                       <button
                         type="button"
@@ -103,14 +120,22 @@ export default function LoginForm() {
                       </button>
                     </div>
                   </FormControl>
-                  <FormMessage className="font-normal text-yellow-600" />
+                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
           </div>
         </div>
 
-        <AuthFormButton isLoading={isLoading} />
+        <div className="flex flex-col gap-2">
+          <Link
+            href="/password-reset"
+            className="flex justify-start text-secondaryTextColor"
+          >
+            <span className="text-indigo-600">Se me olvidó la contraseña</span>
+          </Link>
+          <AuthFormButton isLoading={isLoading} />
+        </div>
       </form>
     </Form>
   );

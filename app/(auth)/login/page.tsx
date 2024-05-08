@@ -5,14 +5,14 @@ import Link from 'next/link';
 export default function LoginPage() {
   return (
     <div className="flex flex-col gap-8 justify-around items-center lg:flex-row h-[600px] sm:w-[440px] w-[85%]">
-      <div className="flex flex-col justify-around w-full h-full">
+      <div className="flex flex-col justify-between w-full h-full">
         <p className="text-2xl font-semibold text-center sm:text-3xl">
           Ingresá a tu lista
         </p>
 
         <LoginForm />
 
-        <div className="flex flex-col justify-between items-center py-8">
+        <div className="flex flex-col justify-between items-center py-4">
           <span className="w-1/2 border border-b" />
         </div>
 

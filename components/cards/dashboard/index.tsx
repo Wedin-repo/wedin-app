@@ -1,13 +1,13 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { DashboardSearchParams } from '@/app/(default)/dashboard/page';
+import { DashboardPageSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/cards/dashboard/components/pagination';
 import DashboardGiftCard from './card';
 
 type DashboardGiftsProps = {
-  searchParams: DashboardSearchParams;
+  searchParams: DashboardPageSearchParams;
 };
 
 export default async function DashboardGifts({
@@ -16,6 +16,12 @@ export default async function DashboardGifts({
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
+
+  if (!wishListId) {
+    return (
+      <EmptyState showReset title="No se ha creado una lista de regalos" />
+    );
+  }
 
   // This is to count is just for the case that when
   // the user had not add any gift to the wishlist

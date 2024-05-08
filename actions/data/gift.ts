@@ -1,14 +1,15 @@
 'use server';
 
-import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import prisma from '@/db/client';
 
 export type GetGiftsParams = {
   category?: string;
   giftListId?: string;
-  wishListId?: string | null;
+  wishListId?: string;
   itemsPerPage?: number;
-} & Omit<GiftPageSearchParams, 'tab'>;
+  page?: string;
+  name?: string;
+};
 
 export async function getGifts({
   searchParams,

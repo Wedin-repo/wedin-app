@@ -124,7 +124,7 @@ const StepTwo = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />
@@ -143,7 +143,7 @@ const StepTwo = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />

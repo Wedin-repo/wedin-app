@@ -1,23 +1,23 @@
-import { getGifts } from '@/actions/data/gift';
+import { GetGiftsParams, getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import Gifts from '@/components/cards/gifts';
-import { formatPrice } from '@/utils/format';
+import GiftsCards from '@/components/cards/gifts';
+import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
 
-export type GiftListSearchParams = {
-  giftListId: string;
-};
+export type GiftListPageParams = Pick<GetGiftsParams, 'giftListId'>;
 
 type GiftListPageProps = {
-  params: GiftListSearchParams;
+  params: GiftListPageParams;
 };
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
   const { giftListId } = params;
+  if (!giftListId) return null;
+
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const giftList = await getGiftList(giftListId);
@@ -58,7 +58,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
       </div>
 
       <div className="mt-6 sm:mt-10">
-        <Gifts searchParams={{ giftListId }} hideModal={true} />
+        <GiftsCards searchParams={{ giftListId }} />
       </div>
     </div>
   );
