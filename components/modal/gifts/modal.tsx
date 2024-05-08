@@ -5,14 +5,13 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import { Gift } from '@prisma/client';
+import type { Gift } from '@prisma/client';
 import Image from 'next/image';
 import { useState } from 'react';
 
 type GiftModalProps = {
   gift: Gift;
   wishlistId?: string | null;
-  hideModal?: boolean;
   children: React.ReactNode;
 };
 

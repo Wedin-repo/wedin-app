@@ -1,12 +1,11 @@
 import { getGifts } from '@/actions/data/gift';
-import { GiftListPageParams } from '@/app/(default)/giftLists/[giftListId]/page';
+import type { GiftListPageParams } from '@/app/(default)/giftLists/[giftListId]/page';
 import EmptyState from '@/components/EmptyState';
 import CardContainer from '../shared/card-container';
 import GiftCard from './card';
 
 type GiftsProps = {
   searchParams: GiftListPageParams;
-  hideModal?: boolean;
 };
 
 async function GiftsCards({ searchParams }: GiftsProps) {
