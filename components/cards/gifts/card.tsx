@@ -7,15 +7,15 @@ import { FaChevronRight } from 'react-icons/fa';
 
 type GiftCardProps = {
   gift: Gift;
-  hideModal?: boolean;
+  hideCursor?: boolean;
 };
 
-export default function GiftCard({ gift, hideModal = false }: GiftCardProps) {
+export default function GiftCard({ gift, hideCursor = false }: GiftCardProps) {
   const { name, description, price, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
 
   return (
-    <Card className={`${hideModal && 'cursor-auto'}`}>
+    <Card className={`${hideCursor && 'cursor-auto'}`}>
       <CardHeader className="flex items-center p-0 w-full">
         <Image
           src={imageUrl || ringsLoader}

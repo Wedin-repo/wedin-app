@@ -6,9 +6,10 @@ import GiftCard from './card';
 
 type GiftsProps = {
   searchParams: GiftListPageParams;
+  hideCursor?: boolean;
 };
 
-async function GiftsCards({ searchParams }: GiftsProps) {
+async function GiftsCards({ searchParams, hideCursor = false }: GiftsProps) {
   const gifts = await getGifts({ searchParams });
 
   if (gifts?.length === 0 || !gifts)
@@ -17,7 +18,7 @@ async function GiftsCards({ searchParams }: GiftsProps) {
   return (
     <CardContainer>
       {gifts.map(gift => (
-        <GiftCard key={gift.id} gift={gift} />
+        <GiftCard key={gift.id} gift={gift} hideCursor={hideCursor} />
       ))}
     </CardContainer>
   );
