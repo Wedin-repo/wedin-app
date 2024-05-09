@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
-import { StepTwoSchema } from '@/schemas';
+import { StepTwoSchema } from '@/schemas/forms/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -29,7 +29,7 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { countries } from '../countries';
 
 const StepTwo = () => {
@@ -42,8 +42,6 @@ const StepTwo = () => {
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
     defaultValues: {
-      weddingCountry: '',
-      weddingCity: '',
       isDecidingWeddingCountryCity: false,
       hasPYbankAccount: true,
     },
@@ -53,7 +51,7 @@ const StepTwo = () => {
     setIsLoading(true);
     const validatedFields = StepTwoSchema.safeParse(values);
     if (validatedFields.success) {
-      let response = await stepTwoUpdate(validatedFields.data);
+      const response = await stepTwoUpdate(validatedFields.data);
 
       if (response?.error) {
         toast({
@@ -65,18 +63,18 @@ const StepTwo = () => {
         setIsLoading(false);
         return null;
       }
+
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          isOnboarded: true,
+        },
+      });
+
+      setIsLoading(false);
+      router.push('/dashboard');
     }
-
-    await update({
-      ...session,
-      user: {
-        ...session?.user,
-        isOnboarded: true,
-      },
-    });
-
-    setIsLoading(false);
-    router.push('/dashboard');
   };
 
   const handleIsDecidingCountryCity = (value: boolean | string) => {
@@ -126,7 +124,7 @@ const StepTwo = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />
@@ -145,7 +143,7 @@ const StepTwo = () => {
                     {...field}
                   />
                 </FormControl>
-                <FormMessage className="font-normal text-yellow-600" />
+                <FormMessage className="font-normal text-red-600" />
               </FormItem>
             )}
           />

@@ -2,20 +2,19 @@ import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
-// flex flex-col justify-between items-normal
-// flex flex-col flex-grow gap-1 w-full justify-start
-
 const cardVariants = cva('', {
   variants: {
     variant: {
       default:
-        'flex flex-col gap-0 p-0 bg-white rounded-lg shadow-xl transition duration-200 ease-in-out transform cursor-pointer hover:scale-105',
+        'flex flex-col gap-0 p-0 rounded-lg shadow-xl transition duration-200 ease-in-out transform cursor-pointer hover:scale-105',
       dashboard:
-        'border-b-[#848484] border-b pb-3 w-full flex items-normal sm:items-center justify-between gap-4',
+        'border-b-primaryBackgroundColor border-b pb-3 w-full flex items-normal sm:items-center justify-between gap-4',
+      emailVerification: 'grid grid-rows-2 gap-4',
     },
     size: {
       default: 'h-[360px]',
       dashboard: '',
+      emailVerification: 'w-full sm:w-[400px] sm:h-[320px]',
     },
   },
   defaultVariants: {
@@ -48,6 +47,7 @@ const cardHeaderVariants = cva('', {
       default: 'flex flex-col space-y-1.5 p-2',
       dashboard:
         'min-h-[90px] bg-primaryBorderColor rounded-lg min-w-[90px] flex justify-center',
+      emailVerification: 'flex justify-center items-end',
     },
     size: {
       default: '',
@@ -81,7 +81,7 @@ const cardContentVariants = cva('flex flex-col', {
   variants: {
     variant: {
       default: 'flex-grow w-full p-0',
-      dashboard: 'gap-1 w-full justify-between items-normal',
+      dashboard: 'gap-1 flex-grow justify-between items-normal',
     },
     size: {
       default: '',
@@ -115,7 +115,7 @@ const cardFooterVariants = cva('flex', {
   variants: {
     variant: {
       default: 'items-center p-0',
-      dashboard: 'flex-col gap-2 sm:gap-4 sm:flex-row',
+      dashboard: 'flex-col gap-2 sm:gap-4 sm:flex-row justify-center',
     },
     size: {
       default: '',

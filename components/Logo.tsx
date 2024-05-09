@@ -8,7 +8,7 @@ type LogoProps = {
   width?: number;
 };
 
-const Logo = ({ height = 62, width = 132 }: LogoProps) => {
+const Logo = ({ height = 38, width = 132 }: LogoProps) => {
   const router = useRouter();
 
   return (

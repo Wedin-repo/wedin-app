@@ -1,26 +1,26 @@
 'use client';
 
-import RegisterForm from '@/components/signin/register-form';
-import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
+import RegisterForm from '@/components/forms/auth/register-form';
+import SociaMediaLoginButton from '@/components/forms/auth/socia-media-login-form';
 import Link from 'next/link';
 
 const RegisterRight = () => {
   return (
-    <div className="flex flex-col justify-around h-[600px]">
+    <div className="flex flex-col gap-8 justify-around">
       <p className="text-2xl font-semibold text-center sm:text-3xl">
         Registrate en 3 minutos y creá tu lista de regalos
       </p>
 
       <RegisterForm />
 
-      <div className="flex flex-col justify-between items-center py-8">
+      <div className="flex flex-col justify-between items-center py-4">
         <span className="w-1/2 border border-b" />
       </div>
 
       <div className="flex flex-col gap-2 justify-center items-center">
         <span className="text-secondaryTextColor">O registate con</span>
-        <SociaMediaLoginForm provider="google" callbackUrl="/onboarding" />
-        <SociaMediaLoginForm provider="facebook" callbackUrl="/onboarding" />
+        <SociaMediaLoginButton provider="google" callbackUrl="/onboarding" />
+        <SociaMediaLoginButton provider="facebook" callbackUrl="/onboarding" />
       </div>
 
       <Link

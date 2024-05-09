@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import Container from '@/components/Container';
+import DefaultLayoutContainer from '@/components/default-layout-container';
 import Footer from '@/components/Footer';
 import NavBar from '@/components/navbar/Navbar';
 
@@ -14,7 +14,7 @@ export default async function DefaultLayout({
     <div className="sm:flex sm:flex-col sm:min-h-[100vh]">
       <NavBar currentUser={currentUser} />
       <div className="pt-16" />
-      <Container>{children}</Container>
+      <DefaultLayoutContainer>{children}</DefaultLayoutContainer>
       <Footer />
     </div>
   );

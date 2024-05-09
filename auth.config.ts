@@ -3,9 +3,9 @@ import bcrypt from 'bcryptjs';
 import Credentials from 'next-auth/providers/credentials';
 import Facebook from 'next-auth/providers/facebook';
 import Google from 'next-auth/providers/google';
-import { LoginSchema } from '@/schemas';
-import { NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
+import { LoginSchema } from './schemas/forms/auth';
 
 const authOptions: NextAuthConfig = {
   adapter: PrismaAdapter(prisma),

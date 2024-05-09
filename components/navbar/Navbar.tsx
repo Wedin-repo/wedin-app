@@ -16,9 +16,6 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  // console.log('navbar layout currentUser', currentUser?.isOnboarded);
-  // console.log('navbar layout session', session?.user.isOnboarded);
-
   let menuValue = 'addGifts';
 
   // The only case where this will run or the session.user.valid == false
@@ -60,7 +57,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
       <div className="flex flex-row gap-3 justify-between items-center md:gap-0">
         <div className="flex gap-4 items-center">
           <div className="pb-4">
-            <Logo height={39} width={90} />
+            <Logo width={90} />
           </div>
 
           <Tabs

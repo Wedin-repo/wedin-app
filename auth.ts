@@ -1,9 +1,5 @@
-import {
-  updateVerifiedOn,
-  getUserByEmail,
-  upsertUser,
-} from '@/actions/data/user';
-import NextAuth, { DefaultSession } from 'next-auth';
+import { getUserByEmail, updateVerifiedOn } from '@/actions/data/user';
+import NextAuth, { type DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import authOptions from './auth.config';
 
@@ -11,7 +7,7 @@ export type ErrorResponse = {
   error: string;
 };
 
-function isError(response: any): response is ErrorResponse {
+export function isError(response: unknown): response is ErrorResponse {
   return (response as ErrorResponse).error !== undefined;
 }
 
@@ -40,7 +36,8 @@ export const {
   signOut,
 } = NextAuth({
   pages: {
-    signIn: '/login',
+    signIn: '(auth)/login',
+    error: '(auth)/error',
   },
   events: {
     async linkAccount({ user }) {
@@ -51,11 +48,9 @@ export const {
   },
   callbacks: {
     async signIn({ user, account }) {
-      // if (!user || !user.email) return false;
+      if (!user || !user.email) return false;
 
-      // if (account && account.type !== 'credentials' && user?.email) {
-      //   await upsertUser(user.email, account.type);
-      // }
+      if (account && account.type !== 'credentials') return true;
 
       // const existingUser = await getUserbyEmail(user.email);
       //
@@ -88,7 +83,6 @@ export const {
           default:
             // You might decide to leave isExistingUser unchanged if it's an internal error
             return token;
-            break;
         }
         return token;
       }
@@ -104,7 +98,7 @@ export const {
   debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 60 * 24, // 24 hours
   },
   secret: process.env.NEXTAUTH_SECRET,
   ...authOptions,

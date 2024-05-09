@@ -1,4 +1,6 @@
 import { getCategories } from '@/actions/data/category';
+import type { GetGiftsParams } from '@/actions/data/gift';
+import type { GetGiftListsParams } from '@/actions/data/giftlist';
 import Loader from '@/components/Loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -8,7 +10,8 @@ import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import Categories from './components/categories';
 import AllGifts from './components/tabs/all-gifts';
-import PredefinedGifts from './components/tabs/predefined-gifts';
+import CreateGift from './components/tabs/create-gift';
+import DefaultGiftLists from './components/tabs/default-giftlists';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',
@@ -18,12 +21,15 @@ const TABS = {
 
 const DEFAULT_TAB = TABS.predefinedGifts;
 
+export type GetGiftListsSerachParams = GetGiftListsParams;
+export type GetGiftsSearchParams = Pick<
+  GetGiftsParams,
+  'category' | 'page' | 'name'
+>;
 export type GiftPageSearchParams = {
   tab?: string;
-  name?: string;
-  page?: string;
-  category?: string;
-};
+} & GetGiftsSearchParams &
+  GetGiftListsSerachParams;
 
 type GiftsPageProps = {
   searchParams: GiftPageSearchParams;
@@ -35,7 +41,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
-    <div className="flex flex-col justify-start min-h-[90vh]">
+    <div className="flex flex-col justify-start">
       <h1 className="flex justify-center items-center my-8 w-full text-4xl font-medium sm:text-5xl text-primaryTextColor">
         Agregar regalos
       </h1>
@@ -68,7 +74,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <TabsTrigger value={TABS.createGift} asChild>
             <Link
               href={{
-                query: { tab: 'create-gift' },
+                query: { tab: TABS.createGift },
               }}
               className="flex gap-2 items-center"
             >
@@ -78,9 +84,9 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
-        <SearchBar />
-
         <TabsContent value={TABS.predefinedGifts}>
+          <SearchBar />
+
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
             Comenzá con una lista pre-definida, podes personalizarla más
             adelante
@@ -89,11 +95,13 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <Categories categories={categories} />
 
           <Suspense fallback={<Loader />}>
-            <PredefinedGifts searchParams={searchParams} />
+            <DefaultGiftLists searchParams={searchParams} />
           </Suspense>
         </TabsContent>
 
         <TabsContent value={TABS.allGifts}>
+          <SearchBar />
+
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
             Elegí los productos que más te gusten y empezá a armar tu lista
           </p>
@@ -102,6 +110,12 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
 
           <Suspense fallback={<Loader />}>
             <AllGifts searchParams={searchParams} />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value={TABS.createGift}>
+          <Suspense fallback={<Loader />}>
+            <CreateGift />
           </Suspense>
         </TabsContent>
       </Tabs>

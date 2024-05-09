@@ -1,36 +1,17 @@
 'use server';
 
 import { signIn } from '@/auth';
-import { LoginSchema } from '@/schemas';
+import { generateVerificationToken } from '@/lib/tokens';
+import { LoginSchema } from '@/schemas/forms/auth';
 import { AuthError } from 'next-auth';
-import * as z from 'zod';
+import type * as z from 'zod';
+import { getLoginUserByEmail } from '../data/user';
 
 export const login = async (
+  values: z.infer<typeof LoginSchema>,
   type = 'credentials',
-  values: z.infer<typeof LoginSchema> | null = null,
   redirectTo = '/dashboard'
 ) => {
-  if (values === undefined || values === null) {
-    try {
-      await signIn(type, {
-        redirectTo,
-      });
-    } catch (error) {
-      if (error instanceof AuthError) {
-        switch (error.type) {
-          case 'AccessDenied':
-            return { error: 'Credenciales incorrectas' };
-          default:
-            return { error: 'An error occurred' };
-        }
-      }
-
-      throw error;
-    }
-
-    return;
-  }
-
   const validatedFields = LoginSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -39,6 +20,22 @@ export const login = async (
 
   if (validatedFields.success) {
     const { email, password } = validatedFields.data;
+
+    const existingUser = await getLoginUserByEmail(email);
+
+    if (!existingUser) {
+      return { error: 'Usuario no encontrado' };
+    }
+
+    if (!existingUser.emailVerified) {
+      await generateVerificationToken(email);
+
+      // send email
+    }
+
+    if (existingUser.password === null) {
+      return { error: 'Deberias de ingresar sin contraseña' };
+    }
 
     try {
       await signIn(type, {

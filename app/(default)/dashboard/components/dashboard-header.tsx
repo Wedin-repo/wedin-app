@@ -2,7 +2,7 @@ import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { Switch } from '@/components/ui/switch';
-import { formatPrice } from '@/utils/format';
+import { formatPrice } from '@/lib/utils';
 import { IoIosLink } from 'react-icons/io';
 import { IoGiftOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
@@ -12,6 +12,9 @@ export default async function DashboardHeader() {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
+
+  if (!wishListId) return null;
+
   const wishlistGifts = await getGifts({
     searchParams: { wishListId: wishListId },
   });
@@ -23,7 +26,7 @@ export default async function DashboardHeader() {
   return (
     <div className="flex flex-col gap-4 items-center w-full">
       <h1 className="text-4xl font-semibold text-primaryTextColor">Mi lista</h1>
-      <div className="flex gap-3 items-center">
+      <div className="flex flex-col sm:flex-row gap-3 items-center">
         <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-base flex items-center gap-2">
           <IoGiftOutline fontSize={'18px'} />
           {wishlistGifts?.length} regalos

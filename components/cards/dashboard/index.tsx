@@ -1,19 +1,27 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { DashboardSearchParams } from '@/app/(default)/dashboard/page';
+import type { DashboardPageSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
-import Pagination from '@/components/cards/dashboard/components/pagination';
-import GiftCard from './card';
+import Pagination from '@/components/Pagination';
+import DashboardGiftCard from './card';
 
-type GiftsProps = {
-  searchParams: DashboardSearchParams;
+type DashboardGiftsProps = {
+  searchParams: DashboardPageSearchParams;
 };
 
-export default async function Gifts({ searchParams }: GiftsProps) {
+export default async function DashboardGifts({
+  searchParams,
+}: DashboardGiftsProps) {
   const currentUser = await getCurrentUser();
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
+
+  if (!wishListId) {
+    return (
+      <EmptyState showReset title="No se ha creado una lista de regalos" />
+    );
+  }
 
   // This is to count is just for the case that when
   // the user had not add any gift to the wishlist
@@ -29,9 +37,8 @@ export default async function Gifts({ searchParams }: GiftsProps) {
   const itemsPerPage = 8;
   const { page = '1', name } = searchParams;
 
-  // This also takes into account when the
-  // name is empty so it regurns all the gifts
-  // when that happens
+  // This also takes into account when the name
+  // is empty so it regurns all the gifts when that happens
   const filteredWishlistGifts = await getGifts({
     searchParams: { ...searchParams, wishListId },
   });
@@ -48,7 +55,7 @@ export default async function Gifts({ searchParams }: GiftsProps) {
   return (
     <div className="flex flex-col gap-5">
       {paginatedFilteredWishlistGift.map(gift => (
-        <GiftCard key={gift.id} gift={gift} wishListId={wishListId} />
+        <DashboardGiftCard key={gift.id} gift={gift} wishListId={wishListId} />
       ))}
 
       {totalPages > 1 ? (
@@ -56,9 +63,8 @@ export default async function Gifts({ searchParams }: GiftsProps) {
           <Pagination totalPages={totalPages} />
         </div>
       ) : (
-        /* This is so that the space leave by
-         * not having the pagination is covered
-         * it is consistent */
+        /* This is so that the space leave by not
+        having the pagination is covered  it is consistent */
         <div className="h-[72px]" />
       )}
     </div>

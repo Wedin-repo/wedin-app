@@ -1,16 +1,14 @@
+import type { GetGiftsParams } from '@/actions/data/gift';
 import Loader from '@/components/Loader';
+import DashboardGifts from '@/components/cards/dashboard';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
 import DashboardHeader from './components/dashboard-header';
-import WishlistGifts from './components/wishlist-gifts';
 
-export type DashboardSearchParams = {
-  page?: string;
-  name?: string;
-};
+export type DashboardPageSearchParams = Pick<GetGiftsParams, 'name' | 'page'>;
 
 type DashboardPageProps = {
-  searchParams: DashboardSearchParams;
+  searchParams: DashboardPageSearchParams;
 };
 
 export default function DashboardPage({ searchParams }: DashboardPageProps) {
@@ -21,7 +19,7 @@ export default function DashboardPage({ searchParams }: DashboardPageProps) {
       <SearchBar scrollValue={200} scrollValueMobile={250} />
 
       <Suspense fallback={<Loader />}>
-        <WishlistGifts searchParams={searchParams} />
+        <DashboardGifts searchParams={searchParams} />
       </Suspense>
     </div>
   );

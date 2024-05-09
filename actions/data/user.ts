@@ -1,3 +1,5 @@
+'use server';
+
 import { ErrorResponse } from '@/auth';
 import prisma from '@/db/client';
 import { User } from '@prisma/client';
@@ -17,6 +19,16 @@ export const getUserByEmail = async (
   } catch (error: any) {
     console.error('Error getting user by email:', error);
     return { error: 'InternalError' };
+  }
+};
+
+export const getLoginUserByEmail = async (email: string) => {
+  try {
+    return await prisma.user.findUnique({
+      where: { email },
+    });
+  } catch (error) {
+    return null;
   }
 };
 

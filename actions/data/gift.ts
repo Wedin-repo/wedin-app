@@ -1,14 +1,15 @@
 'use server';
 
-import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import prisma from '@/db/client';
 
 export type GetGiftsParams = {
   category?: string;
   giftListId?: string;
-  wishListId?: string | null;
+  wishListId?: string;
   itemsPerPage?: number;
-} & Omit<GiftPageSearchParams, 'tab'>;
+  page?: string;
+  name?: string;
+};
 
 export async function getGifts({
   searchParams,
@@ -28,7 +29,7 @@ export async function getGifts({
     }
   }
 
-  let query: any = {};
+  const query: any = {};
 
   const { category, giftListId, wishListId, name, page, itemsPerPage } =
     searchParams;
@@ -58,7 +59,7 @@ export async function getGifts({
     try {
       return await prisma.gift.findMany({
         where: query,
-        skip: (parseInt(page) - 1) * itemsPerPage,
+        skip: (Number.parseInt(page) - 1) * itemsPerPage,
         take: itemsPerPage,
         orderBy: {
           createdAt: 'desc',
