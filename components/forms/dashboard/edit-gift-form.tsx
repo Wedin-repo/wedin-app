@@ -6,7 +6,7 @@ import GiftForm from '@/components/GiftForm';
 import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/lib/utils';
-import { GiftSchema } from '@/schemas/index';
+import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
@@ -94,32 +94,46 @@ function EditGiftForm({
 
   const handleRemoveGiftFromWishList = async () => {
     setIsLoading(true);
-    const formData = new FormData();
 
-    formData.append('content', gift.id);
-    try {
-      const response = await deleteGiftFromWishList(wishlistId, formData);
+    const validatedFields = RemoveGiftFromWishListSchema.safeParse({
+      giftId: gift.id,
+      wishlistId: wishlistId,
+    });
+
+    if (!validatedFields.success) {
       toast({
-        title: response.status,
-        description: response.message,
-        action: (
-          <AddToWishListForm
-            giftId={gift.id}
-            wishlistId={wishlistId}
-            variant="undoButton"
-          />
-        ),
+        title: 'Error',
+        description: 'Error al eliminar el regalo de la lista',
         className: 'bg-white',
       });
-    } catch (error: any) {
+
+      return;
+    }
+
+    const response = await deleteGiftFromWishList(validatedFields.data);
+
+    if (response.status === 'Error') {
       toast({
         title: 'Error',
         description:
-          error.message ||
+          response.message ||
           'An error occurred while deleting the gift from the wishlist.',
         className: 'bg-white',
       });
     }
+
+    toast({
+      title: response.status,
+      description: response.message,
+      action: (
+        <AddToWishListForm
+          giftId={gift.id}
+          wishlistId={wishlistId}
+          variant="undoButton"
+        />
+      ),
+      className: 'bg-white',
+    });
 
     if (setIsOpen) {
       setIsOpen(false);

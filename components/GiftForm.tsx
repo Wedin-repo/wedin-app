@@ -1,12 +1,5 @@
-import { UseFormReturn } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import ImageUpload from '@/components/ImageUpload';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -15,20 +8,25 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import ImageUpload from '@/components/ImageUpload';
-import { Button } from '@/components/ui/button';
-import { FaRegTrashAlt } from 'react-icons/fa';
+import type { GiftSchema } from '@/schemas/forms';
+import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
+import type { UseFormReturn } from 'react-hook-form';
+import { FaRegTrashAlt } from 'react-icons/fa';
 import { FiEdit3 } from 'react-icons/fi';
-import { GiftSchema } from '@/schemas/index';
-
-import React from 'react';
-import { Category, Gift } from '@prisma/client';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 type GiftFormProps = {
-  form:  UseFormReturn<z.infer<typeof GiftSchema>>;
+  form: UseFormReturn<z.infer<typeof GiftSchema>>;
   gift?: Gift;
   categories: Category[] | null;
   isLoading: boolean;
@@ -49,7 +47,7 @@ const GiftForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col lg:flex-row items-center justify-center w-full gap-4 sm:gap-8 pt-6 lg:pt-0">
+        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:gap-8 lg:flex-row lg:pt-0">
           <div className="w-full lg:w-1/2">
             <ImageUpload imgUrl={gift?.imageUrl} />
           </div>
@@ -101,7 +99,7 @@ const GiftForm = ({
                             <div
                               className="flex justify-center items-center w-5/6 border border-b-secondaryBorderColor"
                               style={{ margin: '0 auto' }}
-                            ></div>
+                            />
                           </div>
                         ))}
                       </SelectContent>
@@ -137,7 +135,7 @@ const GiftForm = ({
                 render={({ field }) => (
                   <FormItem className="flex justify-between items-center">
                     <FormLabel className="text-base font-normal">
-                      Marcar como el que más queremos ⭐️
+                      Marcar como el que más queremos ⭐
                     </FormLabel>
                     <FormControl className="!mt-0">
                       <Switch
@@ -169,7 +167,7 @@ const GiftForm = ({
                 )}
               />
             </div>
-            <div className="flex flex-col gap-3 items-center justify-center w-full mt-6">
+            <div className="flex flex-col gap-3 justify-center items-center mt-6 w-full">
               {gift && (
                 <div className="w-full">
                   <Button
@@ -180,7 +178,7 @@ const GiftForm = ({
                   >
                     Eliminar regalo
                     {isLoading ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                       <FaRegTrashAlt fontSize={'16px'} />
                     )}
@@ -195,7 +193,7 @@ const GiftForm = ({
                 >
                   {gift ? 'Editar regalo' : 'Guardar y agregar a la lista'}
                   {isLoading ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
                     <FiEdit3 fontSize={'16px'} />
                   )}

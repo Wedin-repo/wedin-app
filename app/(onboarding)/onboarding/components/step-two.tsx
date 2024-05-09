@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { toast } from '@/components/ui/use-toast';
-import { StepTwoSchema } from '@/schemas';
+import { StepTwoSchema } from '@/schemas/forms/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -29,7 +29,7 @@ import { useRouter } from 'next/navigation';
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { FaArrowRight } from 'react-icons/fa6';
-import { z } from 'zod';
+import type { z } from 'zod';
 import { countries } from '../countries';
 
 const StepTwo = () => {
@@ -51,7 +51,7 @@ const StepTwo = () => {
     setIsLoading(true);
     const validatedFields = StepTwoSchema.safeParse(values);
     if (validatedFields.success) {
-      let response = await stepTwoUpdate(validatedFields.data);
+      const response = await stepTwoUpdate(validatedFields.data);
 
       if (response?.error) {
         toast({

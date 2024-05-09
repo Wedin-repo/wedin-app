@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/client';
-import { NewPasswordSchema } from '@/schemas';
+import { NewPasswordSchema } from '@/schemas/forms/auth';
 import bcrypt from 'bcryptjs';
 import type * as z from 'zod';
 import { getPasswordTokenResetByEmail } from '../data/password-token';

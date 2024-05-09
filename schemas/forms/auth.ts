@@ -37,6 +37,7 @@ export const RegisterSchema = z
   });
 
 export const PasswordResetSchema = LoginSchema.pick({ email: true });
+
 export const NewPasswordSchema = z
   .object({
     password: z
@@ -94,27 +95,4 @@ export const StepTwoSchema = z.object({
   weddingCity: z.string().optional(),
   isDecidingWeddingCountryCity: boolean(),
   hasPYbankAccount: z.boolean(),
-});
-
-export const GiftSchema = z.object({
-  id: z.string(),
-  name: z
-    .string()
-    .min(1, { message: 'El nombre del regalo no puede estar vacío' })
-    .max(60, { message: 'El nombre del regalo es demasiado largo' }),
-  categoryId: z.string().min(1, { message: 'Debes seleccionar una categoría' }),
-  price: z
-    .string()
-    .regex(/^\d+(\.\d{1,2})?$/, { message: 'Introduce un precio válido' })
-    .max(8, {
-      message: 'El precio no puede ser mayor de PYG 99,999,999',
-    }),
-  isFavoriteGift: z.boolean(),
-  isGroupGift: z.boolean(),
-  wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
-});
-
-export const RemoveGiftFromWishListSchema = z.object({
-  wishlistId: z.string(),
-  giftId: z.string(),
 });

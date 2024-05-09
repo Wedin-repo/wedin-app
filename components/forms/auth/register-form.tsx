@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { RegisterSchema } from '@/schemas';
+import { RegisterSchema } from '@/schemas/forms/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { MdErrorOutline } from 'react-icons/md';
 import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
+
 export default function RegisterForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);

@@ -1,7 +1,6 @@
 'use server';
 
 import prisma from '@/db/client';
-import { GiftSchema } from '@/schemas';
 import { revalidatePath } from 'next/cache';
 import type * as z from 'zod';
 import {
@@ -9,6 +8,7 @@ import {
   validateCategory,
   validateGiftAndWishlist,
 } from './helper';
+import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas/forms';
 
 export const addGiftToWishList = async (
   wishlistId: string,
@@ -101,24 +101,18 @@ export const addGiftsToWishList = async (
 };
 
 export const deleteGiftFromWishList = async (
-  wishlistId: string,
-  formData: FormData
+  formData: z.infer<typeof RemoveGiftFromWishListSchema>
 ) => {
-  const giftId = formData.get('content') as string | null;
+  const validatedFields = RemoveGiftFromWishListSchema.safeParse(formData);
 
-  if (typeof giftId !== 'string' || giftId === null) {
+  if (!validatedFields.success) {
     return {
       status: 'Error',
-      message: 'Invalid gift ID',
+      message: 'Datos requeridos no fueron encontrados',
     };
   }
 
-  if (!wishlistId) {
-    return {
-      status: 'Error',
-      message: 'Wishlist not found',
-    };
-  }
+  const { wishlistId, giftId } = validatedFields.data;
 
   try {
     await prisma.wishList.update({
@@ -129,7 +123,7 @@ export const deleteGiftFromWishList = async (
         },
       },
     });
-  } catch (error: unknown) {
+  } catch (error) {
     return {
       status: 'Error',
       message: getErrorMessage(error),
@@ -145,7 +139,7 @@ export const deleteGiftFromWishList = async (
 };
 
 export const editOrCreateGift = async (
-  formData: z.infer<typeof GiftSchema> | null = null
+  formData: z.infer<typeof GiftSchema>
 ) => {
   try {
     const validatedFields = GiftSchema.safeParse(formData);
@@ -173,10 +167,8 @@ export const editOrCreateGift = async (
       description: 'a new gift creater by user', // TODO: inform UX about description issue
     };
 
-    let response;
-
     if (gift.isDefault) {
-      response = await prisma.gift.create({
+      const response = await prisma.gift.create({
         data: { ...newGiftData },
       });
       await prisma.wishList.update({
@@ -191,7 +183,7 @@ export const editOrCreateGift = async (
     }
 
     if (!gift.isDefault) {
-      response = await prisma.gift.update({
+      const response = await prisma.gift.update({
         where: { id: validatedFields.data.id },
         data: newGiftData,
       });
@@ -275,7 +267,7 @@ export async function getWishList(wishListId: string | null | undefined) {
     if (!wishList) return null;
 
     return wishList;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(error);
     return null;
   }

@@ -4,7 +4,7 @@ import { createGiftToWishList } from '@/actions/data/wishlist';
 import GiftForm from '@/components/GiftForm';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { GiftSchema } from '@/schemas/index';
+import { GiftSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
