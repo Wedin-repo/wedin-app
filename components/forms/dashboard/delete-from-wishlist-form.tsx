@@ -1,8 +1,8 @@
 'use client';
 
 import { deleteGiftFromWishList } from '@/actions/data/wishlist';
-import AddToWishListForm from '@/components/forms/gifts/add-to-wishlist-form';
-import WishListFormButton from '@/components/forms/gifts/wishlist-form-button';
+import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
+import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
 import { GiftWishListSchema } from '@/schemas/forms';
 import { useRouter } from 'next/navigation';

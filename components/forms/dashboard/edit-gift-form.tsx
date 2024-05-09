@@ -3,7 +3,7 @@ import {
   editOrCreateGift,
 } from '@/actions/data/wishlist';
 import GiftForm from '@/components/GiftForm';
-import AddToWishListForm from '@/components/forms/gifts/add-to-wishlist-form';
+import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/lib/utils';
 import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';

@@ -1,5 +1,5 @@
 import { getGiftLists } from '@/actions/data/giftlist';
-import { GetGiftListsSerachParams } from '@/app/(default)/gifts/page';
+import type { GetGiftListsSerachParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
 import CardContainer from '../shared/card-container';
 import GiftListCard from './card';
