@@ -7,7 +7,7 @@ import {
   getErrorMessage,
   validateCategory,
   validateGiftAndWishlist,
-} from './helper';
+} from '../helper';
 import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas/forms';
 
 export const addGiftToWishList = async (

@@ -1,9 +1,6 @@
 // app/api/wishlist/route.ts
 
-import {
-  validateCategory,
-  validateGiftAndWishlist,
-} from '@/actions/data/helper';
+import { validateCategory, validateGiftAndWishlist } from '@/actions/helper';
 import prisma from '@/db/client';
 import { GiftSchema } from '@/schemas/forms';
 import type { NextApiRequest, NextApiResponse } from 'next';
