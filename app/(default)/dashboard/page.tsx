@@ -1,9 +1,9 @@
+import type { GetGiftsParams } from '@/actions/data/gift';
 import Loader from '@/components/Loader';
 import DashboardGifts from '@/components/cards/dashboard';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
 import DashboardHeader from './components/dashboard-header';
-import { GetGiftsParams } from '@/actions/data/gift';
 
 export type DashboardPageSearchParams = Pick<GetGiftsParams, 'name' | 'page'>;
 

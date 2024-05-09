@@ -1,16 +1,17 @@
-import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { GiftSchema } from '@/schemas/index';
-import { editOrCreateGift } from '@/actions/data/wishlist';
-import { Category, Gift } from '@prisma/client';
-import { deleteGiftFromWishList } from '@/actions/data/wishlist';
-import { z } from 'zod';
-import { useToast } from '@/components/ui/use-toast';
-import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
-
+import {
+  deleteGiftFromWishList,
+  editOrCreateGift,
+} from '@/actions/data/wishlist';
 import GiftForm from '@/components/GiftForm';
+import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
+import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/lib/utils';
+import { GiftSchema } from '@/schemas/index';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { Category, Gift } from '@prisma/client';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import type { z } from 'zod';
 
 type EditGiftFormProps = {
   gift: Gift;
@@ -27,7 +28,7 @@ function EditGiftForm({
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  
+
   const form = useForm({
     resolver: zodResolver(GiftSchema),
     defaultValues: {
@@ -42,15 +43,14 @@ function EditGiftForm({
   });
 
   const { formState } = form;
-  
+
   if (!categories) return null;
-  
+
   const formattedPrice = formatPrice(Number(gift.price));
-  
+
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
-      console.log('No changes made');
       if (setIsOpen) {
         setIsOpen(false);
       }
@@ -60,35 +60,28 @@ function EditGiftForm({
 
     const validatedFields = GiftSchema.safeParse(values);
 
-    if (validatedFields.success) {
-      try {
-        const response = await editOrCreateGift(validatedFields.data);
-
-        if (response.status === 'Error') {
-          toast({
-            title: 'Error',
-            description: response.message,
-            className: 'bg-white',
-          });
-        } else {
-          toast({
-            title: 'Éxito! 🎁🎉',
-            description: 'Regalo actualizado.',
-            className: 'bg-white',
-          });
-        }
-      } catch (error: any) {
-        toast({
-          title: 'Error',
-          description:
-            error.message || 'An error occurred while updating the gift.',
-          className: 'bg-white',
-        });
-      }
-    } else {
+    if (!validatedFields.success) {
       toast({
         title: 'Validation Error',
         description: 'Please check your input and try again.',
+        className: 'bg-white',
+      });
+
+      return;
+    }
+
+    const response = await editOrCreateGift(validatedFields.data);
+
+    if (response.status === 'Error') {
+      toast({
+        title: 'Error',
+        description: response.message,
+        className: 'bg-white',
+      });
+    } else {
+      toast({
+        title: 'Éxito! 🎁🎉',
+        description: 'Regalo actualizado.',
         className: 'bg-white',
       });
     }
@@ -102,6 +95,7 @@ function EditGiftForm({
   const handleRemoveGiftFromWishList = async () => {
     setIsLoading(true);
     const formData = new FormData();
+
     formData.append('content', gift.id);
     try {
       const response = await deleteGiftFromWishList(wishlistId, formData);

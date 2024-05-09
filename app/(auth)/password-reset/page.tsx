@@ -1,7 +1,7 @@
 'use client';
 
-import PasswordResetForm from '@/components/signin/password-reset-form';
-import SociaMediaLoginButton from '@/components/signin/socia-media-login-form';
+import PasswordResetForm from '@/components/forms/auth/password-reset-form';
+import SociaMediaLoginButton from '@/components/forms/auth/socia-media-login-form';
 import { capitalizeFirstLetter } from '@/lib/utils';
 import { MoveDown } from 'lucide-react';
 import { useState } from 'react';

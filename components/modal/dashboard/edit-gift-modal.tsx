@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import EditGiftForm from '@/components/forms/dashboard/edit-gift-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { Category, Gift, User, Wedding } from '@prisma/client';
+import type { Category, Gift } from '@prisma/client';
+import { useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
-import EditGiftForm from './edit-gift-form';
 
 type EditGiftModalProps = {
   gift: Gift;

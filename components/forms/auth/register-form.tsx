@@ -20,7 +20,6 @@ import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
 import { MdErrorOutline } from 'react-icons/md';
 import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
-
 export default function RegisterForm() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);

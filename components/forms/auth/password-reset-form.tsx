@@ -15,7 +15,7 @@ import { PasswordResetSchema } from '@/schemas';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -132,8 +132,8 @@ export default function PasswordResetForm(props: PasswordResetFormProps) {
             isLoading={isLoading}
             label={
               isLoading
-                ? `Enviando link a tu correo`
-                : `Enviar link a tu Correo`
+                ? 'Enviando link a tu correo'
+                : 'Enviar link a tu Correo'
             }
           />
         </div>

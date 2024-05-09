@@ -1,10 +1,14 @@
 'use server';
 
 import prisma from '@/db/client';
-import { revalidatePath } from 'next/cache';
 import { GiftSchema } from '@/schemas';
-import * as z from 'zod';
-import { getErrorMessage, validateGiftAndWishlist, validateCategory } from './helper';
+import { revalidatePath } from 'next/cache';
+import type * as z from 'zod';
+import {
+  getErrorMessage,
+  validateCategory,
+  validateGiftAndWishlist,
+} from './helper';
 
 export const addGiftToWishList = async (
   wishlistId: string,
@@ -135,7 +139,7 @@ export const deleteGiftFromWishList = async (
   revalidatePath('/', 'layout');
 
   return {
-    status: 'Éxito! 🎁🗑️',
+    status: 'Éxito! 🎁🗑',
     message: 'Regalo eliminado de tu lista.',
   };
 };
@@ -152,7 +156,7 @@ export const editOrCreateGift = async (
 
     await validateCategory(validatedFields.data.categoryId);
 
-    const { gift, wishlist } = await validateGiftAndWishlist(
+    const { gift } = await validateGiftAndWishlist(
       validatedFields.data.id,
       validatedFields.data.wishListId
     );
@@ -212,7 +216,7 @@ export const editOrCreateGift = async (
 };
 
 export const createGiftToWishList = async (
-  formData: z.infer<typeof GiftSchema> | null = null
+  formData: z.infer<typeof GiftSchema>
 ) => {
   try {
     const validatedFields = GiftSchema.safeParse(formData);
@@ -231,7 +235,7 @@ export const createGiftToWishList = async (
         categoryId: validatedFields.data.categoryId,
         price: validatedFields.data.price,
         isFavoriteGift: validatedFields.data.isFavoriteGift,
-        isGroupGift: validatedFields.data.isGroupGift,
+        isGroupGift: validatedFields.data.isGroupGift ?? false,
         isDefault: false,
         isEditedVersion: false,
         description: 'a new gift creater by user', // TODO: inform UX about description issue

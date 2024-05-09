@@ -8,9 +8,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 
-type EmailVerifyCardProps = {};
-
-export default function EmailVerifyCard({}: EmailVerifyCardProps) {
+export default function EmailVerifyCard() {
   const { toast } = useToast();
   const router = useRouter();
   const searchParams = useSearchParams();
