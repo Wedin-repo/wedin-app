@@ -1,6 +1,7 @@
 import { addGiftToWishList } from '@/actions/data/wishlist';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { GiftWishListSchema } from '@/schemas/forms';
 import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishListFormButton from './wishlist-form-button';
@@ -21,11 +22,17 @@ function AddToWishListForm({
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleAddGiftToWishList = async (formData: FormData) => {
-    if (!wishlistId) return redirect('/register');
+  const handleAddGiftToWishList = async () => {
+    const validatedFields = GiftWishListSchema.safeParse({
+      wishlistId,
+      giftId,
+    });
 
-    const addToWishListWithId = addGiftToWishList.bind(null, wishlistId);
-    const response = await addToWishListWithId(formData);
+    if (!validatedFields.success) {
+      return redirect('/register');
+    }
+
+    const response = await addGiftToWishList(validatedFields.data);
 
     if (variant !== 'undoButton') {
       toast({
@@ -35,7 +42,7 @@ function AddToWishListForm({
           <Button
             onClick={() => router.push('/dashboard?page=1')}
             variant="outline"
-            className="gap-1 h-8 border-borderColor px-3 hover:bg-primaryBackgroundColor hover:text-white"
+            className="gap-1 px-3 h-8 hover:text-white border-borderColor hover:bg-primaryBackgroundColor"
           >
             <IoGiftOutline />
             Ver lista

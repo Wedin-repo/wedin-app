@@ -1,5 +1,5 @@
 import { getUserByEmail, updateVerifiedOn } from '@/actions/data/user';
-import NextAuth, { DefaultSession } from 'next-auth';
+import NextAuth, { type DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import authOptions from './auth.config';
 
@@ -7,7 +7,7 @@ export type ErrorResponse = {
   error: string;
 };
 
-export function isError(response: any): response is ErrorResponse {
+export function isError(response: unknown): response is ErrorResponse {
   return (response as ErrorResponse).error !== undefined;
 }
 

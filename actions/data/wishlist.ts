@@ -1,30 +1,32 @@
 'use server';
 
 import prisma from '@/db/client';
+import {
+  GiftSchema,
+  GiftWishListSchema,
+  GiftsWishListSchema,
+} from '@/schemas/forms';
 import { revalidatePath } from 'next/cache';
-import { GiftSchema } from '@/schemas';
-import * as z from 'zod';
-import { getErrorMessage, validateGiftAndWishlist, validateCategory } from './helper';
+import type * as z from 'zod';
+import {
+  getErrorMessage,
+  validateCategory,
+  validateGiftAndWishlist,
+} from '../helper';
 
 export const addGiftToWishList = async (
-  wishlistId: string,
-  formData: FormData
+  formData: z.infer<typeof GiftWishListSchema>
 ) => {
-  const giftId = formData.get('giftId') as string | null;
+  const validatedFields = GiftWishListSchema.safeParse(formData);
 
-  if (typeof giftId !== 'string' || giftId === null) {
+  if (!validatedFields.success) {
     return {
       status: 'Error',
-      message: 'Invalid gift ID',
+      message: 'Invalid Data',
     };
   }
 
-  if (!wishlistId) {
-    return {
-      status: 'Error',
-      message: 'Wishlist not found',
-    };
-  }
+  const { giftId, wishlistId } = validatedFields.data;
 
   try {
     await prisma.wishList.update({
@@ -51,33 +53,25 @@ export const addGiftToWishList = async (
 };
 
 export const addGiftsToWishList = async (
-  wishlistId: string,
-  formData: FormData
+  formData: z.infer<typeof GiftsWishListSchema>
 ) => {
-  const giftIds = formData.get('giftIds') as string | null;
+  const validatedFields = GiftsWishListSchema.safeParse(formData);
 
-  if (giftIds === null || !giftIds) {
+  if (!validatedFields.success) {
     return {
       status: 'Error',
       message: 'Invalid gift Ids',
     };
   }
 
-  const arrayGiftIds = giftIds?.split(',');
-
-  if (arrayGiftIds === null || arrayGiftIds.length === 0) {
-    return {
-      status: 'Error',
-      message: 'Something went wrong. Please try again.',
-    };
-  }
+  const { giftIds, wishlistId } = validatedFields.data;
 
   try {
     await prisma.wishList.update({
       where: { id: wishlistId },
       data: {
         gifts: {
-          connect: arrayGiftIds.map(giftId => ({ id: giftId })),
+          connect: giftIds.map(giftId => ({ id: giftId })),
         },
       },
     });
@@ -97,24 +91,18 @@ export const addGiftsToWishList = async (
 };
 
 export const deleteGiftFromWishList = async (
-  wishlistId: string,
-  formData: FormData
+  formData: z.infer<typeof GiftWishListSchema>
 ) => {
-  const giftId = formData.get('content') as string | null;
+  const validatedFields = GiftWishListSchema.safeParse(formData);
 
-  if (typeof giftId !== 'string' || giftId === null) {
+  if (!validatedFields.success) {
     return {
       status: 'Error',
-      message: 'Invalid gift ID',
+      message: 'Datos requeridos no fueron encontrados',
     };
   }
 
-  if (!wishlistId) {
-    return {
-      status: 'Error',
-      message: 'Wishlist not found',
-    };
-  }
+  const { wishlistId, giftId } = validatedFields.data;
 
   try {
     await prisma.wishList.update({
@@ -125,7 +113,7 @@ export const deleteGiftFromWishList = async (
         },
       },
     });
-  } catch (error: unknown) {
+  } catch (error) {
     return {
       status: 'Error',
       message: getErrorMessage(error),
@@ -135,13 +123,13 @@ export const deleteGiftFromWishList = async (
   revalidatePath('/', 'layout');
 
   return {
-    status: 'Éxito! 🎁🗑️',
+    status: 'Éxito! 🎁🗑',
     message: 'Regalo eliminado de tu lista.',
   };
 };
 
 export const editOrCreateGift = async (
-  formData: z.infer<typeof GiftSchema> | null = null
+  formData: z.infer<typeof GiftSchema>
 ) => {
   try {
     const validatedFields = GiftSchema.safeParse(formData);
@@ -152,7 +140,7 @@ export const editOrCreateGift = async (
 
     await validateCategory(validatedFields.data.categoryId);
 
-    const { gift, wishlist } = await validateGiftAndWishlist(
+    const { gift } = await validateGiftAndWishlist(
       validatedFields.data.id,
       validatedFields.data.wishListId
     );
@@ -169,10 +157,8 @@ export const editOrCreateGift = async (
       description: 'a new gift creater by user', // TODO: inform UX about description issue
     };
 
-    let response;
-
     if (gift.isDefault) {
-      response = await prisma.gift.create({
+      const response = await prisma.gift.create({
         data: { ...newGiftData },
       });
       await prisma.wishList.update({
@@ -187,7 +173,7 @@ export const editOrCreateGift = async (
     }
 
     if (!gift.isDefault) {
-      response = await prisma.gift.update({
+      const response = await prisma.gift.update({
         where: { id: validatedFields.data.id },
         data: newGiftData,
       });
@@ -212,7 +198,7 @@ export const editOrCreateGift = async (
 };
 
 export const createGiftToWishList = async (
-  formData: z.infer<typeof GiftSchema> | null = null
+  formData: z.infer<typeof GiftSchema>
 ) => {
   try {
     const validatedFields = GiftSchema.safeParse(formData);
@@ -231,7 +217,7 @@ export const createGiftToWishList = async (
         categoryId: validatedFields.data.categoryId,
         price: validatedFields.data.price,
         isFavoriteGift: validatedFields.data.isFavoriteGift,
-        isGroupGift: validatedFields.data.isGroupGift,
+        isGroupGift: validatedFields.data.isGroupGift ?? false,
         isDefault: false,
         isEditedVersion: false,
         description: 'a new gift creater by user', // TODO: inform UX about description issue
@@ -260,19 +246,3 @@ export const createGiftToWishList = async (
     return { status: 'Error', message: getErrorMessage(error) };
   }
 };
-
-export async function getWishList(wishListId: string | null | undefined) {
-  try {
-    if (wishListId === null) return null;
-    const wishList = await prisma.wishList.findFirst({
-      where: { id: wishListId },
-    });
-
-    if (!wishList) return null;
-
-    return wishList;
-  } catch (error: any) {
-    console.error(error);
-    return null;
-  }
-}

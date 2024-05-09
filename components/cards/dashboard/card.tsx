@@ -1,5 +1,6 @@
-import RemoveFromWishListForm from '@/components/cards/dashboard/components/delete-from-wishlist-form';
-import EditGiftModal from '@/components/cards/dashboard/components/edit-gift-modal';
+import { getCategories, getCategory } from '@/actions/data/category';
+import RemoveFromWishListForm from '@/components/forms/dashboard/delete-from-wishlist-form';
+import EditGiftModal from '@/components/modals/dashboard/edit-gift-modal';
 import {
   Card,
   CardContent,
@@ -8,10 +9,8 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import { Gift } from '@prisma/client';
-import { getCategory } from '@/actions/data/category';
+import type { Gift } from '@prisma/client';
 import Image from 'next/image';
-import { getCategories } from '@/actions/data/category';
 
 type DashboardGiftCardProps = {
   gift: Gift;
@@ -22,16 +21,8 @@ const DashboardGiftCard = async ({
   gift,
   wishListId,
 }: DashboardGiftCardProps) => {
-  const {
-    id,
-    name,
-    price,
-    isDefault,
-    imageUrl,
-    categoryId,
-    isFavoriteGift,
-    isGroupGift,
-  } = gift;
+  const { id, name, price, imageUrl, categoryId, isFavoriteGift, isGroupGift } =
+    gift;
 
   const categories = await getCategories();
   if (!categories) return null;
@@ -49,11 +40,6 @@ const DashboardGiftCard = async ({
           alt={name}
           className="object-cover rounded-lg shadow"
         />
-        {isDefault && (
-          <div className="absolute top-2 right-2 p-1 text-xs text-yellow-400 bg-white rounded-full shadow-inner transform translate-x-1/2 -translate-y-1/2">
-            ⭐️
-          </div>
-        )}
       </CardHeader>
 
       <CardContent variant="dashboard">
@@ -61,10 +47,10 @@ const DashboardGiftCard = async ({
         <p className="text-sm text-secondaryTextColor">{category?.name}</p>
         <span className="text-lg text-black">{formattedPrice}</span>
         {(isFavoriteGift || isGroupGift) && (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <div className="flex flex-col gap-2 items-start sm:flex-row sm:items-center">
             {isFavoriteGift && (
               <span className="text-xs bg-[#F2F2F2] py-1.5 px-3 rounded-full text-secondaryTextColor">
-                El que más queremos ⭐️
+                El que más queremos ⭐
               </span>
             )}
             {isGroupGift && (

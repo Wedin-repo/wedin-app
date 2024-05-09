@@ -1,7 +1,7 @@
 'use client';
 
-import RegisterForm from '@/components/signin/register-form';
-import SociaMediaLoginButton from '@/components/signin/socia-media-login-form';
+import RegisterForm from '@/components/forms/auth/register-form';
+import SociaMediaLoginButton from '@/components/forms/auth/socia-media-login-form';
 import Link from 'next/link';
 
 const RegisterRight = () => {

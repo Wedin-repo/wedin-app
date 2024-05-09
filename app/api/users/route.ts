@@ -1,5 +1,5 @@
 import prisma from '@/db/client';
-import { MagicLoginSchema } from '@/schemas';
+import { MagicLoginSchema } from '@/schemas/forms/auth';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {

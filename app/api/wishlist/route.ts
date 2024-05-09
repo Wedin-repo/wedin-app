@@ -1,12 +1,9 @@
 // app/api/wishlist/route.ts
 
+import { validateCategory, validateGiftAndWishlist } from '@/actions/helper';
 import prisma from '@/db/client';
-import { NextApiRequest, NextApiResponse } from 'next';
-import {
-  validateGiftAndWishlist,
-  validateCategory,
-} from '@/actions/data/helper';
-import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas';
+import { GiftSchema } from '@/schemas/forms';
+import type { NextApiRequest, NextApiResponse } from 'next';
 
 export async function POST(req: Request, res: Response) {
   /* const { wishlistId, giftId } = req.body;
@@ -27,10 +24,10 @@ export async function POST(req: Request, res: Response) {
     }); */
 
     return Response.json({
-      status: 'Éxito! 🎁🗑️',
+      status: 'Éxito! 🎁🗑',
       message: 'Regalo eliminado de tu lista.',
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log(error);
     /* return res.status(500).json({
       status: 'Error',

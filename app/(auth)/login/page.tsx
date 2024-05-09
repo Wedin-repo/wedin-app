@@ -1,5 +1,5 @@
-import LoginForm from '@/components/signin/login-form';
-import SociaMediaLoginForm from '@/components/signin/socia-media-login-form';
+import LoginForm from '@/components/forms/auth/login-form';
+import SociaMediaLoginForm from '@/components/forms/auth/socia-media-login-form';
 import Link from 'next/link';
 
 export default function LoginPage() {

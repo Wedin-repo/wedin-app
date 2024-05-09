@@ -2,9 +2,10 @@
 
 import { auth } from '@/auth';
 import prisma from '@/db/client';
-import { StepTwoSchema } from '@/schemas';
+import { StepTwoSchema } from '@/schemas/forms/auth';
+import type { User } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
-import * as z from 'zod';
+import type { z } from 'zod';
 
 export const stepTwoUpdate = async (
   values: z.infer<typeof StepTwoSchema> | null = null
@@ -27,7 +28,7 @@ export const stepTwoUpdate = async (
 
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
-    let groom;
+    let groom: User;
 
     try {
       groom = await prisma.user.update({

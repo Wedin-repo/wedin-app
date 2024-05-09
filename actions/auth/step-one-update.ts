@@ -2,17 +2,11 @@
 
 import { auth } from '@/auth';
 import prisma from '@/db/client';
-import { StepOneSchema } from '@/schemas';
+import { StepOneSchema } from '@/schemas/forms/auth';
 import type { User, WishList } from '@prisma/client';
 import type * as z from 'zod';
 
-export const stepOneUpdate = async (
-  values: z.infer<typeof StepOneSchema> | null = null
-) => {
-  if (values === undefined || values === null) {
-    return { error: 'Algo salio mal! reintanta' };
-  }
-
+export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
   const validatedFields = StepOneSchema.safeParse(values);
 
   if (!validatedFields.success) {

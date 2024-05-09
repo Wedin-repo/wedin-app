@@ -1,6 +1,8 @@
 'use client';
 
+import { login } from '@/actions/auth/login';
 import { newPassword } from '@/actions/auth/new-password';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -11,18 +13,15 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { LoginSchema, NewPasswordSchema } from '@/schemas';
+import { LoginSchema, NewPasswordSchema } from '@/schemas/forms/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoEyeOffOutline, IoEyeOutline } from 'react-icons/io5';
-import { z } from 'zod';
-import { Card, CardContent, CardHeader } from '../ui/card';
+import type { z } from 'zod';
 import AuthFormButton from './auth-form-button';
-import { login } from '@/actions/auth/login';
 
 type NewPasswordFormProps = {
   email: string;
@@ -237,7 +236,7 @@ export default function NewPasswordForm({
         <AuthFormButton
           isLoading={isLoading}
           label={
-            isLoading ? `Actualizando contraseña` : `Confirmar nueva contraseña`
+            isLoading ? 'Actualizando contraseña' : 'Confirmar nueva contraseña'
           }
         />
       </form>

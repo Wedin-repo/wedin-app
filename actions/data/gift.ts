@@ -29,7 +29,7 @@ export async function getGifts({
     }
   }
 
-  let query: any = {};
+  const query: any = {};
 
   const { category, giftListId, wishListId, name, page, itemsPerPage } =
     searchParams;
@@ -59,7 +59,7 @@ export async function getGifts({
     try {
       return await prisma.gift.findMany({
         where: query,
-        skip: (parseInt(page) - 1) * itemsPerPage,
+        skip: (Number.parseInt(page) - 1) * itemsPerPage,
         take: itemsPerPage,
         orderBy: {
           createdAt: 'desc',

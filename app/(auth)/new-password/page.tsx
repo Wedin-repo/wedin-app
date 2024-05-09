@@ -1,6 +1,6 @@
 'use client';
 
-import NewPasswordForm from '@/components/signin/new-password-form';
+import NewPasswordForm from '@/components/forms/auth/new-password-form';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { X } from 'lucide-react';
 import Link from 'next/link';

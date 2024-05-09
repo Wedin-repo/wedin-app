@@ -18,14 +18,14 @@ import {
 } from '@/components/ui/popover';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { StepOneSchema } from '@/schemas';
+import { StepOneSchema } from '@/schemas/forms/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 type StepOneProps = {
   onNextStep: () => void;
@@ -55,7 +55,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
     setIsLoading(true);
     const validatedFields = StepOneSchema.safeParse(values);
     if (validatedFields.success) {
-      let response = await stepOneUpdate(validatedFields.data);
+      const response = await stepOneUpdate(validatedFields.data);
 
       if (response?.error) {
         toast({

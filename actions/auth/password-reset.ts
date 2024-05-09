@@ -3,7 +3,7 @@
 import prisma from '@/db/client';
 import { sendPasswordResetEmail } from '@/lib/mail';
 import { generatePasswordResetToken } from '@/lib/tokens';
-import { PasswordResetSchema } from '@/schemas';
+import { PasswordResetSchema } from '@/schemas/forms/auth';
 import type { PasswordResetToken } from '@prisma/client';
 import type * as z from 'zod';
 

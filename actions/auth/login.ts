@@ -2,15 +2,15 @@
 
 import { signIn } from '@/auth';
 import { generateVerificationToken } from '@/lib/tokens';
-import { LoginSchema } from '@/schemas';
+import { LoginSchema } from '@/schemas/forms/auth';
 import { AuthError } from 'next-auth';
 import type * as z from 'zod';
 import { getLoginUserByEmail } from '../data/user';
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
-  redirectTo = '/dashboard',
-  type = 'credentials'
+  type = 'credentials',
+  redirectTo = '/dashboard'
 ) => {
   const validatedFields = LoginSchema.safeParse(values);
 
