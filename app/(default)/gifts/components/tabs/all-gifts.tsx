@@ -1,5 +1,5 @@
-import GiftsModals from '@/components/modal/gifts';
-import { GetGiftsSearchParams } from '../../page';
+import GiftsModals from '@/components/modals/gifts';
+import type { GetGiftsSearchParams } from '../../page';
 
 type AllGiftsProps = {
   searchParams: GetGiftsSearchParams;

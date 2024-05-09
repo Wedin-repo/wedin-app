@@ -1,7 +1,7 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
 import { getCurrentUser } from '@/actions/getCurrentUser';
-import { GiftPageSearchParams } from '@/app/(default)/gifts/page';
+import type { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
 import GiftCard from '@/components/cards/gifts/card';
 import CardContainer from '@/components/cards/shared/card-container';

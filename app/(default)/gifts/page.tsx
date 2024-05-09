@@ -1,6 +1,6 @@
 import { getCategories } from '@/actions/data/category';
-import { GetGiftsParams } from '@/actions/data/gift';
-import { GetGiftListsParams } from '@/actions/data/giftlist';
+import type { GetGiftsParams } from '@/actions/data/gift';
+import type { GetGiftListsParams } from '@/actions/data/giftlist';
 import Loader from '@/components/Loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,8 +10,8 @@ import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import Categories from './components/categories';
 import AllGifts from './components/tabs/all-gifts';
-import DefaultGiftLists from './components/tabs/default-giftlists';
 import CreateGift from './components/tabs/create-gift';
+import DefaultGiftLists from './components/tabs/default-giftlists';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',

@@ -1,6 +1,6 @@
 import { getCategories, getCategory } from '@/actions/data/category';
 import RemoveFromWishListForm from '@/components/forms/dashboard/delete-from-wishlist-form';
-import EditGiftModal from '@/components/modal/dashboard/edit-gift-modal';
+import EditGiftModal from '@/components/modals/dashboard/edit-gift-modal';
 import {
   Card,
   CardContent,
