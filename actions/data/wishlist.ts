@@ -246,19 +246,3 @@ export const createGiftToWishList = async (
     return { status: 'Error', message: getErrorMessage(error) };
   }
 };
-
-export async function getWishList(wishListId: string | null | undefined) {
-  try {
-    if (wishListId === null) return null;
-    const wishList = await prisma.wishList.findFirst({
-      where: { id: wishListId },
-    });
-
-    if (!wishList) return null;
-
-    return wishList;
-  } catch (error: unknown) {
-    console.error(error);
-    return null;
-  }
-}
