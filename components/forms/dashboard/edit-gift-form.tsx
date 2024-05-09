@@ -3,10 +3,10 @@ import {
   editOrCreateGift,
 } from '@/actions/data/wishlist';
 import GiftForm from '@/components/GiftForm';
-import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
+import AddToWishListForm from '@/components/forms/gifts/add-to-wishlist-form';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/lib/utils';
-import { GiftSchema, RemoveGiftFromWishListSchema } from '@/schemas/forms';
+import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
@@ -95,7 +95,7 @@ function EditGiftForm({
   const handleRemoveGiftFromWishList = async () => {
     setIsLoading(true);
 
-    const validatedFields = RemoveGiftFromWishListSchema.safeParse({
+    const validatedFields = GiftWishListSchema.safeParse({
       giftId: gift.id,
       wishlistId: wishlistId,
     });

@@ -18,7 +18,12 @@ export const GiftSchema = z.object({
   wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
 });
 
-export const RemoveGiftFromWishListSchema = z.object({
+export const GiftWishListSchema = z.object({
   wishlistId: z.string(),
   giftId: z.string(),
+});
+
+export const GiftsWishListSchema = z.object({
+  wishlistId: z.string(),
+  giftIds: z.array(z.string()),
 });

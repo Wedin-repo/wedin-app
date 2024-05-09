@@ -1,10 +1,10 @@
 'use client';
 
 import { deleteGiftFromWishList } from '@/actions/data/wishlist';
-import AddToWishListForm from '@/components/cards/gifts/components/add-to-wishlist-form';
-import WishListFormButton from '@/components/cards/gifts/components/wishlist-form-button';
+import AddToWishListForm from '@/components/forms/gifts/add-to-wishlist-form';
+import WishListFormButton from '@/components/forms/gifts/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { RemoveGiftFromWishListSchema } from '@/schemas/forms';
+import { GiftWishListSchema } from '@/schemas/forms';
 import { useRouter } from 'next/navigation';
 
 type RemoveFromWishListFormProps = {
@@ -27,7 +27,7 @@ function RemoveFromWishListForm({
       return;
     }
 
-    const validatedFields = RemoveGiftFromWishListSchema.safeParse({
+    const validatedFields = GiftWishListSchema.safeParse({
       giftId: giftId,
       wishlistId: wishlistId,
     });
