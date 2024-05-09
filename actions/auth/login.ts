@@ -9,8 +9,8 @@ import { getLoginUserByEmail } from '../data/user';
 
 export const login = async (
   values: z.infer<typeof LoginSchema>,
-  redirectTo = '/dashboard',
-  type = 'credentials'
+  type = 'credentials',
+  redirectTo = '/dashboard'
 ) => {
   const validatedFields = LoginSchema.safeParse(values);
 

@@ -44,7 +44,7 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
 
             <div className="flex flex-col gap-3 text-base sm:text-lg">
               <div className="flex justify-between items-center">
-                <p>Marcar como el que más queremos ⭐️</p>
+                <p>Marcar como el que más queremos ⭐</p>
                 <Switch id="favorite-gift" />
               </div>
               <div className="flex justify-between items-center">

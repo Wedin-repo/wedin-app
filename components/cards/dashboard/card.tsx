@@ -21,16 +21,8 @@ const DashboardGiftCard = async ({
   gift,
   wishListId,
 }: DashboardGiftCardProps) => {
-  const {
-    id,
-    name,
-    price,
-    isDefault,
-    imageUrl,
-    categoryId,
-    isFavoriteGift,
-    isGroupGift,
-  } = gift;
+  const { id, name, price, imageUrl, categoryId, isFavoriteGift, isGroupGift } =
+    gift;
 
   const categories = await getCategories();
   if (!categories) return null;
@@ -48,11 +40,6 @@ const DashboardGiftCard = async ({
           alt={name}
           className="object-cover rounded-lg shadow"
         />
-        {isDefault && (
-          <div className="absolute top-2 right-2 p-1 text-xs text-yellow-400 bg-white rounded-full shadow-inner transform translate-x-1/2 -translate-y-1/2">
-            ⭐
-          </div>
-        )}
       </CardHeader>
 
       <CardContent variant="dashboard">
