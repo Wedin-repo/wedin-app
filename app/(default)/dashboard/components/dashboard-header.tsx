@@ -36,7 +36,7 @@ export default async function DashboardHeader() {
           {formattedTotalPrice}
         </div>
       </div>
-      <div className="flex flex-col gap-4 justify-start w-full sm:flex-row sm:justify-center">
+      <div className="flex flex-col gap-4 justify-start w-full sm:flex-row sm:justify-center items-center">
         <div className="flex gap-2 items-center">
           <Switch id="makeVisible" />
           Lista visible a los invitados

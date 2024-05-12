@@ -48,7 +48,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
         description: 'Please check your input and try again.',
         className: 'bg-white',
       });
-
       return;
     }
 
@@ -70,7 +69,8 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
         ),
         className: 'bg-white',
       });
-
+      form.reset();
+      setIsLoading(false);
       return;
     }
 
@@ -79,8 +79,9 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       description: 'Ocurrío un error al intentar agregar el regalo',
       className: 'bg-white',
     });
-    setIsLoading(false);
-    return;
+    if (setIsLoading) {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -89,6 +90,7 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       categories={categories}
       isLoading={isLoading}
       onSubmit={onSubmit}
+      buttonTitle={'Agregar regalo'}
     />
   );
 }

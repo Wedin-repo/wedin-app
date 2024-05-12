@@ -34,7 +34,7 @@ export default async function DashboardGifts({
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
-  const itemsPerPage = 8;
+  const itemsPerPage = 15;
   const { page = '1', name } = searchParams;
 
   // This also takes into account when the name

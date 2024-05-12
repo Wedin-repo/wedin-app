@@ -3,7 +3,7 @@ import {
   editOrCreateGift,
 } from '@/actions/data/wishlist';
 import GiftForm from '@/components/GiftForm';
-import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
+//import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/lib/utils';
 import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';
@@ -27,7 +27,12 @@ function EditGiftForm({
   wishlistId,
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [formattedPrice, setFormattedPrice] = useState(
+    formatPrice(Number(gift.price))
+  );
   const { toast } = useToast();
+
+  console.log(formattedPrice.toString());
 
   const form = useForm({
     resolver: zodResolver(GiftSchema),
@@ -35,7 +40,7 @@ function EditGiftForm({
       id: gift.id,
       name: gift.name,
       categoryId: gift.categoryId,
-      price: gift.price.toString(),
+      price: formattedPrice.toString(),
       isFavoriteGift: gift.isFavoriteGift,
       isGroupGift: gift.isGroupGift,
       wishListId: wishlistId,
@@ -45,8 +50,6 @@ function EditGiftForm({
   const { formState } = form;
 
   if (!categories) return null;
-
-  const formattedPrice = formatPrice(Number(gift.price));
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
@@ -92,54 +95,54 @@ function EditGiftForm({
     setIsLoading(false);
   };
 
-  const handleRemoveGiftFromWishList = async () => {
-    setIsLoading(true);
+  // const handleRemoveGiftFromWishList = async () => {
+  //   setIsLoading(true);
 
-    const validatedFields = GiftWishListSchema.safeParse({
-      giftId: gift.id,
-      wishlistId: wishlistId,
-    });
+  //   const validatedFields = GiftWishListSchema.safeParse({
+  //     giftId: gift.id,
+  //     wishlistId: wishlistId,
+  //   });
 
-    if (!validatedFields.success) {
-      toast({
-        title: 'Error',
-        description: 'Error al eliminar el regalo de la lista',
-        className: 'bg-white',
-      });
+  //   if (!validatedFields.success) {
+  //     toast({
+  //       title: 'Error',
+  //       description: 'Error al eliminar el regalo de la lista',
+  //       className: 'bg-white',
+  //     });
 
-      return;
-    }
+  //     return;
+  //   }
 
-    const response = await deleteGiftFromWishList(validatedFields.data);
+  //   const response = await deleteGiftFromWishList(validatedFields.data);
 
-    if (response.status === 'Error') {
-      toast({
-        title: 'Error',
-        description:
-          response.message ||
-          'An error occurred while deleting the gift from the wishlist.',
-        className: 'bg-white',
-      });
-    }
+  //   if (response.status === 'Error') {
+  //     toast({
+  //       title: 'Error',
+  //       description:
+  //         response.message ||
+  //         'An error occurred while deleting the gift from the wishlist.',
+  //       className: 'bg-white',
+  //     });
+  //   }
 
-    toast({
-      title: response.status,
-      description: response.message,
-      action: (
-        <AddToWishListForm
-          giftId={gift.id}
-          wishlistId={wishlistId}
-          variant="undoButton"
-        />
-      ),
-      className: 'bg-white',
-    });
+  //   toast({
+  //     title: response.status,
+  //     description: response.message,
+  //     action: (
+  //       <AddToWishListForm
+  //         giftId={gift.id}
+  //         wishlistId={wishlistId}
+  //         variant="undoButton"
+  //       />
+  //     ),
+  //     className: 'bg-white',
+  //   });
 
-    if (setIsOpen) {
-      setIsOpen(false);
-    }
-    setIsLoading(false);
-  };
+  //   if (setIsOpen) {
+  //     setIsOpen(false);
+  //   }
+  //   setIsLoading(false);
+  // };
 
   return (
     <GiftForm
@@ -148,8 +151,9 @@ function EditGiftForm({
       categories={categories}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
+      // handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
       formattedPrice={formattedPrice}
+      buttonTitle={'Guardar'}
     />
   );
 }

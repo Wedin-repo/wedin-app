@@ -21,7 +21,7 @@ import type { GiftSchema } from '@/schemas/forms';
 import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import type { UseFormReturn } from 'react-hook-form';
-import { FaRegTrashAlt } from 'react-icons/fa';
+//import { FaRegTrashAlt } from 'react-icons/fa';
 import { FiEdit3 } from 'react-icons/fi';
 import type { z } from 'zod';
 
@@ -31,8 +31,9 @@ type GiftFormProps = {
   categories: Category[] | null;
   isLoading: boolean;
   onSubmit: (values: z.infer<typeof GiftSchema>) => void;
-  handleRemoveGiftFromWishList?: () => void;
+  //handleRemoveGiftFromWishList?: () => void;
   formattedPrice?: string;
+  buttonTitle?: string | null;
 };
 
 const GiftForm = ({
@@ -41,8 +42,9 @@ const GiftForm = ({
   categories,
   isLoading,
   onSubmit,
-  handleRemoveGiftFromWishList,
+  //handleRemoveGiftFromWishList,
   formattedPrice,
+  buttonTitle,
 }: GiftFormProps) => {
   return (
     <Form {...form}>
@@ -93,7 +95,7 @@ const GiftForm = ({
                               value={category.id}
                               className="cursor-pointer"
                             >
-                              {category.name}
+                              {category.name ?? 'selecciona una categoria'}
                             </SelectItem>
                             {/* this is just a border for aesthetic purposes */}
                             <div
@@ -118,8 +120,8 @@ const GiftForm = ({
                     <FormControl>
                       <Input
                         placeholder={formattedPrice ?? 'Valor del regalo'}
-                        type="number"
-                        min="0"
+                        // type="number"
+                        // min="0"
                         className="!mt-0"
                         {...field}
                       />
@@ -168,7 +170,7 @@ const GiftForm = ({
               />
             </div>
             <div className="flex flex-col gap-3 justify-center items-center mt-6 w-full">
-              {gift && (
+              {/* {gift && (
                 <div className="w-full">
                   <Button
                     type="button"
@@ -184,14 +186,14 @@ const GiftForm = ({
                     )}
                   </Button>
                 </div>
-              )}
-              <div className="w-full">
+              )} */}
+              <div className="w-full mt-6">
                 <Button
                   type="submit"
                   variant="editGiftButton"
                   disabled={isLoading}
                 >
-                  {gift ? 'Editar regalo' : 'Guardar y agregar a la lista'}
+                  {buttonTitle}
                   {isLoading ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
