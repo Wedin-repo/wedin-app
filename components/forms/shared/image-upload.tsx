@@ -9,7 +9,6 @@ import { MdOutlineFileUpload } from 'react-icons/md';
 
 type ImageUploadProps = {
   imgUrl?: string | null;
-  selectedFile: File | null;
   setSelectedFile: (file: File | null) => void;
   previewUrl: string | null;
   setPreviewUrl: (url: string | null) => void;
@@ -20,7 +19,6 @@ type ImageUploadProps = {
 
 function ImageUpload({
   imgUrl,
-  selectedFile,
   setSelectedFile,
   previewUrl,
   setPreviewUrl,

@@ -1,4 +1,4 @@
-import ImageUpload from '@/components/ImageUpload';
+import ImageUpload from '@/components/forms/shared/image-upload';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -66,7 +66,6 @@ const GiftForm = ({
           <div className="w-full lg:w-1/2">
             <ImageUpload
               imgUrl={gift?.imageUrl}
-              selectedFile={selectedFile}
               setSelectedFile={setSelectedFile}
               previewUrl={previewUrl}
               setPreviewUrl={setPreviewUrl}

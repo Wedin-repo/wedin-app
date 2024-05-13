@@ -126,10 +126,7 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const newGift = await updateGiftImageUrl(
-      imageUrl,
-      giftCreateResponse.gift.id
-    );
+    await updateGiftImageUrl(imageUrl, giftCreateResponse.gift.id);
 
     toast({
       title: 'Éxito! 🎁🗑',
