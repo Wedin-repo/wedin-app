@@ -64,6 +64,7 @@ const GiftForm = ({
             <ImageUpload
               imgUrl={gift?.imageUrl}
               setSelectedFile={setSelectedFile}
+              previewUrl={previewUrl}
               setPreviewUrl={setPreviewUrl}
               setError={setError}
               error={error}
