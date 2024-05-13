@@ -143,15 +143,15 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   return (
     <GiftForm
       categories={categories}
+      error={error}
+      fileInputRef={fileInputRef}
       form={form}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      setSelectedFile={setSelectedFile}
       previewUrl={previewUrl}
-      setPreviewUrl={setPreviewUrl}
       setError={setError}
-      error={error}
-      fileInputRef={fileInputRef}
+      setPreviewUrl={setPreviewUrl}
+      setSelectedFile={setSelectedFile}
     />
   );
 }

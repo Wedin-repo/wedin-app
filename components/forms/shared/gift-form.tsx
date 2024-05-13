@@ -27,34 +27,34 @@ import type { z } from 'zod';
 
 type GiftFormProps = {
   categories: Category[] | null;
+  error: string | null;
+  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
   form: UseFormReturn<z.infer<typeof GiftSchema>>;
   formattedPrice?: string;
   gift?: Gift;
-  handleRemoveGiftFromWishList?: () => void;
   isLoading: boolean;
-  onSubmit: (values: z.infer<typeof GiftSchema>) => void;
-  setSelectedFile: (file: File | null) => void;
   previewUrl: string | null;
-  setPreviewUrl: (url: string | null) => void;
+  handleRemoveGiftFromWishList?: () => void;
+  onSubmit: (values: z.infer<typeof GiftSchema>) => void;
   setError: (error: string | null) => void;
-  error: string | null;
-  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
+  setPreviewUrl: (url: string | null) => void;
+  setSelectedFile: (file: File | null) => void;
 };
 
 const GiftForm = ({
-  form,
-  gift,
   categories,
-  isLoading,
-  onSubmit,
-  handleRemoveGiftFromWishList,
-  formattedPrice,
-  setSelectedFile,
-  previewUrl,
-  setPreviewUrl,
-  setError,
   error,
   fileInputRef,
+  form,
+  formattedPrice,
+  gift,
+  isLoading,
+  previewUrl,
+  handleRemoveGiftFromWishList,
+  onSubmit,
+  setError,
+  setPreviewUrl,
+  setSelectedFile,
 }: GiftFormProps) => {
   return (
     <Form {...form}>

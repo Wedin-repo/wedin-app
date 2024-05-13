@@ -9,21 +9,21 @@ import { useState } from 'react';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
 type ImageUploadProps = {
-  imgUrl?: string | null;
-  setSelectedFile: (file: File | null) => void;
-  previewUrl: string | null;
-  setPreviewUrl: (url: string | null) => void;
-  setError: (error: string | null) => void;
   error: string | null;
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
+  imgUrl?: string | null;
+  previewUrl: string | null;
+  setError: (error: string | null) => void;
+  setPreviewUrl: (url: string | null) => void;
+  setSelectedFile: (file: File | null) => void;
 };
 
 function ImageUpload({
+  fileInputRef,
   imgUrl,
-  setSelectedFile,
   previewUrl,
   setPreviewUrl,
-  fileInputRef,
+  setSelectedFile,
 }: ImageUploadProps) {
   const [image, setImage] = useState(
     previewUrl || imgUrl || '../../../public/images/rings.svg'

@@ -13,7 +13,6 @@ import {
   validateCategory,
   validateGiftAndWishlist,
 } from '../helper';
-import { User } from 'next-auth';
 
 export const addGiftToWishList = async (
   formData: z.infer<typeof GiftWishListSchema>
