@@ -6,7 +6,6 @@ import GiftForm from '@/components/GiftForm';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { GiftSchema } from '@/schemas/forms';
-import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
@@ -57,7 +56,7 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
     setIsLoading(true);
     const validatedFields = GiftSchema.safeParse(values);
 
-    if (!validatedFields.success) {
+    if (!validatedFields.success || !selectedFile) {
       toast({
         title: 'Validation Error',
         description: 'Please check your input and try again.',
@@ -68,40 +67,85 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    if (selectedFile) {
-      const response = await getSignedURL(selectedFile.name);
+    const giftCreateResponse = await createGiftToWishList(validatedFields.data);
 
-      if (response.failure) {
-        setError('Error al subir la imagen');
-        setIsLoading(false);
-        return;
-      }
-
-      const url = response?.success?.url;
-
-      if (!url) {
-        setError('Error al subir la imagen presigned URL');
-        return;
-      }
-
-      const result = await fetch(url, {
-        method: 'PUT',
-        body: selectedFile,
-        headers: {
-          'Content-Type': selectedFile.type,
-        },
+    if (giftCreateResponse.error || !giftCreateResponse.gift) {
+      toast({
+        variant: 'destructive',
+        title: 'error al crear el regalo',
+        description: giftCreateResponse.error,
       });
 
-      if (result.ok) {
-        const giftImageUrl = getS3ObjectUrl(selectedFile.name);
-        console.log('giftImageUrl: ', giftImageUrl);
-      }
-
-      console.log('url: ', url);
-      console.log('response: ', response);
-      console.log('result: ', result);
+      setIsLoading(false);
+      return;
     }
 
+    const checksum = await computeSHA256(selectedFile);
+
+    const presignResponse = await getSignedURL({
+      fileName: selectedFile.name,
+      fileType: selectedFile.type,
+      fileSize: selectedFile.size,
+      giftId: giftCreateResponse.gift.id,
+      checksum: checksum,
+    });
+
+    if (presignResponse.error || !presignResponse?.success?.url) {
+      setError('Error al subir la imagen');
+      toast({
+        variant: 'destructive',
+        title: 'Error al conseguir presign URL',
+        description: presignResponse.error,
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    const url = presignResponse.success.url;
+
+    const awsImagePosting = await fetch(url, {
+      method: 'PUT',
+      body: selectedFile,
+      headers: {
+        'Content-Type': selectedFile.type,
+      },
+    });
+
+    if (!awsImagePosting.ok) {
+      setError('Error al subir la imagen a AWS');
+      toast({
+        variant: 'destructive',
+        title: 'error al subir la imagen a AWS',
+        description: presignResponse.error,
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    const giftImageUrl = await getS3ObjectUrl(selectedFile.name);
+
+    console.log('giftImageUrl: ', giftImageUrl);
+    console.log('url: ', url);
+    console.log('response: ', presignResponse);
+    console.log('result: ', awsImagePosting);
+
+    toast({
+      title: 'Éxito! 🎁🗑',
+      description: giftCreateResponse.success,
+      action: (
+        <Button
+          onClick={() => router.push('/dashboard?page=1')}
+          variant="outline"
+          className="gap-1 px-3 h-8 hover:text-white border-borderColor hover:bg-primaryBackgroundColor"
+        >
+          <IoGiftOutline />
+          Ver lista
+        </Button>
+      ),
+      className: 'bg-white',
+    });
     setIsLoading(false);
     return;
   };

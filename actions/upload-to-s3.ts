@@ -19,74 +19,51 @@ const s3Client = new S3Client({
 const allowedFileTypes = [
   'image/jpeg',
   'image/png',
-  'video/mp4',
-  'video/quicktime',
+  'image/heic',
+  'image/webp',
 ];
-
-const maxFileSize = 1048576 * 10; // 1 MB
 
 type GetSignedURLParams = {
   fileName: string;
   fileType: string;
   fileSize: number;
+  giftId: string;
   checksum: string;
-  // file: File;
 };
 
-// export const getSignedURL = async ({
-//   fileName,
-//   fileType,
-//   fileSize,
-//   checksum,
-//   // file,
-// }: GetSignedURLParams) => {
-//   const session = await auth();
-//
-//   if (!session) {
-//     return { failure: 'not authenticated' };
-//   }
-//
-//   if (!allowedFileTypes.includes(fileType)) {
-//     return { failure: 'File type not allowed' };
-//   }
-//
-//   if (fileSize > maxFileSize) {
-//     return { failure: 'File size too large' };
-//   }
-//
-//   // const putObjectCommand = new PutObjectCommand({
-//   //   Bucket: 'wedin-images-dev',
-//   //   Key: fileName,
-//   //   ContentType: fileType,
-//   //   ContentLength: fileSize,
-//   //   ChecksumSHA256: checksum,
-//   // });
-//   //
-//   // const response = await s3Client.send(putObjectCommand);
-//   // console.log('hello');
-//   //
-//   // // const url = await getSignedUrl(
-//   // //   s3Client,
-//   // //   putObjectCommand,
-//   // // );
-//   //
-//   // console.log({ success: response });
-//   //
-//   // // Insert into user table
-//   // return { success: response };
-// };
-//
-export const getSignedURL = async (key: string) => {
+const maxFileSize = 1048576 * 100; // 10 MB
+
+export const getSignedURL = async ({
+  fileName,
+  fileType,
+  fileSize,
+  giftId,
+  checksum,
+}: GetSignedURLParams) => {
   const session = await auth();
 
   if (!session) {
-    return { failure: 'not authenticated' };
+    return { error: 'not authenticated' };
+  }
+
+  if (!allowedFileTypes.includes(fileType)) {
+    return { error: 'File type not allowed' };
   }
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET,
-    Key: key,
+    Key: fileName,
+    ContentType: fileType,
+    ContentLength: fileSize,
+    ChecksumSHA256: checksum,
+    Metadata: {
+      giftId: giftId,
+    },
   });
+
+  if (fileSize > maxFileSize) {
+    return { error: 'File size too large' };
+  }
 
   const signedUrl = await getSignedUrl(s3Client, putObjectCommand, {
     expiresIn: 60,
