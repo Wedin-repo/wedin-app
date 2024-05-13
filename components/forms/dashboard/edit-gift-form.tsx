@@ -9,7 +9,7 @@ import { formatPrice } from '@/lib/utils';
 import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -28,6 +28,11 @@ function EditGiftForm({
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm({
     resolver: zodResolver(GiftSchema),
@@ -143,13 +148,20 @@ function EditGiftForm({
 
   return (
     <GiftForm
-      form={form}
-      gift={gift}
       categories={categories}
+      form={form}
+      formattedPrice={formattedPrice}
+      gift={gift}
+      handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
-      formattedPrice={formattedPrice}
+      selectedFile={selectedFile}
+      setSelectedFile={setSelectedFile}
+      previewUrl={previewUrl}
+      setPreviewUrl={setPreviewUrl}
+      setError={setError}
+      error={error}
+      fileInputRef={fileInputRef}
     />
   );
 }

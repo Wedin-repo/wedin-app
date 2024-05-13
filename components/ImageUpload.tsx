@@ -4,31 +4,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
-import { IoImageOutline } from 'react-icons/io5';
+import type React from 'react';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
 type ImageUploadProps = {
   imgUrl?: string | null;
+  selectedFile: File | null;
+  setSelectedFile: (file: File | null) => void;
+  previewUrl: string | null;
+  setPreviewUrl: (url: string | null) => void;
+  setError: (error: string | null) => void;
+  error: string | null;
+  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
 };
 
-function ImageUpload({ imgUrl }: ImageUploadProps) {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const validFileTypes = ['image/jpeg', 'image/png', 'image/heic'];
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+function ImageUpload({
+  imgUrl,
+  selectedFile,
+  setSelectedFile,
+  previewUrl,
+  setPreviewUrl,
+  fileInputRef,
+}: ImageUploadProps) {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0] ?? null;
-    if (file && validFileTypes.includes(file.type)) {
-      setError(null);
-      setSelectedFile(file);
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    if (file) {
       const url = URL.createObjectURL(file);
       setPreviewUrl(url);
+      setSelectedFile(file);
     } else {
-      setError('Por favor suba una imagen .jpeg, .png o .heic');
       setPreviewUrl(null);
       setSelectedFile(null);
     }
@@ -38,14 +49,6 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
     fileInputRef.current?.click();
   };
 
-  useEffect(() => {
-    return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
-    };
-  }, [previewUrl]);
-
   return (
     <div className="flex flex-col gap-1.5">
       <Label>
@@ -54,30 +57,18 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
           372px por 322px
         </span>
       </Label>
-      <div className="flex flex-col gap-3 p-4 rounded-xl bg-secondaryBackgroundColor">
-        {error && <p className="text-sm text-red-600">{error}</p>}
-        <div
-          className={`border-dashed rounded-xl border-2 h-[242px] md:h-[372px] flex items-center justify-center text-secondaryTextColor ${
-            error ? 'border-red-500 text-red-500' : 'border-secondaryTextColor'
-          }`}
-        >
-          {previewUrl ? (
-            <Image
-              src={imgUrl || previewUrl}
-              width={500}
-              height={324}
-              alt="Vista previa de la imagen seleccionada"
-              className="object-cover max-w-full max-h-full rounded-xl"
-            />
-          ) : (
-            <Image
-              src={imgUrl || ''}
-              width={500}
-              height={324}
-              alt="Vista previa de la imagen seleccionada"
-              className="max-h-full max-w-full rounded-xl object-cover"
-            />
-          )}
+      <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
+        <div className="flex justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[242px] sm:h-[322px] sm:w-[372px]">
+          {imgUrl ||
+            (previewUrl && (
+              <Image
+                src={imgUrl || previewUrl}
+                width={500}
+                height={500}
+                alt="Vista previa de la imagen seleccionada"
+                className="object-cover max-w-full max-h-full rounded-xl"
+              />
+            ))}
         </div>
         <div className="">
           <Input
@@ -86,7 +77,7 @@ function ImageUpload({ imgUrl }: ImageUploadProps) {
             type="file"
             className="hidden"
             onChange={handleFileChange}
-            accept="image/*"
+            accept="image/jpeg, image/png, image/heic, image/webp"
           />
           <Button
             type="button"

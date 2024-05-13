@@ -26,13 +26,21 @@ import { FiEdit3 } from 'react-icons/fi';
 import type { z } from 'zod';
 
 type GiftFormProps = {
-  form: UseFormReturn<z.infer<typeof GiftSchema>>;
-  gift?: Gift;
   categories: Category[] | null;
+  form: UseFormReturn<z.infer<typeof GiftSchema>>;
+  formattedPrice?: string;
+  gift?: Gift;
+  handleRemoveGiftFromWishList?: () => void;
   isLoading: boolean;
   onSubmit: (values: z.infer<typeof GiftSchema>) => void;
-  handleRemoveGiftFromWishList?: () => void;
-  formattedPrice?: string;
+
+  selectedFile: File | null;
+  setSelectedFile: (file: File | null) => void;
+  previewUrl: string | null;
+  setPreviewUrl: (url: string | null) => void;
+  setError: (error: string | null) => void;
+  error: string | null;
+  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
 };
 
 const GiftForm = ({
@@ -43,13 +51,29 @@ const GiftForm = ({
   onSubmit,
   handleRemoveGiftFromWishList,
   formattedPrice,
+  selectedFile,
+  setSelectedFile,
+  previewUrl,
+  setPreviewUrl,
+  setError,
+  error,
+  fileInputRef,
 }: GiftFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:gap-8 lg:flex-row lg:pt-0">
+        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:gap-8 lg:flex-row lg:pt-0 sm:w-[800px]">
           <div className="w-full lg:w-1/2">
-            <ImageUpload imgUrl={gift?.imageUrl} />
+            <ImageUpload
+              imgUrl={gift?.imageUrl}
+              selectedFile={selectedFile}
+              setSelectedFile={setSelectedFile}
+              previewUrl={previewUrl}
+              setPreviewUrl={setPreviewUrl}
+              setError={setError}
+              error={error}
+              fileInputRef={fileInputRef}
+            />
           </div>
           <div className="w-full lg:w-1/2">
             <div className="flex flex-col gap-3 sm:gap-5">
@@ -166,8 +190,7 @@ const GiftForm = ({
                   </FormItem>
                 )}
               />
-            </div>
-            <div className="flex flex-col gap-3 justify-center items-center mt-6 w-full">
+
               {gift && (
                 <div className="w-full">
                   <Button
@@ -185,6 +208,7 @@ const GiftForm = ({
                   </Button>
                 </div>
               )}
+
               <div className="w-full">
                 <Button
                   type="submit"
