@@ -1,11 +1,13 @@
+import { updateGiftImageUrl } from '@/actions/data/gift';
 import {
   deleteGiftFromWishList,
   editOrCreateGift,
 } from '@/actions/data/wishlist';
+import { getSignedURL } from '@/actions/upload-to-s3';
 import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
-import { formatPrice } from '@/lib/utils';
+import { computeSHA256, formatPrice } from '@/lib/utils';
 import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
@@ -55,6 +57,7 @@ function EditGiftForm({
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
+    // Does not take into account the image upload
     if (!Object.keys(formState.dirtyFields).length) {
       if (setIsOpen) {
         setIsOpen(false);
@@ -65,31 +68,82 @@ function EditGiftForm({
 
     const validatedFields = GiftSchema.safeParse(values);
 
-    if (!validatedFields.success) {
+    if (!validatedFields.success || !selectedFile) {
       toast({
         title: 'Validation Error',
         description: 'Please check your input and try again.',
         className: 'bg-white',
       });
 
+      setIsLoading(false);
       return;
     }
 
     const response = await editOrCreateGift(validatedFields.data);
 
-    if (response.status === 'Error') {
+    if (response?.error) {
       toast({
         title: 'Error',
-        description: response.message,
+        description: response.error,
         className: 'bg-white',
       });
-    } else {
-      toast({
-        title: 'Éxito! 🎁🎉',
-        description: 'Regalo actualizado.',
-        className: 'bg-white',
-      });
+
+      setIsLoading(false);
+      return;
     }
+
+    const checksum = await computeSHA256(selectedFile);
+
+    const presignResponse = await getSignedURL({
+      fileName: selectedFile.name,
+      fileType: selectedFile.type,
+      fileSize: selectedFile.size,
+      giftId: validatedFields.data.id,
+      checksum: checksum,
+    });
+
+    if (presignResponse.error || !presignResponse?.success?.url) {
+      setError('Error al subir la imagen');
+      toast({
+        variant: 'destructive',
+        title: 'Error al conseguir presign URL',
+        description: presignResponse.error,
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    const imageUrl = presignResponse.success.url.split('?')[0];
+
+    const awsImagePosting = await fetch(imageUrl, {
+      method: 'PUT',
+      body: selectedFile,
+      headers: {
+        'Content-Type': selectedFile.type,
+        metadata: JSON.stringify({ giftId: validatedFields.data.id }),
+      },
+    });
+
+    if (!awsImagePosting.ok) {
+      setError('Error al subir la imagen a AWS');
+      toast({
+        variant: 'destructive',
+        title: 'error al subir la imagen a AWS',
+        description: presignResponse.error,
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    await updateGiftImageUrl(imageUrl, validatedFields.data.id);
+
+    toast({
+      title: 'Éxito! 🎁🎉',
+      description: 'Regalo actualizado.',
+      className: 'bg-white',
+    });
 
     if (setIsOpen) {
       setIsOpen(false);
@@ -112,6 +166,7 @@ function EditGiftForm({
         className: 'bg-white',
       });
 
+      setIsLoading(false);
       return;
     }
 
@@ -125,6 +180,8 @@ function EditGiftForm({
           'An error occurred while deleting the gift from the wishlist.',
         className: 'bg-white',
       });
+      setIsLoading(false);
+      return;
     }
 
     toast({
@@ -149,19 +206,18 @@ function EditGiftForm({
   return (
     <GiftForm
       categories={categories}
+      error={error}
+      fileInputRef={fileInputRef}
       form={form}
       formattedPrice={formattedPrice}
       gift={gift}
       handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      selectedFile={selectedFile}
-      setSelectedFile={setSelectedFile}
       previewUrl={previewUrl}
-      setPreviewUrl={setPreviewUrl}
       setError={setError}
-      error={error}
-      fileInputRef={fileInputRef}
+      setPreviewUrl={setPreviewUrl}
+      setSelectedFile={setSelectedFile}
     />
   );
 }

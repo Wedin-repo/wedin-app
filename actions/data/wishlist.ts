@@ -13,6 +13,7 @@ import {
   validateCategory,
   validateGiftAndWishlist,
 } from '../helper';
+import { User } from 'next-auth';
 
 export const addGiftToWishList = async (
   formData: z.infer<typeof GiftWishListSchema>
@@ -177,6 +178,7 @@ export const editOrCreateGift = async (
         where: { id: validatedFields.data.id },
         data: newGiftData,
       });
+
       await prisma.wishList.update({
         where: { id: validatedFields.data.wishListId },
         data: {
@@ -188,12 +190,8 @@ export const editOrCreateGift = async (
     }
 
     revalidatePath('/dashboard');
-    return {
-      status: 'Success',
-      message: 'Updated gift in wishlist successfully',
-    };
   } catch (error) {
-    return { status: 'Error', message: getErrorMessage(error) };
+    return { error: getErrorMessage(error) };
   }
 };
 

@@ -6,6 +6,7 @@ import { getSignedURL } from '@/actions/upload-to-s3';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
+import { computeSHA256 } from '@/lib/utils';
 import { GiftSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
@@ -18,14 +19,6 @@ import type { z } from 'zod';
 type CreateGiftFormProps = {
   wishlistId: string;
   categories?: Category[] | null;
-};
-
-const computeSHA256 = async (file: File) => {
-  const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  return hashHex;
 };
 
 function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
@@ -153,7 +146,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       form={form}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      selectedFile={selectedFile}
       setSelectedFile={setSelectedFile}
       previewUrl={previewUrl}
       setPreviewUrl={setPreviewUrl}

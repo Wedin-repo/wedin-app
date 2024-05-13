@@ -33,8 +33,6 @@ type GiftFormProps = {
   handleRemoveGiftFromWishList?: () => void;
   isLoading: boolean;
   onSubmit: (values: z.infer<typeof GiftSchema>) => void;
-
-  selectedFile: File | null;
   setSelectedFile: (file: File | null) => void;
   previewUrl: string | null;
   setPreviewUrl: (url: string | null) => void;
@@ -51,7 +49,6 @@ const GiftForm = ({
   onSubmit,
   handleRemoveGiftFromWishList,
   formattedPrice,
-  selectedFile,
   setSelectedFile,
   previewUrl,
   setPreviewUrl,
@@ -67,7 +64,6 @@ const GiftForm = ({
             <ImageUpload
               imgUrl={gift?.imageUrl}
               setSelectedFile={setSelectedFile}
-              previewUrl={previewUrl}
               setPreviewUrl={setPreviewUrl}
               setError={setError}
               error={error}
@@ -89,7 +85,7 @@ const GiftForm = ({
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -127,7 +123,7 @@ const GiftForm = ({
                         ))}
                       </SelectContent>
                     </Select>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -147,7 +143,7 @@ const GiftForm = ({
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -166,7 +162,7 @@ const GiftForm = ({
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
@@ -185,7 +181,7 @@ const GiftForm = ({
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
-                    <FormMessage className="font-normal text-yellow-600" />
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
