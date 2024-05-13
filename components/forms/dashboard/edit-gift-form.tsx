@@ -2,8 +2,8 @@ import {
   deleteGiftFromWishList,
   editOrCreateGift,
 } from '@/actions/data/wishlist';
-import GiftForm from '@/components/GiftForm';
 import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
+import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { formatPrice } from '@/lib/utils';
 import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';

@@ -2,8 +2,8 @@
 
 import { updateGiftImageUrl } from '@/actions/data/gift';
 import { createGiftToWishList } from '@/actions/data/wishlist';
-import { getS3ObjectUrl, getSignedURL } from '@/actions/upload-to-s3';
-import GiftForm from '@/components/GiftForm';
+import { getSignedURL } from '@/actions/upload-to-s3';
+import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { GiftSchema } from '@/schemas/forms';
@@ -130,8 +130,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       imageUrl,
       giftCreateResponse.gift.id
     );
-
-    console.log({ newGift });
 
     toast({
       title: 'Éxito! 🎁🗑',
