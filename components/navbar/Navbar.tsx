@@ -3,8 +3,8 @@
 import Logo from '@/components/Logo';
 import UserMenu from '@/components/navbar/UserMenu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User } from '@prisma/client';
-import { Session } from 'next-auth';
+import type { User } from '@prisma/client';
+import type { Session } from 'next-auth';
 import { usePathname, useRouter } from 'next/navigation';
 
 type NavBarProps = {

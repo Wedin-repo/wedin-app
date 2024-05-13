@@ -1,10 +1,10 @@
 import Image from 'next/image';
 
 type AvatarProps = {
-  src?: string | null | undefined;
+  src?: string | null;
 };
 
-const Avatar: React.FC<AvatarProps> = ({ src }) => {
+const Avatar = ({ src }: AvatarProps) => {
   const img = src || '/images/avatar.jpg';
 
   return (
