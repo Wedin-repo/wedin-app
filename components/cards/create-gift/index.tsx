@@ -1,5 +1,6 @@
 'use client';
 
+import { updateGiftImageUrl } from '@/actions/data/gift';
 import { createGiftToWishList } from '@/actions/data/wishlist';
 import { getS3ObjectUrl, getSignedURL } from '@/actions/upload-to-s3';
 import GiftForm from '@/components/GiftForm';
@@ -102,13 +103,14 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const url = presignResponse.success.url;
+    const imageUrl = presignResponse.success.url.split('?')[0];
 
-    const awsImagePosting = await fetch(url, {
+    const awsImagePosting = await fetch(imageUrl, {
       method: 'PUT',
       body: selectedFile,
       headers: {
         'Content-Type': selectedFile.type,
+        metadata: JSON.stringify({ giftId: giftCreateResponse.gift.id }),
       },
     });
 
@@ -124,12 +126,12 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const giftImageUrl = await getS3ObjectUrl(selectedFile.name);
+    const newGift = await updateGiftImageUrl(
+      imageUrl,
+      giftCreateResponse.gift.id
+    );
 
-    console.log('giftImageUrl: ', giftImageUrl);
-    console.log('url: ', url);
-    console.log('response: ', presignResponse);
-    console.log('result: ', awsImagePosting);
+    console.log({ newGift });
 
     toast({
       title: 'Éxito! 🎁🗑',

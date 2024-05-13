@@ -29,6 +29,7 @@ export async function getGifts({
     }
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const query: any = {};
 
   const { category, giftListId, wishListId, name, page, itemsPerPage } =
@@ -81,5 +82,18 @@ export async function getGifts({
   } catch (error) {
     console.error('Error retrieving filtered gifts:', error);
     return [];
+  }
+}
+
+export async function updateGiftImageUrl(url: string, giftId: string) {
+  try {
+    const gift = await prisma.gift.update({
+      where: { id: giftId },
+      data: { imageUrl: url },
+    });
+    return gift;
+  } catch (error) {
+    console.error('Error updating gift image URL:', error);
+    return { error: 'Error updating gift image URL' };
   }
 }

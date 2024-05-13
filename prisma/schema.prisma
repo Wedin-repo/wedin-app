@@ -109,7 +109,7 @@ model Gift {
   weddingId       String?  @db.ObjectId
   wishListIds     String[] @db.ObjectId
   imageUrl        String?
-  //price can be = > <
+  // imageId         String?  @db.ObjectId
   price           String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -120,21 +120,23 @@ model Gift {
 
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
   giftlist  GiftList?  @relation(fields: [giftListId], references: [id])
-  images    Image[]
+  // image     Image?     @relation(fields: [imageId], references: [id])
 }
 
 model GiftList {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String
   quantity    String?
-  categoryId  String  @db.ObjectId
-  isDefault   Boolean @default(false)
+  categoryId  String   @db.ObjectId
+  // imageId     String?  @db.ObjectId
+  isDefault   Boolean  @default(false)
   totalPrice  String?
-  weddingId   String? @db.ObjectId
+  weddingId   String?  @db.ObjectId
+  giftids     String[] @db.ObjectId
 
-  gifts  Gift[]
-  images Image[]
+  gifts Gift[]
+  // Image Image? @relation(fields: [imageId], references: [id])
 }
 
 model Category {
@@ -142,17 +144,17 @@ model Category {
   name String @unique
 }
 
-model Image {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  url        String
-  giftId     String   @db.ObjectId
-  giftListId String   @db.ObjectId
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  giftList GiftList @relation(fields: [giftListId], references: [id])
-  gift     Gift     @relation(fields: [giftId], references: [id])
-}
+// model Image {
+//   id         String   @id @default(auto()) @map("_id") @db.ObjectId
+//   url        String
+//   giftId     String?  @db.ObjectId
+//   giftListId String?  @db.ObjectId
+//   createdAt  DateTime @default(now())
+//   updatedAt  DateTime @updatedAt
+//
+//   Gift     Gift[]
+//   GiftList GiftList[]
+// }
 
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId

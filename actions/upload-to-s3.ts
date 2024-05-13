@@ -71,16 +71,3 @@ export const getSignedURL = async ({
 
   return { success: { url: signedUrl } };
 };
-
-export const getS3ObjectUrl = async (key: string) => {
-  const objectUrlCommand = new GetObjectCommand({
-    Bucket: process.env.AWS_BUCKET,
-    Key: key,
-  });
-
-  const response = await s3Client.send(objectUrlCommand);
-
-  if (response.Body) {
-    return { success: response.Body.toString() };
-  }
-};

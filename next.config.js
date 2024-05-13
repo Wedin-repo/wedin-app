@@ -8,6 +8,7 @@ const nextConfig = {
       'scontent.fasu11-2.fna.fbcdn.net',
       'loremflickr.com',
       'picsum.photos',
+      'wedin-images-dev.s3.us-east-1.amazonaws.com',
       // Add other domains you want to allow here
     ],
   },
