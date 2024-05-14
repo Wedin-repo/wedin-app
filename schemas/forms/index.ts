@@ -1,7 +1,6 @@
 import { type ZodType, z } from 'zod';
 
 export const GiftSchema = z.object({
-  id: z.string(),
   name: z
     .string()
     .min(1, { message: 'El nombre del regalo no puede estar vacío' })

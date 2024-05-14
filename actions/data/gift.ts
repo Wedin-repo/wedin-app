@@ -96,6 +96,6 @@ export async function updateGiftImageUrl(url: string, giftId: string) {
     revalidatePath('/dashboard');
   } catch (error) {
     console.error('Error updating gift image URL:', error);
-    return { error: 'Error updating gift image URL' };
+    return { error: 'Error al agregar la imagen' };
   }
 }

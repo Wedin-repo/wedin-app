@@ -224,10 +224,7 @@ export const createWishListGift = async (
 
     revalidatePath('/gifts?tab=predefinedGifts');
 
-    return {
-      success: 'Regalo creado y agregado a tu lista.',
-      giftId: newGift.id,
-    };
+    return { giftId: newGift.id };
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

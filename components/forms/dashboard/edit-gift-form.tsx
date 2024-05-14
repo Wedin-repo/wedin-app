@@ -1,13 +1,12 @@
-import { updateGiftImageUrl } from '@/actions/data/gift';
 import {
   deleteGiftFromWishList,
   editOrCreateGift,
 } from '@/actions/data/wishlist';
-import { getSignedURL } from '@/actions/upload-to-s3';
 import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
-import { computeSHA256, formatPrice } from '@/lib/utils';
+import { uploadImageToAws } from '@/lib/s3';
+import { formatPrice } from '@/lib/utils';
 import ringSvg from '@/public/images/rings.svg';
 import {
   GiftParamSchema,
@@ -42,7 +41,6 @@ function EditGiftForm({
   const form = useForm({
     resolver: zodResolver(GiftSchema),
     defaultValues: {
-      id: gift.id,
       name: gift.name,
       categoryId: gift.categoryId,
       price: gift.price.toString(),
@@ -71,11 +69,11 @@ function EditGiftForm({
 
     const validatedFields = GiftSchema.safeParse(values);
 
-    if (!validatedFields.success || !selectedFile) {
+    if (!validatedFields.success) {
       toast({
-        title: 'Validation Error',
-        description: 'Please check your input and try again.',
-        className: 'bg-white',
+        title: 'Error',
+        description: 'Datos inválidos, por favor verifica tus datos.',
+        variant: 'destructive',
       });
 
       setIsLoading(false);
@@ -92,57 +90,30 @@ function EditGiftForm({
       toast({
         title: 'Error',
         description: response.error,
-        className: 'bg-white',
-      });
-
-      setIsLoading(false);
-      return;
-    }
-
-    const checksum = await computeSHA256(selectedFile);
-
-    const presignResponse = await getSignedURL({
-      fileName: selectedFile.name,
-      fileType: selectedFile.type,
-      fileSize: selectedFile.size,
-      giftId: validatedFields.data.id,
-      checksum: checksum,
-    });
-
-    if (presignResponse.error || !presignResponse?.success) {
-      toast({
         variant: 'destructive',
-        title: 'Error al conseguir presign URL',
-        description: presignResponse.error,
       });
 
       setIsLoading(false);
       return;
     }
 
-    const imageUrl = presignResponse.success.split('?')[0];
-
-    const awsImagePosting = await fetch(imageUrl, {
-      method: 'PUT',
-      body: selectedFile,
-      headers: {
-        'Content-Type': selectedFile.type,
-        metadata: JSON.stringify({ giftId: validatedFields.data.id }),
-      },
-    });
-
-    if (!awsImagePosting.ok) {
-      toast({
-        variant: 'destructive',
-        title: 'error al subir la imagen a AWS',
-        description: presignResponse.error,
+    if (selectedFile) {
+      const uploadResponse = await uploadImageToAws({
+        file: selectedFile,
+        giftId: gift.id,
       });
 
-      setIsLoading(false);
-      return;
-    }
+      if (uploadResponse?.error) {
+        toast({
+          title: 'Error',
+          description: uploadResponse.error,
+          variant: 'destructive',
+        });
 
-    await updateGiftImageUrl(imageUrl, validatedFields.data.id);
+        setIsLoading(false);
+        return;
+      }
+    }
 
     toast({
       title: 'Éxito! 🎁🎉',
@@ -153,9 +124,9 @@ function EditGiftForm({
     if (setIsOpen) {
       setIsOpen(false);
     }
+
     setIsLoading(false);
   };
-
   const handleRemoveGiftFromWishList = async () => {
     setIsLoading(true);
 
@@ -166,9 +137,9 @@ function EditGiftForm({
 
     if (!validatedFields.success) {
       toast({
-        variant: 'destructive',
         title: 'Error',
-        description: 'Datos requeridos no fueron encontrados',
+        description: 'Datos inválidos, por favor verifica tus datos.',
+        variant: 'destructive',
       });
 
       setIsLoading(false);

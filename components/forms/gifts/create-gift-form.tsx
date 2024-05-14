@@ -1,12 +1,10 @@
 'use client';
 
-import { updateGiftImageUrl } from '@/actions/data/gift';
 import { createWishListGift } from '@/actions/data/wishlist';
-import { getSignedURL } from '@/actions/upload-to-s3';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { computeSHA256 } from '@/lib/utils';
+import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
 import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -33,7 +31,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   const form = useForm({
     resolver: zodResolver(GiftSchema),
     defaultValues: {
-      id: '',
       name: '',
       categoryId: '',
       price: '',
@@ -48,11 +45,11 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
     setIsLoading(true);
     const validatedFields = GiftSchema.safeParse(values);
 
-    if (!validatedFields.success || !selectedFile) {
+    if (!validatedFields.success) {
       toast({
-        title: 'Validation Error',
-        description: 'Please check your input and try again.',
-        className: 'bg-white',
+        title: 'Error',
+        description: 'Datos inválidos, por favor verifica tus datos.',
+        variant: 'destructive',
       });
 
       setIsLoading(false);
@@ -67,63 +64,36 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
 
     if (wishlistGiftResponse.error || !wishlistGiftResponse.giftId) {
       toast({
-        variant: 'destructive',
         title: 'Error al crear el regalo',
         description: wishlistGiftResponse.error,
-      });
-
-      setIsLoading(false);
-      return;
-    }
-
-    const checksum = await computeSHA256(selectedFile);
-
-    const presignResponse = await getSignedURL({
-      fileName: selectedFile.name,
-      fileType: selectedFile.type,
-      fileSize: selectedFile.size,
-      giftId: wishlistGiftResponse.giftId,
-      checksum: checksum,
-    });
-
-    if (presignResponse.error || !presignResponse?.success) {
-      toast({
         variant: 'destructive',
-        title: 'Error al conseguir presign URL',
-        description: presignResponse.error,
       });
 
       setIsLoading(false);
       return;
     }
 
-    const imageUrl = presignResponse.success.split('?')[0];
-
-    const awsImagePosting = await fetch(imageUrl, {
-      method: 'PUT',
-      body: selectedFile,
-      headers: {
-        'Content-Type': selectedFile.type,
-        metadata: JSON.stringify({ giftId: wishlistGiftResponse.giftId }),
-      },
-    });
-
-    if (!awsImagePosting.ok) {
-      toast({
-        variant: 'destructive',
-        title: 'Error al subir la imagen a AWS',
-        description: presignResponse.error,
+    if (selectedFile) {
+      const uploadResponse = await uploadImageToAws({
+        file: selectedFile,
+        giftId: wishlistGiftResponse.giftId,
       });
 
-      setIsLoading(false);
-      return;
-    }
+      if (uploadResponse?.error) {
+        toast({
+          title: 'Error',
+          description: uploadResponse.error,
+          variant: 'destructive',
+        });
 
-    await updateGiftImageUrl(imageUrl, wishlistGiftResponse.giftId);
+        setIsLoading(false);
+        return;
+      }
+    }
 
     toast({
-      title: 'Éxito! 🎁🗑',
-      description: wishlistGiftResponse.success,
+      title: 'Éxito! 🎁🎉',
+      description: 'Regalo creado y agregado a tu lista.',
       action: (
         <Button
           onClick={() => router.push('/dashboard?page=1')}

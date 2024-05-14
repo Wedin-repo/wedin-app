@@ -39,11 +39,15 @@ export const getSignedURL = async ({
   const session = await auth();
 
   if (!session) {
-    return { error: 'not authenticated' };
+    return { error: 'No estas autenticado' };
   }
 
   if (!allowedFileTypes.includes(fileType)) {
-    return { error: 'File type not allowed' };
+    return { error: 'Tipo de archivo no soportado' };
+  }
+
+  if (fileSize > maxFileSize) {
+    return { error: 'Archvo muy grande' };
   }
 
   const putObjectCommand = new PutObjectCommand({
@@ -56,10 +60,6 @@ export const getSignedURL = async ({
       giftId: giftId,
     },
   });
-
-  if (fileSize > maxFileSize) {
-    return { error: 'File size too large' };
-  }
 
   const signedUrl = await getSignedUrl(s3Client, putObjectCommand, {
     expiresIn: 60,
