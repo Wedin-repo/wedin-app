@@ -3,8 +3,6 @@
 import prisma from '@/db/client';
 
 export async function getWedding(userId: string) {
-  if (!userId) return null;
-
   try {
     const wedding = await prisma.wedding.findFirst({
       where: {

@@ -10,9 +10,10 @@ import { PiWallet } from 'react-icons/pi';
 
 export default async function DashboardHeader() {
   const currentUser = await getCurrentUser();
+  if (!currentUser) return null;
+
   const wedding = await getWedding(currentUser?.id);
   const wishListId = wedding?.wishListId;
-
   if (!wishListId) return null;
 
   const wishlistGifts = await getGifts({
@@ -20,13 +21,16 @@ export default async function DashboardHeader() {
   });
 
   const totalPrice =
-    wishlistGifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
+    wishlistGifts?.reduce(
+      (acc, gift) => acc + Number.parseFloat(gift.price),
+      0
+    ) || 0;
   const formattedTotalPrice = formatPrice(totalPrice);
 
   return (
     <div className="flex flex-col gap-4 items-center w-full">
       <h1 className="text-4xl font-semibold text-primaryTextColor">Mi lista</h1>
-      <div className="flex flex-col sm:flex-row gap-3 items-center">
+      <div className="flex flex-col gap-3 items-center sm:flex-row">
         <div className="bg-[#F2F2F2] rounded-full py-1.5 px-4 text-base flex items-center gap-2">
           <IoGiftOutline fontSize={'18px'} />
           {wishlistGifts?.length} regalos
