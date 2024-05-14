@@ -1,6 +1,7 @@
 'use server';
 
 import prisma from '@/db/client';
+import { revalidatePath } from 'next/cache';
 
 export type GetGiftsParams = {
   category?: string;
@@ -87,11 +88,12 @@ export async function getGifts({
 
 export async function updateGiftImageUrl(url: string, giftId: string) {
   try {
-    const gift = await prisma.gift.update({
+    await prisma.gift.update({
       where: { id: giftId },
       data: { imageUrl: url },
     });
-    return gift;
+
+    revalidatePath('/dashboard');
   } catch (error) {
     console.error('Error updating gift image URL:', error);
     return { error: 'Error updating gift image URL' };

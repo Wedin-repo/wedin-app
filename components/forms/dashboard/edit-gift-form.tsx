@@ -62,7 +62,6 @@ function EditGiftForm({
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
-    // Does not take into account the image upload
     if (!Object.keys(formState.dirtyFields).length) {
       if (setIsOpen) {
         setIsOpen(false);

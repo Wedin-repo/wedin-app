@@ -3,7 +3,6 @@
 import prisma from '@/db/client';
 import {
   GiftParamSchema,
-  GiftSchema,
   GiftWishListSchema,
   GiftsWishListSchema,
 } from '@/schemas/forms';

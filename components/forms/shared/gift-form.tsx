@@ -57,7 +57,7 @@ const GiftForm = ({
   setSelectedFile,
   onSubmit,
 }: GiftFormProps) => {
-  const [image, setImage] = useState(gift?.imageUrl || previewUrl || ringSvg);
+  const [image, setImage] = useState(gift?.imageUrl || previewUrl);
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -84,8 +84,8 @@ const GiftForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:gap-8 lg:flex-row lg:pt-0 sm:w-[800px]">
-          <div className="w-full lg:w-1/2">
+        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:justify-between lg:flex-row lg:pt-0">
+          <div className="w-full lg:w-7/12">
             <FormField
               control={form.control}
               name="imageUrl"
@@ -97,13 +97,13 @@ const GiftForm = ({
                       372px por 322px
                     </span>
                     <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
-                      <div className="flex justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[242px] sm:h-[322px] sm:w-[372px]">
+                      <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
                         <Image
-                          src={image}
+                          src={image ?? ringSvg}
                           width={372}
                           height={322}
                           alt="Vista previa de la imagen seleccionada"
-                          className="object-cover max-w-full max-h-full rounded-xl"
+                          className="object-cover min-w-full min-h-full rounded-xl"
                         />
                       </div>
                       <div className="">
@@ -130,13 +130,12 @@ const GiftForm = ({
                       </div>
                     </div>
                   </div>
-
                   <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
           </div>
-          <div className="flex flex-col gap-3 w-full sm:gap-7">
+          <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12 sm:min-h-[460px]">
             <FormField
               control={form.control}
               name="name"
