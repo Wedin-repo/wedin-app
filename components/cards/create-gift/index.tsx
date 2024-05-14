@@ -1,7 +1,7 @@
 'use client';
 
 import { updateGiftImageUrl } from '@/actions/data/gift';
-import { createGiftToWishList } from '@/actions/data/wishlist';
+import { createWishListGift } from '@/actions/data/wishlist';
 import { getSignedURL } from '@/actions/upload-to-s3';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
@@ -58,23 +58,18 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const giftCreateResponse = await createGiftToWishList(
-      validatedFields.data
-      // selectedFile
-    );
+    const wishlistGiftResponse = await createWishListGift(validatedFields.data);
 
-    if (giftCreateResponse.error || !giftCreateResponse.gift) {
+    if (wishlistGiftResponse.error || !wishlistGiftResponse.giftId) {
       toast({
         variant: 'destructive',
         title: 'error al crear el regalo',
-        description: giftCreateResponse.error,
+        description: wishlistGiftResponse.error,
       });
 
       setIsLoading(false);
       return;
     }
-
-    // have a upload image function
 
     const checksum = await computeSHA256(selectedFile);
 
@@ -82,11 +77,11 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       fileName: selectedFile.name,
       fileType: selectedFile.type,
       fileSize: selectedFile.size,
-      giftId: giftCreateResponse.gift.id,
+      giftId: wishlistGiftResponse.giftId,
       checksum: checksum,
     });
 
-    if (presignResponse.error || !presignResponse?.success?.url) {
+    if (presignResponse.error || !presignResponse?.success) {
       setError('Error al subir la imagen');
       toast({
         variant: 'destructive',
@@ -98,14 +93,14 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const imageUrl = presignResponse.success.url.split('?')[0];
+    const imageUrl = presignResponse.success.split('?')[0];
 
     const awsImagePosting = await fetch(imageUrl, {
       method: 'PUT',
       body: selectedFile,
       headers: {
         'Content-Type': selectedFile.type,
-        metadata: JSON.stringify({ giftId: giftCreateResponse.gift.id }),
+        metadata: JSON.stringify({ giftId: wishlistGiftResponse.giftId }),
       },
     });
 
@@ -121,11 +116,11 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    await updateGiftImageUrl(imageUrl, giftCreateResponse.gift.id);
+    await updateGiftImageUrl(imageUrl, wishlistGiftResponse.giftId);
 
     toast({
       title: 'Éxito! 🎁🗑',
-      description: giftCreateResponse.success,
+      description: wishlistGiftResponse.success,
       action: (
         <Button
           onClick={() => router.push('/dashboard?page=1')}

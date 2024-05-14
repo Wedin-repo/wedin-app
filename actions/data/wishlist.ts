@@ -200,9 +200,8 @@ export const editOrCreateGift = async (
   }
 };
 
-export const createGiftToWishList = async (
-  formData: z.infer<typeof GiftSchema>,
-  _file: File | null | undefined = null
+export const createWishListGift = async (
+  formData: z.infer<typeof GiftSchema>
 ) => {
   const validatedFields = GiftSchema.safeParse(formData);
 
@@ -243,11 +242,9 @@ export const createGiftToWishList = async (
 
     revalidatePath('/gifts?tab=predefinedGifts');
 
-    console.log('newGift', newGift);
-
     return {
       success: 'Regalo creado y agregado a tu lista.',
-      gift: newGift,
+      giftId: newGift.id,
     };
   } catch (error) {
     return { error: getErrorMessage(error) };

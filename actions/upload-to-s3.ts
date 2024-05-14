@@ -65,5 +65,5 @@ export const getSignedURL = async ({
     expiresIn: 60,
   });
 
-  return { success: { url: signedUrl } };
+  return { success: signedUrl };
 };
