@@ -58,7 +58,10 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const giftCreateResponse = await createGiftToWishList(validatedFields.data);
+    const giftCreateResponse = await createGiftToWishList(
+      validatedFields.data
+      // selectedFile
+    );
 
     if (giftCreateResponse.error || !giftCreateResponse.gift) {
       toast({

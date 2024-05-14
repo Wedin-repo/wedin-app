@@ -12,7 +12,6 @@ import {
   getErrorMessage,
   validateCategory,
   validateGift,
-  validateGiftAndWishlist,
   validateWishlist,
 } from '../helper';
 
@@ -202,7 +201,8 @@ export const editOrCreateGift = async (
 };
 
 export const createGiftToWishList = async (
-  formData: z.infer<typeof GiftSchema>
+  formData: z.infer<typeof GiftSchema>,
+  _file: File | null | undefined = null
 ) => {
   const validatedFields = GiftSchema.safeParse(formData);
 
@@ -219,7 +219,6 @@ export const createGiftToWishList = async (
   if (!wishlist) return { error: 'Wishlist not found' };
 
   try {
-    // Create the new gift
     const newGift = await prisma.gift.create({
       data: {
         name: validatedFields.data.name,
@@ -229,7 +228,7 @@ export const createGiftToWishList = async (
         isGroupGift: validatedFields.data.isGroupGift ?? false,
         isDefault: false,
         isEditedVersion: false,
-        description: 'a new gift creater by user', // TODO: inform UX about description issue
+        description: 'a new gift creater by user',
       },
     });
 
@@ -243,6 +242,8 @@ export const createGiftToWishList = async (
     });
 
     revalidatePath('/gifts?tab=predefinedGifts');
+
+    console.log('newGift', newGift);
 
     return {
       success: 'Regalo creado y agregado a tu lista.',

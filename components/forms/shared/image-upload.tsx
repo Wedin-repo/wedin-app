@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import ringSvg from '@/public/images/rings.svg';
 import Image from 'next/image';
 import type React from 'react';
 import { useState } from 'react';
@@ -26,9 +27,7 @@ function ImageUpload({
   setPreviewUrl,
   setSelectedFile,
 }: ImageUploadProps) {
-  const [image, setImage] = useState(
-    previewUrl || imgUrl || '../../../public/images/rings.svg'
-  );
+  const [image, setImage] = useState(previewUrl || imgUrl || ringSvg);
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -64,8 +63,8 @@ function ImageUpload({
         <div className="flex justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[242px] sm:h-[322px] sm:w-[372px]">
           <Image
             src={image}
-            width={500}
-            height={500}
+            width={372}
+            height={322}
             alt="Vista previa de la imagen seleccionada"
             className="object-cover max-w-full max-h-full rounded-xl"
           />
