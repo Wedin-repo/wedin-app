@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { type ZodType, z } from 'zod';
 
 export const GiftSchema = z.object({
   id: z.string(),
@@ -16,7 +16,10 @@ export const GiftSchema = z.object({
   isFavoriteGift: z.boolean(),
   isGroupGift: z.boolean(),
   wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  imageUrl: z.any() as ZodType<File>,
 });
+
+export const GiftParamSchema = GiftSchema.omit({ imageUrl: true });
 
 export const GiftWishListSchema = z.object({
   wishlistId: z.string(),

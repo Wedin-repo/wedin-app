@@ -8,7 +8,12 @@ import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { computeSHA256, formatPrice } from '@/lib/utils';
-import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';
+import ringSvg from '@/public/images/rings.svg';
+import {
+  GiftParamSchema,
+  GiftSchema,
+  GiftWishListSchema,
+} from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
 import { useRef, useState } from 'react';
@@ -29,12 +34,11 @@ function EditGiftForm({
   wishlistId,
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   const form = useForm({
     resolver: zodResolver(GiftSchema),
@@ -46,6 +50,7 @@ function EditGiftForm({
       isFavoriteGift: gift.isFavoriteGift,
       isGroupGift: gift.isGroupGift,
       wishListId: wishlistId,
+      imageUrl: ringSvg,
     },
   });
 
@@ -79,7 +84,11 @@ function EditGiftForm({
       return;
     }
 
-    const response = await editOrCreateGift(validatedFields.data);
+    const validatedParams = GiftParamSchema.safeParse(validatedFields.data);
+
+    if (!validatedParams.success) return null;
+
+    const response = await editOrCreateGift(validatedParams.data);
 
     if (response?.error) {
       toast({
@@ -102,7 +111,7 @@ function EditGiftForm({
       checksum: checksum,
     });
 
-    if (presignResponse.error || !presignResponse?.success?.url) {
+    if (presignResponse.error || !presignResponse?.success) {
       setError('Error al subir la imagen');
       toast({
         variant: 'destructive',
@@ -114,7 +123,7 @@ function EditGiftForm({
       return;
     }
 
-    const imageUrl = presignResponse.success.url.split('?')[0];
+    const imageUrl = presignResponse.success.split('?')[0];
 
     const awsImagePosting = await fetch(imageUrl, {
       method: 'PUT',
@@ -212,8 +221,10 @@ function EditGiftForm({
       formattedPrice={formattedPrice}
       gift={gift}
       handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
+      selectedFile={selectedFile}
       isLoading={isLoading}
       onSubmit={onSubmit}
+      wishlistId={wishlistId}
       previewUrl={previewUrl}
       setError={setError}
       setPreviewUrl={setPreviewUrl}

@@ -2,6 +2,7 @@
 
 import prisma from '@/db/client';
 import {
+  GiftParamSchema,
   GiftSchema,
   GiftWishListSchema,
   GiftsWishListSchema,
@@ -130,9 +131,9 @@ export const deleteGiftFromWishList = async (
 };
 
 export const editOrCreateGift = async (
-  formData: z.infer<typeof GiftSchema>
+  formData: z.infer<typeof GiftParamSchema>
 ) => {
-  const validatedFields = GiftSchema.safeParse(formData);
+  const validatedFields = GiftParamSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Campos inválidos' };
@@ -201,9 +202,9 @@ export const editOrCreateGift = async (
 };
 
 export const createWishListGift = async (
-  formData: z.infer<typeof GiftSchema>
+  formData: z.infer<typeof GiftParamSchema>
 ) => {
-  const validatedFields = GiftSchema.safeParse(formData);
+  const validatedFields = GiftParamSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Invalid fields' };
