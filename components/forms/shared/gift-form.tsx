@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { formatPrice } from '@/lib/utils';
 import ringSvg from '@/public/images/rings.svg';
 import type { GiftSchema } from '@/schemas/forms';
 import type { Category, Gift } from '@prisma/client';
@@ -31,7 +32,6 @@ type GiftFormProps = {
   categories: Category[] | null;
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
   form: UseFormReturn<z.infer<typeof GiftSchema>>;
-  formattedPrice?: string;
   gift?: Gift;
   isLoading: boolean;
   previewUrl: string | null;
@@ -46,7 +46,6 @@ const GiftForm = ({
   categories,
   fileInputRef,
   form,
-  formattedPrice,
   gift,
   isLoading,
   previewUrl,
@@ -192,21 +191,37 @@ const GiftForm = ({
             <FormField
               control={form.control}
               name="price"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Precio</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={formattedPrice ?? 'Valor del regalo'}
-                      type="number"
-                      min="0"
-                      className="!mt-0"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="font-normal text-red-600" />
-                </FormItem>
-              )}
+              render={({ field }) => {
+                const [displayValue, setDisplayValue] = useState(
+                  formatPrice(Number(field.value))
+                );
+
+                const handleInputChange = (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ) => {
+                  const rawValue = e.target.value.replace(/[^0-9]/g, '');
+                  const numericValue = Number(rawValue);
+                  const formattedValue = formatPrice(numericValue);
+
+                  setDisplayValue(formattedValue);
+                  field.onChange(rawValue);
+                };
+
+                return (
+                  <FormItem className="w-full">
+                    <FormLabel>Precio</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        className="!mt-0"
+                        value={displayValue}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                );
+              }}
             />
 
             <FormField

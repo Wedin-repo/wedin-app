@@ -6,7 +6,6 @@ import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
-import { formatPrice } from '@/lib/utils';
 import ringSvg from '@/public/images/rings.svg';
 import {
   GiftParamSchema,
@@ -22,7 +21,7 @@ import type { z } from 'zod';
 type EditGiftFormProps = {
   gift: Gift;
   wishlistId: string;
-  categories?: Category[] | null;
+  categories: Category[];
   setIsOpen?: (value: boolean) => void;
 };
 
@@ -53,10 +52,6 @@ function EditGiftForm({
 
   const { formState } = form;
 
-  if (!categories) return null;
-
-  const formattedPrice = formatPrice(Number(gift.price));
-
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
@@ -84,7 +79,7 @@ function EditGiftForm({
 
     if (!validatedParams.success) return null;
 
-    const response = await editOrCreateGift(validatedParams.data);
+    const response = await editOrCreateGift(validatedParams.data, gift.id);
 
     if (response?.error) {
       toast({
@@ -182,7 +177,6 @@ function EditGiftForm({
       categories={categories}
       fileInputRef={fileInputRef}
       form={form}
-      formattedPrice={formattedPrice}
       gift={gift}
       handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
       selectedFile={selectedFile}

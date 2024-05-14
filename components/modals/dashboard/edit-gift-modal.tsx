@@ -9,7 +9,7 @@ import { FiEdit3 } from 'react-icons/fi';
 
 type EditGiftModalProps = {
   gift: Gift;
-  categories?: Category[];
+  categories: Category[];
   wishListId?: string | null;
 };
 

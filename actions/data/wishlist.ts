@@ -112,7 +112,8 @@ export const deleteGiftFromWishList = async (
 };
 
 export const editOrCreateGift = async (
-  formData: z.infer<typeof GiftParamSchema>
+  formData: z.infer<typeof GiftParamSchema>,
+  giftId: string
 ) => {
   const validatedFields = GiftParamSchema.safeParse(formData);
 
@@ -128,7 +129,7 @@ export const editOrCreateGift = async (
 
   if (!wishlist) return { error: 'Wishlist not found' };
 
-  const gift = await validateGift(validatedFields.data.id);
+  const gift = await validateGift(giftId);
 
   if (!gift) return { error: 'Gift not found' };
 
@@ -140,7 +141,7 @@ export const editOrCreateGift = async (
     isGroupGift: validatedFields.data.isGroupGift,
     isDefault: false,
     isEditedVersion: true,
-    sourceGiftId: validatedFields.data.id,
+    sourceGiftId: giftId,
     description: 'a new gift creater by user', // TODO: inform UX about description issue
   };
 
@@ -153,7 +154,7 @@ export const editOrCreateGift = async (
         where: { id: validatedFields.data.wishListId },
         data: {
           gifts: {
-            disconnect: { id: validatedFields.data.id },
+            disconnect: { id: giftId },
             connect: { id: response?.id },
           },
         },
@@ -162,7 +163,7 @@ export const editOrCreateGift = async (
 
     if (!gift.isDefault) {
       const response = await prisma.gift.update({
-        where: { id: validatedFields.data.id },
+        where: { id: giftId },
         data: newGiftData,
       });
 
