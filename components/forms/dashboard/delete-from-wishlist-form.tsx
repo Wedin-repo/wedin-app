@@ -36,7 +36,7 @@ function RemoveFromWishListForm({
       toast({
         title: 'Error',
         description: 'Error al eliminar el regalo de la lista',
-        className: 'bg-white',
+        variant: 'destructive',
       });
 
       return;
@@ -48,7 +48,7 @@ function RemoveFromWishListForm({
       toast({
         title: 'Error',
         description: response.error,
-        className: 'bg-white',
+        variant: 'destructive',
       });
     }
 

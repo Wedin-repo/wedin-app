@@ -1,5 +1,4 @@
 import prisma from '@/db/client';
-import { withCoalescedInvoke } from 'next/dist/lib/coalesced-function';
 
 export const getErrorMessage = (error: unknown): string => {
   let message: string;
