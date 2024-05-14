@@ -40,7 +40,7 @@ function EditGiftForm({
       id: gift.id,
       name: gift.name,
       categoryId: gift.categoryId,
-      price: formattedPrice.toString(),
+      price: formattedPrice.toString(), // change this
       isFavoriteGift: gift.isFavoriteGift,
       isGroupGift: gift.isGroupGift,
       wishListId: wishlistId,
