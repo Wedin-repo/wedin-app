@@ -4,11 +4,11 @@ import { auth } from '@/auth';
 import prisma from '@/db/client';
 
 export async function getCurrentUser() {
+  const session = await auth();
+
+  if (!session?.user?.email) return null;
+
   try {
-    const session = await auth();
-
-    if (!session?.user?.email) return null;
-
     const currentUser = await prisma.user.findUnique({
       where: {
         email: session.user.email,

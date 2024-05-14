@@ -8,6 +8,7 @@ import type React from 'react';
 import { useState } from 'react';
 import { MdOutlineFileUpload } from 'react-icons/md';
 
+// delete unused props
 type ImageUploadProps = {
   error: string | null;
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
@@ -50,9 +51,6 @@ function ImageUpload({
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
-
-  console.log('imgUrl', imgUrl);
-  console.log('previewUrl', previewUrl);
 
   return (
     <div className="flex flex-col gap-1.5">

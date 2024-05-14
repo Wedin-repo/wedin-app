@@ -18,18 +18,17 @@ import type { z } from 'zod';
 
 type CreateGiftFormProps = {
   wishlistId: string;
-  categories?: Category[] | null;
+  categories: Category[];
 };
 
 function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-  const { toast } = useToast();
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm({
     resolver: zodResolver(GiftSchema),
@@ -43,8 +42,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       wishListId: wishlistId,
     },
   });
-
-  if (!categories) return null;
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
@@ -73,6 +70,8 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       setIsLoading(false);
       return;
     }
+
+    // have a upload image function
 
     const checksum = await computeSHA256(selectedFile);
 

@@ -11,7 +11,9 @@ import type * as z from 'zod';
 import {
   getErrorMessage,
   validateCategory,
+  validateGift,
   validateGiftAndWishlist,
+  validateWishlist,
 } from '../helper';
 
 export const addGiftToWishList = async (
@@ -131,32 +133,37 @@ export const deleteGiftFromWishList = async (
 export const editOrCreateGift = async (
   formData: z.infer<typeof GiftSchema>
 ) => {
+  const validatedFields = GiftSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return { error: 'Campos inválidos' };
+  }
+
+  const category = await validateCategory(validatedFields.data.categoryId);
+
+  if (!category) return { error: 'Category not found' };
+
+  const wishlist = await validateWishlist(validatedFields.data.wishListId);
+
+  if (!wishlist) return { error: 'Wishlist not found' };
+
+  const gift = await validateGift(validatedFields.data.id);
+
+  if (!gift) return { error: 'Gift not found' };
+
+  const newGiftData = {
+    name: validatedFields.data.name,
+    categoryId: validatedFields.data.categoryId,
+    price: validatedFields.data.price,
+    isFavoriteGift: validatedFields.data.isFavoriteGift,
+    isGroupGift: validatedFields.data.isGroupGift,
+    isDefault: false,
+    isEditedVersion: true,
+    sourceGiftId: validatedFields.data.id,
+    description: 'a new gift creater by user', // TODO: inform UX about description issue
+  };
+
   try {
-    const validatedFields = GiftSchema.safeParse(formData);
-
-    if (!validatedFields.success) {
-      return { error: 'Campos inválidos' };
-    }
-
-    await validateCategory(validatedFields.data.categoryId);
-
-    const { gift } = await validateGiftAndWishlist(
-      validatedFields.data.id,
-      validatedFields.data.wishListId
-    );
-
-    const newGiftData = {
-      name: validatedFields.data.name,
-      categoryId: validatedFields.data.categoryId,
-      price: validatedFields.data.price,
-      isFavoriteGift: validatedFields.data.isFavoriteGift,
-      isGroupGift: validatedFields.data.isGroupGift,
-      isDefault: false,
-      isEditedVersion: true,
-      sourceGiftId: validatedFields.data.id,
-      description: 'a new gift creater by user', // TODO: inform UX about description issue
-    };
-
     if (gift.isDefault) {
       const response = await prisma.gift.create({
         data: { ...newGiftData },
@@ -197,16 +204,21 @@ export const editOrCreateGift = async (
 export const createGiftToWishList = async (
   formData: z.infer<typeof GiftSchema>
 ) => {
+  const validatedFields = GiftSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return { error: 'Invalid fields' };
+  }
+
+  const category = await validateCategory(validatedFields.data.categoryId);
+
+  if (!category) return { error: 'Category not found' };
+
+  const wishlist = await validateWishlist(validatedFields.data.wishListId);
+
+  if (!wishlist) return { error: 'Wishlist not found' };
+
   try {
-    const validatedFields = GiftSchema.safeParse(formData);
-
-    if (!validatedFields.success) {
-      return { error: 'Invalid fields' };
-    }
-
-    // Validate category
-    await validateCategory(validatedFields.data.categoryId);
-
     // Create the new gift
     const newGift = await prisma.gift.create({
       data: {
@@ -221,7 +233,6 @@ export const createGiftToWishList = async (
       },
     });
 
-    // Connect the new gift to the wishlist
     await prisma.wishList.update({
       where: { id: validatedFields.data.wishListId },
       data: {
@@ -231,7 +242,6 @@ export const createGiftToWishList = async (
       },
     });
 
-    // Revalidate the cache
     revalidatePath('/gifts?tab=predefinedGifts');
 
     return {

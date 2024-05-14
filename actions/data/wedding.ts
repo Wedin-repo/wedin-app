@@ -2,26 +2,20 @@
 
 import prisma from '@/db/client';
 
-export async function getWedding(userId: string | undefined) {
+export async function getWedding(userId: string) {
+  if (!userId) return null;
+
   try {
-    if (!userId) return null;
-
-    let wedding;
-
-    wedding = await prisma.wedding.findFirst({
-      where: { brideId: userId },
+    const wedding = await prisma.wedding.findFirst({
+      where: {
+        OR: [{ brideId: userId }, { groomId: userId }],
+      },
     });
 
-    if (!wedding) {
-      wedding = await prisma.wedding.findFirst({
-        where: { groomId: userId },
-      });
-      if (!wedding) return null;
-      return wedding;
-    }
+    if (!wedding) return null;
 
     return wedding;
-  } catch (error: any) {
+  } catch (error) {
     console.error(error);
     return null;
   }

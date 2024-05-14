@@ -3,7 +3,7 @@
 import MenuItem from '@/components/navbar/MenuItem';
 import { Button } from '@/components/ui/button';
 import useOutsideClick from '@/hooks/useOutsideClick';
-import { User } from '@prisma/client';
+import type { User } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -38,6 +38,7 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
           <div className="hidden text-sm md:block">
             {`Hola ${currentUser?.name || currentUser?.email}!`}
           </div>
+          {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> chane to use shad cn drop down */}
           <div
             className="flex flex-row gap-3 items-center p-4 rounded-full transition cursor-pointer md:py-1 md:px-2 hover:shadow-md border-[1px] border-neutral-200"
             onClick={toggleOpen}
