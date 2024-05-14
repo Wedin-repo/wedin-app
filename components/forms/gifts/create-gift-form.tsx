@@ -8,11 +8,9 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { computeSHA256 } from '@/lib/utils';
 import { GiftSchema } from '@/schemas/forms';
-import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { IoGiftOutline } from 'react-icons/io5';
 import type { z } from 'zod';
 
@@ -29,19 +27,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { toast } = useToast();
-
-  const form = useForm({
-    resolver: zodResolver(GiftSchema),
-    defaultValues: {
-      id: '',
-      name: '',
-      categoryId: '',
-      price: '',
-      isFavoriteGift: false,
-      isGroupGift: false,
-      wishListId: wishlistId,
-    },
-  });
 
   const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
     setIsLoading(true);
@@ -142,7 +127,8 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       categories={categories}
       error={error}
       fileInputRef={fileInputRef}
-      form={form}
+      wishlistId={wishlistId}
+      selectedFile={selectedFile}
       isLoading={isLoading}
       onSubmit={onSubmit}
       previewUrl={previewUrl}
