@@ -3,11 +3,11 @@
 import { updateGiftImageUrl } from '@/actions/data/gift';
 import { createWishListGift } from '@/actions/data/wishlist';
 import { getSignedURL } from '@/actions/upload-to-s3';
-import ringSvg from '@/public/images/rings.svg';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { computeSHA256 } from '@/lib/utils';
+import ringSvg from '@/public/images/rings.svg';
 import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
@@ -26,7 +26,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(ringSvg);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { toast } = useToast();
@@ -69,7 +68,7 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
     if (wishlistGiftResponse.error || !wishlistGiftResponse.giftId) {
       toast({
         variant: 'destructive',
-        title: 'error al crear el regalo',
+        title: 'Error al crear el regalo',
         description: wishlistGiftResponse.error,
       });
 
@@ -88,7 +87,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
     });
 
     if (presignResponse.error || !presignResponse?.success) {
-      setError('Error al subir la imagen');
       toast({
         variant: 'destructive',
         title: 'Error al conseguir presign URL',
@@ -111,10 +109,9 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
     });
 
     if (!awsImagePosting.ok) {
-      setError('Error al subir la imagen a AWS');
       toast({
         variant: 'destructive',
-        title: 'error al subir la imagen a AWS',
+        title: 'Error al subir la imagen a AWS',
         description: presignResponse.error,
       });
 
@@ -146,15 +143,12 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   return (
     <GiftForm
       categories={categories}
-      error={error}
       fileInputRef={fileInputRef}
-      wishlistId={wishlistId}
       selectedFile={selectedFile}
       isLoading={isLoading}
       form={form}
       onSubmit={onSubmit}
       previewUrl={previewUrl}
-      setError={setError}
       setPreviewUrl={setPreviewUrl}
       setSelectedFile={setSelectedFile}
     />

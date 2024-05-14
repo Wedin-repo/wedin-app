@@ -60,8 +60,7 @@ export const addGiftsToWishList = async (
 
   if (!validatedFields.success) {
     return {
-      status: 'Error',
-      message: 'Invalid gift Ids',
+      error: 'Invalid gift Ids',
     };
   }
 
@@ -78,17 +77,11 @@ export const addGiftsToWishList = async (
     });
   } catch (error: unknown) {
     return {
-      status: 'Error',
-      message: getErrorMessage(error),
+      error: getErrorMessage(error),
     };
   }
 
   revalidatePath('/dashboard');
-
-  return {
-    status: 'Éxito! 🎁🎉',
-    message: 'Regalo agregado a tu lista.',
-  };
 };
 
 export const deleteGiftFromWishList = async (
@@ -97,10 +90,7 @@ export const deleteGiftFromWishList = async (
   const validatedFields = GiftWishListSchema.safeParse(formData);
 
   if (!validatedFields.success) {
-    return {
-      status: 'Error',
-      message: 'Datos requeridos no fueron encontrados',
-    };
+    return { error: 'Datos requeridos no fueron encontrados' };
   }
 
   const { wishlistId, giftId } = validatedFields.data;
@@ -115,18 +105,10 @@ export const deleteGiftFromWishList = async (
       },
     });
   } catch (error) {
-    return {
-      status: 'Error',
-      message: getErrorMessage(error),
-    };
+    return { error: getErrorMessage(error) };
   }
 
   revalidatePath('/', 'layout');
-
-  return {
-    status: 'Éxito! 🎁🗑',
-    message: 'Regalo eliminado de tu lista.',
-  };
 };
 
 export const editOrCreateGift = async (

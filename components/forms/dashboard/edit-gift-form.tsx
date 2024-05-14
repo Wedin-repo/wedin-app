@@ -36,7 +36,6 @@ function EditGiftForm({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -111,7 +110,6 @@ function EditGiftForm({
     });
 
     if (presignResponse.error || !presignResponse?.success) {
-      setError('Error al subir la imagen');
       toast({
         variant: 'destructive',
         title: 'Error al conseguir presign URL',
@@ -134,7 +132,6 @@ function EditGiftForm({
     });
 
     if (!awsImagePosting.ok) {
-      setError('Error al subir la imagen a AWS');
       toast({
         variant: 'destructive',
         title: 'error al subir la imagen a AWS',
@@ -169,9 +166,9 @@ function EditGiftForm({
 
     if (!validatedFields.success) {
       toast({
+        variant: 'destructive',
         title: 'Error',
-        description: 'Error al eliminar el regalo de la lista',
-        className: 'bg-white',
+        description: 'Datos requeridos no fueron encontrados',
       });
 
       setIsLoading(false);
@@ -180,21 +177,19 @@ function EditGiftForm({
 
     const response = await deleteGiftFromWishList(validatedFields.data);
 
-    if (response.status === 'Error') {
+    if (response?.error) {
       toast({
+        variant: 'destructive',
         title: 'Error',
-        description:
-          response.message ||
-          'An error occurred while deleting the gift from the wishlist.',
-        className: 'bg-white',
+        description: response.error,
       });
       setIsLoading(false);
       return;
     }
 
     toast({
-      title: response.status,
-      description: response.message,
+      title: 'Éxito! 🎁🗑',
+      description: 'Regalo eliminado de tu lista',
       action: (
         <AddToWishListForm
           giftId={gift.id}
@@ -202,19 +197,18 @@ function EditGiftForm({
           variant="undoButton"
         />
       ),
-      className: 'bg-white',
     });
 
     if (setIsOpen) {
       setIsOpen(false);
     }
+
     setIsLoading(false);
   };
 
   return (
     <GiftForm
       categories={categories}
-      error={error}
       fileInputRef={fileInputRef}
       form={form}
       formattedPrice={formattedPrice}
@@ -223,9 +217,7 @@ function EditGiftForm({
       selectedFile={selectedFile}
       isLoading={isLoading}
       onSubmit={onSubmit}
-      wishlistId={wishlistId}
       previewUrl={previewUrl}
-      setError={setError}
       setPreviewUrl={setPreviewUrl}
       setSelectedFile={setSelectedFile}
     />

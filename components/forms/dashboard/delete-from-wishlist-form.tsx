@@ -44,19 +44,17 @@ function RemoveFromWishListForm({
 
     const response = await deleteGiftFromWishList(validatedFields.data);
 
-    if (response.status === 'Error') {
+    if (response?.error) {
       toast({
         title: 'Error',
-        description:
-          response.message ||
-          'An error occurred while deleting the gift from the wishlist.',
+        description: response.error,
         className: 'bg-white',
       });
     }
 
     toast({
-      title: response.status,
-      description: response.message,
+      title: 'Exito! 🎁🗑',
+      description: 'Regalo eliminado de tu lista',
       action: (
         <AddToWishListForm
           giftId={giftId}
@@ -64,7 +62,6 @@ function RemoveFromWishListForm({
           variant="undoButton"
         />
       ),
-      className: 'bg-white',
     });
   };
 

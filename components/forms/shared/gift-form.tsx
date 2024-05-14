@@ -29,18 +29,15 @@ import type { z } from 'zod';
 
 type GiftFormProps = {
   categories: Category[] | null;
-  error: string | null;
   fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
   form: UseFormReturn<z.infer<typeof GiftSchema>>;
   formattedPrice?: string;
   gift?: Gift;
-  wishlistId: string;
-  selectedFile: File | null;
   isLoading: boolean;
   previewUrl: string | null;
+  selectedFile: File | null;
   handleRemoveGiftFromWishList?: () => void;
   onSubmit: (values: z.infer<typeof GiftSchema>) => void;
-  setError: (error: string | null) => void;
   setPreviewUrl: (url: string | null) => void;
   setSelectedFile: (file: File | null) => void;
 };
@@ -50,12 +47,12 @@ const GiftForm = ({
   fileInputRef,
   form,
   formattedPrice,
-  previewUrl,
   gift,
   isLoading,
+  previewUrl,
+  onSubmit,
   setPreviewUrl,
   setSelectedFile,
-  onSubmit,
 }: GiftFormProps) => {
   const [image, setImage] = useState(gift?.imageUrl || previewUrl);
   const handleFileChange = async (

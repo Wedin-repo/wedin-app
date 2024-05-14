@@ -31,12 +31,12 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
 
     const response = await addGiftsToWishList(validatedFields.data);
 
-    if (response?.status === 'Error') {
+    if (response?.error) {
       toast({
-        title: response.status,
-        description: response.message,
+        title: 'Error 🎁🚫',
+        description: response.error,
+        variant: 'destructive',
         action: <FaCheck color="red" fontSize={'36px'} />,
-        className: 'bg-white',
       });
 
       return;
