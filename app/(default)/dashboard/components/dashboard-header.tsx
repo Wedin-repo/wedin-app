@@ -1,6 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import { IoIosLink } from 'react-icons/io';
@@ -9,10 +8,7 @@ import { LuScreenShare } from 'react-icons/lu';
 import { PiWallet } from 'react-icons/pi';
 
 export default async function DashboardHeader() {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) return null;
-
-  const wedding = await getWedding(currentUser?.id);
+  const wedding = await getWedding();
   const wishListId = wedding?.wishListId;
   if (!wishListId) return null;
 

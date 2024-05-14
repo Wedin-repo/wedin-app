@@ -1,7 +1,6 @@
-import { GetGiftsParams, getGifts } from '@/actions/data/gift';
+import { type GetGiftsParams, getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import GiftsCards from '@/components/cards/gifts';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
@@ -16,10 +15,10 @@ type GiftListPageProps = {
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
   const { giftListId } = params;
+
   if (!giftListId) return null;
 
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
+  const wedding = await getWedding();
   const giftList = await getGiftList(giftListId);
   const gifts = await getGifts({ searchParams: { giftListId } });
   const giftIds = gifts?.map(gift => gift.id);

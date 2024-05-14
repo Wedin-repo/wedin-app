@@ -1,6 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import type { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
 import GiftCard from '@/components/cards/gifts/card';
@@ -17,8 +16,7 @@ async function GiftsModals({ searchParams }: GiftsModalProps) {
   if (gifts?.length === 0 || !gifts)
     return <EmptyState title="No se encontraron regalos" />;
 
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
+  const wedding = await getWedding();
 
   return (
     <CardContainer>

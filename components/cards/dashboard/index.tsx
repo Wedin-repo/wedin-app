@@ -1,6 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
 import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import type { DashboardPageSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/Pagination';
@@ -13,8 +12,7 @@ type DashboardGiftsProps = {
 export default async function DashboardGifts({
   searchParams,
 }: DashboardGiftsProps) {
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
+  const wedding = await getWedding();
   const wishListId = wedding?.wishListId;
 
   if (!wishListId) {

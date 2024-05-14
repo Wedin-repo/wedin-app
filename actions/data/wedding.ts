@@ -1,8 +1,15 @@
 'use server';
 
 import prisma from '@/db/client';
+import { getCurrentUser } from '../getCurrentUser';
 
-export async function getWedding(userId: string) {
+export async function getWedding() {
+  const user = await getCurrentUser();
+
+  if (!user) return null;
+
+  const userId = user.id;
+
   try {
     const wedding = await prisma.wedding.findFirst({
       where: {

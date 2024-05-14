@@ -2,14 +2,10 @@
 
 import { getCategories } from '@/actions/data/category';
 import { getWedding } from '@/actions/data/wedding';
-import { getCurrentUser } from '@/actions/getCurrentUser';
 import CreateGiftForm from '@/components/forms/gifts/create-gift-form';
 
 async function CreateGift() {
-  const currentUser = await getCurrentUser();
-  if (!currentUser) return null;
-
-  const wedding = await getWedding(currentUser.id);
+  const wedding = await getWedding();
   const wishListId = wedding?.wishListId;
   if (!wishListId) return null;
 
