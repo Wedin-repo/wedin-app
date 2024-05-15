@@ -1,29 +1,32 @@
-import { editOrCreateGift } from '@/actions/data/gift';
+import { editGift } from '@/actions/data/gift';
+import { editWishlistGift } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftPostSchema, GiftFormPostSchema } from '@/schemas/forms';
+import { GiftFormPostSchema, GiftPostSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Category, Gift } from '@prisma/client';
+import type { Category, Gift, WishListGift } from '@prisma/client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 type EditGiftFormProps = {
+  categories: Category[];
+  eventId: string;
   gift: Gift;
   wishlistId: string;
-  eventId: string;
-  categories: Category[];
+  wishlistGift: WishListGift;
   setIsOpen?: (value: boolean) => void;
 };
 
 function EditGiftForm({
-  gift,
-  eventId,
   categories,
-  setIsOpen,
+  eventId,
+  gift,
+  wishlistGift,
   wishlistId,
+  setIsOpen,
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -43,8 +46,8 @@ function EditGiftForm({
 
       imageUrl: ringSvg,
 
-      isFavoriteGift: false,
-      isGroupGift: false,
+      isFavoriteGift: wishlistGift.isFavoriteGift,
+      isGroupGift: wishlistGift.isGroupGift,
       wishlistId: wishlistId,
     },
   });
@@ -54,16 +57,16 @@ function EditGiftForm({
   const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
       if (setIsOpen) {
         setIsOpen(false);
       }
-      setIsLoading(false);
       return;
     }
 
-    const validatedFields = GiftFormPostSchema.safeParse(values);
+    const validatedParams = GiftPostSchema.safeParse(values);
 
-    if (!validatedFields.success) {
+    if (!validatedParams.success) {
       toast({
         title: 'Error',
         description: 'Datos inválidos, por favor verifica tus datos.',
@@ -74,16 +77,12 @@ function EditGiftForm({
       return;
     }
 
-    const validatedParams = GiftPostSchema.safeParse(validatedFields.data);
+    const giftResponse = await editGift(validatedParams.data, gift.id);
 
-    if (!validatedParams.success) return null;
-
-    const response = await editOrCreateGift(validatedParams.data, gift.id);
-
-    if (response?.error) {
+    if (giftResponse?.error) {
       toast({
         title: 'Error',
-        description: response.error,
+        description: giftResponse.error,
         variant: 'destructive',
       });
 
@@ -91,7 +90,7 @@ function EditGiftForm({
       return;
     }
 
-    if (selectedFile) {
+    if (selectedFile && !formState.dirtyFields.imageUrl) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
         giftId: gift.id,
@@ -109,6 +108,27 @@ function EditGiftForm({
       }
     }
 
+    if (
+      formState.dirtyFields.isGroupGift ||
+      formState.dirtyFields.isFavoriteGift
+    ) {
+      const wishlistGiftResponse = await editWishlistGift({
+        ...validatedParams.data,
+        id: wishlistGift.id,
+      });
+
+      if (wishlistGiftResponse?.error) {
+        toast({
+          title: 'Error',
+          description: wishlistGiftResponse.error,
+          variant: 'destructive',
+        });
+
+        setIsLoading(false);
+        return;
+      }
+    }
+
     toast({
       title: 'Éxito! 🎁🎉',
       description: 'Regalo actualizado.',
@@ -116,7 +136,7 @@ function EditGiftForm({
     });
 
     if (setIsOpen) {
-      setIsOpen(false);
+      // setIsOpen(false);
     }
 
     setIsLoading(false);

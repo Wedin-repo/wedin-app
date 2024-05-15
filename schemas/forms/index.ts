@@ -33,7 +33,14 @@ export const WishListGiftPostSchema = z.object({
   isGroupGift: z.boolean().default(false),
 });
 
-export const WishListGiftPostsSchema = z.object({
+export const WishListGiftsPostSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftIds: z.array(z.string().min(1, { message: 'No se encontro un gift ID' })),
+});
+
+export const WishListGiftEditSchema = z.object({
+  id: z.string().min(1, { message: 'No se encontro un ID' }),
+  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  isFavoriteGift: z.boolean().default(false),
+  isGroupGift: z.boolean().default(false),
 });

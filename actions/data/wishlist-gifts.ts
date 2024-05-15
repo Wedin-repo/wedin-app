@@ -2,8 +2,9 @@
 
 import prisma from '@/db/client';
 import {
+  WishListGiftEditSchema,
   WishListGiftPostSchema,
-  WishListGiftPostsSchema,
+  WishListGiftsPostSchema,
 } from '@/schemas/forms';
 import { GetWishListGiftsParams } from '@/schemas/forms/params';
 import type { Prisma } from '@prisma/client';
@@ -42,9 +43,9 @@ export const addGiftToWishList = async (
 };
 
 export const addGiftsToWishList = async (
-  formData: z.infer<typeof WishListGiftPostsSchema>
+  formData: z.infer<typeof WishListGiftsPostSchema>
 ) => {
-  const validatedFields = WishListGiftPostsSchema.safeParse(formData);
+  const validatedFields = WishListGiftsPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -138,5 +139,29 @@ export const getWishListGifts = async (
   } catch (error) {
     console.error('Error retrieving wishlist gifts:', error);
     return [];
+  }
+};
+
+export const editWishlistGift = async (
+  formValues: z.infer<typeof WishListGiftEditSchema>
+) => {
+  const validatedFields = WishListGiftEditSchema.safeParse(formValues);
+
+  if (!validatedFields.success) {
+    return { error: 'Datos inválidos, por favor verifica tus datos.' };
+  }
+
+  const { isFavoriteGift, isGroupGift, id } = validatedFields.data;
+
+  try {
+    await prisma.wishListGift.update({
+      where: { id },
+      data: {
+        isFavoriteGift,
+        isGroupGift,
+      },
+    });
+  } catch (error) {
+    return { error: getErrorMessage(error) };
   }
 };

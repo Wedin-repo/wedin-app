@@ -60,10 +60,6 @@ export async function getGifts({
       query.giftlistId = giftlistId;
     }
 
-    // if (wishlistId) {
-    //   query.wishlistId = wishlistId;
-    // }
-
     const event = await getEvent();
 
     if (event?.id) {
@@ -118,65 +114,30 @@ export async function updateGiftImageUrl(url: string, giftId: string) {
   }
 }
 
-export const editOrCreateGift = async (
+export const editGift = async (
   formData: z.infer<typeof GiftPostSchema>,
   giftId: string
 ) => {
   const validatedFields = GiftPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
-    return { error: 'Campos inválidos' };
+    return { error: 'Datos inválidos, por favor verifica tus datos.' };
   }
 
-  const category = await validateCategory(validatedFields.data.categoryId);
+  try {
+    await prisma.gift.update({
+      where: { id: giftId },
+      data: {
+        name: validatedFields.data.name,
+        categoryId: validatedFields.data.categoryId,
+        price: validatedFields.data.price,
+      },
+    });
+  } catch (error) {
+    return { error: 'Error al editar el regalo' };
+  }
 
-  if (!category) return { error: 'Category not found' };
-
-  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-
-  if (!wishlist) return { error: 'Wishlist not found' };
-
-  const gift = await validateGift(giftId);
-
-  if (!gift) return { error: 'Gift not found' };
-
-  //
-  // try {
-  //   if (gift.isDefault) {
-  //     const response = await prisma.gift.create({
-  //       data: { ...newGiftData },
-  //     });
-  //     await prisma.wishList.update({
-  //       where: { id: validatedFields.data.wishlistId },
-  //       data: {
-  //         gifts: {
-  //           disconnect: { id: giftId },
-  //           connect: { id: response?.id },
-  //         },
-  //       },
-  //     });
-  //   }
-  //
-  //   if (!gift.isDefault) {
-  //     const response = await prisma.gift.update({
-  //       where: { id: giftId },
-  //       data: newGiftData,
-  //     });
-  //
-  //     await prisma.wishList.update({
-  //       where: { id: validatedFields.data.wishlistId },
-  //       data: {
-  //         gifts: {
-  //           connect: { id: response?.id },
-  //         },
-  //       },
-  //     });
-  //   }
-  //
-  //   revalidatePath('/dashboard');
-  // } catch (error) {
-  //   return { error: getErrorMessage(error) };
-  // }
+  revalidatePath('/dashboard');
 };
 
 export const createGift = async (formData: z.infer<typeof GiftPostSchema>) => {
