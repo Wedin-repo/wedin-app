@@ -13,15 +13,20 @@ import Image from 'next/image';
 
 type GiftsReceivedGiftCardProps = {
   gift: Gift;
-  wishListId?: string | null;
+  wishlistId?: string | null;
 };
 
 const GiftsReceivedGiftCard = async ({
   gift,
-  wishListId,
+  wishlistId,
 }: GiftsReceivedGiftCardProps) => {
-  const { id, name, price, imageUrl, categoryId, isFavoriteGift, isGroupGift } =
-    gift;
+  const {
+    id,
+    name,
+    price,
+    imageUrl,
+    categoryId /* isFavoriteGift, isGroupGift */,
+  } = gift;
 
   const categories = await getCategories();
   if (!categories) return null;

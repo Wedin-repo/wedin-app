@@ -1,5 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import type { GiftsReceivedPageSearchParams } from '@/app/(default)/gifts-received/page';
 import EmptyState from '@/components/EmptyState';
@@ -15,17 +15,17 @@ export default async function GiftsReceived({
   searchParams,
 }: GiftsReceivedProps) {
   const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
-  const wishListId = wedding?.wishListId;
+  const wedding = await getEvent();
+  const wishlistId = wedding?.wishlistId;
 
-  if (!wishListId) {
+  if (!wishlistId) {
     return (
       <EmptyState showReset title="No se ha creado una lista de regalos" />
     );
   }
 
   const wishlistGifts = await getGifts({
-    searchParams: { wishListId: wishListId },
+    searchParams: { wishlistId },
   });
 
   if (!wishlistGifts || wishlistGifts.length === 0) {
@@ -36,7 +36,7 @@ export default async function GiftsReceived({
   const { page = '1', name } = searchParams;
 
   const filteredWishlistGifts = await getGifts({
-    searchParams: { ...searchParams, wishListId },
+    searchParams: { ...searchParams, wishlistId },
   });
 
   if (filteredWishlistGifts.length === 0 && name) {
@@ -45,7 +45,7 @@ export default async function GiftsReceived({
 
   const totalPages = Math.ceil(filteredWishlistGifts.length / itemsPerPage);
   const paginatedFilteredWishlistGift = await getGifts({
-    searchParams: { ...searchParams, itemsPerPage, page, wishListId },
+    searchParams: { ...searchParams, itemsPerPage, page, wishlistId },
   });
 
   return (
@@ -55,7 +55,7 @@ export default async function GiftsReceived({
           <GiftsReceivedGiftCard
             key={gift.id}
             gift={gift}
-            wishListId={wishListId}
+            wishlistId={wishlistId}
           />
         ))}
       </CardContainer>
