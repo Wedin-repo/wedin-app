@@ -73,7 +73,7 @@ export async function getGifts({
     const take = itemsPerPage ? Number(itemsPerPage) : undefined;
 
     try {
-      return await prisma.gift.findMany({
+      const gifts = await prisma.gift.findMany({
         where: query,
         orderBy: {
           createdAt: 'desc',
@@ -81,6 +81,18 @@ export async function getGifts({
         skip,
         take,
       });
+
+      // // Filter out default gifts if there is an edited version
+      // const editedGifts = gifts.filter(gift => gift.isEditedVersion);
+      //
+      // const editedSourceIds = new Set(
+      //   editedGifts.map(gift => gift.sourceGiftId)
+      // );
+      // gifts = gifts.filter(
+      //   gift => !gift.isDefault || !editedSourceIds.has(gift.id)
+      // );
+
+      return gifts;
     } catch (error) {
       console.error('Error retrieving gifts:', error);
       return [];
@@ -88,12 +100,21 @@ export async function getGifts({
   }
 
   try {
-    return await prisma.gift.findMany({
+    let gifts = await prisma.gift.findMany({
       where: query,
       orderBy: {
         createdAt: 'desc',
       },
     });
+
+    // Filter out default gifts if there is an edited version
+    const editedGifts = gifts.filter(gift => gift.isEditedVersion);
+    const editedSourceIds = new Set(editedGifts.map(gift => gift.sourceGiftId));
+    gifts = gifts.filter(
+      gift => !gift.isDefault || !editedSourceIds.has(gift.id)
+    );
+
+    return gifts;
   } catch (error) {
     console.error('Error retrieving gifts:', error);
     return [];
@@ -125,7 +146,7 @@ export const editGift = async (
   }
 
   try {
-    await prisma.gift.update({
+    const gift = await prisma.gift.update({
       where: { id: giftId },
       data: {
         name: validatedFields.data.name,
@@ -133,38 +154,47 @@ export const editGift = async (
         price: validatedFields.data.price,
       },
     });
+
+    if (!gift) {
+      return { error: 'Error al editar el regalo' };
+    }
+
+    revalidatePath('/dashboard');
+
+    return { giftId: gift.id };
   } catch (error) {
     return { error: 'Error al editar el regalo' };
   }
-
-  revalidatePath('/dashboard');
 };
 
-export const createGift = async (formData: z.infer<typeof GiftPostSchema>) => {
+export const createGift = async (
+  formData: z.infer<typeof GiftPostSchema>,
+  imageUrl: string | null
+) => {
   const validatedFields = GiftPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Datos inválidos, por favor verifica tus datos.' };
   }
 
-  const newGift = await prisma.gift.create({
-    data: {
-      name: validatedFields.data.name,
-      categoryId: validatedFields.data.categoryId,
-      price: validatedFields.data.price,
-      isDefault: validatedFields.data.isDefault,
-      isEditedVersion: validatedFields.data.isEditedVersion,
-      eventId: validatedFields.data.eventId,
-    },
-  });
-
-  if (!newGift) {
-    return { error: 'Error creating gift' };
-  }
-
-  revalidatePath('/gifts?tab=predefinedGifts');
-
   try {
+    const newGift = await prisma.gift.create({
+      data: {
+        name: validatedFields.data.name,
+        categoryId: validatedFields.data.categoryId,
+        price: validatedFields.data.price,
+        isDefault: validatedFields.data.isDefault,
+        isEditedVersion: validatedFields.data.isEditedVersion,
+        eventId: validatedFields.data.eventId,
+        imageUrl: imageUrl,
+      },
+    });
+
+    if (!newGift) {
+      return { error: 'Error al crear regalo' };
+    }
+
+    revalidatePath('/dashboard');
     return { giftId: newGift.id };
   } catch (error) {
     return { error: getErrorMessage(error) };

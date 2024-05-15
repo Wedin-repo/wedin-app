@@ -2,6 +2,7 @@
 
 import prisma from '@/db/client';
 import {
+  WishListGiftDeleteSchema,
   WishListGiftEditSchema,
   WishListGiftPostSchema,
   WishListGiftsPostSchema,
@@ -72,9 +73,9 @@ export const addGiftsToWishList = async (
 };
 
 export const deleteGiftFromWishList = async (
-  formData: z.infer<typeof WishListGiftPostSchema>
+  formData: z.infer<typeof WishListGiftDeleteSchema>
 ) => {
-  const validatedFields = WishListGiftPostSchema.safeParse(formData);
+  const validatedFields = WishListGiftDeleteSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Datos requeridos no fueron encontrados' };

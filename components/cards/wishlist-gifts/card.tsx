@@ -42,7 +42,7 @@ const DashboardGiftCard = async ({
         <Image
           src={imageUrl || ringsLoader}
           height={118}
-          width={500}
+          width={118}
           alt={name}
           className="object-cover rounded-lg shadow"
         />

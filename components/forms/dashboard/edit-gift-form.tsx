@@ -1,5 +1,9 @@
-import { editGift } from '@/actions/data/gift';
-import { editWishlistGift } from '@/actions/data/wishlist-gifts';
+import { createGift, editGift } from '@/actions/data/gift';
+import {
+  addGiftToWishList,
+  deleteGiftFromWishList,
+  editWishlistGift,
+} from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
@@ -39,7 +43,7 @@ function EditGiftForm({
       name: gift.name,
       categoryId: gift.categoryId,
       price: gift.price,
-      isDefault: gift.isDefault,
+      isDefault: false,
       isEditedVersion: gift.isEditedVersion,
       sourceGiftId: gift.sourceGiftId ?? '',
       eventId: eventId,
@@ -56,13 +60,14 @@ function EditGiftForm({
 
   const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
-    if (!Object.keys(formState.dirtyFields).length) {
-      setIsLoading(false);
-      if (setIsOpen) {
-        setIsOpen(false);
-      }
-      return;
-    }
+
+    // if (!Object.keys(formState.dirtyFields).length) {
+    //   setIsLoading(false);
+    //   if (setIsOpen) {
+    //     setIsOpen(false);
+    //   }
+    //   return;
+    // }
 
     const validatedParams = GiftPostSchema.safeParse(values);
 
@@ -77,9 +82,52 @@ function EditGiftForm({
       return;
     }
 
-    const giftResponse = await editGift(validatedParams.data, gift.id);
+    let giftResponse:
+      | {
+          error: string;
+          giftId?: undefined;
+        }
+      | {
+          giftId: string;
+          error?: undefined;
+        };
 
-    if (giftResponse?.error) {
+    if (gift.isDefault) {
+      // Create a new gift based on the default one
+      const newGiftParams = {
+        ...validatedParams.data,
+        isEditedVersion: true,
+        sourceGiftId: gift.id,
+        isDefault: false,
+      };
+
+      giftResponse = await createGift(newGiftParams, gift.imageUrl);
+
+      if (giftResponse?.error || !giftResponse.giftId) {
+        toast({
+          title: 'Error',
+          description: giftResponse.error,
+          variant: 'destructive',
+        });
+
+        setIsLoading(false);
+        return;
+      }
+
+      await deleteGiftFromWishList({
+        ...validatedParams.data,
+        giftId: gift.id,
+      });
+
+      await addGiftToWishList({
+        ...validatedParams.data,
+        giftId: giftResponse.giftId,
+      });
+    } else {
+      giftResponse = await editGift(validatedParams.data, gift.id);
+    }
+
+    if (giftResponse?.error || !giftResponse.giftId) {
       toast({
         title: 'Error',
         description: giftResponse.error,
@@ -93,7 +141,7 @@ function EditGiftForm({
     if (selectedFile && !formState.dirtyFields.imageUrl) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: gift.id,
+        giftId: gift.isDefault ? giftResponse.giftId : gift.id,
       });
 
       if (uploadResponse?.error) {
@@ -136,7 +184,7 @@ function EditGiftForm({
     });
 
     if (setIsOpen) {
-      // setIsOpen(false);
+      setIsOpen(false);
     }
 
     setIsLoading(false);
