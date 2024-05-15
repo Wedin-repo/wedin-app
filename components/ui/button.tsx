@@ -22,6 +22,8 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
+        seeMyWalletButton:
+          'border rounded-full text-[#424242] border-[#484848] font-medium hover:bg-[#484848] transition hover:text-white',
         secondary:
           'bg-secondary text-secondary-foreground hover:bg-secondary/80',
         undoButton:
