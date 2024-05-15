@@ -47,7 +47,7 @@ export const stepTwoUpdate = async (
     try {
       await prisma.event.update({
         where: {
-          groomId: groom.id,
+          secondaryUserId: groom.id,
         },
         data: {
           country: eventCountry,

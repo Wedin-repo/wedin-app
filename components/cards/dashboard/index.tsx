@@ -18,13 +18,13 @@ export default async function DashboardGifts({
     return <EmptyState showReset title="Ocurrio un error al crear tu cuenta" />;
   }
 
-  const wishListId = event.wishListId;
+  const wishlistId = event.wishlistId;
 
   // This is to count is just for the case that when
   // the user had not add any gift to the wishlist
   // and not because the filters are not returning any gift
   const wishlistGifts = await getGifts({
-    searchParams: { wishListId: wishListId },
+    searchParams: { wishlistId: wishlistId },
   });
 
   if (!wishlistGifts || wishlistGifts.length === 0) {
@@ -37,7 +37,7 @@ export default async function DashboardGifts({
   // This also takes into account when the name
   // is empty so it regurns all the gifts when that happens
   const filteredWishlistGifts = await getGifts({
-    searchParams: { ...searchParams, wishListId },
+    searchParams: { ...searchParams, wishlistId },
   });
 
   if (filteredWishlistGifts.length === 0 && name) {
@@ -46,13 +46,18 @@ export default async function DashboardGifts({
 
   const totalPages = Math.ceil(filteredWishlistGifts.length / itemsPerPage);
   const paginatedFilteredWishlistGift = await getGifts({
-    searchParams: { ...searchParams, itemsPerPage, page, wishListId },
+    searchParams: { ...searchParams, itemsPerPage, page, wishlistId },
   });
 
   return (
     <div className="flex flex-col gap-5">
       {paginatedFilteredWishlistGift.map(gift => (
-        <DashboardGiftCard key={gift.id} gift={gift} wishListId={wishListId} />
+        <DashboardGiftCard
+          key={gift.id}
+          eventId={event.id}
+          gift={gift}
+          wishlistId={wishlistId}
+        />
       ))}
 
       {totalPages > 1 ? (

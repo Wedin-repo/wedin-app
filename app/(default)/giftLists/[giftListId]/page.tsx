@@ -1,13 +1,17 @@
-import { type GetGiftsParams, getGifts } from '@/actions/data/gift';
+import { getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import { getEvent } from '@/actions/data/event';
-import GiftsCards from '@/components/cards/gifts';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
+import GiftCard from '@/components/cards/gifts/card';
+import CardContainer from '@/components/cards/shared/card-container';
+import EmptyState from '@/components/EmptyState';
 
-export type GiftListPageParams = Pick<GetGiftsParams, 'giftlistId'>;
+export type GiftListPageParams = {
+  giftlistId: string;
+};
 
 type GiftListPageProps = {
   params: GiftListPageParams;
@@ -15,17 +19,18 @@ type GiftListPageProps = {
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
   const { giftlistId } = params;
-
-  if (!giftlistId) return null;
-
   const giftList = await getGiftList(giftlistId);
 
   if (!giftList) return null;
 
   const event = await getEvent();
   const gifts = await getGifts({ searchParams: { giftlistId } });
+
+  if (gifts?.length === 0 || !gifts)
+    return <EmptyState title="No se encontraron regalos" />;
+
   const giftIds = gifts?.map(gift => gift.id);
-  const { name, quantity, totalPrice, description } = giftList;
+  const { name, quantity, totalPrice } = giftList;
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
@@ -45,16 +50,19 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
               {formattedPrice}
             </div>
           </div>
-          <p className="text-xl text-center">{description}</p>
         </div>
 
         <div className="flex justify-center w-full">
-          <AddToWishlistForm wishlistId={event?.wishListId} giftIds={giftIds} />
+          <AddToWishlistForm wishlistId={event?.wishlistId} giftIds={giftIds} />
         </div>
       </div>
 
       <div className="mt-6 sm:mt-10">
-        <GiftsCards searchParams={{ giftlistId }} />
+        <CardContainer>
+          {gifts.map(gift => (
+            <GiftCard key={gift.id} gift={gift} hideCursor />
+          ))}
+        </CardContainer>
       </div>
     </div>
   );

@@ -13,7 +13,7 @@ export async function getEvent() {
   try {
     const event = await prisma.event.findFirst({
       where: {
-        OR: [{ brideId: userId }, { groomId: userId }],
+        OR: [{ primaryUserId: userId }, { secondaryUserId: userId }],
       },
     });
 

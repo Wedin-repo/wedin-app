@@ -17,67 +17,42 @@ export async function getGifts({
   searchParams,
 }: {
   searchParams?: GetGiftsParams;
-}) {
-  if (!searchParams) {
-    try {
-      return await prisma.gift.findMany({
-        where: { isDefault: true },
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-    } catch (error) {
-      console.error('Error retrieving all gifts:', error);
-      return [];
-    }
-  }
-
+} = {}) {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const query: any = {};
 
-  const { category, giftlistId, wishlistId, name, page, itemsPerPage } =
-    searchParams;
+  // Handle default gifts if no search parameters are provided
+  if (!searchParams) {
+    query.isDefault = true;
+  } else {
+    const { category, giftlistId, name, page, itemsPerPage } = searchParams;
 
-  if (name) {
-    query.name = {
-      contains: name,
-      mode: 'insensitive',
-    };
-  }
+    if (name) {
+      query.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
+    }
 
-  if (category) {
-    query.categoryId = category;
-  }
+    if (category) {
+      query.categoryId = category;
+    }
 
-  if (giftlistId) {
-    query.giftlistId = giftlistId;
-  }
+    if (giftlistId) {
+      query.giftlistId = giftlistId;
+    }
 
-  const event = await getEvent();
+    const event = await getEvent();
 
-  if (event?.id) {
-    query.eventId = event.id;
-  }
+    if (event?.id) {
+      query.OR = [{ eventId: event.id }, { isDefault: true }];
+    } else {
+      query.isDefault = true;
+    }
 
-  if (wishlistId) {
-    query.wishlistIds = {
-      has: wishlistId,
-    };
-  }
-
-  if (page && itemsPerPage) {
-    try {
-      return await prisma.gift.findMany({
-        where: query,
-        skip: (Number.parseInt(page) - 1) * itemsPerPage,
-        take: itemsPerPage,
-        orderBy: {
-          createdAt: 'desc',
-        },
-      });
-    } catch (error) {
-      console.error('Error retrieving paginated gifts', error);
-      return [];
+    if (page && itemsPerPage) {
+      query.skip = (Number.parseInt(page) - 1) * itemsPerPage;
+      query.take = itemsPerPage;
     }
   }
 
@@ -89,7 +64,7 @@ export async function getGifts({
       },
     });
   } catch (error) {
-    console.error('Error retrieving filtered gifts:', error);
+    console.error('Error retrieving gifts:', error);
     return [];
   }
 }

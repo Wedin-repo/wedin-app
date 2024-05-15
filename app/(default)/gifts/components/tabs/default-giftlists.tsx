@@ -1,7 +1,7 @@
 import type { GetGiftListsSerachParams } from '../../page';
 import { getGiftLists } from '@/actions/data/giftlist';
 import EmptyState from '@/components/EmptyState';
-import GiftListCard from '@/components/cards/gift-lists/card';
+import GiftListCard from '@/components/cards/giftlists/card';
 import CardContainer from '@/components/cards/shared/card-container';
 
 type DefaultGiftListsProps = {

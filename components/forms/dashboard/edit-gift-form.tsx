@@ -13,12 +13,14 @@ import type { z } from 'zod';
 type EditGiftFormProps = {
   gift: Gift;
   wishlistId: string;
+  eventId: string;
   categories: Category[];
   setIsOpen?: (value: boolean) => void;
 };
 
 function EditGiftForm({
   gift,
+  eventId,
   categories,
   setIsOpen,
   wishlistId,
@@ -33,10 +35,11 @@ function EditGiftForm({
     defaultValues: {
       name: gift.name,
       categoryId: gift.categoryId,
-      price: gift.price.toString(),
+      price: gift.price,
       isFavoriteGift: gift.isFavoriteGift,
       isGroupGift: gift.isGroupGift,
-      wishListId: wishlistId,
+      wishlistId: wishlistId,
+      eventId: eventId,
       imageUrl: ringSvg,
     },
   });

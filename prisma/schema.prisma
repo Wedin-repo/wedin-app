@@ -59,32 +59,32 @@ model User {
 
   accounts           Account[]
   sessions           Session[]
-  eventPrimaryUser   Event[]   @relation("Bride")
-  eventSecondaryUser Event[]   @relation("Groom")
+  eventPrimaryUser   Event[]   @relation("primaryUser")
+  eventSecondaryUser Event[]   @relation("secondaryUser")
 }
 
 model Event {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String?
-  brideId    String    @db.ObjectId
-  groomId    String    @db.ObjectId
-  date       DateTime?
-  location   String?
-  url        String?   @unique
-  wishlistId String    @db.ObjectId
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  country    String?
-  city       String?
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  primaryUserId   String    @db.ObjectId
+  secondaryUserId String    @db.ObjectId
+  date            DateTime?
+  location        String?
+  url             String?   @unique
+  wishlistId      String    @db.ObjectId
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  country         String?
+  city            String?
 
-  wishList WishList @relation(fields: [wishlistId], references: [id])
-  bride    User?    @relation("Bride", fields: [brideId], references: [id])
-  groom    User?    @relation("Groom", fields: [groomId], references: [id])
-  Gift     Gift[]
+  wishList           WishList @relation(fields: [wishlistId], references: [id])
+  eventPrimaryUser   User?    @relation("primaryUser", fields: [primaryUserId], references: [id])
+  eventSecondaryUser User?    @relation("secondaryUser", fields: [secondaryUserId], references: [id])
+  Gift               Gift[]
 
   @@unique([wishlistId])
-  @@unique([groomId])
-  @@unique([brideId])
+  @@unique([secondaryUserId])
+  @@unique([primaryUserId])
 }
 
 model WishList {
@@ -106,7 +106,6 @@ model Gift {
   eventId         String?  @db.ObjectId
   wishListIds     String[] @db.ObjectId
   imageUrl        String?
-  // imageId         String?  @db.ObjectId
   price           String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -118,7 +117,6 @@ model Gift {
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
   giftlist  GiftList?  @relation(fields: [giftlistId], references: [id])
   event     Event?     @relation(fields: [eventId], references: [id])
-  // image     Image?     @relation(fields: [imageId], references: [id])
 }
 
 model GiftList {

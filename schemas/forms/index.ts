@@ -14,7 +14,8 @@ export const GiftSchema = z.object({
     }),
   isFavoriteGift: z.boolean(),
   isGroupGift: z.boolean(),
-  wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  eventId: z.string().min(1, { message: 'No se encontro un event ID' }),
   imageUrl: z.any() as ZodType<File>,
 });
 

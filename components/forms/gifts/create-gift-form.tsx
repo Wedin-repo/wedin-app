@@ -16,13 +16,18 @@ import { IoGiftOutline } from 'react-icons/io5';
 import type { z } from 'zod';
 
 type CreateGiftFormProps = {
+  eventId: string;
   wishlistId: string;
   categories: Category[];
 };
 
-function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
+function CreateGiftForm({
+  eventId,
+  categories,
+  wishlistId,
+}: CreateGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(ringSvg);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
@@ -35,7 +40,8 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       price: '',
       isFavoriteGift: false,
       isGroupGift: false,
-      wishListId: wishlistId,
+      wishlistId: wishlistId,
+      eventId: eventId,
       imageUrl: ringSvg,
     },
   });

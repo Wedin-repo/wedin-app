@@ -11,7 +11,7 @@ type GiftCardProps = {
 };
 
 export default function GiftCard({ gift, hideCursor = false }: GiftCardProps) {
-  const { name, description, price, imageUrl } = gift;
+  const { name, price, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
 
   return (
@@ -28,9 +28,6 @@ export default function GiftCard({ gift, hideCursor = false }: GiftCardProps) {
 
       <CardContent className="p-4">
         <p className="text-base text-secondaryTextColor">{name}</p>
-        <p className="hidden text-base text-secondaryTextColor">
-          {description}
-        </p>
         <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
           <p className="text-lg">{formattedPrice}</p>
           <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />

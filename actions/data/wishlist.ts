@@ -125,7 +125,7 @@ export const editOrCreateGift = async (
 
   if (!category) return { error: 'Category not found' };
 
-  const wishlist = await validateWishlist(validatedFields.data.wishListId);
+  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
 
   if (!wishlist) return { error: 'Wishlist not found' };
 
@@ -151,7 +151,7 @@ export const editOrCreateGift = async (
         data: { ...newGiftData },
       });
       await prisma.wishList.update({
-        where: { id: validatedFields.data.wishListId },
+        where: { id: validatedFields.data.wishlistId },
         data: {
           gifts: {
             disconnect: { id: giftId },
@@ -168,7 +168,7 @@ export const editOrCreateGift = async (
       });
 
       await prisma.wishList.update({
-        where: { id: validatedFields.data.wishListId },
+        where: { id: validatedFields.data.wishlistId },
         data: {
           gifts: {
             connect: { id: response?.id },
@@ -196,7 +196,7 @@ export const createWishListGift = async (
 
   if (!category) return { error: 'Category not found' };
 
-  const wishlist = await validateWishlist(validatedFields.data.wishListId);
+  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
 
   if (!wishlist) return { error: 'Wishlist not found' };
 
@@ -210,12 +210,11 @@ export const createWishListGift = async (
         isGroupGift: validatedFields.data.isGroupGift ?? false,
         isDefault: false,
         isEditedVersion: false,
-        description: 'a new gift creater by user',
       },
     });
 
     await prisma.wishList.update({
-      where: { id: validatedFields.data.wishListId },
+      where: { id: validatedFields.data.wishlistId },
       data: {
         gifts: {
           connect: { id: newGift.id },

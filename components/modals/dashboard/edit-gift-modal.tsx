@@ -10,12 +10,17 @@ import { FiEdit3 } from 'react-icons/fi';
 type EditGiftModalProps = {
   gift: Gift;
   categories: Category[];
-  wishListId?: string | null;
+  wishlistId: string;
+  eventId: string;
 };
 
-function EditGiftModal({ gift, wishListId, categories }: EditGiftModalProps) {
+function EditGiftModal({
+  gift,
+  wishlistId,
+  categories,
+  eventId,
+}: EditGiftModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  if (!wishListId) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -28,8 +33,9 @@ function EditGiftModal({ gift, wishListId, categories }: EditGiftModalProps) {
       <DialogContent className="bg-white !rounded-2xl ">
         <EditGiftForm
           gift={gift}
+          eventId={eventId}
           categories={categories}
-          wishlistId={wishListId}
+          wishlistId={wishlistId}
           setIsOpen={setIsOpen}
         />
       </DialogContent>

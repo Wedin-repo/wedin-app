@@ -18,7 +18,7 @@ type GiftListCardProps = {
 };
 
 async function GiftListCard({ giftList }: GiftListCardProps) {
-  const { name, description, totalPrice, quantity, id } = giftList;
+  const { name, totalPrice, quantity, id } = giftList;
   const gifts = await getGifts({ searchParams: { giftlistId: id } });
   const formattedPrice = formatPrice(Number(totalPrice));
 
@@ -54,9 +54,6 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
       <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
         <CardContent className="p-4">
           <p className="text-base text-secondaryTextColor">{name}</p>
-          <p className="hidden text-sm text-secondaryTextColor">
-            {description}
-          </p>
           <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
             <p className="text-lg">{formattedPrice}</p>
             <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />

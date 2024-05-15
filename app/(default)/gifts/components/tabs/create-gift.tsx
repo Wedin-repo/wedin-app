@@ -14,7 +14,11 @@ async function CreateGift() {
 
   return (
     <div className="flex justify-center items-center w-full min-h-[60vh]">
-      <CreateGiftForm wishlistId={wishListId} categories={categories} />
+      <CreateGiftForm
+        eventId={event.id}
+        wishlistId={wishListId}
+        categories={categories}
+      />
     </div>
   );
 }

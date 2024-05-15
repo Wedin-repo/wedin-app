@@ -14,12 +14,14 @@ import Image from 'next/image';
 
 type DashboardGiftCardProps = {
   gift: Gift;
-  wishListId?: string | null;
+  wishlistId: string;
+  eventId: string;
 };
 
 const DashboardGiftCard = async ({
   gift,
-  wishListId,
+  eventId,
+  wishlistId,
 }: DashboardGiftCardProps) => {
   const { id, name, price, imageUrl, categoryId, isFavoriteGift, isGroupGift } =
     gift;
@@ -65,10 +67,11 @@ const DashboardGiftCard = async ({
       <CardFooter variant="dashboard">
         <EditGiftModal
           gift={gift}
+          eventId={eventId}
           categories={categories}
-          wishListId={wishListId}
+          wishlistId={wishlistId}
         />
-        <RemoveFromWishListForm giftId={id} wishlistId={wishListId} />
+        <RemoveFromWishListForm giftId={id} wishlistId={wishlistId} />
       </CardFooter>
     </Card>
   );

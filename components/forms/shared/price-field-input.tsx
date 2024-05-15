@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/utils';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 
 const PriceField = ({
@@ -19,7 +19,8 @@ const PriceField = ({
       price: string;
       isFavoriteGift: boolean;
       isGroupGift: boolean;
-      wishListId: string;
+      wishlistId: string;
+      eventId: string;
       imageUrl: File;
     },
     'price'
@@ -28,6 +29,10 @@ const PriceField = ({
   const [displayValue, setDisplayValue] = useState(
     formatPrice(Number(field.value))
   );
+
+  useEffect(() => {
+    setDisplayValue(formatPrice(Number(field.value)));
+  }, [field.value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const rawValue = e.target.value.replace(/[^0-9]/g, '');
