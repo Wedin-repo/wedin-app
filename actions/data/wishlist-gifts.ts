@@ -162,6 +162,7 @@ export const editWishlistGift = async (
         isGroupGift,
       },
     });
+    revalidatePath('/dashboard');
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

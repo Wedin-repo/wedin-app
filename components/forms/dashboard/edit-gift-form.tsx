@@ -61,13 +61,13 @@ function EditGiftForm({
   const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
 
-    // if (!Object.keys(formState.dirtyFields).length) {
-    //   setIsLoading(false);
-    //   if (setIsOpen) {
-    //     setIsOpen(false);
-    //   }
-    //   return;
-    // }
+    if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
+      if (setIsOpen) {
+        setIsOpen(false);
+      }
+      return;
+    }
 
     const validatedParams = GiftPostSchema.safeParse(values);
 
@@ -138,7 +138,7 @@ function EditGiftForm({
       return;
     }
 
-    if (selectedFile && !formState.dirtyFields.imageUrl) {
+    if (selectedFile && formState.dirtyFields.imageUrl) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
         giftId: gift.isDefault ? giftResponse.giftId : gift.id,
