@@ -21,12 +21,12 @@ export const GiftSchema = z.object({
 
 export const GiftParamSchema = GiftSchema.omit({ imageUrl: true });
 
-export const GiftWishListSchema = z.object({
-  wishlistId: z.string(),
-  giftId: z.string(),
+export const WishListGiftSchema = z.object({
+  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
 });
 
-export const GiftsWishListSchema = z.object({
-  wishlistId: z.string(),
-  giftIds: z.array(z.string()),
+export const WishListGiftsSchema = z.object({
+  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  giftIds: z.array(z.string().min(1, { message: 'No se encontro un gift ID' })),
 });

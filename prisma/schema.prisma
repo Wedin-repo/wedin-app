@@ -91,10 +91,9 @@ model WishList {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  giftIds   String[] @db.ObjectId
 
-  gifts Gift[] @relation(fields: [giftIds], references: [id])
-  event Event?
+  wishListGifts WishListGift[]
+  event         Event?
 }
 
 model Gift {
@@ -104,19 +103,30 @@ model Gift {
   isDefault       Boolean  @default(false)
   categoryId      String   @db.ObjectId
   eventId         String?  @db.ObjectId
-  wishListIds     String[] @db.ObjectId
   imageUrl        String?
   price           String
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  isFavoriteGift  Boolean  @default(false)
-  isGroupGift     Boolean  @default(false)
   isEditedVersion Boolean  @default(false)
   sourceGiftId    String?  @db.ObjectId
 
-  wishLists WishList[] @relation(fields: [wishListIds], references: [id])
-  giftlist  GiftList?  @relation(fields: [giftlistId], references: [id])
-  event     Event?     @relation(fields: [eventId], references: [id])
+  wishListGifts WishListGift[]
+  giftlist      GiftList?      @relation(fields: [giftlistId], references: [id])
+  event         Event?         @relation(fields: [eventId], references: [id])
+}
+
+model WishListGift {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  wishListId     String  @db.ObjectId
+  giftId         String  @db.ObjectId
+  isFavoriteGift Boolean @default(false)
+  isGroupGift    Boolean @default(false)
+
+  wishList WishList @relation(fields: [wishListId], references: [id])
+  gift     Gift     @relation(fields: [giftId], references: [id])
+
+  @@index([wishListId])
+  @@index([giftId])
 }
 
 model GiftList {

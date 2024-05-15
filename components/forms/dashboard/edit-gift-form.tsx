@@ -1,4 +1,4 @@
-import { editOrCreateGift } from '@/actions/data/wishlist';
+import { editOrCreateGift } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
@@ -36,8 +36,8 @@ function EditGiftForm({
       name: gift.name,
       categoryId: gift.categoryId,
       price: gift.price,
-      isFavoriteGift: gift.isFavoriteGift,
-      isGroupGift: gift.isGroupGift,
+      isFavoriteGift: false,
+      isGroupGift: false,
       wishlistId: wishlistId,
       eventId: eventId,
       imageUrl: ringSvg,

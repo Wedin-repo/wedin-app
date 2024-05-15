@@ -1,4 +1,5 @@
 import { getCategories, getCategory } from '@/actions/data/category';
+import { getGift } from '@/actions/data/gift';
 import RemoveFromWishListForm from '@/components/forms/dashboard/delete-from-wishlist-form';
 import EditGiftModal from '@/components/modals/dashboard/edit-gift-modal';
 import {
@@ -9,25 +10,28 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { Gift } from '@prisma/client';
+import { WishListGift } from '@prisma/client';
 import Image from 'next/image';
 
 type DashboardGiftCardProps = {
-  gift: Gift;
   wishlistId: string;
+  wishListGift: WishListGift;
   eventId: string;
 };
 
 const DashboardGiftCard = async ({
-  gift,
+  wishListGift,
   eventId,
   wishlistId,
 }: DashboardGiftCardProps) => {
-  const { id, name, price, imageUrl, categoryId, isFavoriteGift, isGroupGift } =
-    gift;
-
   const categories = await getCategories();
   if (!categories) return null;
+
+  const gift = await getGift(wishListGift.giftId);
+  if (!gift) return null;
+
+  const { id, name, price, imageUrl, categoryId } = gift;
+  const { isFavoriteGift, isGroupGift } = wishListGift;
 
   const formattedPrice = formatPrice(Number(price));
   const category = await getCategory({ searchParams: { categoryId } });

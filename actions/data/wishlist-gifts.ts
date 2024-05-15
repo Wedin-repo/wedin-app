@@ -3,8 +3,8 @@
 import prisma from '@/db/client';
 import {
   GiftParamSchema,
-  GiftWishListSchema,
-  GiftsWishListSchema,
+  WishListGiftSchema,
+  WishListGiftsSchema,
 } from '@/schemas/forms';
 import { revalidatePath } from 'next/cache';
 import type * as z from 'zod';
@@ -15,10 +15,13 @@ import {
   validateWishlist,
 } from '../helper';
 
+// take into account that when we add a defualt gift to our wishlist
+// when showing all gifts
+// if the gift that we are about to show is a default one and was added to the wishlist as it is (no edit) => we show
 export const addGiftToWishList = async (
-  formData: z.infer<typeof GiftWishListSchema>
+  formData: z.infer<typeof WishListGiftSchema>
 ) => {
-  const validatedFields = GiftWishListSchema.safeParse(formData);
+  const validatedFields = WishListGiftSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -30,12 +33,10 @@ export const addGiftToWishList = async (
   const { giftId, wishlistId } = validatedFields.data;
 
   try {
-    await prisma.wishList.update({
-      where: { id: wishlistId },
+    await prisma.wishListGift.create({
       data: {
-        gifts: {
-          connect: { id: giftId },
-        },
+        wishListId: wishlistId,
+        giftId: giftId,
       },
     });
   } catch (error: unknown) {
@@ -54,9 +55,9 @@ export const addGiftToWishList = async (
 };
 
 export const addGiftsToWishList = async (
-  formData: z.infer<typeof GiftsWishListSchema>
+  formData: z.infer<typeof WishListGiftsSchema>
 ) => {
-  const validatedFields = GiftsWishListSchema.safeParse(formData);
+  const validatedFields = WishListGiftsSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -66,14 +67,14 @@ export const addGiftsToWishList = async (
 
   const { giftIds, wishlistId } = validatedFields.data;
 
+  const wishListGiftData = giftIds.map(giftId => ({
+    wishListId: wishlistId,
+    giftId: giftId,
+  }));
+
   try {
-    await prisma.wishList.update({
-      where: { id: wishlistId },
-      data: {
-        gifts: {
-          connect: giftIds.map(giftId => ({ id: giftId })),
-        },
-      },
+    await prisma.wishListGift.createMany({
+      data: wishListGiftData,
     });
   } catch (error: unknown) {
     return {
@@ -85,9 +86,9 @@ export const addGiftsToWishList = async (
 };
 
 export const deleteGiftFromWishList = async (
-  formData: z.infer<typeof GiftWishListSchema>
+  formData: z.infer<typeof WishListGiftSchema>
 ) => {
-  const validatedFields = GiftWishListSchema.safeParse(formData);
+  const validatedFields = WishListGiftSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Datos requeridos no fueron encontrados' };
@@ -96,12 +97,10 @@ export const deleteGiftFromWishList = async (
   const { wishlistId, giftId } = validatedFields.data;
 
   try {
-    await prisma.wishList.update({
-      where: { id: wishlistId },
-      data: {
-        gifts: {
-          disconnect: { id: giftId },
-        },
+    await prisma.wishListGift.deleteMany({
+      where: {
+        wishListId: wishlistId,
+        giftId: giftId,
       },
     });
   } catch (error) {
@@ -111,7 +110,54 @@ export const deleteGiftFromWishList = async (
   revalidatePath('/', 'layout');
 };
 
-export const editOrCreateGift = async (
+type GetWishListGiftsParams = {
+  wishlistId: string;
+  name?: string;
+  page?: string;
+  itemsPerPage?: number;
+};
+
+export const getWishListGifts = async ({
+  wishlistId,
+  name,
+  page,
+  itemsPerPage,
+}: GetWishListGiftsParams) => {
+  const query: any = {
+    wishListId: wishlistId,
+  };
+
+  if (name) {
+    query.gift = {
+      name: {
+        contains: name,
+        mode: 'insensitive',
+      },
+    };
+  }
+
+  const skip =
+    page && itemsPerPage ? (Number(page) - 1) * itemsPerPage : undefined;
+  const take = itemsPerPage ? Number(itemsPerPage) : undefined;
+
+  try {
+    return await prisma.wishListGift.findMany({
+      where: query,
+      include: {
+        gift: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip,
+      take,
+    });
+  } catch (error) {
+    console.error('Error retrieving wishlist gifts:', error);
+    return [];
+  }
+};
+const editOrCreateGift = async (
   formData: z.infer<typeof GiftParamSchema>,
   giftId: string
 ) => {
@@ -183,7 +229,7 @@ export const editOrCreateGift = async (
   }
 };
 
-export const createWishListGift = async (
+const createWishListGift = async (
   formData: z.infer<typeof GiftParamSchema>
 ) => {
   const validatedFields = GiftParamSchema.safeParse(formData);

@@ -1,4 +1,4 @@
-import { addGiftToWishList } from '@/actions/data/wishlist';
+import { addGiftToWishList } from '@/actions/data/wishlist-gifts';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { GiftWishListSchema } from '@/schemas/forms';
