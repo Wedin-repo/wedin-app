@@ -1,9 +1,10 @@
-import { editOrCreateGift } from '@/actions/data/wishlist-gifts';
+import { editOrCreateGift } from '@/actions/data/gift';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
+import { GiftPostSchema } from '@/schemas/forms';
+import { GiftParamSchema } from '@/schemas/forms/params';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
@@ -31,7 +32,7 @@ function EditGiftForm({
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(GiftSchema),
+    resolver: zodResolver(GiftPostSchema),
     defaultValues: {
       name: gift.name,
       categoryId: gift.categoryId,
@@ -46,7 +47,7 @@ function EditGiftForm({
 
   const { formState } = form;
 
-  const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftPostSchema>) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
       if (setIsOpen) {
@@ -56,7 +57,7 @@ function EditGiftForm({
       return;
     }
 
-    const validatedFields = GiftSchema.safeParse(values);
+    const validatedFields = GiftPostSchema.safeParse(values);
 
     if (!validatedFields.success) {
       toast({

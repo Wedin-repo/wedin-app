@@ -1,5 +1,5 @@
-import { getGifts } from '@/actions/data/gift';
 import { getEvent } from '@/actions/data/event';
+import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import type { DashboardPageSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/Pagination';
@@ -23,9 +23,7 @@ export default async function DashboardGifts({
   // This is to count is just for the case that when
   // the user had not add any gift to the wishlist
   // and not because the filters are not returning any gift
-  const wishlistGifts = await getGifts({
-    searchParams: { wishlistId: wishlistId },
-  });
+  const wishlistGifts = await getWishListGifts({ wishlistId: wishlistId });
 
   if (!wishlistGifts || wishlistGifts.length === 0) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
@@ -36,8 +34,9 @@ export default async function DashboardGifts({
 
   // This also takes into account when the name
   // is empty so it regurns all the gifts when that happens
-  const filteredWishlistGifts = await getGifts({
-    searchParams: { ...searchParams, wishlistId },
+  const filteredWishlistGifts = await getWishListGifts({
+    ...searchParams,
+    wishlistId,
   });
 
   if (filteredWishlistGifts.length === 0 && name) {
@@ -45,17 +44,20 @@ export default async function DashboardGifts({
   }
 
   const totalPages = Math.ceil(filteredWishlistGifts.length / itemsPerPage);
-  const paginatedFilteredWishlistGift = await getGifts({
-    searchParams: { ...searchParams, itemsPerPage, page, wishlistId },
+  const paginatedFilteredWishlistGift = await getWishListGifts({
+    ...searchParams,
+    itemsPerPage,
+    page,
+    wishlistId,
   });
 
   return (
     <div className="flex flex-col gap-5">
-      {paginatedFilteredWishlistGift.map(gift => (
+      {paginatedFilteredWishlistGift.map(wishlistGift => (
         <DashboardGiftCard
-          key={gift.id}
+          key={wishlistGift.id}
           eventId={event.id}
-          gift={gift}
+          wishlistGift={wishlistGift}
           wishlistId={wishlistId}
         />
       ))}

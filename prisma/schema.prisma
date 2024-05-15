@@ -116,11 +116,13 @@ model Gift {
 }
 
 model WishListGift {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  wishListId     String  @db.ObjectId
-  giftId         String  @db.ObjectId
-  isFavoriteGift Boolean @default(false)
-  isGroupGift    Boolean @default(false)
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  wishListId     String   @db.ObjectId
+  giftId         String   @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  isFavoriteGift Boolean  @default(false)
+  isGroupGift    Boolean  @default(false)
 
   wishList WishList @relation(fields: [wishListId], references: [id])
   gift     Gift     @relation(fields: [giftId], references: [id])

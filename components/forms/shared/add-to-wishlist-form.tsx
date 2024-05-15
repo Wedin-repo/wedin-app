@@ -1,7 +1,7 @@
 import { addGiftToWishList } from '@/actions/data/wishlist-gifts';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { GiftWishListSchema } from '@/schemas/forms';
+import { WishListGiftPostSchema } from '@/schemas/forms';
 import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishListFormButton from './wishlist-form-button';
@@ -23,7 +23,7 @@ function AddToWishListForm({
   const { toast } = useToast();
 
   const handleAddGiftToWishList = async () => {
-    const validatedFields = GiftWishListSchema.safeParse({
+    const validatedFields = WishListGiftPostSchema.safeParse({
       wishlistId,
       giftId,
     });

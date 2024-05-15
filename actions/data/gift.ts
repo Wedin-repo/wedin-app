@@ -1,17 +1,17 @@
 'use server';
 
 import prisma from '@/db/client';
+import type { GiftParamSchema } from '@/schemas/forms/params';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
-import { getEvent } from './event';
-import { GiftParamSchema } from '@/schemas/forms';
 import type { z } from 'zod';
 import {
-  validateCategory,
-  validateWishlist,
-  validateGift,
   getErrorMessage,
+  validateCategory,
+  validateGift,
+  validateWishlist,
 } from '../helper';
+import { getEvent } from './event';
 
 export type GetGiftsParams = {
   category?: string;
@@ -122,117 +122,117 @@ export const editOrCreateGift = async (
   formData: z.infer<typeof GiftParamSchema>,
   giftId: string
 ) => {
-  const validatedFields = GiftParamSchema.safeParse(formData);
-
-  if (!validatedFields.success) {
-    return { error: 'Campos inválidos' };
-  }
-
-  const category = await validateCategory(validatedFields.data.categoryId);
-
-  if (!category) return { error: 'Category not found' };
-
-  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-
-  if (!wishlist) return { error: 'Wishlist not found' };
-
-  const gift = await validateGift(giftId);
-
-  if (!gift) return { error: 'Gift not found' };
-
-  const newGiftData = {
-    name: validatedFields.data.name,
-    categoryId: validatedFields.data.categoryId,
-    price: validatedFields.data.price,
-    isFavoriteGift: validatedFields.data.isFavoriteGift,
-    isGroupGift: validatedFields.data.isGroupGift,
-    isDefault: false,
-    isEditedVersion: true,
-    sourceGiftId: giftId,
-    description: 'a new gift creater by user', // TODO: inform UX about description issue
-  };
-
-  try {
-    if (gift.isDefault) {
-      const response = await prisma.gift.create({
-        data: { ...newGiftData },
-      });
-      await prisma.wishList.update({
-        where: { id: validatedFields.data.wishlistId },
-        data: {
-          gifts: {
-            disconnect: { id: giftId },
-            connect: { id: response?.id },
-          },
-        },
-      });
-    }
-
-    if (!gift.isDefault) {
-      const response = await prisma.gift.update({
-        where: { id: giftId },
-        data: newGiftData,
-      });
-
-      await prisma.wishList.update({
-        where: { id: validatedFields.data.wishlistId },
-        data: {
-          gifts: {
-            connect: { id: response?.id },
-          },
-        },
-      });
-    }
-
-    revalidatePath('/dashboard');
-  } catch (error) {
-    return { error: getErrorMessage(error) };
-  }
+  // const validatedFields = GiftParamSchema.safeParse(formData);
+  //
+  // if (!validatedFields.success) {
+  //   return { error: 'Campos inválidos' };
+  // }
+  //
+  // const category = await validateCategory(validatedFields.data.categoryId);
+  //
+  // if (!category) return { error: 'Category not found' };
+  //
+  // const wishlist = await validateWishlist(validatedFields.data.wishlistId);
+  //
+  // if (!wishlist) return { error: 'Wishlist not found' };
+  //
+  // const gift = await validateGift(giftId);
+  //
+  // if (!gift) return { error: 'Gift not found' };
+  //
+  // const newGiftData = {
+  //   name: validatedFields.data.name,
+  //   categoryId: validatedFields.data.categoryId,
+  //   price: validatedFields.data.price,
+  //   isFavoriteGift: validatedFields.data.isFavoriteGift,
+  //   isGroupGift: validatedFields.data.isGroupGift,
+  //   isDefault: false,
+  //   isEditedVersion: true,
+  //   sourceGiftId: giftId,
+  //   description: 'a new gift creater by user', // TODO: inform UX about description issue
+  // };
+  //
+  // try {
+  //   if (gift.isDefault) {
+  //     const response = await prisma.gift.create({
+  //       data: { ...newGiftData },
+  //     });
+  //     await prisma.wishList.update({
+  //       where: { id: validatedFields.data.wishlistId },
+  //       data: {
+  //         gifts: {
+  //           disconnect: { id: giftId },
+  //           connect: { id: response?.id },
+  //         },
+  //       },
+  //     });
+  //   }
+  //
+  //   if (!gift.isDefault) {
+  //     const response = await prisma.gift.update({
+  //       where: { id: giftId },
+  //       data: newGiftData,
+  //     });
+  //
+  //     await prisma.wishList.update({
+  //       where: { id: validatedFields.data.wishlistId },
+  //       data: {
+  //         gifts: {
+  //           connect: { id: response?.id },
+  //         },
+  //       },
+  //     });
+  //   }
+  //
+  //   revalidatePath('/dashboard');
+  // } catch (error) {
+  //   return { error: getErrorMessage(error) };
+  // }
 };
 
 export const createWishListGift = async (
   formData: z.infer<typeof GiftParamSchema>
 ) => {
-  const validatedFields = GiftParamSchema.safeParse(formData);
-
-  if (!validatedFields.success) {
-    return { error: 'Invalid fields' };
-  }
-
-  const category = await validateCategory(validatedFields.data.categoryId);
-
-  if (!category) return { error: 'Category not found' };
-
-  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-
-  if (!wishlist) return { error: 'Wishlist not found' };
-
-  try {
-    const newGift = await prisma.gift.create({
-      data: {
-        name: validatedFields.data.name,
-        categoryId: validatedFields.data.categoryId,
-        price: validatedFields.data.price,
-        isFavoriteGift: validatedFields.data.isFavoriteGift,
-        isGroupGift: validatedFields.data.isGroupGift ?? false,
-        isDefault: false,
-        isEditedVersion: false,
-      },
-    });
-
-    await prisma.wishList.update({
-      where: { id: validatedFields.data.wishlistId },
-      data: {
-        gifts: {
-          connect: { id: newGift.id },
-        },
-      },
-    });
-
-    revalidatePath('/gifts?tab=predefinedGifts');
-
-    return { giftId: newGift.id };
-  } catch (error) {
-    return { error: getErrorMessage(error) };
-  }
+  // const validatedFields = GiftParamSchema.safeParse(formData);
+  //
+  // if (!validatedFields.success) {
+  //   return { error: 'Invalid fields' };
+  // }
+  //
+  // const category = await validateCategory(validatedFields.data.categoryId);
+  //
+  // if (!category) return { error: 'Category not found' };
+  //
+  // const wishlist = await validateWishlist(validatedFields.data.wishlistId);
+  //
+  // if (!wishlist) return { error: 'Wishlist not found' };
+  //
+  // try {
+  //   const newGift = await prisma.gift.create({
+  //     data: {
+  //       name: validatedFields.data.name,
+  //       categoryId: validatedFields.data.categoryId,
+  //       price: validatedFields.data.price,
+  //       isFavoriteGift: validatedFields.data.isFavoriteGift,
+  //       isGroupGift: validatedFields.data.isGroupGift ?? false,
+  //       isDefault: false,
+  //       isEditedVersion: false,
+  //     },
+  //   });
+  //
+  //   await prisma.wishList.update({
+  //     where: { id: validatedFields.data.wishlistId },
+  //     data: {
+  //       gifts: {
+  //         connect: { id: newGift.id },
+  //       },
+  //     },
+  //   });
+  //
+  //   revalidatePath('/gifts?tab=predefinedGifts');
+  //
+  //   return { giftId: newGift.id };
+  // } catch (error) {
+  //   return { error: getErrorMessage(error) };
+  // }
 };

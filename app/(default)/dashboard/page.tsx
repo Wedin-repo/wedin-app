@@ -68,7 +68,6 @@ export default async function DashboardPage({
             <DashboardGiftCard
               key={wishListGift.id}
               eventId={event.id}
-              giftId={wishListGift.giftId}
               wishlistId={wishlistId}
               wishListGift={wishListGift}
             />

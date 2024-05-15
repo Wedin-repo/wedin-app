@@ -1,6 +1,6 @@
 import { type ZodType, z } from 'zod';
 
-export const GiftSchema = z.object({
+export const GiftPostSchema = z.object({
   name: z
     .string()
     .min(1, { message: 'El nombre del regalo no puede estar vacío' })
@@ -19,14 +19,12 @@ export const GiftSchema = z.object({
   imageUrl: z.any() as ZodType<File>,
 });
 
-export const GiftParamSchema = GiftSchema.omit({ imageUrl: true });
-
-export const WishListGiftSchema = z.object({
+export const WishListGiftPostSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
 });
 
-export const WishListGiftsSchema = z.object({
+export const WishListGiftPostsSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftIds: z.array(z.string().min(1, { message: 'No se encontro un gift ID' })),
 });

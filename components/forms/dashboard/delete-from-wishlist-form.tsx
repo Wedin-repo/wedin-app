@@ -4,7 +4,7 @@ import { deleteGiftFromWishList } from '@/actions/data/wishlist-gifts';
 import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { WishListGiftSchema } from '@/schemas/forms';
+import { WishListGiftPostSchema } from '@/schemas/forms';
 import { useRouter } from 'next/navigation';
 
 type RemoveFromWishListFormProps = {
@@ -27,9 +27,9 @@ function RemoveFromWishListForm({
       return;
     }
 
-    const validatedFields = WishListGiftSchema.safeParse({
-      giftId: giftId,
-      wishlistId: wishlistId,
+    const validatedFields = WishListGiftPostSchema.safeParse({
+      giftId,
+      wishlistId,
     });
 
     if (!validatedFields.success) {

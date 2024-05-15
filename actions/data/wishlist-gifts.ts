@@ -2,26 +2,22 @@
 
 import prisma from '@/db/client';
 import {
-  GiftParamSchema,
-  WishListGiftSchema,
-  WishListGiftsSchema,
+  WishListGiftPostSchema,
+  WishListGiftPostsSchema,
 } from '@/schemas/forms';
+import { GetWishListGiftsParams } from '@/schemas/forms/params';
+import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type * as z from 'zod';
-import {
-  getErrorMessage,
-  validateCategory,
-  validateGift,
-  validateWishlist,
-} from '../helper';
+import { getErrorMessage } from '../helper';
 
 // take into account that when we add a defualt gift to our wishlist
 // when showing all gifts
 // if the gift that we are about to show is a default one and was added to the wishlist as it is (no edit) => we show
 export const addGiftToWishList = async (
-  formData: z.infer<typeof WishListGiftSchema>
+  formData: z.infer<typeof WishListGiftPostSchema>
 ) => {
-  const validatedFields = WishListGiftSchema.safeParse(formData);
+  const validatedFields = WishListGiftPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -55,9 +51,9 @@ export const addGiftToWishList = async (
 };
 
 export const addGiftsToWishList = async (
-  formData: z.infer<typeof WishListGiftsSchema>
+  formData: z.infer<typeof WishListGiftPostsSchema>
 ) => {
-  const validatedFields = WishListGiftsSchema.safeParse(formData);
+  const validatedFields = WishListGiftPostsSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -86,9 +82,9 @@ export const addGiftsToWishList = async (
 };
 
 export const deleteGiftFromWishList = async (
-  formData: z.infer<typeof WishListGiftSchema>
+  formData: z.infer<typeof WishListGiftPostSchema>
 ) => {
-  const validatedFields = WishListGiftSchema.safeParse(formData);
+  const validatedFields = WishListGiftPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Datos requeridos no fueron encontrados' };
@@ -110,20 +106,18 @@ export const deleteGiftFromWishList = async (
   revalidatePath('/', 'layout');
 };
 
-type GetWishListGiftsParams = {
-  wishlistId: string;
-  name?: string;
-  page?: string;
-  itemsPerPage?: number;
-};
+export const getWishListGifts = async (
+  searchParams: z.infer<typeof GetWishListGiftsParams>
+) => {
+  const validatedFields = GetWishListGiftsParams.safeParse(searchParams);
 
-export const getWishListGifts = async ({
-  wishlistId,
-  name,
-  page,
-  itemsPerPage,
-}: GetWishListGiftsParams) => {
-  const query: any = {
+  if (!validatedFields.success) {
+    return [];
+  }
+
+  const { wishlistId, name, page, itemsPerPage } = validatedFields.data;
+
+  const query: Prisma.WishListGiftWhereInput = {
     wishListId: wishlistId,
   };
 
@@ -155,123 +149,5 @@ export const getWishListGifts = async ({
   } catch (error) {
     console.error('Error retrieving wishlist gifts:', error);
     return [];
-  }
-};
-const editOrCreateGift = async (
-  formData: z.infer<typeof GiftParamSchema>,
-  giftId: string
-) => {
-  const validatedFields = GiftParamSchema.safeParse(formData);
-
-  if (!validatedFields.success) {
-    return { error: 'Campos inválidos' };
-  }
-
-  const category = await validateCategory(validatedFields.data.categoryId);
-
-  if (!category) return { error: 'Category not found' };
-
-  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-
-  if (!wishlist) return { error: 'Wishlist not found' };
-
-  const gift = await validateGift(giftId);
-
-  if (!gift) return { error: 'Gift not found' };
-
-  const newGiftData = {
-    name: validatedFields.data.name,
-    categoryId: validatedFields.data.categoryId,
-    price: validatedFields.data.price,
-    isFavoriteGift: validatedFields.data.isFavoriteGift,
-    isGroupGift: validatedFields.data.isGroupGift,
-    isDefault: false,
-    isEditedVersion: true,
-    sourceGiftId: giftId,
-    description: 'a new gift creater by user', // TODO: inform UX about description issue
-  };
-
-  try {
-    if (gift.isDefault) {
-      const response = await prisma.gift.create({
-        data: { ...newGiftData },
-      });
-      await prisma.wishList.update({
-        where: { id: validatedFields.data.wishlistId },
-        data: {
-          gifts: {
-            disconnect: { id: giftId },
-            connect: { id: response?.id },
-          },
-        },
-      });
-    }
-
-    if (!gift.isDefault) {
-      const response = await prisma.gift.update({
-        where: { id: giftId },
-        data: newGiftData,
-      });
-
-      await prisma.wishList.update({
-        where: { id: validatedFields.data.wishlistId },
-        data: {
-          gifts: {
-            connect: { id: response?.id },
-          },
-        },
-      });
-    }
-
-    revalidatePath('/dashboard');
-  } catch (error) {
-    return { error: getErrorMessage(error) };
-  }
-};
-
-const createWishListGift = async (
-  formData: z.infer<typeof GiftParamSchema>
-) => {
-  const validatedFields = GiftParamSchema.safeParse(formData);
-
-  if (!validatedFields.success) {
-    return { error: 'Invalid fields' };
-  }
-
-  const category = await validateCategory(validatedFields.data.categoryId);
-
-  if (!category) return { error: 'Category not found' };
-
-  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-
-  if (!wishlist) return { error: 'Wishlist not found' };
-
-  try {
-    const newGift = await prisma.gift.create({
-      data: {
-        name: validatedFields.data.name,
-        categoryId: validatedFields.data.categoryId,
-        price: validatedFields.data.price,
-        isFavoriteGift: validatedFields.data.isFavoriteGift,
-        isGroupGift: validatedFields.data.isGroupGift ?? false,
-        isDefault: false,
-        isEditedVersion: false,
-      },
-    });
-
-    await prisma.wishList.update({
-      where: { id: validatedFields.data.wishlistId },
-      data: {
-        gifts: {
-          connect: { id: newGift.id },
-        },
-      },
-    });
-
-    revalidatePath('/gifts?tab=predefinedGifts');
-
-    return { giftId: newGift.id };
-  } catch (error) {
-    return { error: getErrorMessage(error) };
   }
 };

@@ -1,12 +1,13 @@
 'use client';
 
-import { createWishListGift } from '@/actions/data/wishlist-gifts';
+import { createWishListGift } from '@/actions/data/gift';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
+import { GiftPostSchema } from '@/schemas/forms';
+import { GiftParamSchema } from '@/schemas/forms/params';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
@@ -33,7 +34,7 @@ function CreateGiftForm({
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(GiftSchema),
+    resolver: zodResolver(GiftPostSchema),
     defaultValues: {
       name: '',
       categoryId: '',
@@ -46,9 +47,9 @@ function CreateGiftForm({
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftPostSchema>) => {
     setIsLoading(true);
-    const validatedFields = GiftSchema.safeParse(values);
+    const validatedFields = GiftPostSchema.safeParse(values);
 
     if (!validatedFields.success) {
       toast({
