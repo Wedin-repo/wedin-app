@@ -57,13 +57,13 @@ model User {
   isMagicLinkLogin Boolean   @default(false)
   onboardingStep   Int       @default(1)
 
-  accounts        Account[]
-  sessions        Session[]
-  weddingsAsBride Wedding[] @relation("Bride")
-  weddingsAsGroom Wedding[] @relation("Groom")
+  accounts           Account[]
+  sessions           Session[]
+  eventPrimaryUser   Event[]   @relation("Bride")
+  eventSecondaryUser Event[]   @relation("Groom")
 }
 
-model Wedding {
+model Event {
   id         String    @id @default(auto()) @map("_id") @db.ObjectId
   name       String?
   brideId    String    @db.ObjectId
@@ -71,42 +71,39 @@ model Wedding {
   date       DateTime?
   location   String?
   url        String?   @unique
-  wishListId String?   @db.ObjectId
+  wishlistId String    @db.ObjectId
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
   country    String?
   city       String?
 
-  wishList WishList? @relation(fields: [wishListId], references: [id])
-  bride    User?     @relation("Bride", fields: [brideId], references: [id])
-  groom    User?     @relation("Groom", fields: [groomId], references: [id])
+  wishList WishList @relation(fields: [wishlistId], references: [id])
+  bride    User?    @relation("Bride", fields: [brideId], references: [id])
+  groom    User?    @relation("Groom", fields: [groomId], references: [id])
+  Gift     Gift[]
 
-  @@unique([wishListId])
+  @@unique([wishlistId])
   @@unique([groomId])
   @@unique([brideId])
 }
 
-// create a wedding and wishlist for the user after finishing onboarding
 model WishList {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  weddingId   String?  @db.ObjectId
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  giftIds     String[] @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  giftIds   String[] @db.ObjectId
 
-  gifts   Gift[]   @relation(fields: [giftIds], references: [id])
-  wedding Wedding?
+  gifts Gift[] @relation(fields: [giftIds], references: [id])
+  event Event?
 }
 
 model Gift {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  description     String
-  giftListId      String?  @db.ObjectId
+  giftlistId      String?  @db.ObjectId
   isDefault       Boolean  @default(false)
   categoryId      String   @db.ObjectId
-  weddingId       String?  @db.ObjectId
+  eventId         String?  @db.ObjectId
   wishListIds     String[] @db.ObjectId
   imageUrl        String?
   // imageId         String?  @db.ObjectId
@@ -119,42 +116,25 @@ model Gift {
   sourceGiftId    String?  @db.ObjectId
 
   wishLists WishList[] @relation(fields: [wishListIds], references: [id])
-  giftlist  GiftList?  @relation(fields: [giftListId], references: [id])
+  giftlist  GiftList?  @relation(fields: [giftlistId], references: [id])
+  event     Event?     @relation(fields: [eventId], references: [id])
   // image     Image?     @relation(fields: [imageId], references: [id])
 }
 
 model GiftList {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  quantity    String?
-  categoryId  String   @db.ObjectId
-  // imageId     String?  @db.ObjectId
-  isDefault   Boolean  @default(false)
-  totalPrice  String?
-  weddingId   String?  @db.ObjectId
-  giftids     String[] @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  quantity   String?
+  categoryId String  @db.ObjectId
+  totalPrice String?
 
   gifts Gift[]
-  // Image Image? @relation(fields: [imageId], references: [id])
 }
 
 model Category {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
 }
-
-// model Image {
-//   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-//   url        String
-//   giftId     String?  @db.ObjectId
-//   giftListId String?  @db.ObjectId
-//   createdAt  DateTime @default(now())
-//   updatedAt  DateTime @updatedAt
-//
-//   Gift     Gift[]
-//   GiftList GiftList[]
-// }
 
 model VerificationToken {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId

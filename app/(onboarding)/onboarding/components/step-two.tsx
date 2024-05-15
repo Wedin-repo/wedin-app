@@ -42,7 +42,7 @@ const StepTwo = () => {
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
     defaultValues: {
-      isDecidingWeddingCountryCity: false,
+      isDecidingEventLocation: false,
       hasPYbankAccount: true,
     },
   });
@@ -80,8 +80,8 @@ const StepTwo = () => {
   const handleIsDecidingCountryCity = (value: boolean | string) => {
     setIsDecidingWeddingCountryCity(value);
     if (value) {
-      form.setValue('weddingCountry', '');
-      form.setValue('weddingCity', '');
+      form.setValue('eventCountry', '');
+      form.setValue('eventCity', '');
     }
   };
 
@@ -97,7 +97,7 @@ const StepTwo = () => {
         >
           <FormField
             control={form.control}
-            name="weddingCountry"
+            name="eventCountry"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>País</FormLabel>
@@ -131,7 +131,7 @@ const StepTwo = () => {
 
           <FormField
             control={form.control}
-            name="weddingCity"
+            name="eventCity"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Ciudad</FormLabel>
@@ -150,7 +150,7 @@ const StepTwo = () => {
 
           <FormField
             control={form.control}
-            name="isDecidingWeddingCountryCity"
+            name="isDecidingEventLocation"
             render={({ field }) => (
               <FormItem className="flex gap-2 items-center">
                 <FormControl>

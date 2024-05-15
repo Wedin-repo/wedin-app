@@ -1,30 +1,30 @@
 import { type GetGiftsParams, getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import GiftsCards from '@/components/cards/gifts';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
 
-export type GiftListPageParams = Pick<GetGiftsParams, 'giftListId'>;
+export type GiftListPageParams = Pick<GetGiftsParams, 'giftlistId'>;
 
 type GiftListPageProps = {
   params: GiftListPageParams;
 };
 
 export default async function GiftListPage({ params }: GiftListPageProps) {
-  const { giftListId } = params;
+  const { giftlistId } = params;
 
-  if (!giftListId) return null;
+  if (!giftlistId) return null;
 
-  const wedding = await getWedding();
-  const giftList = await getGiftList(giftListId);
-  const gifts = await getGifts({ searchParams: { giftListId } });
-  const giftIds = gifts?.map(gift => gift.id);
+  const giftList = await getGiftList(giftlistId);
 
   if (!giftList) return null;
 
+  const event = await getEvent();
+  const gifts = await getGifts({ searchParams: { giftlistId } });
+  const giftIds = gifts?.map(gift => gift.id);
   const { name, quantity, totalPrice, description } = giftList;
   const formattedPrice = formatPrice(Number(totalPrice));
 
@@ -49,15 +49,12 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
         </div>
 
         <div className="flex justify-center w-full">
-          <AddToWishlistForm
-            wishlistId={wedding?.wishListId}
-            giftIds={giftIds}
-          />
+          <AddToWishlistForm wishlistId={event?.wishListId} giftIds={giftIds} />
         </div>
       </div>
 
       <div className="mt-6 sm:mt-10">
-        <GiftsCards searchParams={{ giftListId }} />
+        <GiftsCards searchParams={{ giftlistId }} />
       </div>
     </div>
   );

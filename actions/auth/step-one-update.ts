@@ -20,8 +20,8 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
       partnerLastName,
       name,
       lastName,
-      weddingUrl,
-      weddingDate,
+      eventUrl,
+      eventDate,
     } = validatedFields.data;
 
     let bride: User;
@@ -81,12 +81,12 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
           description: 'My first wish list',
         },
       });
-      await prisma.wedding.create({
+      await prisma.event.create({
         data: {
           groomId: groom.id,
           brideId: bride.id,
-          date: weddingDate ? new Date(weddingDate) : undefined,
-          url: weddingUrl,
+          date: eventDate ? new Date(eventDate) : undefined,
+          url: eventUrl,
           wishListId: wishlist.id,
         },
       });

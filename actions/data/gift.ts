@@ -2,12 +2,12 @@
 
 import prisma from '@/db/client';
 import { revalidatePath } from 'next/cache';
-import { getWedding } from './wedding';
+import { getEvent } from './event';
 
 export type GetGiftsParams = {
   category?: string;
-  giftListId?: string;
-  wishListId?: string;
+  giftlistId?: string;
+  wishlistId?: string;
   itemsPerPage?: number;
   page?: string;
   name?: string;
@@ -35,7 +35,7 @@ export async function getGifts({
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const query: any = {};
 
-  const { category, giftListId, wishListId, name, page, itemsPerPage } =
+  const { category, giftlistId, wishlistId, name, page, itemsPerPage } =
     searchParams;
 
   if (name) {
@@ -49,19 +49,19 @@ export async function getGifts({
     query.categoryId = category;
   }
 
-  if (giftListId) {
-    query.giftListId = giftListId;
+  if (giftlistId) {
+    query.giftlistId = giftlistId;
   }
 
-  const wedding = await getWedding();
+  const event = await getEvent();
 
-  if (wedding?.id) {
-    query.weddingId = wedding.id;
+  if (event?.id) {
+    query.eventId = event.id;
   }
 
-  if (wishListId) {
-    query.wishListIds = {
-      has: wishListId,
+  if (wishlistId) {
+    query.wishlistIds = {
+      has: wishlistId,
     };
   }
 

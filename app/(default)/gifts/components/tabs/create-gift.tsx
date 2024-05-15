@@ -1,11 +1,11 @@
 'use server';
 
 import { getCategories } from '@/actions/data/category';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import CreateGiftForm from '@/components/forms/gifts/create-gift-form';
 
 async function CreateGift() {
-  const wedding = await getWedding();
+  const wedding = await getEvent();
   const wishListId = wedding?.wishListId;
   if (!wishListId) return null;
 

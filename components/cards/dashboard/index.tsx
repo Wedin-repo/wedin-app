@@ -1,5 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import type { DashboardPageSearchParams } from '@/app/(default)/dashboard/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/Pagination';
@@ -12,14 +12,13 @@ type DashboardGiftsProps = {
 export default async function DashboardGifts({
   searchParams,
 }: DashboardGiftsProps) {
-  const wedding = await getWedding();
-  const wishListId = wedding?.wishListId;
+  const event = await getEvent();
 
-  if (!wishListId) {
-    return (
-      <EmptyState showReset title="No se ha creado una lista de regalos" />
-    );
+  if (!event) {
+    return <EmptyState showReset title="Ocurrio un error al crear tu cuenta" />;
   }
+
+  const wishListId = event.wishListId;
 
   // This is to count is just for the case that when
   // the user had not add any gift to the wishlist
