@@ -49,11 +49,14 @@ function RemoveFromWishListForm({
         title: 'Error',
         description: response.error,
         variant: 'destructive',
+        className: 'bg-white',
       });
+
+      return;
     }
 
     toast({
-      title: 'Exito! 🎁🗑',
+      title: 'Éxito! 🎁🗑',
       description: 'Regalo eliminado de tu lista',
       action: (
         <AddToWishListForm

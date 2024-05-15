@@ -34,10 +34,20 @@ function AddToWishListForm({
 
     const response = await addGiftToWishList(validatedFields.data);
 
+    if (response?.error) {
+      toast({
+        title: 'Error',
+        description: response.error,
+        variant: 'destructive',
+      });
+
+      return;
+    }
+
     if (variant !== 'undoButton') {
       toast({
-        title: response.status,
-        description: response.message,
+        title: 'Exito! 🎁🎉',
+        description: 'Regalo creado y agregado a tu lista.',
         action: (
           <Button
             onClick={() => router.push('/dashboard?page=1')}

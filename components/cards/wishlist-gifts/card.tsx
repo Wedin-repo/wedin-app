@@ -54,16 +54,8 @@ const DashboardGiftCard = async ({
         <span className="text-lg text-black">{formattedPrice}</span>
         {(isFavoriteGift || isGroupGift) && (
           <div className="flex flex-col gap-2 items-start sm:flex-row sm:items-center">
-            {isFavoriteGift && (
-              <span className="text-xs bg-[#F2F2F2] py-1.5 px-3 rounded-full text-secondaryTextColor">
-                El que más queremos ⭐
-              </span>
-            )}
-            {isGroupGift && (
-              <span className="text-xs bg-[#F2F2F2] py-1.5 px-3 rounded-full text-secondaryTextColor">
-                Regalo grupal 🎁
-              </span>
-            )}
+            {isFavoriteGift && <Badge text="El que más queremos ⭐" />}
+            {isGroupGift && <Badge text="Regalo grupal 🎁" />}
           </div>
         )}
       </CardContent>

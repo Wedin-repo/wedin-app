@@ -35,6 +35,7 @@ export const addGiftToWishList = async (
         isFavoriteGift,
       },
     });
+    revalidatePath('/dashboard');
   } catch (error: unknown) {
     return { error: getErrorMessage(error) };
   }
@@ -67,8 +68,6 @@ export const addGiftsToWishList = async (
       error: getErrorMessage(error),
     };
   }
-
-  revalidatePath('/dashboard');
 };
 
 export const deleteGiftFromWishList = async (
@@ -93,7 +92,7 @@ export const deleteGiftFromWishList = async (
     return { error: getErrorMessage(error) };
   }
 
-  revalidatePath('/', 'layout');
+  revalidatePath('/dashboard');
 };
 
 export const getWishListGifts = async (
