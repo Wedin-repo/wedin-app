@@ -1,17 +1,9 @@
-import {
-  deleteGiftFromWishList,
-  editOrCreateGift,
-} from '@/actions/data/wishlist';
-import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
+import { editOrCreateGift } from '@/actions/data/wishlist';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import {
-  GiftParamSchema,
-  GiftSchema,
-  GiftWishListSchema,
-} from '@/schemas/forms';
+import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
@@ -121,66 +113,16 @@ function EditGiftForm({
 
     setIsLoading(false);
   };
-  const handleRemoveGiftFromWishList = async () => {
-    setIsLoading(true);
-
-    const validatedFields = GiftWishListSchema.safeParse({
-      giftId: gift.id,
-      wishlistId: wishlistId,
-    });
-
-    if (!validatedFields.success) {
-      toast({
-        title: 'Error',
-        description: 'Datos inválidos, por favor verifica tus datos.',
-        variant: 'destructive',
-      });
-
-      setIsLoading(false);
-      return;
-    }
-
-    const response = await deleteGiftFromWishList(validatedFields.data);
-
-    if (response?.error) {
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description: response.error,
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    toast({
-      title: 'Éxito! 🎁🗑',
-      description: 'Regalo eliminado de tu lista',
-      action: (
-        <AddToWishListForm
-          giftId={gift.id}
-          wishlistId={wishlistId}
-          variant="undoButton"
-        />
-      ),
-    });
-
-    if (setIsOpen) {
-      setIsOpen(false);
-    }
-
-    setIsLoading(false);
-  };
 
   return (
     <GiftForm
       categories={categories}
       form={form}
       gift={gift}
-      handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
-      selectedFile={selectedFile}
       isLoading={isLoading}
-      onSubmit={onSubmit}
       previewUrl={previewUrl}
+      selectedFile={selectedFile}
+      onSubmit={onSubmit}
       setPreviewUrl={setPreviewUrl}
       setSelectedFile={setSelectedFile}
     />

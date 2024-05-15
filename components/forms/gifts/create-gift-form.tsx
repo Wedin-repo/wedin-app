@@ -115,11 +115,11 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   return (
     <GiftForm
       categories={categories}
-      selectedFile={selectedFile}
-      isLoading={isLoading}
       form={form}
-      onSubmit={onSubmit}
+      isLoading={isLoading}
       previewUrl={previewUrl}
+      selectedFile={selectedFile}
+      onSubmit={onSubmit}
       setPreviewUrl={setPreviewUrl}
       setSelectedFile={setSelectedFile}
     />

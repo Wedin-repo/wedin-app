@@ -35,7 +35,6 @@ type GiftFormProps = {
   isLoading: boolean;
   previewUrl: string | null;
   selectedFile: File | null;
-  handleRemoveGiftFromWishList?: () => void;
   onSubmit: (values: z.infer<typeof GiftSchema>) => void;
   setPreviewUrl: (url: string | null) => void;
   setSelectedFile: (file: File | null) => void;
