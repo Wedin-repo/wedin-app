@@ -10,7 +10,7 @@ import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoGiftOutline } from 'react-icons/io5';
 import type { z } from 'zod';
@@ -24,7 +24,6 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(ringSvg);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { toast } = useToast();
 
@@ -106,14 +105,16 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       ),
       className: 'bg-white',
     });
+
     setIsLoading(false);
-    return;
+    setPreviewUrl(null);
+    setSelectedFile(null);
+    form.reset();
   };
 
   return (
     <GiftForm
       categories={categories}
-      fileInputRef={fileInputRef}
       selectedFile={selectedFile}
       isLoading={isLoading}
       form={form}

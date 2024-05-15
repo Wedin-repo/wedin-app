@@ -6,9 +6,12 @@ export const GiftSchema = z.object({
     .min(1, { message: 'El nombre del regalo no puede estar vacío' })
     .max(60, { message: 'El nombre del regalo es demasiado largo' }),
   categoryId: z.string().min(1, { message: 'Debes seleccionar una categoría' }),
-  price: z.string().max(8, {
-    message: 'El precio no puede ser mayor de PYG 99,999,999',
-  }),
+  price: z
+    .string()
+    .min(4, { message: 'Precio tiene que ser mayor a 999 guaranies' })
+    .max(10, {
+      message: 'El precio no puede ser mayor de PYG 99,999,999',
+    }),
   isFavoriteGift: z.boolean(),
   isGroupGift: z.boolean(),
   wishListId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),

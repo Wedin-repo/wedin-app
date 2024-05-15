@@ -22,7 +22,7 @@ import type { GiftSchema } from '@/schemas/forms';
 import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { FiEdit3 } from 'react-icons/fi';
 import { MdOutlineFileUpload } from 'react-icons/md';
@@ -30,7 +30,6 @@ import type { z } from 'zod';
 
 type GiftFormProps = {
   categories: Category[] | null;
-  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
   form: UseFormReturn<z.infer<typeof GiftSchema>>;
   gift?: Gift;
   isLoading: boolean;
@@ -44,7 +43,6 @@ type GiftFormProps = {
 
 const GiftForm = ({
   categories,
-  fileInputRef,
   form,
   gift,
   isLoading,
@@ -53,7 +51,8 @@ const GiftForm = ({
   setPreviewUrl,
   setSelectedFile,
 }: GiftFormProps) => {
-  const [image, setImage] = useState(gift?.imageUrl || previewUrl);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -65,7 +64,7 @@ const GiftForm = ({
 
     if (file) {
       const url = URL.createObjectURL(file);
-      setImage(url);
+      setPreviewUrl(url);
       setSelectedFile(file);
     } else {
       setPreviewUrl(null);
@@ -85,63 +84,64 @@ const GiftForm = ({
             <FormField
               control={form.control}
               name="imageUrl"
-              render={({ field: { value, onChange, ...fieldProps } }) => (
+              render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem className="w-full">
                   <FormLabel>Imagen del regalo</FormLabel>
-                  <div className="flex flex-col gap-1.5">
-                    <span className="!text-xs font-normal text-secondaryTextColor ml-1">
-                      372px por 322px
-                    </span>
-                    <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
-                      <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
-                        <Image
-                          src={image ?? ringSvg}
-                          width={372}
-                          height={322}
-                          alt="Vista previa de la imagen seleccionada"
-                          className="object-cover min-w-full min-h-full rounded-xl"
-                        />
-                      </div>
-                      <div className="">
-                        <Input
-                          id="imageUpload"
-                          type="file"
-                          className="hidden"
-                          accept="image/jpeg, image/png, image/heic, image/webp, image/svg+xml"
-                          {...fieldProps}
-                          ref={fileInputRef}
-                          onChange={event => {
-                            onChange(event.target.files?.[0]);
-                            handleFileChange(event);
-                          }}
-                        />
-                        <Button
-                          type="button"
-                          variant="uploadImageButton"
-                          onClick={handleButtonClick}
-                        >
-                          <MdOutlineFileUpload fontSize={'18px'} />
-                          {gift?.imageUrl ? 'Cambiar imagen' : 'Subir imagen'}
-                        </Button>
+                  <FormControl>
+                    <div className="flex flex-col gap-1.5">
+                      <span className="!text-xs font-normal text-secondaryTextColor">
+                        372px por 322px
+                      </span>
+                      <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
+                        <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
+                          <Image
+                            src={previewUrl || gift?.imageUrl || ringSvg}
+                            width={390}
+                            height={340}
+                            alt="Vista previa de la imagen seleccionada"
+                            className="object-cover min-w-full min-h-full rounded-xl"
+                          />
+                        </div>
+                        <div className="">
+                          <Input
+                            id="imageUpload"
+                            type="file"
+                            className="hidden"
+                            accept="image/jpeg, image/png, image/heic, image/webp, image/svg+xml"
+                            {...fieldProps}
+                            ref={fileInputRef}
+                            onChange={event => {
+                              onChange(event.target.files?.[0]);
+                              handleFileChange(event);
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="uploadImageButton"
+                            onClick={handleButtonClick}
+                          >
+                            <MdOutlineFileUpload fontSize={'18px'} />
+                            {gift?.imageUrl ? 'Cambiar imagen' : 'Subir imagen'}
+                          </Button>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </FormControl>
                   <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
           </div>
-          <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12 sm:min-h-[460px]">
+          <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12 ">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem className="w-full">
+                <FormItem>
                   <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input
                       placeholder={gift?.name ?? 'Nombre del regalo'}
-                      className="!mt-0"
                       {...field}
                     />
                   </FormControl>
@@ -155,13 +155,10 @@ const GiftForm = ({
               name="categoryId"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel className="!mb-[-5px]">Categoria</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <FormLabel className="">Categoria</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
-                      <SelectTrigger className="!mt-0">
+                      <SelectTrigger>
                         <SelectValue placeholder="Selecciona una categoria" />
                       </SelectTrigger>
                     </FormControl>
@@ -196,6 +193,10 @@ const GiftForm = ({
                   formatPrice(Number(field.value))
                 );
 
+                useEffect(() => {
+                  setDisplayValue(formatPrice(Number(field.value)));
+                }, [field.value]);
+
                 const handleInputChange = (
                   e: React.ChangeEvent<HTMLInputElement>
                 ) => {
@@ -213,7 +214,6 @@ const GiftForm = ({
                     <FormControl>
                       <Input
                         type="text"
-                        className="!mt-0"
                         value={displayValue}
                         onChange={handleInputChange}
                       />
@@ -232,7 +232,7 @@ const GiftForm = ({
                   <FormLabel className="text-base font-normal">
                     Marcar como el que más queremos ⭐
                   </FormLabel>
-                  <FormControl className="!mt-0">
+                  <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}
@@ -251,7 +251,7 @@ const GiftForm = ({
                   <FormLabel className="text-base font-normal">
                     Regalo grupal 🎁
                   </FormLabel>
-                  <FormControl className="!mt-0">
+                  <FormControl>
                     <Switch
                       checked={field.value}
                       onCheckedChange={field.onChange}

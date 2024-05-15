@@ -14,7 +14,7 @@ import {
 } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
@@ -34,7 +34,6 @@ function EditGiftForm({
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   const form = useForm({
@@ -175,7 +174,6 @@ function EditGiftForm({
   return (
     <GiftForm
       categories={categories}
-      fileInputRef={fileInputRef}
       form={form}
       gift={gift}
       handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
