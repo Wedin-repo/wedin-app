@@ -1,4 +1,4 @@
-import { getGifts } from '@/actions/data/gift';
+import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import { IoIosLink } from 'react-icons/io';
@@ -13,13 +13,11 @@ type DashboardHeaderProps = {
 export default async function DashboardHeader({
   wishlistId,
 }: DashboardHeaderProps) {
-  const wishlistGifts = await getGifts({
-    searchParams: { wishlistId },
-  });
+  const wishlistGifts = await getWishListGifts({ wishlistId });
 
   const totalPrice =
     wishlistGifts?.reduce(
-      (acc, gift) => acc + Number.parseFloat(gift.price),
+      (acc, wishlistGift) => acc + Number.parseFloat(wishlistGift.gift.price),
       0
     ) || 0;
   const formattedTotalPrice = formatPrice(totalPrice);
