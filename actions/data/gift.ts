@@ -5,12 +5,7 @@ import { GiftPostSchema } from '@/schemas/forms';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
-import {
-  getErrorMessage,
-  validateCategory,
-  validateGift,
-  validateWishlist,
-} from '../helper';
+import { getErrorMessage } from '../helper';
 import { getEvent } from './event';
 
 export type GetGiftsParams = {
@@ -169,7 +164,7 @@ export const editGift = async (
 
 export const createGift = async (
   formData: z.infer<typeof GiftPostSchema>,
-  imageUrl: string | null
+  imageUrl: string | null = null
 ) => {
   const validatedFields = GiftPostSchema.safeParse(formData);
 
