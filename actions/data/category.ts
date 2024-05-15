@@ -4,12 +4,8 @@ import prisma from '@/db/client';
 
 export async function getCategories() {
   try {
-    const categories = await prisma.category.findMany();
-
-    if (!categories) return null;
-
-    return categories;
-  } catch (error: any) {
+    return await prisma.category.findMany();
+  } catch (error) {
     console.error(error);
     return null;
   }
@@ -24,21 +20,19 @@ export async function getCategory({
 }: {
   searchParams?: GetCategoryParams;
 }) {
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  const query: any = {};
+  const { categoryId } = searchParams ?? {};
+
+  if (categoryId) {
+    query.id = categoryId;
+  }
   try {
-    let query: any = {};
-    const { categoryId } = searchParams ?? {};
-
-    if (categoryId) {
-      query.id = categoryId;
-    }
-
-    const category = await prisma.category.findUnique({
+    return await prisma.category.findUnique({
       where: query,
     });
-
-    return category;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error retrieving category:', error);
-    return null; // or throw error depending on your error handling strategy
+    return null;
   }
 }

@@ -20,16 +20,16 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
       partnerLastName,
       name,
       lastName,
-      weddingUrl,
-      weddingDate,
+      eventUrl,
+      eventDate,
     } = validatedFields.data;
 
-    let bride: User;
-    let groom: User;
+    let primaryUser: User;
+    let secondaryUser: User;
     let wishlist: WishList;
 
     try {
-      bride = await prisma.user.upsert({
+      primaryUser = await prisma.user.upsert({
         where: {
           email: partnerEmail, // The unique identifier to search for
         },
@@ -56,7 +56,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
     try {
-      groom = await prisma.user.upsert({
+      secondaryUser = await prisma.user.upsert({
         where: {
           email: session.user.email, // This checks if a user exists with this email
         },
@@ -77,17 +77,16 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
 
     try {
       wishlist = await prisma.wishList.create({
-        data: {
-          description: 'My first wish list',
-        },
+        data: {},
       });
-      await prisma.wedding.create({
+
+      await prisma.event.create({
         data: {
-          groomId: groom.id,
-          brideId: bride.id,
-          date: weddingDate ? new Date(weddingDate) : undefined,
-          url: weddingUrl,
-          wishListId: wishlist.id,
+          secondaryUserId: secondaryUser.id,
+          primaryUserId: primaryUser.id,
+          date: eventDate ? new Date(eventDate) : undefined,
+          url: eventUrl,
+          wishlistId: wishlist.id,
         },
       });
     } catch (error) {

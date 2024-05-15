@@ -1,10 +1,10 @@
 'use client';
 
-import { addGiftsToWishList } from '@/actions/data/wishlist';
+import { addGiftsToWishList } from '@/actions/data/wishlist-gifts';
 import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { GiftsWishListSchema } from '@/schemas/forms';
+import { WishListGiftsPostSchema } from '@/schemas/forms';
 import { useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa';
 import { IoGiftOutline } from 'react-icons/io5';
@@ -19,7 +19,7 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
   const { toast } = useToast();
 
   const handleAddGiftsToWishList = async () => {
-    const validatedFields = GiftsWishListSchema.safeParse({
+    const validatedFields = WishListGiftsPostSchema.safeParse({
       giftIds,
       wishlistId,
     });
@@ -31,12 +31,12 @@ function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
 
     const response = await addGiftsToWishList(validatedFields.data);
 
-    if (response?.status === 'Error') {
+    if (response?.error) {
       toast({
-        title: response.status,
-        description: response.message,
+        title: 'Error 🎁🚫',
+        description: response.error,
+        variant: 'destructive',
         action: <FaCheck color="red" fontSize={'36px'} />,
-        className: 'bg-white',
       });
 
       return;

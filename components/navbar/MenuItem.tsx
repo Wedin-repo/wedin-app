@@ -1,17 +1,19 @@
 import logout from '@/actions/auth/logout';
 import { Button } from '@/components/ui/button';
+import type { ReactElement } from 'react';
 
 type MenuItemProps = {
   variant?: 'logoutButton';
   onClick?: () => void;
   label: string;
-  icon?: any;
+  icon?: ReactElement;
 };
-const MenuItem = ({ onClick, label, icon, variant }: MenuItemProps) => {
-  const handleLogout = async () => {
-    await logout();
-  };
 
+const handleLogout = async () => {
+  await logout();
+};
+
+const MenuItem = ({ onClick, label, icon, variant }: MenuItemProps) => {
   if (variant === 'logoutButton') {
     return (
       <form action={handleLogout}>

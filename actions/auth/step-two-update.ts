@@ -21,8 +21,7 @@ export const stepTwoUpdate = async (
   }
 
   if (validatedFields.success) {
-    const { weddingCountry, weddingCity, hasPYbankAccount } =
-      validatedFields.data;
+    const { eventCountry, eventCity, hasPYbankAccount } = validatedFields.data;
 
     const session = await auth();
 
@@ -46,13 +45,13 @@ export const stepTwoUpdate = async (
     if (!groom) return { error: 'Error obteniendo tu usuario' };
 
     try {
-      await prisma.wedding.update({
+      await prisma.event.update({
         where: {
-          groomId: groom.id,
+          secondaryUserId: groom.id,
         },
         data: {
-          country: weddingCountry,
-          city: weddingCity,
+          country: eventCountry,
+          city: eventCity,
         },
       });
 

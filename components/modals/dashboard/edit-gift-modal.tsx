@@ -3,19 +3,26 @@
 import EditGiftForm from '@/components/forms/dashboard/edit-gift-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import type { Category, Gift } from '@prisma/client';
+import type { Category, Gift, WishListGift } from '@prisma/client';
 import { useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 
 type EditGiftModalProps = {
+  categories: Category[];
+  eventId: string;
   gift: Gift;
-  categories?: Category[];
-  wishListId?: string | null;
+  wishlistGift: WishListGift;
+  wishlistId: string;
 };
 
-function EditGiftModal({ gift, wishListId, categories }: EditGiftModalProps) {
+function EditGiftModal({
+  categories,
+  eventId,
+  gift,
+  wishlistGift,
+  wishlistId,
+}: EditGiftModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-  if (!wishListId) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -27,10 +34,12 @@ function EditGiftModal({ gift, wishListId, categories }: EditGiftModalProps) {
 
       <DialogContent className="bg-white !rounded-2xl ">
         <EditGiftForm
-          gift={gift}
           categories={categories}
-          wishlistId={wishListId}
+          eventId={eventId}
+          gift={gift}
           setIsOpen={setIsOpen}
+          wishlistGift={wishlistGift}
+          wishlistId={wishlistId}
         />
       </DialogContent>
     </Dialog>

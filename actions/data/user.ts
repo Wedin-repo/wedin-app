@@ -1,8 +1,8 @@
 'use server';
 
-import { ErrorResponse } from '@/auth';
+import type { ErrorResponse } from '@/auth';
 import prisma from '@/db/client';
-import { User } from '@prisma/client';
+import type { User } from '@prisma/client';
 
 export const getUserByEmail = async (
   email: string
@@ -16,8 +16,8 @@ export const getUserByEmail = async (
       return { error: 'User not found' }; // Use return instead of throw to control flow
     }
     return currentUser;
-  } catch (error: any) {
-    console.error('Error getting user by email:', error);
+  } catch (error) {
+    // console.error('Error getting user by email:', error);
     return { error: 'InternalError' };
   }
 };

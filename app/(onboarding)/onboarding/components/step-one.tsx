@@ -32,22 +32,20 @@ type StepOneProps = {
 };
 
 const StepOne = ({ onNextStep }: StepOneProps) => {
-  const [isDecidingWeddingDate, setIsDecidingWeddingDate] = useState<
-    boolean | string
-  >(false);
+  const [isDeciding, setIsDeciding] = useState<boolean | string>(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof StepOneSchema>>({
     resolver: zodResolver(StepOneSchema),
     defaultValues: {
-      weddingUrl: '',
+      eventUrl: '',
       name: '',
       lastName: '',
       partnerName: '',
       partnerLastName: '',
       partnerEmail: '',
-      weddingDate: undefined,
-      isDecidingWeddingDate: false,
+      eventDate: undefined,
+      isDecidingEventDate: false,
     },
   });
 
@@ -74,9 +72,9 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
   };
 
   const handleIsDecidingChange = (value: boolean | string) => {
-    setIsDecidingWeddingDate(value);
+    setIsDeciding(value);
     if (value) {
-      form.setValue('weddingDate', undefined);
+      form.setValue('eventDate', undefined);
     }
   };
 
@@ -92,7 +90,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
         >
           <FormField
             control={form.control}
-            name="weddingUrl"
+            name="eventUrl"
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -223,10 +221,10 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
             </div>
 
             <div className="flex gap-6 items-center w-full">
-              {!isDecidingWeddingDate ? (
+              {!isDeciding ? (
                 <FormField
                   control={form.control}
-                  name="weddingDate"
+                  name="eventDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col w-1/2">
                       <Popover>
@@ -282,7 +280,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
               )}
               <FormField
                 control={form.control}
-                name="isDecidingWeddingDate"
+                name="isDecidingEventDate"
                 render={({ field }) => (
                   <FormItem className="flex gap-2 items-center">
                     <FormControl>

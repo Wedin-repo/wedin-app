@@ -1,10 +1,10 @@
 'use client';
 
-import { deleteGiftFromWishList } from '@/actions/data/wishlist';
+import { deleteGiftFromWishList } from '@/actions/data/wishlist-gifts';
 import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { GiftWishListSchema } from '@/schemas/forms';
+import { WishListGiftPostSchema } from '@/schemas/forms';
 import { useRouter } from 'next/navigation';
 
 type RemoveFromWishListFormProps = {
@@ -27,16 +27,16 @@ function RemoveFromWishListForm({
       return;
     }
 
-    const validatedFields = GiftWishListSchema.safeParse({
-      giftId: giftId,
-      wishlistId: wishlistId,
+    const validatedFields = WishListGiftPostSchema.safeParse({
+      giftId,
+      wishlistId,
     });
 
     if (!validatedFields.success) {
       toast({
         title: 'Error',
         description: 'Error al eliminar el regalo de la lista',
-        className: 'bg-white',
+        variant: 'destructive',
       });
 
       return;
@@ -44,19 +44,20 @@ function RemoveFromWishListForm({
 
     const response = await deleteGiftFromWishList(validatedFields.data);
 
-    if (response.status === 'Error') {
+    if (response?.error) {
       toast({
         title: 'Error',
-        description:
-          response.message ||
-          'An error occurred while deleting the gift from the wishlist.',
+        description: response.error,
+        variant: 'destructive',
         className: 'bg-white',
       });
+
+      return;
     }
 
     toast({
-      title: response.status,
-      description: response.message,
+      title: 'Éxito! 🎁🗑',
+      description: 'Regalo eliminado de tu lista',
       action: (
         <AddToWishListForm
           giftId={giftId}
@@ -64,7 +65,6 @@ function RemoveFromWishListForm({
           variant="undoButton"
         />
       ),
-      className: 'bg-white',
     });
   };
 

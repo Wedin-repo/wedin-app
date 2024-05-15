@@ -34,15 +34,14 @@ import { countries } from '../countries';
 
 const StepTwo = () => {
   const router = useRouter();
-  const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
-    React.useState<boolean | string>(false);
+  const [isDeciding, setIsDeciding] = React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const { data: session, update } = useSession();
 
   const form = useForm<z.infer<typeof StepTwoSchema>>({
     resolver: zodResolver(StepTwoSchema),
     defaultValues: {
-      isDecidingWeddingCountryCity: false,
+      isDecidingEventLocation: false,
       hasPYbankAccount: true,
     },
   });
@@ -78,10 +77,10 @@ const StepTwo = () => {
   };
 
   const handleIsDecidingCountryCity = (value: boolean | string) => {
-    setIsDecidingWeddingCountryCity(value);
+    setIsDeciding(value);
     if (value) {
-      form.setValue('weddingCountry', '');
-      form.setValue('weddingCity', '');
+      form.setValue('eventCountry', '');
+      form.setValue('eventCity', '');
     }
   };
 
@@ -97,12 +96,12 @@ const StepTwo = () => {
         >
           <FormField
             control={form.control}
-            name="weddingCountry"
+            name="eventCountry"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>País</FormLabel>
                 <Select
-                  disabled={!!isDecidingWeddingCountryCity}
+                  disabled={!!isDeciding}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -131,14 +130,14 @@ const StepTwo = () => {
 
           <FormField
             control={form.control}
-            name="weddingCity"
+            name="eventCity"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>Ciudad</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="San Bernardino"
-                    disabled={!!isDecidingWeddingCountryCity}
+                    disabled={!!isDeciding}
                     className="!mt-1.5"
                     {...field}
                   />
@@ -150,7 +149,7 @@ const StepTwo = () => {
 
           <FormField
             control={form.control}
-            name="isDecidingWeddingCountryCity"
+            name="isDecidingEventLocation"
             render={({ field }) => (
               <FormItem className="flex gap-2 items-center">
                 <FormControl>
