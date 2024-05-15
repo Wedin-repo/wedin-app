@@ -1,13 +1,13 @@
 'use client';
 
-import { createWishListGift } from '@/actions/data/gift';
+import { createGift } from '@/actions/data/gift';
+import { addGiftToWishList } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftPostSchema } from '@/schemas/forms';
-import { GiftParamSchema } from '@/schemas/forms/params';
+import { GiftFormPostSchema, GiftPostSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
@@ -34,20 +34,30 @@ function CreateGiftForm({
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(GiftPostSchema),
+    resolver: zodResolver(GiftFormPostSchema),
     defaultValues: {
       name: '',
       categoryId: '',
       price: '',
+      isDefault: false,
+      isEditedVersion: false,
+      sourceGiftId: '',
+      eventId: eventId,
+
+      // Event though it si the url string in our DB
+      // here is the actual image file object we dont
+      // upload the image to mongoDB, we upload it to AWS
+      // and save the url in our DB
+      imageUrl: ringSvg,
+
+      // Wishlist Gift params
+      wishlistId: wishlistId,
       isFavoriteGift: false,
       isGroupGift: false,
-      wishlistId: wishlistId,
-      eventId: eventId,
-      imageUrl: ringSvg,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof GiftPostSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
     const validatedFields = GiftPostSchema.safeParse(values);
 
@@ -62,16 +72,12 @@ function CreateGiftForm({
       return;
     }
 
-    const validatedParams = GiftParamSchema.safeParse(validatedFields.data);
+    const giftResponse = await createGift(validatedFields.data);
 
-    if (!validatedParams.success) return null;
-
-    const wishlistGiftResponse = await createWishListGift(validatedParams.data);
-
-    if (wishlistGiftResponse.error || !wishlistGiftResponse.giftId) {
+    if (giftResponse.error || !giftResponse.giftId) {
       toast({
         title: 'Error al crear el regalo',
-        description: wishlistGiftResponse.error,
+        description: giftResponse.error,
         variant: 'destructive',
       });
 
@@ -82,7 +88,7 @@ function CreateGiftForm({
     if (selectedFile) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: wishlistGiftResponse.giftId,
+        giftId: giftResponse.giftId,
       });
 
       if (uploadResponse?.error) {
@@ -93,8 +99,25 @@ function CreateGiftForm({
         });
 
         setIsLoading(false);
-        return;
       }
+    }
+
+    const wishlistGiftResponse = await addGiftToWishList({
+      giftId: giftResponse.giftId,
+      wishlistId: validatedFields.data.wishlistId,
+      isFavoriteGift: validatedFields.data.isFavoriteGift,
+      isGroupGift: validatedFields.data.isGroupGift,
+    });
+
+    if (wishlistGiftResponse?.error) {
+      toast({
+        title: 'Error',
+        description: wishlistGiftResponse.error,
+        variant: 'destructive',
+      });
+
+      setIsLoading(false);
+      return;
     }
 
     toast({

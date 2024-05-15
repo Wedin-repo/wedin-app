@@ -20,34 +20,24 @@ export const addGiftToWishList = async (
   const validatedFields = WishListGiftPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
-    return {
-      status: 'Error',
-      message: 'Invalid Data',
-    };
+    return { error: 'Invalid Data' };
   }
 
-  const { giftId, wishlistId } = validatedFields.data;
+  const { giftId, wishlistId, isGroupGift, isFavoriteGift } =
+    validatedFields.data;
 
   try {
     await prisma.wishListGift.create({
       data: {
         wishListId: wishlistId,
-        giftId: giftId,
+        giftId,
+        isGroupGift,
+        isFavoriteGift,
       },
     });
   } catch (error: unknown) {
-    return {
-      status: 'Error',
-      message: getErrorMessage(error),
-    };
+    return { error: getErrorMessage(error) };
   }
-
-  revalidatePath('/', 'layout');
-
-  return {
-    status: 'Éxito! 🎁🎉',
-    message: 'Regalo agregado a tu lista.',
-  };
 };
 
 export const addGiftsToWishList = async (

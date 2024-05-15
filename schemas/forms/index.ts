@@ -1,6 +1,6 @@
 import { type ZodType, z } from 'zod';
 
-export const GiftPostSchema = z.object({
+export const GiftFormPostSchema = z.object({
   name: z
     .string()
     .min(1, { message: 'El nombre del regalo no puede estar vacío' })
@@ -12,16 +12,25 @@ export const GiftPostSchema = z.object({
     .max(10, {
       message: 'El precio no puede ser mayor de PYG 99,999,999',
     }),
-  isFavoriteGift: z.boolean(),
-  isGroupGift: z.boolean(),
-  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  isDefault: z.boolean().default(false),
+  sourceGiftId: z.string(),
+  isEditedVersion: z.boolean().default(false),
   eventId: z.string().min(1, { message: 'No se encontro un event ID' }),
-  imageUrl: z.any() as ZodType<File>,
+
+  imageUrl: z.any().optional() as ZodType<File>,
+
+  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }), // WishListGiftPostSchema
+  isFavoriteGift: z.boolean().default(false), // WishListGiftPostSchema
+  isGroupGift: z.boolean().default(false), // WishListGiftPostSchema
 });
+
+export const GiftPostSchema = GiftFormPostSchema.omit({ imageUrl: true });
 
 export const WishListGiftPostSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
+  isFavoriteGift: z.boolean().default(false),
+  isGroupGift: z.boolean().default(false),
 });
 
 export const WishListGiftPostsSchema = z.object({

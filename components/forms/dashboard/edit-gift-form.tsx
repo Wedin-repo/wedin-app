@@ -3,8 +3,7 @@ import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftPostSchema } from '@/schemas/forms';
-import { GiftParamSchema } from '@/schemas/forms/params';
+import { GiftPostSchema, GiftFormPostSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift } from '@prisma/client';
 import { useState } from 'react';
@@ -32,22 +31,27 @@ function EditGiftForm({
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(GiftPostSchema),
+    resolver: zodResolver(GiftFormPostSchema),
     defaultValues: {
       name: gift.name,
       categoryId: gift.categoryId,
       price: gift.price,
+      isDefault: gift.isDefault,
+      isEditedVersion: gift.isEditedVersion,
+      sourceGiftId: gift.sourceGiftId ?? '',
+      eventId: eventId,
+
+      imageUrl: ringSvg,
+
       isFavoriteGift: false,
       isGroupGift: false,
       wishlistId: wishlistId,
-      eventId: eventId,
-      imageUrl: ringSvg,
     },
   });
 
   const { formState } = form;
 
-  const onSubmit = async (values: z.infer<typeof GiftPostSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
       if (setIsOpen) {
@@ -57,7 +61,7 @@ function EditGiftForm({
       return;
     }
 
-    const validatedFields = GiftPostSchema.safeParse(values);
+    const validatedFields = GiftFormPostSchema.safeParse(values);
 
     if (!validatedFields.success) {
       toast({
@@ -70,7 +74,7 @@ function EditGiftForm({
       return;
     }
 
-    const validatedParams = GiftParamSchema.safeParse(validatedFields.data);
+    const validatedParams = GiftPostSchema.safeParse(validatedFields.data);
 
     if (!validatedParams.success) return null;
 

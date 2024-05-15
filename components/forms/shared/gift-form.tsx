@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import ringSvg from '@/public/images/rings.svg';
-import type { GiftPostSchema } from '@/schemas/forms';
+import type { GiftFormPostSchema } from '@/schemas/forms';
 import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
@@ -30,12 +30,12 @@ import PriceField from './price-field-input';
 
 type GiftFormProps = {
   categories: Category[] | null;
-  form: UseFormReturn<z.infer<typeof GiftPostSchema>>;
+  form: UseFormReturn<z.infer<typeof GiftFormPostSchema>>;
   gift?: Gift;
   isLoading: boolean;
   previewUrl: string | null;
   selectedFile: File | null;
-  onSubmit: (values: z.infer<typeof GiftPostSchema>) => void;
+  onSubmit: (values: z.infer<typeof GiftFormPostSchema>) => void;
   setPreviewUrl: (url: string | null) => void;
   setSelectedFile: (file: File | null) => void;
 };

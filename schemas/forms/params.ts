@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { GiftPostSchema } from '.';
 
 export const GetWishListGiftsParams = z
   .object({
@@ -20,5 +19,3 @@ export const GetWishListGiftsParams = z
       path: ['page'], // You can adjust the path to point to the right place
     }
   );
-
-export const GiftParamSchema = GiftPostSchema.omit({ imageUrl: true });

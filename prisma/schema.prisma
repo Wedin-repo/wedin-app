@@ -99,16 +99,16 @@ model WishList {
 model Gift {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  giftlistId      String?  @db.ObjectId
-  isDefault       Boolean  @default(false)
   categoryId      String   @db.ObjectId
-  eventId         String?  @db.ObjectId
-  imageUrl        String?
   price           String
+  imageUrl        String?
+  isDefault       Boolean  @default(false)
+  isEditedVersion Boolean  @default(false)
+  eventId         String?  @db.ObjectId
+  giftlistId      String?  @db.ObjectId
+  sourceGiftId    String?  @db.ObjectId
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  isEditedVersion Boolean  @default(false)
-  sourceGiftId    String?  @db.ObjectId
 
   wishListGifts WishListGift[]
   giftlist      GiftList?      @relation(fields: [giftlistId], references: [id])

@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/client';
-import type { GiftParamSchema } from '@/schemas/forms/params';
+import { GiftPostSchema } from '@/schemas/forms';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
@@ -119,38 +119,27 @@ export async function updateGiftImageUrl(url: string, giftId: string) {
 }
 
 export const editOrCreateGift = async (
-  formData: z.infer<typeof GiftParamSchema>,
+  formData: z.infer<typeof GiftPostSchema>,
   giftId: string
 ) => {
-  // const validatedFields = GiftParamSchema.safeParse(formData);
-  //
-  // if (!validatedFields.success) {
-  //   return { error: 'Campos inválidos' };
-  // }
-  //
-  // const category = await validateCategory(validatedFields.data.categoryId);
-  //
-  // if (!category) return { error: 'Category not found' };
-  //
-  // const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-  //
-  // if (!wishlist) return { error: 'Wishlist not found' };
-  //
-  // const gift = await validateGift(giftId);
-  //
-  // if (!gift) return { error: 'Gift not found' };
-  //
-  // const newGiftData = {
-  //   name: validatedFields.data.name,
-  //   categoryId: validatedFields.data.categoryId,
-  //   price: validatedFields.data.price,
-  //   isFavoriteGift: validatedFields.data.isFavoriteGift,
-  //   isGroupGift: validatedFields.data.isGroupGift,
-  //   isDefault: false,
-  //   isEditedVersion: true,
-  //   sourceGiftId: giftId,
-  //   description: 'a new gift creater by user', // TODO: inform UX about description issue
-  // };
+  const validatedFields = GiftPostSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return { error: 'Campos inválidos' };
+  }
+
+  const category = await validateCategory(validatedFields.data.categoryId);
+
+  if (!category) return { error: 'Category not found' };
+
+  const wishlist = await validateWishlist(validatedFields.data.wishlistId);
+
+  if (!wishlist) return { error: 'Wishlist not found' };
+
+  const gift = await validateGift(giftId);
+
+  if (!gift) return { error: 'Gift not found' };
+
   //
   // try {
   //   if (gift.isDefault) {
@@ -190,49 +179,33 @@ export const editOrCreateGift = async (
   // }
 };
 
-export const createWishListGift = async (
-  formData: z.infer<typeof GiftParamSchema>
-) => {
-  // const validatedFields = GiftParamSchema.safeParse(formData);
-  //
-  // if (!validatedFields.success) {
-  //   return { error: 'Invalid fields' };
-  // }
-  //
-  // const category = await validateCategory(validatedFields.data.categoryId);
-  //
-  // if (!category) return { error: 'Category not found' };
-  //
-  // const wishlist = await validateWishlist(validatedFields.data.wishlistId);
-  //
-  // if (!wishlist) return { error: 'Wishlist not found' };
-  //
-  // try {
-  //   const newGift = await prisma.gift.create({
-  //     data: {
-  //       name: validatedFields.data.name,
-  //       categoryId: validatedFields.data.categoryId,
-  //       price: validatedFields.data.price,
-  //       isFavoriteGift: validatedFields.data.isFavoriteGift,
-  //       isGroupGift: validatedFields.data.isGroupGift ?? false,
-  //       isDefault: false,
-  //       isEditedVersion: false,
-  //     },
-  //   });
-  //
-  //   await prisma.wishList.update({
-  //     where: { id: validatedFields.data.wishlistId },
-  //     data: {
-  //       gifts: {
-  //         connect: { id: newGift.id },
-  //       },
-  //     },
-  //   });
-  //
-  //   revalidatePath('/gifts?tab=predefinedGifts');
-  //
-  //   return { giftId: newGift.id };
-  // } catch (error) {
-  //   return { error: getErrorMessage(error) };
-  // }
+export const createGift = async (formData: z.infer<typeof GiftPostSchema>) => {
+  const validatedFields = GiftPostSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return { error: 'Datos inválidos, por favor verifica tus datos.' };
+  }
+
+  const newGift = await prisma.gift.create({
+    data: {
+      name: validatedFields.data.name,
+      categoryId: validatedFields.data.categoryId,
+      price: validatedFields.data.price,
+      isDefault: validatedFields.data.isDefault,
+      isEditedVersion: validatedFields.data.isEditedVersion,
+      eventId: validatedFields.data.eventId,
+    },
+  });
+
+  if (!newGift) {
+    return { error: 'Error creating gift' };
+  }
+
+  revalidatePath('/gifts?tab=predefinedGifts');
+
+  try {
+    return { giftId: newGift.id };
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
 };

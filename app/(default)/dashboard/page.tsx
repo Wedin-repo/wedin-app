@@ -1,4 +1,3 @@
-import prisma from '@/db/client';
 import { getEvent } from '@/actions/data/event';
 import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import EmptyState from '@/components/EmptyState';
@@ -64,12 +63,12 @@ export default async function DashboardPage({
 
       <Suspense fallback={<Loader />}>
         <div className="flex flex-col gap-5">
-          {paginatedWishlistGifts.map(wishListGift => (
+          {paginatedWishlistGifts.map(wishlistGift => (
             <DashboardGiftCard
-              key={wishListGift.id}
+              key={wishlistGift.id}
               eventId={event.id}
               wishlistId={wishlistId}
-              wishListGift={wishListGift}
+              wishlistGift={wishlistGift}
             />
           ))}
 

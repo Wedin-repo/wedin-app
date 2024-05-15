@@ -1,31 +1,21 @@
 import {
+  FormControl,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/utils';
+import type { GiftFormPostSchema } from '@/schemas/forms';
 import { useEffect, useState } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
+import type { z } from 'zod';
 
-const PriceField = ({
-  field,
-}: {
-  field: ControllerRenderProps<
-    {
-      name: string;
-      categoryId: string;
-      price: string;
-      isFavoriteGift: boolean;
-      isGroupGift: boolean;
-      wishlistId: string;
-      eventId: string;
-      imageUrl: File;
-    },
-    'price'
-  >;
-}) => {
+type PriceFieldProps = {
+  field: ControllerRenderProps<z.infer<typeof GiftFormPostSchema>, 'price'>;
+};
+
+const PriceField = ({ field }: PriceFieldProps) => {
   const [displayValue, setDisplayValue] = useState(
     formatPrice(Number(field.value))
   );
