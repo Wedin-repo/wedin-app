@@ -2,6 +2,7 @@
 
 import prisma from '@/db/client';
 import { revalidatePath } from 'next/cache';
+import { getWedding } from './wedding';
 
 export type GetGiftsParams = {
   category?: string;
@@ -20,6 +21,7 @@ export async function getGifts({
   if (!searchParams) {
     try {
       return await prisma.gift.findMany({
+        where: { isDefault: true },
         orderBy: {
           createdAt: 'desc',
         },
@@ -49,6 +51,12 @@ export async function getGifts({
 
   if (giftListId) {
     query.giftListId = giftListId;
+  }
+
+  const wedding = await getWedding();
+
+  if (wedding?.id) {
+    query.weddingId = wedding.id;
   }
 
   if (wishListId) {

@@ -16,17 +16,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { formatPrice } from '@/lib/utils';
 import ringSvg from '@/public/images/rings.svg';
 import type { GiftSchema } from '@/schemas/forms';
 import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 import { FiEdit3 } from 'react-icons/fi';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import type { z } from 'zod';
+import PriceField from './price-field-input';
 
 type GiftFormProps = {
   categories: Category[] | null;
@@ -132,7 +132,7 @@ const GiftForm = ({
               )}
             />
           </div>
-          <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12 ">
+          <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12">
             <FormField
               control={form.control}
               name="name"
@@ -188,40 +188,7 @@ const GiftForm = ({
             <FormField
               control={form.control}
               name="price"
-              render={({ field }) => {
-                const [displayValue, setDisplayValue] = useState(
-                  formatPrice(Number(field.value))
-                );
-
-                useEffect(() => {
-                  setDisplayValue(formatPrice(Number(field.value)));
-                }, [field.value]);
-
-                const handleInputChange = (
-                  e: React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  const rawValue = e.target.value.replace(/[^0-9]/g, '');
-                  const numericValue = Number(rawValue);
-                  const formattedValue = formatPrice(numericValue);
-
-                  setDisplayValue(formattedValue);
-                  field.onChange(rawValue);
-                };
-
-                return (
-                  <FormItem className="w-full">
-                    <FormLabel>Precio</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        value={displayValue}
-                        onChange={handleInputChange}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-red-600" />
-                  </FormItem>
-                );
-              }}
+              render={({ field }) => <PriceField field={field} />}
             />
 
             <FormField

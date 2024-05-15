@@ -1,5 +1,5 @@
 import GiftLists from '@/components/cards/gift-lists';
-import { GetGiftListsSerachParams } from '../../page';
+import type { GetGiftListsSerachParams } from '../../page';
 
 type DefaultGiftListsProps = {
   searchParams: GetGiftListsSerachParams;

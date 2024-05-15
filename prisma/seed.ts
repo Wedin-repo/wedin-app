@@ -46,24 +46,26 @@ async function main() {
   );
 
   // Seed gifts and assign to gift lists
+  // biome-ignore lint/style/useConst: <explanation>
   let gifts = [];
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < 200; i++) {
     const randomGiftList = faker.helpers.arrayElement(giftLists);
-    const gift = await prismaClient.gift.create({
+    const defaultGift = await prismaClient.gift.create({
       data: {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription().substring(0, 60),
-        isDefault: faker.datatype.boolean(),
+        isDefault: true,
         price: faker.number.int({ min: 89000, max: 1820000 }).toString(),
         giftListId: randomGiftList.id,
         categoryId: randomGiftList.categoryId,
         imageUrl: faker.image.url(),
       },
     });
-    gifts.push(gift);
+    gifts.push(defaultGift);
   }
 
   // Update gift lists with calculated quantity and totalPrice
+  // biome-ignore lint/style/useConst: <explanation>
   for (let giftList of giftLists) {
     const giftsForList = gifts.filter(gift => gift.giftListId === giftList.id);
     const totalPrice = giftsForList.reduce(
