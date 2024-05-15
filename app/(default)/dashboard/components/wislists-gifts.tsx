@@ -17,7 +17,7 @@ async function WislistGifts({ searchParams }: WislistGiftsProps) {
   }
 
   const wishlistId = event.wishlistId;
-  const itemsPerPage = 8;
+  const itemsPerPage = 15;
   const { page = '1', name } = searchParams;
 
   // Get total wishlist gifts to determine if the wishlist is empty

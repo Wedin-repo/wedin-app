@@ -12,7 +12,6 @@ export default async function OnboardingPage() {
         <CiImageOn fontSize={'54px'} color="#A1A1AA" />
       </div>
       <div className="flex justify-center items-center">
-        {/* This width w \as added because for some reason the step two form did not grow*/}
         <div className="flex flex-col gap-8 items-center">
           <Logo />
           <OnboardingForm currentUser={currentUser} />
