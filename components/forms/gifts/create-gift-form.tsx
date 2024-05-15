@@ -152,6 +152,7 @@ function CreateGiftForm({
       onSubmit={onSubmit}
       setPreviewUrl={setPreviewUrl}
       setSelectedFile={setSelectedFile}
+      buttonLabel="Guardar y agregar regalo"
     />
   );
 }

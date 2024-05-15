@@ -38,6 +38,7 @@ type GiftFormProps = {
   onSubmit: (values: z.infer<typeof GiftFormPostSchema>) => void;
   setPreviewUrl: (url: string | null) => void;
   setSelectedFile: (file: File | null) => void;
+  buttonLabel?: string;
 };
 
 const GiftForm = ({
@@ -49,6 +50,7 @@ const GiftForm = ({
   onSubmit,
   setPreviewUrl,
   setSelectedFile,
+  buttonLabel,
 }: GiftFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -234,7 +236,7 @@ const GiftForm = ({
                 variant="editGiftButton"
                 disabled={isLoading}
               >
-                {gift ? 'Editar regalo' : 'Guardar y agregar a la lista'}
+                {buttonLabel ?? 'Guardar'}
                 {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (

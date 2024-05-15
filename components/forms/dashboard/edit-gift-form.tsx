@@ -201,6 +201,7 @@ function EditGiftForm({
       onSubmit={onSubmit}
       setPreviewUrl={setPreviewUrl}
       setSelectedFile={setSelectedFile}
+      buttonLabel="Guardar"
     />
   );
 }
