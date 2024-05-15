@@ -32,9 +32,7 @@ type StepOneProps = {
 };
 
 const StepOne = ({ onNextStep }: StepOneProps) => {
-  const [isDecidingWeddingDate, setIsDecidingWeddingDate] = useState<
-    boolean | string
-  >(false);
+  const [isDeciding, setIsDeciding] = useState<boolean | string>(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<z.infer<typeof StepOneSchema>>({
@@ -74,7 +72,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
   };
 
   const handleIsDecidingChange = (value: boolean | string) => {
-    setIsDecidingWeddingDate(value);
+    setIsDeciding(value);
     if (value) {
       form.setValue('eventDate', undefined);
     }
@@ -223,7 +221,7 @@ const StepOne = ({ onNextStep }: StepOneProps) => {
             </div>
 
             <div className="flex gap-6 items-center w-full">
-              {!isDecidingWeddingDate ? (
+              {!isDeciding ? (
                 <FormField
                   control={form.control}
                   name="eventDate"

@@ -34,8 +34,7 @@ import { countries } from '../countries';
 
 const StepTwo = () => {
   const router = useRouter();
-  const [isDecidingWeddingCountryCity, setIsDecidingWeddingCountryCity] =
-    React.useState<boolean | string>(false);
+  const [isDeciding, setIsDeciding] = React.useState<boolean | string>(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const { data: session, update } = useSession();
 
@@ -78,7 +77,7 @@ const StepTwo = () => {
   };
 
   const handleIsDecidingCountryCity = (value: boolean | string) => {
-    setIsDecidingWeddingCountryCity(value);
+    setIsDeciding(value);
     if (value) {
       form.setValue('eventCountry', '');
       form.setValue('eventCity', '');
@@ -102,7 +101,7 @@ const StepTwo = () => {
               <FormItem className="w-full">
                 <FormLabel>País</FormLabel>
                 <Select
-                  disabled={!!isDecidingWeddingCountryCity}
+                  disabled={!!isDeciding}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
@@ -138,7 +137,7 @@ const StepTwo = () => {
                 <FormControl>
                   <Input
                     placeholder="San Bernardino"
-                    disabled={!!isDecidingWeddingCountryCity}
+                    disabled={!!isDeciding}
                     className="!mt-1.5"
                     {...field}
                   />

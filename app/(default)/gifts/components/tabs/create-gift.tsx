@@ -5,8 +5,8 @@ import { getEvent } from '@/actions/data/event';
 import CreateGiftForm from '@/components/forms/gifts/create-gift-form';
 
 async function CreateGift() {
-  const wedding = await getEvent();
-  const wishListId = wedding?.wishListId;
+  const event = await getEvent();
+  const wishListId = event?.wishlistId;
   if (!wishListId) return null;
 
   const categories = await getCategories();

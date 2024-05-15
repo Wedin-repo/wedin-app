@@ -8,12 +8,12 @@ import { LuScreenShare } from 'react-icons/lu';
 import { PiWallet } from 'react-icons/pi';
 
 export default async function DashboardHeader() {
-  const wedding = await getEvent();
-  const wishListId = wedding?.wishListId;
-  if (!wishListId) return null;
+  const event = await getEvent();
+  const wishlistId = event?.wishlistId;
+  if (!wishlistId) return null;
 
   const wishlistGifts = await getGifts({
-    searchParams: { wishListId: wishListId },
+    searchParams: { wishlistId },
   });
 
   const totalPrice =

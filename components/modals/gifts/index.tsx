@@ -16,12 +16,12 @@ async function GiftsModals({ searchParams }: GiftsModalProps) {
   if (gifts?.length === 0 || !gifts)
     return <EmptyState title="No se encontraron regalos" />;
 
-  const wedding = await getEvent();
+  const event = await getEvent();
 
   return (
     <CardContainer>
       {gifts.map(gift => (
-        <GiftModal key={gift.id} gift={gift} wishlistId={wedding?.wishListId}>
+        <GiftModal key={gift.id} gift={gift} wishlistId={event?.wishlistId}>
           <GiftCard gift={gift} />
         </GiftModal>
       ))}
