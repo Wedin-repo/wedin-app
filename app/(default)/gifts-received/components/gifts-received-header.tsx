@@ -1,5 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import { formatPrice } from '@/lib/utils';
 import { PiWallet } from 'react-icons/pi';
@@ -7,15 +7,12 @@ import { IoGiftOutline } from 'react-icons/io5';
 import { Button } from '@/components/ui/button';
 
 export default async function GiftsReceivedHeader() {
-  const currentUser = await getCurrentUser();
-  const wedding = await getWedding(currentUser?.id);
-  const wishListId = wedding?.wishListId;
+  const wedding = await getEvent();
+  const wishlistId = wedding?.wishlistId;
 
-  if (!wishListId) return null;
+  if (!wishlistId) return null;
 
-  const wishlistGifts = await getGifts({
-    searchParams: { wishListId: wishListId },
-  });
+  const wishlistGifts = await getGifts({ searchParams: { wishlistId } });
 
   const totalPrice =
     wishlistGifts?.reduce((acc, gift) => acc + parseFloat(gift.price), 0) || 0;
