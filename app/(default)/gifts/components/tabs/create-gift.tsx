@@ -1,12 +1,12 @@
 'use server';
 
 import { getCategories } from '@/actions/data/category';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import CreateGiftForm from '@/components/forms/gifts/create-gift-form';
 
 async function CreateGift() {
-  const wedding = await getWedding();
-  const wishListId = wedding?.wishListId;
+  const event = await getEvent();
+  const wishListId = event?.wishlistId;
   if (!wishListId) return null;
 
   const categories = await getCategories();
@@ -14,7 +14,11 @@ async function CreateGift() {
 
   return (
     <div className="flex justify-center items-center w-full min-h-[60vh]">
-      <CreateGiftForm wishlistId={wishListId} categories={categories} />
+      <CreateGiftForm
+        eventId={event.id}
+        wishlistId={wishListId}
+        categories={categories}
+      />
     </div>
   );
 }

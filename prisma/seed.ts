@@ -35,8 +35,6 @@ async function main() {
       return prismaClient.giftList.create({
         data: {
           name: `${category.name} Package`,
-          description: faker.lorem.sentences(2),
-          isDefault: faker.datatype.boolean(),
           quantity: '0', // Initial placeholder
           totalPrice: '0', // Initial placeholder
           categoryId: category.id,
@@ -53,7 +51,6 @@ async function main() {
     const defaultGift = await prismaClient.gift.create({
       data: {
         name: faker.commerce.productName(),
-        description: faker.commerce.productDescription().substring(0, 60),
         isDefault: true,
         price: faker.number.int({ min: 89000, max: 1820000 }).toString(),
         giftListId: randomGiftList.id,

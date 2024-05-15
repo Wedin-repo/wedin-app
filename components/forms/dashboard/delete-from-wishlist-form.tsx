@@ -1,10 +1,10 @@
 'use client';
 
-import { deleteGiftFromWishList } from '@/actions/data/wishlist';
+import { deleteGiftFromWishList } from '@/actions/data/wishlist-gifts';
 import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { GiftWishListSchema } from '@/schemas/forms';
+import { WishListGiftPostSchema } from '@/schemas/forms';
 import { useRouter } from 'next/navigation';
 
 type RemoveFromWishListFormProps = {
@@ -27,9 +27,9 @@ function RemoveFromWishListForm({
       return;
     }
 
-    const validatedFields = GiftWishListSchema.safeParse({
-      giftId: giftId,
-      wishlistId: wishlistId,
+    const validatedFields = WishListGiftPostSchema.safeParse({
+      giftId,
+      wishlistId,
     });
 
     if (!validatedFields.success) {
@@ -49,11 +49,14 @@ function RemoveFromWishListForm({
         title: 'Error',
         description: response.error,
         variant: 'destructive',
+        className: 'bg-white',
       });
+
+      return;
     }
 
     toast({
-      title: 'Exito! 🎁🗑',
+      title: 'Éxito! 🎁🗑',
       description: 'Regalo eliminado de tu lista',
       action: (
         <AddToWishListForm

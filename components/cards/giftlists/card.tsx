@@ -8,7 +8,6 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { formatPrice } from '@/lib/utils';
-import ringsLoader from '@/public/images/rings.svg';
 import type { GiftList } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -19,8 +18,8 @@ type GiftListCardProps = {
 };
 
 async function GiftListCard({ giftList }: GiftListCardProps) {
-  const { name, description, totalPrice, quantity, id } = giftList;
-  const gifts = await getGifts({ searchParams: { giftListId: giftList.id } });
+  const { name, totalPrice, quantity, id } = giftList;
+  const gifts = await getGifts({ searchParams: { giftlistId: id } });
   const formattedPrice = formatPrice(Number(totalPrice));
 
   if (!gifts || gifts.length === 0) return null;
@@ -29,12 +28,12 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
     <Card>
       <CardHeader className="relative p-0">
         <Carousel>
-          <Link href={`/giftLists/${id}`}>
+          <Link href={`/giftlists/${id}`}>
             <CarouselContent>
               {gifts?.map(gift => (
                 <CarouselItem key={gift.id}>
                   <Image
-                    src={gift.imageUrl || ringsLoader}
+                    src={gift.imageUrl || '../../../public/images/rings.svg'}
                     width={500}
                     height={0}
                     alt={gift.name}
@@ -55,9 +54,6 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
       <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
         <CardContent className="p-4">
           <p className="text-base text-secondaryTextColor">{name}</p>
-          <p className="hidden text-sm text-secondaryTextColor">
-            {description}
-          </p>
           <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
             <p className="text-lg">{formattedPrice}</p>
             <FaChevronRight fontSize="22" className="block pb-1 sm:hidden" />

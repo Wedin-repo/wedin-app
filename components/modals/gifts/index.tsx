@@ -1,5 +1,5 @@
 import { getGifts } from '@/actions/data/gift';
-import { getWedding } from '@/actions/data/wedding';
+import { getEvent } from '@/actions/data/event';
 import type { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
 import GiftCard from '@/components/cards/gifts/card';
@@ -16,12 +16,12 @@ async function GiftsModals({ searchParams }: GiftsModalProps) {
   if (gifts?.length === 0 || !gifts)
     return <EmptyState title="No se encontraron regalos" />;
 
-  const wedding = await getWedding();
+  const event = await getEvent();
 
   return (
     <CardContainer>
       {gifts.map(gift => (
-        <GiftModal key={gift.id} gift={gift} wishlistId={wedding?.wishListId}>
+        <GiftModal key={gift.id} gift={gift} wishlistId={event?.wishlistId}>
           <GiftCard gift={gift} />
         </GiftModal>
       ))}

@@ -1,4 +1,5 @@
 import { getCategories, getCategory } from '@/actions/data/category';
+import { getGift } from '@/actions/data/gift';
 import RemoveFromWishListForm from '@/components/forms/dashboard/delete-from-wishlist-form';
 import EditGiftModal from '@/components/modals/dashboard/edit-gift-modal';
 import {
@@ -9,23 +10,28 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { Gift } from '@prisma/client';
+import type { WishListGift } from '@prisma/client';
 import Image from 'next/image';
 
 type DashboardGiftCardProps = {
-  gift: Gift;
-  wishListId?: string | null;
+  wishlistId: string;
+  wishlistGift: WishListGift;
+  eventId: string;
 };
 
 const DashboardGiftCard = async ({
-  gift,
-  wishListId,
+  wishlistGift,
+  eventId,
+  wishlistId,
 }: DashboardGiftCardProps) => {
-  const { id, name, price, imageUrl, categoryId, isFavoriteGift, isGroupGift } =
-    gift;
-
   const categories = await getCategories();
   if (!categories) return null;
+
+  const gift = await getGift(wishlistGift.giftId);
+  if (!gift) return null;
+
+  const { id, name, price, imageUrl, categoryId } = gift;
+  const { isFavoriteGift, isGroupGift } = wishlistGift;
 
   const formattedPrice = formatPrice(Number(price));
   const category = await getCategory({ searchParams: { categoryId } });
@@ -36,7 +42,7 @@ const DashboardGiftCard = async ({
         <Image
           src={imageUrl || ringsLoader}
           height={118}
-          width={500}
+          width={118}
           alt={name}
           className="object-cover rounded-lg shadow"
         />
@@ -64,11 +70,13 @@ const DashboardGiftCard = async ({
 
       <CardFooter variant="dashboard">
         <EditGiftModal
-          gift={gift}
           categories={categories}
-          wishListId={wishListId}
+          eventId={eventId}
+          gift={gift}
+          wishlistGift={wishlistGift}
+          wishlistId={wishlistId}
         />
-        <RemoveFromWishListForm giftId={id} wishlistId={wishListId} />
+        <RemoveFromWishListForm giftId={id} wishlistId={wishlistId} />
       </CardFooter>
     </Card>
   );

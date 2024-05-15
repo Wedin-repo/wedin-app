@@ -1,12 +1,13 @@
 'use client';
 
-import { createWishListGift } from '@/actions/data/wishlist';
+import { createGift } from '@/actions/data/gift';
+import { addGiftToWishList } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftParamSchema, GiftSchema } from '@/schemas/forms';
+import { GiftFormPostSchema, GiftPostSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category } from '@prisma/client';
 import { useRouter } from 'next/navigation';
@@ -16,33 +17,49 @@ import { IoGiftOutline } from 'react-icons/io5';
 import type { z } from 'zod';
 
 type CreateGiftFormProps = {
+  eventId: string;
   wishlistId: string;
   categories: Category[];
 };
 
-function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
+function CreateGiftForm({
+  eventId,
+  categories,
+  wishlistId,
+}: CreateGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(ringSvg);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const router = useRouter();
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(GiftSchema),
+    resolver: zodResolver(GiftFormPostSchema),
     defaultValues: {
       name: '',
       categoryId: '',
       price: '',
+      isDefault: false,
+      isEditedVersion: false,
+      sourceGiftId: '',
+      eventId: eventId,
+
+      // Event though it si the url string in our DB
+      // here is the actual image file object we dont
+      // upload the image to mongoDB, we upload it to AWS
+      // and save the url in our DB
+      imageUrl: ringSvg,
+
+      // Wishlist Gift params
+      wishlistId: wishlistId,
       isFavoriteGift: false,
       isGroupGift: false,
-      wishListId: wishlistId,
-      imageUrl: ringSvg,
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
-    const validatedFields = GiftSchema.safeParse(values);
+    const validatedFields = GiftPostSchema.safeParse(values);
 
     if (!validatedFields.success) {
       toast({
@@ -55,16 +72,12 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
       return;
     }
 
-    const validatedParams = GiftParamSchema.safeParse(validatedFields.data);
+    const giftResponse = await createGift(validatedFields.data);
 
-    if (!validatedParams.success) return null;
-
-    const wishlistGiftResponse = await createWishListGift(validatedParams.data);
-
-    if (wishlistGiftResponse.error || !wishlistGiftResponse.giftId) {
+    if (giftResponse.error || !giftResponse.giftId) {
       toast({
         title: 'Error al crear el regalo',
-        description: wishlistGiftResponse.error,
+        description: giftResponse.error,
         variant: 'destructive',
       });
 
@@ -75,7 +88,7 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
     if (selectedFile) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: wishlistGiftResponse.giftId,
+        giftId: giftResponse.giftId,
       });
 
       if (uploadResponse?.error) {
@@ -86,8 +99,25 @@ function CreateGiftForm({ categories, wishlistId }: CreateGiftFormProps) {
         });
 
         setIsLoading(false);
-        return;
       }
+    }
+
+    const wishlistGiftResponse = await addGiftToWishList({
+      giftId: giftResponse.giftId,
+      wishlistId: validatedFields.data.wishlistId,
+      isFavoriteGift: validatedFields.data.isFavoriteGift,
+      isGroupGift: validatedFields.data.isGroupGift,
+    });
+
+    if (wishlistGiftResponse?.error) {
+      toast({
+        title: 'Error',
+        description: wishlistGiftResponse.error,
+        variant: 'destructive',
+      });
+
+      setIsLoading(false);
+      return;
     }
 
     toast({

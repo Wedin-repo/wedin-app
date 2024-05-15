@@ -8,7 +8,7 @@ const cardVariants = cva('', {
       default:
         'flex flex-col gap-0 p-0 rounded-lg shadow-xl transition duration-200 ease-in-out transform cursor-pointer hover:scale-105',
       dashboard:
-        'border-b-primaryBackgroundColor border-b pb-3 w-full flex items-normal sm:items-center justify-between gap-4',
+        'border-b-primaryBackgroundColor border-b py-3 w-full flex items-normal sm:items-center justify-between gap-4',
       emailVerification: 'grid grid-rows-2 gap-4',
     },
     size: {
