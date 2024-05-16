@@ -1,6 +1,6 @@
 'use client';
 
-import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
+import CreateWishlistGiftForm from '@/components/forms/shared/create-wishlist-gift-form';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
@@ -58,7 +58,7 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
                 {formattedPrice}
               </span>
             </div>
-            <AddToWishListForm
+            <CreateWishlistGiftForm
               giftId={id}
               wishlistId={wishlistId}
               setIsOpen={setIsOpen}

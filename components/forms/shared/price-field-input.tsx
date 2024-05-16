@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/utils';
-import type { GiftFormSchema } from '@/schemas/forms';
+import type { GiftFormSchema } from '@/schemas/form';
 import { useEffect, useState } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 import type { z } from 'zod';

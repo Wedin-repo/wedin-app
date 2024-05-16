@@ -1,7 +1,7 @@
 'use client';
 
 import Logo from '@/components/Logo';
-import UserMenu from '@/components/navbar/UserMenu';
+import UserMenu from '@/components/navbar/user-menu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { User } from '@prisma/client';
 import type { Session } from 'next-auth';

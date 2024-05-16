@@ -5,7 +5,7 @@ import {
   GiftCreateSchema,
   GiftEditSchema,
   type GiftPostSchema,
-} from '@/schemas/forms';
+} from '@/schemas/form';
 import { GetGiftsParams } from '@/schemas/forms/params';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';

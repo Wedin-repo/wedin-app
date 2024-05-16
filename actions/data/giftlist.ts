@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/client';
-import type { GetGiftListsSearchParams } from '@/schemas/forms/params';
+import type { GetGiftListsSearchParams } from '@/schemas/params';
 import type { Prisma } from '@prisma/client';
 import type { z } from 'zod';
 

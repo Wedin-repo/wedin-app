@@ -2,7 +2,7 @@
 
 import { signIn } from '@/auth';
 import { generateVerificationToken } from '@/lib/tokens';
-import { LoginSchema } from '@/schemas/forms/auth';
+import { LoginSchema } from '@/schemas/auth';
 import { AuthError } from 'next-auth';
 import type * as z from 'zod';
 import { getLoginUserByEmail } from '../data/user';

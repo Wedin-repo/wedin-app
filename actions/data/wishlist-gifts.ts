@@ -6,8 +6,8 @@ import {
   WishListGiftEditSchema,
   WishListGiftsCreateSchema,
   WishlistGiftCreateSchema,
-} from '@/schemas/forms';
-import { GetWishListGiftsParams } from '@/schemas/forms/params';
+} from '@/schemas/form';
+import { GetWishListGiftsParams } from '@/schemas/params';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type * as z from 'zod';

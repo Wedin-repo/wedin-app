@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth';
 import prisma from '@/db/client';
-import { StepOneSchema } from '@/schemas/forms/auth';
+import { StepOneSchema } from '@/schemas/auth';
 import type { User, WishList } from '@prisma/client';
 import type * as z from 'zod';
 

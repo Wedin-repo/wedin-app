@@ -1,6 +1,6 @@
 'use client';
 
-import MenuItem from '@/components/navbar/MenuItem';
+import MenuItem from '@/components/navbar/menu-item';
 import { Button } from '@/components/ui/button';
 import useOutsideClick from '@/hooks/useOutsideClick';
 import type { User } from '@prisma/client';

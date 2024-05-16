@@ -1,16 +1,16 @@
+import type { GiftPageSearchParams } from '../../page';
 import { getEvent } from '@/actions/data/event';
 import { getGifts } from '@/actions/data/gift';
-import type { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
-import GiftModal from './modal';
+import GiftModal from '@/components/modals/gift';
 
-type GiftsModalProps = {
+type DefaultGiftsProps = {
   searchParams: GiftPageSearchParams;
 };
 
-async function GiftsModals({ searchParams }: GiftsModalProps) {
+async function DefaultGifts({ searchParams }: DefaultGiftsProps) {
   const gifts = await getGifts({ searchParams });
 
   if (gifts?.length === 0 || !gifts)
@@ -28,5 +28,4 @@ async function GiftsModals({ searchParams }: GiftsModalProps) {
     </CardContainer>
   );
 }
-
-export default GiftsModals;
+export default DefaultGifts;
