@@ -1,8 +1,8 @@
 import { getEvent } from '@/actions/data/event';
 import { getWishListGifts } from '@/actions/data/wishlist-gifts';
-import EmptyState from '@/components/EmptyState';
-import Pagination from '@/components/Pagination';
 import DashboardGiftCard from '@/components/cards/wishlist-gifts';
+import EmptyState from '@/components/empty-state';
+import Pagination from '@/components/pagination';
 import type { DashboardPageSearchParams } from '../page';
 
 type WislistGiftsProps = {

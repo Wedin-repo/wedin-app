@@ -1,7 +1,7 @@
 import { getCurrentUser } from '@/actions/getCurrentUser';
 import DefaultLayoutContainer from '@/components/default-layout-container';
-import Footer from '@/components/Footer';
-import NavBar from '@/components/navbar/Navbar';
+import Footer from '@/components/footer';
+import NavBar from '@/components/navbar/navbar';
 
 export default async function DefaultLayout({
   children,

@@ -1,5 +1,5 @@
 import { getCategories } from '@/actions/data/category';
-import Loader from '@/components/Loader';
+import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';

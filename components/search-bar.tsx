@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { useDebounceCallback } from 'usehooks-ts';
 

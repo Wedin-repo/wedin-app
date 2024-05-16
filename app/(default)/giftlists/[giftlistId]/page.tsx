@@ -1,9 +1,9 @@
 import { getEvent } from '@/actions/data/event';
 import { getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
-import EmptyState from '@/components/EmptyState';
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
+import EmptyState from '@/components/empty-state';
 import CreateWishlistGiftsForm from '@/components/forms/giftlists/create-wishlist-gifts-form';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';

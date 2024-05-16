@@ -1,8 +1,8 @@
 import { getGiftLists } from '@/actions/data/giftlist';
 import type { GiftPageSearchParams } from '@/app/(default)/gifts/page';
-import EmptyState from '@/components/EmptyState';
 import GiftListCard from '@/components/cards/giftlists';
 import CardContainer from '@/components/cards/shared/card-container';
+import EmptyState from '@/components/empty-state';
 
 type DefaultGiftListsProps = {
   searchParams: GiftPageSearchParams;

@@ -9,7 +9,7 @@ import { useCallback, useRef, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
 import { MdLogout } from 'react-icons/md';
-import Avatar from './Avatar';
+import Avatar from './avatar';
 
 type UserMenuProps = {
   currentUser?: User | null;
