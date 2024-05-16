@@ -4,8 +4,8 @@ import prisma from '@/db/client';
 import {
   WishListGiftDeleteSchema,
   WishListGiftEditSchema,
-  WishListGiftPostSchema,
-  WishListGiftsPostSchema,
+  WishListGiftsCreateSchema,
+  WishlistGiftCreateSchema,
 } from '@/schemas/forms';
 import { GetWishListGiftsParams } from '@/schemas/forms/params';
 import type { Prisma } from '@prisma/client';
@@ -13,13 +13,10 @@ import { revalidatePath } from 'next/cache';
 import type * as z from 'zod';
 import { getErrorMessage } from '../helper';
 
-// take into account that when we add a defualt gift to our wishlist
-// when showing all gifts
-// if the gift that we are about to show is a default one and was added to the wishlist as it is (no edit) => we show
-export const addGiftToWishList = async (
-  formData: z.infer<typeof WishListGiftPostSchema>
-) => {
-  const validatedFields = WishListGiftPostSchema.safeParse(formData);
+export async function createWishlistGift(
+  formData: z.infer<typeof WishlistGiftCreateSchema>
+) {
+  const validatedFields = WishlistGiftCreateSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Invalid Data' };
@@ -41,12 +38,12 @@ export const addGiftToWishList = async (
   } catch (error: unknown) {
     return { error: getErrorMessage(error) };
   }
-};
+}
 
-export const addGiftsToWishList = async (
-  formData: z.infer<typeof WishListGiftsPostSchema>
-) => {
-  const validatedFields = WishListGiftsPostSchema.safeParse(formData);
+export async function addGiftsToWishList(
+  formData: z.infer<typeof WishListGiftsCreateSchema>
+) {
+  const validatedFields = WishListGiftsCreateSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -70,11 +67,11 @@ export const addGiftsToWishList = async (
       error: getErrorMessage(error),
     };
   }
-};
+}
 
-export const deleteGiftFromWishList = async (
+export async function deleteGiftFromWishList(
   formData: z.infer<typeof WishListGiftDeleteSchema>
-) => {
+) {
   const validatedFields = WishListGiftDeleteSchema.safeParse(formData);
 
   if (!validatedFields.success) {
@@ -95,11 +92,11 @@ export const deleteGiftFromWishList = async (
   }
 
   revalidatePath('/dashboard');
-};
+}
 
-export const getWishListGifts = async (
+export async function getWishListGifts(
   searchParams: z.infer<typeof GetWishListGiftsParams>
-) => {
+) {
   const validatedFields = GetWishListGiftsParams.safeParse(searchParams);
 
   if (!validatedFields.success) {
@@ -141,29 +138,29 @@ export const getWishListGifts = async (
     console.error('Error retrieving wishlist gifts:', error);
     return [];
   }
-};
+}
 
-export const editWishlistGift = async (
+export async function updateWishlistGift(
   formValues: z.infer<typeof WishListGiftEditSchema>
-) => {
+) {
   const validatedFields = WishListGiftEditSchema.safeParse(formValues);
 
   if (!validatedFields.success) {
     return { error: 'Datos inválidos, por favor verifica tus datos.' };
   }
 
-  const { isFavoriteGift, isGroupGift, id } = validatedFields.data;
+  const { isFavoriteGift, isGroupGift, wishlistGiftId } = validatedFields.data;
 
   try {
     await prisma.wishListGift.update({
-      where: { id },
+      where: { id: wishlistGiftId },
       data: {
         isFavoriteGift,
         isGroupGift,
       },
     });
-    revalidatePath('/dashboard', 'page');
+    revalidatePath('/dashboard');
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
-};
+}

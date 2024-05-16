@@ -1,14 +1,14 @@
 import { createGift, editGift } from '@/actions/data/gift';
 import {
-  addGiftToWishList,
+  createWishlistGift,
   deleteGiftFromWishList,
-  editWishlistGift,
+  updateWishlistGift,
 } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftFormPostSchema, GiftPostSchema } from '@/schemas/forms';
+import { GiftFormSchema, GiftPostSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift, WishListGift } from '@prisma/client';
 import { useState } from 'react';
@@ -37,7 +37,7 @@ function EditGiftForm({
   const { gift } = wishlistGift;
 
   const form = useForm({
-    resolver: zodResolver(GiftFormPostSchema),
+    resolver: zodResolver(GiftFormSchema),
     defaultValues: {
       name: gift.name,
       categoryId: gift.categoryId,
@@ -57,7 +57,7 @@ function EditGiftForm({
 
   const { formState } = form;
 
-  const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftFormSchema>) => {
     setIsLoading(true);
 
     if (!Object.keys(formState.dirtyFields).length) {
@@ -118,7 +118,7 @@ function EditGiftForm({
         giftId: gift.id,
       });
 
-      await addGiftToWishList({
+      await createWishlistGift({
         ...validatedParams.data,
         giftId: giftResponse.giftId,
       });
@@ -159,9 +159,9 @@ function EditGiftForm({
       formState.dirtyFields.isGroupGift ||
       formState.dirtyFields.isFavoriteGift
     ) {
-      const wishlistGiftResponse = await editWishlistGift({
+      const wishlistGiftResponse = await updateWishlistGift({
         ...validatedParams.data,
-        id: wishlistGift.id,
+        wishlistGiftId: wishlistGift.id,
       });
 
       if (wishlistGiftResponse?.error) {

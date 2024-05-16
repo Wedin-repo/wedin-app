@@ -15,6 +15,7 @@ type GiftModalProps = {
   children: React.ReactNode;
 };
 
+// TODO add use state for the toggle buttons
 function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
   const { name, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));

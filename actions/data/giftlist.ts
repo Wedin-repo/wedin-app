@@ -1,6 +1,9 @@
 'use server';
 
 import prisma from '@/db/client';
+import type { GetGiftListsSearchParams } from '@/schemas/forms/params';
+import type { Prisma } from '@prisma/client';
+import type { z } from 'zod';
 
 export async function getGiftList(giftListId: string) {
   try {
@@ -13,24 +16,19 @@ export async function getGiftList(giftListId: string) {
     if (!giftList) return null;
 
     return giftList;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error retrieving gifts:', error);
     throw error;
   }
 }
 
-export type GetGiftListsParams = {
-  name?: string;
-  category?: string;
-};
-
 export async function getGiftLists({
   searchParams,
 }: {
-  searchParams?: GetGiftListsParams;
+  searchParams?: z.infer<typeof GetGiftListsSearchParams>;
 }) {
   try {
-    let query: any = {};
+    const query: Prisma.GiftListWhereInput = {};
 
     if (!searchParams) {
       const giftLists = await prisma.giftList.findMany({
@@ -62,7 +60,7 @@ export async function getGiftLists({
     if (!giftLists) return null;
 
     return giftLists;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error retrieving gift lists:', error);
     throw error;
   }

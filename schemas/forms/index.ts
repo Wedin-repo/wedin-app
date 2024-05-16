@@ -1,6 +1,6 @@
 import { type ZodType, z } from 'zod';
 
-export const GiftFormPostSchema = z.object({
+export const GiftFormSchema = z.object({
   name: z
     .string()
     .min(1, { message: 'El nombre del regalo no puede estar vacío' })
@@ -24,22 +24,38 @@ export const GiftFormPostSchema = z.object({
   isGroupGift: z.boolean().default(false), // WishListGiftPostSchema
 });
 
-export const GiftPostSchema = GiftFormPostSchema.omit({ imageUrl: true });
+// We want to ignore the imageUrl field when creating/editing a gift
+export const GiftPostSchema = GiftFormSchema.omit({ imageUrl: true });
 
-export const WishListGiftPostSchema = z.object({
+export const GiftEditSchema = GiftPostSchema.pick({
+  name: true,
+  categoryId: true,
+  price: true,
+});
+
+export const GiftCreateSchema = GiftPostSchema.pick({
+  name: true,
+  categoryId: true,
+  price: true,
+  isDefault: true,
+  isEditedVersion: true,
+  eventId: true,
+});
+
+export const WishlistGiftCreateSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
   isFavoriteGift: z.boolean().default(false),
   isGroupGift: z.boolean().default(false),
 });
 
-export const WishListGiftsPostSchema = z.object({
+export const WishListGiftsCreateSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftIds: z.array(z.string().min(1, { message: 'No se encontro un gift ID' })),
 });
 
 export const WishListGiftEditSchema = z.object({
-  id: z.string().min(1, { message: 'No se encontro un ID' }),
+  wishlistGiftId: z.string().min(1, { message: 'No se encontro un ID' }),
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   isFavoriteGift: z.boolean().default(false),
   isGroupGift: z.boolean().default(false),

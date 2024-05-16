@@ -1,6 +1,4 @@
 import { getCategories } from '@/actions/data/category';
-import type { GetGiftsParams } from '@/actions/data/gift';
-import type { GetGiftListsParams } from '@/actions/data/giftlist';
 import Loader from '@/components/Loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -21,15 +19,12 @@ const TABS = {
 
 const DEFAULT_TAB = TABS.predefinedGifts;
 
-export type GetGiftListsSerachParams = GetGiftListsParams;
-export type GetGiftsSearchParams = Pick<
-  GetGiftsParams,
-  'category' | 'page' | 'name'
->;
 export type GiftPageSearchParams = {
   tab?: string;
-} & GetGiftsSearchParams &
-  GetGiftListsSerachParams;
+  category?: string; // -> Gift and Giftlist params
+  name?: string; // -> Gift and Giftlist params
+  page?: string; // -> Gift
+};
 
 type GiftsPageProps = {
   searchParams: GiftPageSearchParams;

@@ -1,14 +1,13 @@
-import type { GetGiftsParams } from '@/actions/data/gift';
 import GiftsReceivedHeader from './components/gifts-received-header';
 import { Suspense } from 'react';
 import Loader from '@/components/Loader';
 //import SearchBar from '@/components/search-bar';
 import GiftsReceived from '@/components/cards/gifts-received';
 
-export type GiftsReceivedPageSearchParams = Pick<
-  GetGiftsParams,
-  'name' | 'page'
->;
+export type GiftsReceivedPageSearchParams = {
+  name?: string;
+  page?: string;
+};
 
 type GiftsReceivedPageProps = {
   searchParams: GiftsReceivedPageSearchParams;

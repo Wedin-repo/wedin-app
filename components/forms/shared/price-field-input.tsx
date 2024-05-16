@@ -6,13 +6,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/utils';
-import type { GiftFormPostSchema } from '@/schemas/forms';
+import type { GiftFormSchema } from '@/schemas/forms';
 import { useEffect, useState } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 import type { z } from 'zod';
 
 type PriceFieldProps = {
-  field: ControllerRenderProps<z.infer<typeof GiftFormPostSchema>, 'price'>;
+  field: ControllerRenderProps<z.infer<typeof GiftFormSchema>, 'price'>;
 };
 
 const PriceField = ({ field }: PriceFieldProps) => {

@@ -1,7 +1,7 @@
-import { addGiftToWishList } from '@/actions/data/wishlist-gifts';
+import { createWishlistGift } from '@/actions/data/wishlist-gifts';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { WishListGiftPostSchema } from '@/schemas/forms';
+import { WishlistGiftCreateSchema } from '@/schemas/forms';
 import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishListFormButton from './wishlist-form-button';
@@ -13,6 +13,7 @@ type AddToWishListFormProps = {
   setIsOpen?: (value: boolean) => void;
 };
 
+// TODO: add ability to add isGroupGift and isFavoriteGift to the form
 function AddToWishListForm({
   giftId,
   wishlistId,
@@ -23,7 +24,7 @@ function AddToWishListForm({
   const { toast } = useToast();
 
   const handleAddGiftToWishList = async () => {
-    const validatedFields = WishListGiftPostSchema.safeParse({
+    const validatedFields = WishlistGiftCreateSchema.safeParse({
       wishlistId,
       giftId,
     });
@@ -32,7 +33,7 @@ function AddToWishListForm({
       return redirect('/register');
     }
 
-    const response = await addGiftToWishList(validatedFields.data);
+    const response = await createWishlistGift(validatedFields.data);
 
     if (response?.error) {
       toast({
