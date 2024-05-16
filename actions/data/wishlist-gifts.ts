@@ -132,7 +132,7 @@ export const getWishListGifts = async (
         gift: true,
       },
       orderBy: {
-        createdAt: 'desc',
+        updatedAt: 'desc',
       },
       skip,
       take,
@@ -162,7 +162,7 @@ export const editWishlistGift = async (
         isGroupGift,
       },
     });
-    revalidatePath('/dashboard');
+    revalidatePath('/dashboard', 'page');
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

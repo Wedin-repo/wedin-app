@@ -101,7 +101,7 @@ function EditGiftForm({
         isDefault: false,
       };
 
-      giftResponse = await createGift(newGiftParams, gift.imageUrl);
+      giftResponse = await createGift(newGiftParams);
 
       if (giftResponse?.error || !giftResponse.giftId) {
         toast({
@@ -141,7 +141,7 @@ function EditGiftForm({
     if (selectedFile && formState.dirtyFields.imageUrl) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: gift.isDefault ? giftResponse.giftId : gift.id,
+        giftId: giftResponse.giftId,
       });
 
       if (uploadResponse?.error) {

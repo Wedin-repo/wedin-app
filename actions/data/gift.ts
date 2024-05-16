@@ -124,10 +124,7 @@ export const editGift = async (
   }
 };
 
-export const createGift = async (
-  formData: z.infer<typeof GiftPostSchema>,
-  imageUrl: string | null = null
-) => {
+export const createGift = async (formData: z.infer<typeof GiftPostSchema>) => {
   const validatedFields = GiftPostSchema.safeParse(formData);
 
   if (!validatedFields.success) {
@@ -143,7 +140,6 @@ export const createGift = async (
         isDefault: validatedFields.data.isDefault,
         isEditedVersion: validatedFields.data.isEditedVersion,
         eventId: validatedFields.data.eventId,
-        imageUrl: imageUrl,
       },
     });
 
