@@ -33,7 +33,7 @@ export async function getGifts({
 }: {
   searchParams?: GetGiftsParams;
 } = {}) {
-  const query: Prisma.GiftWhereInput = {};
+  const query: Prisma.GiftWhereInput = { isDefault: true };
 
   if (!searchParams) {
     query.isDefault = true;
@@ -42,7 +42,7 @@ export async function getGifts({
 
     if (name) {
       query.name = {
-        contains: name,
+        contains: name.trim(),
         mode: 'insensitive',
       };
     }
@@ -55,13 +55,7 @@ export async function getGifts({
       query.giftlistId = giftlistId;
     }
 
-    const event = await getEvent();
-
-    if (event?.id) {
-      query.OR = [{ eventId: event.id }, { isDefault: true }];
-    } else {
-      query.isDefault = true;
-    }
+    query.isDefault = true;
 
     const skip =
       page && itemsPerPage ? (Number(page) - 1) * itemsPerPage : undefined;
@@ -77,42 +71,11 @@ export async function getGifts({
         take,
       });
 
-      // // Filter out default gifts if there is an edited version
-      // const editedGifts = gifts.filter(gift => gift.isEditedVersion);
-      //
-      // const editedSourceIds = new Set(
-      //   editedGifts.map(gift => gift.sourceGiftId)
-      // );
-      // gifts = gifts.filter(
-      //   gift => !gift.isDefault || !editedSourceIds.has(gift.id)
-      // );
-
       return gifts;
     } catch (error) {
       console.error('Error retrieving gifts:', error);
       return [];
     }
-  }
-
-  try {
-    let gifts = await prisma.gift.findMany({
-      where: query,
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-
-    // Filter out default gifts if there is an edited version
-    const editedGifts = gifts.filter(gift => gift.isEditedVersion);
-    const editedSourceIds = new Set(editedGifts.map(gift => gift.sourceGiftId));
-    gifts = gifts.filter(
-      gift => !gift.isDefault || !editedSourceIds.has(gift.id)
-    );
-
-    return gifts;
-  } catch (error) {
-    console.error('Error retrieving gifts:', error);
-    return [];
   }
 }
 
