@@ -20,7 +20,7 @@ export default async function GiftsReceived({
   }
 
   const wishlistId = event.wishlistId;
-  const itemsPerPage = 15;
+  const itemsPerPage = 16;
   const { page = '1', name } = searchParams;
 
   // Get total wishlist gifts to determine if the wishlist is empty
