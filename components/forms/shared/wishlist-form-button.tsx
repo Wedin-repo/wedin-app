@@ -63,7 +63,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
   if (variant === 'editGiftButton') {
     return (
       <Button type="submit" variant="editGiftButton" disabled={pending}>
-        Editar regalo
+        Guardar
         {pending ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (

@@ -57,101 +57,93 @@ model User {
   isMagicLinkLogin Boolean   @default(false)
   onboardingStep   Int       @default(1)
 
-  accounts        Account[]
-  sessions        Session[]
-  weddingsAsBride Wedding[] @relation("Bride")
-  weddingsAsGroom Wedding[] @relation("Groom")
+  accounts           Account[]
+  sessions           Session[]
+  eventPrimaryUser   Event[]   @relation("primaryUser")
+  eventSecondaryUser Event[]   @relation("secondaryUser")
 }
 
-model Wedding {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  name       String?
-  brideId    String    @db.ObjectId
-  groomId    String    @db.ObjectId
-  date       DateTime?
-  location   String?
-  url        String?   @unique
-  wishListId String?   @db.ObjectId
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  country    String?
-  city       String?
+model Event {
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  primaryUserId   String    @db.ObjectId
+  secondaryUserId String    @db.ObjectId
+  date            DateTime?
+  location        String?
+  url             String?   @unique
+  wishlistId      String    @db.ObjectId
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  country         String?
+  city            String?
 
-  wishList WishList? @relation(fields: [wishListId], references: [id])
-  bride    User?     @relation("Bride", fields: [brideId], references: [id])
-  groom    User?     @relation("Groom", fields: [groomId], references: [id])
+  wishList           WishList @relation(fields: [wishlistId], references: [id])
+  eventPrimaryUser   User?    @relation("primaryUser", fields: [primaryUserId], references: [id])
+  eventSecondaryUser User?    @relation("secondaryUser", fields: [secondaryUserId], references: [id])
+  Gift               Gift[]
 
-  @@unique([wishListId])
-  @@unique([groomId])
-  @@unique([brideId])
+  @@unique([wishlistId])
+  @@unique([secondaryUserId])
+  @@unique([primaryUserId])
 }
 
-// create a wedding and wishlist for the user after finishing onboarding
 model WishList {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  weddingId   String?  @db.ObjectId
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  giftIds     String[] @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  gifts   Gift[]   @relation(fields: [giftIds], references: [id])
-  wedding Wedding?
+  wishListGifts WishListGift[]
+  event         Event?
 }
 
 model Gift {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  description     String
-  giftListId      String?   @db.ObjectId
-  isDefault       Boolean  @default(false)
   categoryId      String   @db.ObjectId
-  weddingId       String?  @db.ObjectId
-  wishListIds     String[] @db.ObjectId
-  imageUrl        String?
-  //price can be = > <
   price           String
+  imageUrl        String?
+  isDefault       Boolean  @default(false)
+  isEditedVersion Boolean  @default(false)
+  eventId         String?  @db.ObjectId
+  giftlistId      String?  @db.ObjectId
+  sourceGiftId    String?  @db.ObjectId
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
-  isFavoriteGift  Boolean  @default(false)
-  isGroupGift     Boolean  @default(false)
-  isEditedVersion Boolean  @default(false)
-  sourceGiftId    String?  @db.ObjectId
 
-  wishLists WishList[] @relation(fields: [wishListIds], references: [id])
-  giftlist  GiftList?   @relation(fields: [giftListId], references: [id])
-  images    Image[]
+  wishListGifts WishListGift[]
+  giftlist      GiftList?      @relation(fields: [giftlistId], references: [id])
+  event         Event?         @relation(fields: [eventId], references: [id])
+}
+
+model WishListGift {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  wishListId     String   @db.ObjectId
+  giftId         String   @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  isFavoriteGift Boolean  @default(false)
+  isGroupGift    Boolean  @default(false)
+
+  wishList WishList @relation(fields: [wishListId], references: [id])
+  gift     Gift     @relation(fields: [giftId], references: [id])
+
+  @@index([wishListId])
+  @@index([giftId])
 }
 
 model GiftList {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  quantity    String?
-  categoryId  String  @db.ObjectId
-  isDefault   Boolean @default(false)
-  totalPrice  String?
-  weddingId   String? @db.ObjectId
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  quantity   String?
+  categoryId String  @db.ObjectId
+  totalPrice String?
 
-  gifts  Gift[]
-  images Image[]
+  gifts Gift[]
 }
 
 model Category {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String @unique
-}
-
-model Image {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  url        String
-  giftId     String   @db.ObjectId
-  giftListId String   @db.ObjectId
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  giftList GiftList @relation(fields: [giftListId], references: [id])
-  gift     Gift     @relation(fields: [giftId], references: [id])
 }
 
 model VerificationToken {

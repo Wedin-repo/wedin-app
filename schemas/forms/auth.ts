@@ -52,7 +52,7 @@ export const NewPasswordSchema = z
   });
 
 export const StepOneSchema = z.object({
-  weddingUrl: z
+  eventUrl: z
     .string()
     .min(1, { message: 'La dirección de tu espacio no puede estar vacío' })
     .min(3, {
@@ -86,13 +86,13 @@ export const StepOneSchema = z.object({
     .string()
     .min(1, { message: 'El email de tu pareja no puede estar vacío' })
     .email('Email inválido'),
-  weddingDate: z.date().optional(),
-  isDecidingWeddingDate: z.boolean(),
+  eventDate: z.date().optional(),
+  isDecidingEventDate: z.boolean(),
 });
 
 export const StepTwoSchema = z.object({
-  weddingCountry: z.string().optional(),
-  weddingCity: z.string().optional(),
-  isDecidingWeddingCountryCity: boolean(),
+  eventCountry: z.string().optional(),
+  eventCity: z.string().optional(),
+  isDecidingEventLocation: boolean(),
   hasPYbankAccount: z.boolean(),
 });

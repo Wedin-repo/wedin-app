@@ -1,6 +1,6 @@
 'use client';
 
-import AddToWishListForm from '@/components/forms/gifts/add-to-wishlist-form';
+import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
@@ -16,7 +16,7 @@ type GiftModalProps = {
 };
 
 function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
-  const { name, description, price, id, imageUrl } = gift;
+  const { name, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
   const [isOpen, setIsOpen] = useState(false);
 
@@ -39,7 +39,6 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
           <div className="flex flex-col gap-4 justify-around w-full h-full lg:w-1/2">
             <div className="flex flex-col gap-2">
               <h1 className="text-3xl font-medium sm:text-2xl">{name}</h1>
-              <p className="text-base text-secondaryTextColor">{description}</p>
             </div>
 
             <div className="flex flex-col gap-3 text-base sm:text-lg">

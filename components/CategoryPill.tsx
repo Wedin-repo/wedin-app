@@ -42,6 +42,7 @@ const CategoryPill: React.FC<CategoryPillProps> = ({ selected, label, id }) => {
   }, [id, params, router]);
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       onClick={handleClick}
       className={`

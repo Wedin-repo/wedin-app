@@ -1,155 +1,207 @@
+import { createGift, editGift } from '@/actions/data/gift';
 import {
+  addGiftToWishList,
   deleteGiftFromWishList,
-  editOrCreateGift,
-} from '@/actions/data/wishlist';
-import GiftForm from '@/components/GiftForm';
-import AddToWishListForm from '@/components/forms/gifts/add-to-wishlist-form';
+  editWishlistGift,
+} from '@/actions/data/wishlist-gifts';
+import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
-import { formatPrice } from '@/lib/utils';
-import { GiftSchema, GiftWishListSchema } from '@/schemas/forms';
+import { uploadImageToAws } from '@/lib/s3';
+import ringSvg from '@/public/images/rings.svg';
+import { GiftFormPostSchema, GiftPostSchema } from '@/schemas/forms';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Category, Gift } from '@prisma/client';
+import type { Category, Gift, WishListGift } from '@prisma/client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
 type EditGiftFormProps = {
+  categories: Category[];
+  eventId: string;
   gift: Gift;
   wishlistId: string;
-  categories?: Category[] | null;
+  wishlistGift: WishListGift;
   setIsOpen?: (value: boolean) => void;
 };
 
 function EditGiftForm({
-  gift,
   categories,
-  setIsOpen,
+  eventId,
+  gift,
+  wishlistGift,
   wishlistId,
+  setIsOpen,
 }: EditGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { toast } = useToast();
 
   const form = useForm({
-    resolver: zodResolver(GiftSchema),
+    resolver: zodResolver(GiftFormPostSchema),
     defaultValues: {
-      id: gift.id,
       name: gift.name,
       categoryId: gift.categoryId,
-      price: gift.price.toString(),
-      isFavoriteGift: gift.isFavoriteGift,
-      isGroupGift: gift.isGroupGift,
-      wishListId: wishlistId,
+      price: gift.price,
+      isDefault: false,
+      isEditedVersion: gift.isEditedVersion,
+      sourceGiftId: gift.sourceGiftId ?? '',
+      eventId: eventId,
+
+      imageUrl: ringSvg,
+
+      isFavoriteGift: wishlistGift.isFavoriteGift,
+      isGroupGift: wishlistGift.isGroupGift,
+      wishlistId: wishlistId,
     },
   });
 
   const { formState } = form;
 
-  if (!categories) return null;
-
-  const formattedPrice = formatPrice(Number(gift.price));
-
-  const onSubmit = async (values: z.infer<typeof GiftSchema>) => {
+  const onSubmit = async (values: z.infer<typeof GiftFormPostSchema>) => {
     setIsLoading(true);
+
     if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
       if (setIsOpen) {
         setIsOpen(false);
       }
+      return;
+    }
+
+    const validatedParams = GiftPostSchema.safeParse(values);
+
+    if (!validatedParams.success) {
+      toast({
+        title: 'Error',
+        description: 'Datos inválidos, por favor verifica tus datos.',
+        variant: 'destructive',
+      });
+
       setIsLoading(false);
       return;
     }
 
-    const validatedFields = GiftSchema.safeParse(values);
+    let giftResponse:
+      | {
+          error: string;
+          giftId?: undefined;
+        }
+      | {
+          giftId: string;
+          error?: undefined;
+        };
 
-    if (!validatedFields.success) {
-      toast({
-        title: 'Validation Error',
-        description: 'Please check your input and try again.',
-        className: 'bg-white',
+    if (gift.isDefault) {
+      // Create a new gift based on the default one
+      const newGiftParams = {
+        ...validatedParams.data,
+        isEditedVersion: true,
+        sourceGiftId: gift.id,
+        isDefault: false,
+      };
+
+      giftResponse = await createGift(newGiftParams, gift.imageUrl);
+
+      if (giftResponse?.error || !giftResponse.giftId) {
+        toast({
+          title: 'Error',
+          description: giftResponse.error,
+          variant: 'destructive',
+        });
+
+        setIsLoading(false);
+        return;
+      }
+
+      await deleteGiftFromWishList({
+        ...validatedParams.data,
+        giftId: gift.id,
       });
 
-      return;
-    }
-
-    const response = await editOrCreateGift(validatedFields.data);
-
-    if (response.status === 'Error') {
-      toast({
-        title: 'Error',
-        description: response.message,
-        className: 'bg-white',
+      await addGiftToWishList({
+        ...validatedParams.data,
+        giftId: giftResponse.giftId,
       });
     } else {
-      toast({
-        title: 'Éxito! 🎁🎉',
-        description: 'Regalo actualizado.',
-        className: 'bg-white',
-      });
+      giftResponse = await editGift(validatedParams.data, gift.id);
     }
 
-    if (setIsOpen) {
-      setIsOpen(false);
-    }
-    setIsLoading(false);
-  };
-
-  const handleRemoveGiftFromWishList = async () => {
-    setIsLoading(true);
-
-    const validatedFields = GiftWishListSchema.safeParse({
-      giftId: gift.id,
-      wishlistId: wishlistId,
-    });
-
-    if (!validatedFields.success) {
+    if (giftResponse?.error || !giftResponse.giftId) {
       toast({
         title: 'Error',
-        description: 'Error al eliminar el regalo de la lista',
-        className: 'bg-white',
+        description: giftResponse.error,
+        variant: 'destructive',
       });
 
+      setIsLoading(false);
       return;
     }
 
-    const response = await deleteGiftFromWishList(validatedFields.data);
-
-    if (response.status === 'Error') {
-      toast({
-        title: 'Error',
-        description:
-          response.message ||
-          'An error occurred while deleting the gift from the wishlist.',
-        className: 'bg-white',
+    if (selectedFile && formState.dirtyFields.imageUrl) {
+      const uploadResponse = await uploadImageToAws({
+        file: selectedFile,
+        giftId: gift.isDefault ? giftResponse.giftId : gift.id,
       });
+
+      if (uploadResponse?.error) {
+        toast({
+          title: 'Error',
+          description: uploadResponse.error,
+          variant: 'destructive',
+        });
+
+        setIsLoading(false);
+        return;
+      }
+    }
+
+    if (
+      formState.dirtyFields.isGroupGift ||
+      formState.dirtyFields.isFavoriteGift
+    ) {
+      const wishlistGiftResponse = await editWishlistGift({
+        ...validatedParams.data,
+        id: wishlistGift.id,
+      });
+
+      if (wishlistGiftResponse?.error) {
+        toast({
+          title: 'Error',
+          description: wishlistGiftResponse.error,
+          variant: 'destructive',
+        });
+
+        setIsLoading(false);
+        return;
+      }
     }
 
     toast({
-      title: response.status,
-      description: response.message,
-      action: (
-        <AddToWishListForm
-          giftId={gift.id}
-          wishlistId={wishlistId}
-          variant="undoButton"
-        />
-      ),
+      title: 'Éxito! 🎁🎉',
+      description: 'Regalo actualizado.',
       className: 'bg-white',
     });
 
     if (setIsOpen) {
       setIsOpen(false);
     }
+
     setIsLoading(false);
   };
 
   return (
     <GiftForm
+      categories={categories}
       form={form}
       gift={gift}
-      categories={categories}
       isLoading={isLoading}
+      previewUrl={previewUrl}
+      selectedFile={selectedFile}
       onSubmit={onSubmit}
-      handleRemoveGiftFromWishList={handleRemoveGiftFromWishList}
-      formattedPrice={formattedPrice}
+      setPreviewUrl={setPreviewUrl}
+      setSelectedFile={setSelectedFile}
+      buttonLabel="Guardar"
     />
   );
 }

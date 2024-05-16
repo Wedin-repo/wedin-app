@@ -53,8 +53,8 @@ export default function RegisterForm() {
 
       response = await login(
         validatedFields.data,
-        '/onboarding',
-        'credentials'
+        'credentials',
+        '/onboarding'
       );
 
       if (response?.error) {
