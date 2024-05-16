@@ -2,7 +2,7 @@ import { getEvent } from '@/actions/data/event';
 import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/Pagination';
-import DashboardGiftCard from '@/components/cards/wishlist-gifts/card';
+import DashboardGiftCard from '@/components/cards/wishlist-gifts';
 import type { DashboardPageSearchParams } from '../page';
 
 type WislistGiftsProps = {

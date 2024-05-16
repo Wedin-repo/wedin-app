@@ -3,8 +3,8 @@ import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import type { GiftsReceivedPageSearchParams } from '@/app/(default)/gifts-received/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/Pagination';
+import GiftsReceivedGiftCard from '@/components/cards/gifts-received';
 import CardContainer from '@/components/cards/shared/card-container';
-import GiftsReceivedGiftCard from './card';
 
 type GiftsReceivedProps = {
   searchParams: GiftsReceivedPageSearchParams;

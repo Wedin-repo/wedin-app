@@ -1,8 +1,8 @@
-import { getGifts } from '@/actions/data/gift';
 import { getEvent } from '@/actions/data/event';
+import { getGifts } from '@/actions/data/gift';
 import type { GiftPageSearchParams } from '@/app/(default)/gifts/page';
 import EmptyState from '@/components/EmptyState';
-import GiftCard from '@/components/cards/gifts/card';
+import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import GiftModal from './modal';
 
