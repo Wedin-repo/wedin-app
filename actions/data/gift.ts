@@ -6,7 +6,6 @@ import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
-import { getEvent } from './event';
 
 export type GetGiftsParams = {
   category?: string;
