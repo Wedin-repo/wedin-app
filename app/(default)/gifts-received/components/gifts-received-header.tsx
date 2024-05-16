@@ -1,6 +1,6 @@
 import { getEvent } from '@/actions/data/event';
 import { getWishListGifts } from '@/actions/data/wishlist-gifts';
-import EmptyState from '@/components/EmptyState';
+import EmptyState from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';

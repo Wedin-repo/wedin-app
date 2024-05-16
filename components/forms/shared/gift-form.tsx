@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import ringSvg from '@/public/images/rings.svg';
-import type { GiftFormSchema } from '@/schemas/forms';
+import type { GiftFormSchema } from '@/schemas/form';
 import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';

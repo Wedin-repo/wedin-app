@@ -1,8 +1,8 @@
-import GiftsReceivedHeader from './components/gifts-received-header';
+import Loader from '@/components/loader';
 import { Suspense } from 'react';
-import Loader from '@/components/Loader';
+import GiftsReceived from './components/gifts-received';
+import GiftsReceivedHeader from './components/gifts-received-header';
 //import SearchBar from '@/components/search-bar';
-import GiftsReceived from '@/components/cards/gifts-received';
 
 export type GiftsReceivedPageSearchParams = {
   name?: string;

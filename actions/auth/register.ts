@@ -3,7 +3,7 @@
 import prisma from '@/db/client';
 import { sendVericationEmail } from '@/lib/mail';
 import { generateVerificationToken } from '@/lib/tokens';
-import { RegisterSchema } from '@/schemas/forms/auth';
+import { RegisterSchema } from '@/schemas/auth';
 import bcrypt from 'bcryptjs';
 import type * as z from 'zod';
 

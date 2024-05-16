@@ -8,7 +8,7 @@ import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
-import { GiftFormSchema, GiftPostSchema } from '@/schemas/forms';
+import { GiftFormSchema, GiftPostSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Category, Gift, WishListGift } from '@prisma/client';
 import { useState } from 'react';

@@ -1,13 +1,13 @@
 import { getEvent } from '@/actions/data/event';
 import { getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
-import EmptyState from '@/components/EmptyState';
-import GiftCard from '@/components/cards/gifts/card';
+import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
+import EmptyState from '@/components/empty-state';
+import CreateWishlistGiftsForm from '@/components/forms/giftlists/create-wishlist-gifts-form';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
-import AddToWishlistForm from './add-to-wishlist-form';
 
 export type GiftListPageParams = {
   giftlistId: string;
@@ -53,7 +53,10 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
         </div>
 
         <div className="flex justify-center w-full">
-          <AddToWishlistForm wishlistId={event?.wishlistId} giftIds={giftIds} />
+          <CreateWishlistGiftsForm
+            wishlistId={event?.wishlistId}
+            giftIds={giftIds}
+          />
         </div>
       </div>
 

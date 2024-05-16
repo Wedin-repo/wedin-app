@@ -1,10 +1,10 @@
 import { getEvent } from '@/actions/data/event';
 import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import type { GiftsReceivedPageSearchParams } from '@/app/(default)/gifts-received/page';
-import EmptyState from '@/components/EmptyState';
-import Pagination from '@/components/Pagination';
+import GiftsReceivedGiftCard from '@/components/cards/gifts-received';
 import CardContainer from '@/components/cards/shared/card-container';
-import GiftsReceivedGiftCard from './card';
+import EmptyState from '@/components/empty-state';
+import Pagination from '@/components/pagination';
 
 type GiftsReceivedProps = {
   searchParams: GiftsReceivedPageSearchParams;

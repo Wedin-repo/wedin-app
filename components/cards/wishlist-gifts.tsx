@@ -1,6 +1,6 @@
 import { getCategories, getCategory } from '@/actions/data/category';
-import RemoveFromWishListForm from '@/components/forms/dashboard/delete-from-wishlist-form';
-import EditGiftModal from '@/components/modals/dashboard/edit-gift-modal';
+import DeleteWishlistGiftForm from '@/components/forms/dashboard/delete-wishlist-gift-form';
+import EditGiftModal from '@/components/modals/edit-gift';
 import {
   Card,
   CardContent,
@@ -69,7 +69,7 @@ const DashboardGiftCard = async ({
           wishlistGift={wishlistGift}
           wishlistId={wishlistId}
         />
-        <RemoveFromWishListForm giftId={id} wishlistId={wishlistId} />
+        <DeleteWishlistGiftForm giftId={id} wishlistId={wishlistId} />
       </CardFooter>
     </Card>
   );

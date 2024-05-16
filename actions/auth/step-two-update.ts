@@ -2,7 +2,7 @@
 
 import { auth } from '@/auth';
 import prisma from '@/db/client';
-import { StepTwoSchema } from '@/schemas/forms/auth';
+import { StepTwoSchema } from '@/schemas/auth';
 import type { User } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';

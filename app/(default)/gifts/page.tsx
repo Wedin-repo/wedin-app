@@ -1,5 +1,5 @@
 import { getCategories } from '@/actions/data/category';
-import Loader from '@/components/Loader';
+import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
@@ -7,9 +7,9 @@ import { Suspense } from 'react';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import Categories from './components/categories';
-import AllGifts from './components/tabs/all-gifts';
 import CreateGift from './components/tabs/create-gift';
 import DefaultGiftLists from './components/tabs/default-giftlists';
+import DefaultGifts from './components/tabs/default-gifts';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',
@@ -104,7 +104,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <Categories categories={categories} />
 
           <Suspense fallback={<Loader />}>
-            <AllGifts searchParams={searchParams} />
+            <DefaultGifts searchParams={searchParams} />
           </Suspense>
         </TabsContent>
 

@@ -26,6 +26,7 @@ const MenuItem = ({ onClick, label, icon, variant }: MenuItemProps) => {
   }
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       onClick={onClick}
       className="flex gap-2 items-center py-3 px-3 transition hover:bg-neutral-100"

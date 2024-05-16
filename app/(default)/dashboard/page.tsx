@@ -1,6 +1,6 @@
 import { getEvent } from '@/actions/data/event';
-import EmptyState from '@/components/EmptyState';
-import Loader from '@/components/Loader';
+import EmptyState from '@/components/empty-state';
+import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
 import DashboardHeader from './components/dashboard-header';

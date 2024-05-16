@@ -1,11 +1,11 @@
 'use client';
 
 import { deleteGiftFromWishList } from '@/actions/data/wishlist-gifts';
-import AddToWishListForm from '@/components/forms/shared/add-to-wishlist-form';
 import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { WishListGiftDeleteSchema } from '@/schemas/forms';
+import { WishListGiftDeleteSchema } from '@/schemas/form';
 import { useRouter } from 'next/navigation';
+import CreateWishlistGiftForm from '../shared/create-wishlist-gift-form';
 
 type RemoveFromWishListFormProps = {
   giftId: string;
@@ -13,7 +13,7 @@ type RemoveFromWishListFormProps = {
   variant?: string;
 };
 
-function RemoveFromWishListForm({
+function DeleteWishlistGiftForm({
   giftId,
   wishlistId,
   variant = 'deleteGiftIconButton',
@@ -59,7 +59,7 @@ function RemoveFromWishListForm({
       title: 'Éxito! 🎁🗑',
       description: 'Regalo eliminado de tu lista',
       action: (
-        <AddToWishListForm
+        <CreateWishlistGiftForm
           giftId={giftId}
           wishlistId={wishlistId}
           variant="undoButton"
@@ -76,4 +76,4 @@ function RemoveFromWishListForm({
   );
 }
 
-export default RemoveFromWishListForm;
+export default DeleteWishlistGiftForm;

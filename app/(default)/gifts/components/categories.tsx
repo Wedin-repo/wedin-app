@@ -1,7 +1,7 @@
 'use client';
 
-import CategoryPill from '@/components/CategoryPill';
-import { Category } from '@prisma/client';
+import CategoryPill from '@/components/category-pill';
+import type { Category } from '@prisma/client';
 import { useSearchParams } from 'next/navigation';
 
 type CategoryProps = {

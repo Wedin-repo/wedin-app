@@ -65,7 +65,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
       <Button type="submit" variant="editGiftButton" disabled={pending}>
         Guardar
         {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <FiEdit3 fontSize={'16px'} />
         )}
@@ -78,7 +78,7 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
       <Button type="submit" variant="deleteGiftButton" disabled={pending}>
         Eliminar regalo
         {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <FaRegTrashAlt fontSize={'16px'} />
         )}

@@ -1,7 +1,7 @@
 import { createWishlistGift } from '@/actions/data/wishlist-gifts';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { WishlistGiftCreateSchema } from '@/schemas/forms';
+import { WishlistGiftCreateSchema } from '@/schemas/form';
 import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishListFormButton from './wishlist-form-button';
@@ -14,7 +14,7 @@ type AddToWishListFormProps = {
 };
 
 // TODO: add ability to add isGroupGift and isFavoriteGift to the form
-function AddToWishListForm({
+function CreateWishlistGiftForm({
   giftId,
   wishlistId,
   setIsOpen,
@@ -76,4 +76,4 @@ function AddToWishListForm({
   );
 }
 
-export default AddToWishListForm;
+export default CreateWishlistGiftForm;
