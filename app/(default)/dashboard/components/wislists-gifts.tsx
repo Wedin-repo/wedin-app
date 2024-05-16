@@ -52,7 +52,6 @@ async function WislistGifts({ searchParams }: WislistGiftsProps) {
         <DashboardGiftCard
           key={wishlistGift.id}
           eventId={event.id}
-          wishlistId={wishlistId}
           wishlistGift={wishlistGift}
         />
       ))}

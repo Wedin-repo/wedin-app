@@ -1,11 +1,10 @@
-import { getGifts } from '@/actions/data/gift';
 import { getEvent } from '@/actions/data/event';
-import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import type { GiftsReceivedPageSearchParams } from '@/app/(default)/gifts-received/page';
 import EmptyState from '@/components/EmptyState';
 import Pagination from '@/components/Pagination';
-import GiftsReceivedGiftCard from './card';
 import CardContainer from '@/components/cards/shared/card-container';
+import GiftsReceivedGiftCard from './card';
 
 type GiftsReceivedProps = {
   searchParams: GiftsReceivedPageSearchParams;
@@ -14,48 +13,49 @@ type GiftsReceivedProps = {
 export default async function GiftsReceived({
   searchParams,
 }: GiftsReceivedProps) {
-  const currentUser = await getCurrentUser();
-  const wedding = await getEvent();
-  const wishlistId = wedding?.wishlistId;
+  const event = await getEvent();
 
-  if (!wishlistId) {
-    return (
-      <EmptyState showReset title="No se ha creado una lista de regalos" />
-    );
+  if (!event) {
+    return <EmptyState showReset title="Ocurrió un error al crear tu cuenta" />;
   }
 
-  const wishlistGifts = await getGifts({
-    searchParams: { wishlistId },
-  });
+  const wishlistId = event.wishlistId;
+  const itemsPerPage = 15;
+  const { page = '1', name } = searchParams;
 
-  if (!wishlistGifts || wishlistGifts.length === 0) {
+  // Get total wishlist gifts to determine if the wishlist is empty
+  const totalWishlistGifts = await getWishListGifts({ wishlistId });
+
+  if (!totalWishlistGifts || totalWishlistGifts.length === 0) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
-  const itemsPerPage = 8;
-  const { page = '1', name } = searchParams;
-
-  const filteredWishlistGifts = await getGifts({
-    searchParams: { ...searchParams, wishlistId },
+  // Fetch filtered wishlist gifts based on search params
+  const filteredWishlistGifts = await getWishListGifts({
+    wishlistId,
+    name,
   });
 
   if (filteredWishlistGifts.length === 0 && name) {
     return <EmptyState title="No se encontraron regalos" />;
   }
 
+  // Calculate pagination
   const totalPages = Math.ceil(filteredWishlistGifts.length / itemsPerPage);
-  const paginatedFilteredWishlistGift = await getGifts({
-    searchParams: { ...searchParams, itemsPerPage, page, wishlistId },
+  const paginatedWishlistGifts = await getWishListGifts({
+    wishlistId,
+    name,
+    page,
+    itemsPerPage,
   });
 
   return (
     <div className="flex flex-col gap-5 mt-10">
       <CardContainer>
-        {paginatedFilteredWishlistGift.map(gift => (
+        {paginatedWishlistGifts.map(wishlistGift => (
           <GiftsReceivedGiftCard
-            key={gift.id}
-            gift={gift}
-            wishlistId={wishlistId}
+            key={wishlistGift.id}
+            wishlistGift={wishlistGift}
           />
         ))}
       </CardContainer>

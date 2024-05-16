@@ -10,6 +10,7 @@ export type DashboardPageSearchParams = {
   page?: string;
   name?: string;
 };
+
 type DashboardPageProps = {
   searchParams: DashboardPageSearchParams;
 };

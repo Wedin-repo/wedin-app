@@ -7,13 +7,7 @@ import type { User } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
 
-export const stepTwoUpdate = async (
-  values: z.infer<typeof StepTwoSchema> | null = null
-) => {
-  if (values === undefined || values === null) {
-    return { error: 'Algo salio mal! reintanta' };
-  }
-
+export const stepTwoUpdate = async (values: z.infer<typeof StepTwoSchema>) => {
   const validatedFields = StepTwoSchema.safeParse(values);
 
   if (!validatedFields.success) {

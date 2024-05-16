@@ -10,15 +10,13 @@ import { FiEdit3 } from 'react-icons/fi';
 type EditGiftModalProps = {
   categories: Category[];
   eventId: string;
-  gift: Gift;
-  wishlistGift: WishListGift;
+  wishlistGift: WishListGift & { gift: Gift };
   wishlistId: string;
 };
 
 function EditGiftModal({
   categories,
   eventId,
-  gift,
   wishlistGift,
   wishlistId,
 }: EditGiftModalProps) {
@@ -36,7 +34,6 @@ function EditGiftModal({
         <EditGiftForm
           categories={categories}
           eventId={eventId}
-          gift={gift}
           setIsOpen={setIsOpen}
           wishlistGift={wishlistGift}
           wishlistId={wishlistId}

@@ -18,16 +18,14 @@ import type { z } from 'zod';
 type EditGiftFormProps = {
   categories: Category[];
   eventId: string;
-  gift: Gift;
   wishlistId: string;
-  wishlistGift: WishListGift;
+  wishlistGift: WishListGift & { gift: Gift };
   setIsOpen?: (value: boolean) => void;
 };
 
 function EditGiftForm({
   categories,
   eventId,
-  gift,
   wishlistGift,
   wishlistId,
   setIsOpen,
@@ -36,6 +34,7 @@ function EditGiftForm({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const { toast } = useToast();
+  const { gift } = wishlistGift;
 
   const form = useForm({
     resolver: zodResolver(GiftFormPostSchema),
@@ -115,7 +114,7 @@ function EditGiftForm({
       }
 
       await deleteGiftFromWishList({
-        ...validatedParams.data,
+        wishlistId: wishlistId,
         giftId: gift.id,
       });
 

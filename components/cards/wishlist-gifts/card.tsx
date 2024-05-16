@@ -1,5 +1,4 @@
 import { getCategories, getCategory } from '@/actions/data/category';
-import { getGift } from '@/actions/data/gift';
 import RemoveFromWishListForm from '@/components/forms/dashboard/delete-from-wishlist-form';
 import EditGiftModal from '@/components/modals/dashboard/edit-gift-modal';
 import {
@@ -10,28 +9,23 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { WishListGift } from '@prisma/client';
+import type { Gift, WishListGift } from '@prisma/client';
 import Image from 'next/image';
 
 type DashboardGiftCardProps = {
-  wishlistId: string;
-  wishlistGift: WishListGift;
   eventId: string;
+  wishlistGift: WishListGift & { gift: Gift };
 };
 
 const DashboardGiftCard = async ({
-  wishlistGift,
   eventId,
-  wishlistId,
+  wishlistGift,
 }: DashboardGiftCardProps) => {
   const categories = await getCategories();
   if (!categories) return null;
 
-  const gift = await getGift(wishlistGift.giftId);
-  if (!gift) return null;
-
-  const { id, name, price, imageUrl, categoryId } = gift;
-  const { isFavoriteGift, isGroupGift } = wishlistGift;
+  const { id, name, price, imageUrl, categoryId } = wishlistGift.gift;
+  const { isFavoriteGift, isGroupGift, wishListId: wishlistId } = wishlistGift;
 
   const formattedPrice = formatPrice(Number(price));
   const category = await getCategory({ searchParams: { categoryId } });
@@ -72,7 +66,6 @@ const DashboardGiftCard = async ({
         <EditGiftModal
           categories={categories}
           eventId={eventId}
-          gift={gift}
           wishlistGift={wishlistGift}
           wishlistId={wishlistId}
         />
