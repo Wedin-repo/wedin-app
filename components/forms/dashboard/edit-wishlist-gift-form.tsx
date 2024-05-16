@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-type EditGiftFormProps = {
+type EditWishlistGiftFormProps = {
   categories: Category[];
   eventId: string;
   wishlistId: string;
@@ -23,13 +23,13 @@ type EditGiftFormProps = {
   setIsOpen?: (value: boolean) => void;
 };
 
-function EditGiftForm({
+function EditWishlistGiftForm({
   categories,
   eventId,
   wishlistGift,
   wishlistId,
   setIsOpen,
-}: EditGiftFormProps) {
+}: EditWishlistGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -121,6 +121,7 @@ function EditGiftForm({
       await createWishlistGift({
         ...validatedParams.data,
         giftId: giftResponse.giftId,
+        wishlistId: wishlistId,
       });
     } else {
       giftResponse = await editGift(validatedParams.data, gift.id);
@@ -205,4 +206,4 @@ function EditGiftForm({
   );
 }
 
-export default EditGiftForm;
+export default EditWishlistGiftForm;

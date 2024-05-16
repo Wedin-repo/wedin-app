@@ -1,6 +1,6 @@
 'use client';
 
-import EditGiftForm from '@/components/forms/dashboard/edit-gift-form';
+import EditWishlistGiftForm from '@/components/forms/dashboard/edit-wishlist-gift-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import type { Category, Gift, WishListGift } from '@prisma/client';
@@ -31,7 +31,7 @@ function EditGiftModal({
       </DialogTrigger>
 
       <DialogContent className="bg-white !rounded-2xl ">
-        <EditGiftForm
+        <EditWishlistGiftForm
           categories={categories}
           eventId={eventId}
           setIsOpen={setIsOpen}
