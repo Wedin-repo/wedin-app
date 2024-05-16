@@ -1,13 +1,13 @@
+import { getEvent } from '@/actions/data/event';
 import { getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
-import { getEvent } from '@/actions/data/event';
+import EmptyState from '@/components/EmptyState';
+import GiftCard from '@/components/cards/gifts/card';
+import CardContainer from '@/components/cards/shared/card-container';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 import AddToWishlistForm from './add-to-wishlist-form';
-import GiftCard from '@/components/cards/gifts/card';
-import CardContainer from '@/components/cards/shared/card-container';
-import EmptyState from '@/components/EmptyState';
 
 export type GiftListPageParams = {
   giftlistId: string;

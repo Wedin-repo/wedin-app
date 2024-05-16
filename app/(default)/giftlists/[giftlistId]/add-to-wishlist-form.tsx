@@ -11,7 +11,7 @@ import { IoGiftOutline } from 'react-icons/io5';
 
 type AddToWishlistFormProps = {
   giftIds?: string[];
-  wishlistId?: string | null;
+  wishlistId?: string;
 };
 
 function AddToWishlistForm({ giftIds, wishlistId }: AddToWishlistFormProps) {
