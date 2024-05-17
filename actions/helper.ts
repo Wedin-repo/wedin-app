@@ -1,5 +1,3 @@
-import prisma from '@/db/client';
-
 export const getErrorMessage = (error: unknown): string => {
   let message: string;
 
@@ -15,44 +13,3 @@ export const getErrorMessage = (error: unknown): string => {
 
   return message;
 };
-
-export async function validateGiftAndWishlist(
-  giftId: string,
-  wishlistId: string
-) {
-  const gift = await prisma.gift.findUnique({ where: { id: giftId } });
-  const wishlist = await prisma.wishList.findUnique({
-    where: { id: wishlistId },
-  });
-  if (!gift || !wishlist) return null;
-
-  return { gift, wishlist };
-}
-
-export async function validateWishlist(wishlistId: string) {
-  const wishlist = await prisma.wishList.findUnique({
-    where: { id: wishlistId },
-  });
-
-  if (!wishlist) return null;
-
-  return wishlist;
-}
-
-export async function validateGift(giftId: string) {
-  const gift = await prisma.gift.findUnique({ where: { id: giftId } });
-
-  if (!gift) return null;
-
-  return gift;
-}
-
-export async function validateCategory(categoryId: string) {
-  const category = await prisma.category.findUnique({
-    where: { id: categoryId },
-  });
-
-  if (!category) return null;
-
-  return category;
-}

@@ -36,7 +36,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
-    <div className="flex flex-col justify-start">
+    <div className="flex flex-col justify-start no-scrollbar">
       <h1 className="flex justify-center items-center my-8 w-full text-4xl font-medium sm:text-5xl text-primaryTextColor">
         Agregar regalos
       </h1>
