@@ -1,4 +1,3 @@
-import { getGifts } from '@/actions/data/gift';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import {
   Carousel,
@@ -8,18 +7,17 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { formatPrice } from '@/lib/utils';
-import type { GiftList } from '@prisma/client';
+import type { Gift, GiftList } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaChevronRight } from 'react-icons/fa';
 
 type GiftListCardProps = {
-  giftList: GiftList;
+  giftList: GiftList & { gifts: Gift[] };
 };
 
 async function GiftListCard({ giftList }: GiftListCardProps) {
-  const { name, totalPrice, quantity, id } = giftList;
-  const gifts = await getGifts({ searchParams: { giftlistId: id } });
+  const { name, totalPrice, quantity, id, gifts } = giftList;
   const formattedPrice = formatPrice(Number(totalPrice));
 
   if (!gifts || gifts.length === 0) return null;

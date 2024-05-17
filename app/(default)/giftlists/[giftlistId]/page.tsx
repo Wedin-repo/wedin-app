@@ -1,5 +1,4 @@
 import { getEvent } from '@/actions/data/event';
-import { getGifts } from '@/actions/data/gift';
 import { getGiftList } from '@/actions/data/giftlist';
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
@@ -23,12 +22,11 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
 
   if (!giftList) return null;
 
-  const event = await getEvent();
-  const gifts = await getGifts({ searchParams: { giftlistId } });
-
+  const { gifts } = giftList;
   if (gifts?.length === 0 || !gifts)
     return <EmptyState title="No se encontraron regalos" />;
 
+  const event = await getEvent();
   const giftIds = gifts?.map(gift => gift.id);
   const { name, quantity, totalPrice } = giftList;
   const formattedPrice = formatPrice(Number(totalPrice));

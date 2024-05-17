@@ -8,6 +8,9 @@ import type { z } from 'zod';
 export async function getGiftList(giftListId: string) {
   try {
     const giftList = await prisma.giftList.findUnique({
+      include: {
+        gifts: true,
+      },
       where: {
         id: giftListId,
       },
@@ -27,19 +30,9 @@ export async function getGiftLists({
 }: {
   searchParams?: z.infer<typeof GetGiftListsSearchParams>;
 }) {
-  try {
-    const query: Prisma.GiftListWhereInput = {};
+  const query: Prisma.GiftListWhereInput = {};
 
-    if (!searchParams) {
-      const giftLists = await prisma.giftList.findMany({
-        where: query,
-      });
-
-      if (!giftLists) return null;
-
-      return giftLists;
-    }
-
+  if (searchParams) {
     const { category, name } = searchParams;
 
     if (name) {
@@ -52,16 +45,19 @@ export async function getGiftLists({
     if (category) {
       query.categoryId = category;
     }
+  }
 
+  try {
     const giftLists = await prisma.giftList.findMany({
       where: query,
+      include: {
+        gifts: true,
+      },
     });
-
-    if (!giftLists) return null;
 
     return giftLists;
   } catch (error) {
     console.error('Error retrieving gift lists:', error);
-    throw error;
+    throw new Error('Failed to retrieve gift lists');
   }
 }
