@@ -4,7 +4,7 @@ import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
 import GiftModal from '@/components/modals/gift';
-import type { GiftPageSearchParams } from '../../page';
+import type { GiftPageSearchParams } from '../page';
 
 type DefaultGiftsProps = {
   searchParams: GiftPageSearchParams;

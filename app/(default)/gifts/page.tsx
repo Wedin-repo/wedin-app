@@ -7,9 +7,9 @@ import { Suspense } from 'react';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import Categories from './components/categories';
-import CreateGift from './components/tabs/create-gift';
-import DefaultGiftLists from './components/tabs/default-giftlists';
-import DefaultGifts from './components/tabs/default-gifts';
+import CreateGift from './tabs/create-gift';
+import DefaultGiftLists from './tabs/default-giftlists';
+import DefaultGifts from './tabs/default-gifts';
 
 const TABS = {
   predefinedGifts: 'predefinedGifts',
