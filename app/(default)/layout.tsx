@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getCurrentUser } from '@/actions/get-current-user';
 import DefaultLayoutContainer from '@/components/default-layout-container';
 import NavBar from '@/components/navbar/navbar';
 

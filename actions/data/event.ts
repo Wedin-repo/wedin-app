@@ -1,7 +1,7 @@
 'use server';
 
 import prisma from '@/db/client';
-import { getCurrentUser } from '../getCurrentUser';
+import { getCurrentUser } from '../get-current-user';
 
 export async function getEvent() {
   const user = await getCurrentUser();

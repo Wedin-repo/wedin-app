@@ -42,8 +42,7 @@ const buttonVariants = cva(
           'bg-black rounded-full text-white font-normal hover:opacity-80 hover transition text-lg',
         uploadImageButton:
           'w-full bg-white flex items-center justify-center rounded-lg py-2 gap-2 text-black font-medium hover:opacity-60 hover transition',
-        logoutButton:
-          'px-3 py-3 hover:bg-neutral-100 transition flex gap-2 items-center',
+        logoutButton: 'hover:bg-neutral-100 transition flex gap-2 items-center',
         socialMediaLoginButton:
           'bg-secondaryBackgroundColor text-tertiaryTextColor py-1.5 px-6 rounded-lg w-[208px] hover:opacity-80 transition-all',
       },

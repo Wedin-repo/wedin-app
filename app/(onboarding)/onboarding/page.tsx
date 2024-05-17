@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getCurrentUser } from '@/actions/get-current-user';
 import Logo from '@/components/logo';
 import { CiImageOn } from 'react-icons/ci';
 import OnboardingStepper from './components/onboarding-stepper';

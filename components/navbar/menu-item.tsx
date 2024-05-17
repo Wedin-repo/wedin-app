@@ -16,8 +16,8 @@ const handleLogout = async () => {
 const MenuItem = ({ onClick, label, icon, variant }: MenuItemProps) => {
   if (variant === 'logoutButton') {
     return (
-      <form action={handleLogout}>
-        <Button type="submit" variant="logoutButton">
+      <form action={handleLogout} className="w-full">
+        <Button type="submit" variant="logoutButton" className="px-2">
           {icon}
           {label}
         </Button>
@@ -26,14 +26,13 @@ const MenuItem = ({ onClick, label, icon, variant }: MenuItemProps) => {
   }
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-    <div
+    <Button
       onClick={onClick}
-      className="flex gap-2 items-center py-3 px-3 transition hover:bg-neutral-100"
+      className="flex gap-2 justify-start items-center px-2 w-full transition hover:bg-neutral-100"
     >
       {icon}
       {label}
-    </div>
+    </Button>
   );
 };
 

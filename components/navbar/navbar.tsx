@@ -15,7 +15,6 @@ type NavBarProps = {
 export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
-
   let menuValue = 'addGifts';
 
   // The only case where this will run or the session.user.valid == false

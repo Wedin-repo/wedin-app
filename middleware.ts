@@ -4,7 +4,7 @@ import {
   onboardingRoute,
   protectedRoutes,
   publicRoutes,
-} from '@/routes';
+} from '@/lib/routes';
 import { auth } from './auth';
 
 export default auth(req => {
@@ -20,8 +20,6 @@ export default auth(req => {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
   const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   const isOnboardingRoute = onboardingRoute.includes(nextUrl.pathname);
-
-  console.log(nextUrl.pathname);
 
   if (isApiAuthRoute) {
     return;
