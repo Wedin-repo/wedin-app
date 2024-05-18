@@ -1,4 +1,4 @@
-import { ZodType, z } from 'zod';
+import { type ZodType, z } from 'zod';
 
 export const GiftFormSchema = z.object({
   name: z
@@ -19,9 +19,9 @@ export const GiftFormSchema = z.object({
 
   imageUrl: z.any().optional() as ZodType<File>,
 
-  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }), // WishListGiftPostSchema
-  isFavoriteGift: z.boolean().default(false), // WishListGiftPostSchema
-  isGroupGift: z.boolean().default(false), // WishListGiftPostSchema
+  wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }), // wishlistGiftPostSchema
+  isFavoriteGift: z.boolean().default(false), // wishlistGiftPostSchema
+  isGroupGift: z.boolean().default(false), // wishlistGiftPostSchema
 });
 
 // We want to ignore the imageUrl field when creating/editing a gift
@@ -44,71 +44,35 @@ export const GiftCreateSchema = GiftPostSchema.pick({
 
 export const WishlistGiftCreateSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  eventId: z.string().min(1, { message: 'No se encontro un event ID' }),
   giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
   isFavoriteGift: z.boolean().default(false),
   isGroupGift: z.boolean().default(false),
 });
 
-export const WishListGiftsCreateSchema = z.object({
+export const WishlistGiftsCreateSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftIds: z.array(z.string().min(1, { message: 'No se encontro un gift ID' })),
+  eventId: z.string().min(1, { message: 'No se encontro un event ID' }),
 });
 
-export const WishListGiftEditSchema = z.object({
+export const WishlistGiftEditSchema = z.object({
   wishlistGiftId: z.string().min(1, { message: 'No se encontro un ID' }),
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   isFavoriteGift: z.boolean().default(false),
   isGroupGift: z.boolean().default(false),
 });
 
-export const WishListGiftDeleteSchema = z.object({
+export const WishlistGiftDeleteSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
 });
 
-export const TransactionCreateSchema = z
-  .object({
-    wishListGift: z.object({
-      id: z
-        .string()
-        .nonempty({ message: 'No se encontró un ID de WishListGift' })
-        .uuid(),
-      isGroupGift: z.boolean(),
-      groupGiftParts: z.string().optional(),
-      isFullyPaid: z.boolean(),
-      gift: z.object({
-        price: z
-          .string()
-          .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
-          .max(10, {
-            message: 'El precio no puede ser mayor de PYG 99,999,999',
-          }),
-      }),
-      transactions: z
-        .array(
-          z.object({
-            amount: z
-              .number()
-              .positive({ message: 'El monto debe ser un número positivo' }),
-          })
-        )
-        .optional(),
+export const TransactionCreateSchema = z.object({
+  amount: z
+    .string()
+    .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
+    .max(10, {
+      message: 'El precio no puede ser mayor de PYG 99,999,999',
     }),
-    amount: z
-      .string()
-      .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
-      .max(10, {
-        message: 'El precio no puede ser mayor de PYG 99,999,999',
-      }),
-  })
-  .refine(
-    data => {
-      const totalCost = Number.parseFloat(data.wishListGift.gift.price);
-      const formattedAmount = Number.parseFloat(data.amount);
-      return formattedAmount === totalCost;
-    },
-    {
-      message: 'El monto debe coincidir con el precio del regalo',
-      path: ['amount'], // Set the path of the error to the `amount` field
-    }
-  );
+});

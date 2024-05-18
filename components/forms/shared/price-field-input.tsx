@@ -15,9 +15,10 @@ type PriceFieldProps = {
   field:
     | ControllerRenderProps<z.infer<typeof GiftFormSchema>, 'price'>
     | ControllerRenderProps<z.infer<typeof TransactionCreateSchema>, 'amount'>;
+  disabled?: boolean;
 };
 
-const PriceField = ({ field }: PriceFieldProps) => {
+const PriceField = ({ field, disabled = false }: PriceFieldProps) => {
   const [displayValue, setDisplayValue] = useState(
     formatPrice(Number(field.value))
   );
@@ -39,7 +40,12 @@ const PriceField = ({ field }: PriceFieldProps) => {
     <FormItem className="w-full">
       <FormLabel>Precio</FormLabel>
       <FormControl>
-        <Input type="text" value={displayValue} onChange={handleInputChange} />
+        <Input
+          type="text"
+          value={displayValue}
+          onChange={handleInputChange}
+          disabled={disabled}
+        />
       </FormControl>
       <FormMessage className="font-normal text-red-600" />
     </FormItem>

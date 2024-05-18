@@ -8,7 +8,7 @@ type BannerProps = {
 
 function Banner({ primayUser, secondaryUser, eventDate }: BannerProps) {
   return (
-    <div className="flex flex-row p-2 w-full h-[270px] bg-primaryTextColor">
+    <div className="flex flex-row p-2 w-full h-[270px] bg-primaryBorderColor">
       <div className="w-1/12" />
 
       <div className="flex flex-col justify-center items-start w-4/12">

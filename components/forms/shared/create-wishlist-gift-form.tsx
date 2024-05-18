@@ -4,9 +4,9 @@ import { useToast } from '@/components/ui/use-toast';
 import { WishlistGiftCreateSchema } from '@/schemas/form';
 import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
-import WishListFormButton from './wishlist-form-button';
+import WishlistFormButton from './wishlist-form-button';
 
-type AddToWishListFormProps = {
+type AddTowishlistFormProps = {
   giftId: string;
   isFavoriteGift?: boolean;
   isGroupGift?: boolean;
@@ -22,11 +22,11 @@ function CreateWishlistGiftForm({
   variant,
   wishlistId,
   setIsOpen,
-}: AddToWishListFormProps) {
+}: AddTowishlistFormProps) {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleAddGiftToWishList = async () => {
+  const handleAddGiftTowishlist = async () => {
     const validatedFields = WishlistGiftCreateSchema.safeParse({
       wishlistId,
       giftId,
@@ -76,9 +76,9 @@ function CreateWishlistGiftForm({
   };
 
   return (
-    <form action={handleAddGiftToWishList}>
+    <form action={handleAddGiftTowishlist}>
       <input id="giftId" type="hidden" name="giftId" value={giftId} />
-      <WishListFormButton variant={variant} />
+      <WishlistFormButton variant={variant} />
     </form>
   );
 }

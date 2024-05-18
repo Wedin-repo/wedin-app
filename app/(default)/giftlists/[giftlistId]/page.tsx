@@ -1,5 +1,5 @@
 import { getEvent } from '@/actions/data/event';
-import { getGiftList } from '@/actions/data/giftlist';
+import { getGiftlist } from '@/actions/data/giftlist';
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
@@ -8,27 +8,27 @@ import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
 
-export type GiftListPageParams = {
+export type GiftlistPageParams = {
   giftlistId: string;
 };
 
-type GiftListPageProps = {
-  params: GiftListPageParams;
+type GiftlistPageProps = {
+  params: GiftlistPageParams;
 };
 
-export default async function GiftListPage({ params }: GiftListPageProps) {
+export default async function GiftlistPage({ params }: GiftlistPageProps) {
   const { giftlistId } = params;
-  const giftList = await getGiftList(giftlistId);
+  const giftlist = await getGiftlist(giftlistId);
 
-  if (!giftList) return null;
+  if (!giftlist) return null;
 
-  const { gifts } = giftList;
+  const { gifts } = giftlist;
   if (gifts?.length === 0 || !gifts)
     return <EmptyState title="No se encontraron regalos" />;
 
   const event = await getEvent();
   const giftIds = gifts?.map(gift => gift.id);
-  const { name, quantity, totalPrice } = giftList;
+  const { name, quantity, totalPrice } = giftlist;
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (

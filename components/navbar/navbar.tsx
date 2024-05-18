@@ -27,7 +27,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
 
   if (pathname.includes('/gifts-received')) {
     menuValue = 'gifts-received';
-  } else if (pathname.includes('/dashboard')) {
+  } else if (pathname.includes('/dashboard') || pathname.includes('/events')) {
     menuValue = 'dashboard';
   }
 

@@ -1,26 +1,22 @@
-import { getWishlistGifts } from '@/actions/data/wishlist-gifts';
-import type { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
+import GiftCard from '@/components/cards/gifts';
+import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
-import type { Event, User, WishListGift } from '@prisma/client';
-import GiftCard from '../cards/gifts';
-import CardContainer from '../cards/shared/card-container';
-import WishlistGiftModal from '../modals/invitee-gifts-modal';
+import TransactionForm from '@/components/forms/invitees/create-transaction-form';
+import WishlistGiftModal from '@/components/modals/invitee-gifts-modal';
+import type { Event, Gift, User, WishlistGift } from '@prisma/client';
 
 type InvateeGiftsProps = {
   event: Event & {
-    wishlistGifts: WishListGift[];
+    wishlistGifts: (WishlistGift & {
+      gift: Gift;
+    })[];
     eventPrimaryUser: User | null;
     eventSecondaryUser: User | null;
   };
-  searchParams: EventPageSearchParams;
 };
 
-async function InviteeGifts({ event, searchParams }: InvateeGiftsProps) {
-  const wishlistId = event.wishlistId;
-  const { category } = searchParams;
-
-  // Get total wishlist gifts to determine if the wishlist is empty
-  const wishlistGifts = await getWishlistGifts({ wishlistId, category });
+async function InviteeGifts({ event }: InvateeGiftsProps) {
+  const { wishlistGifts } = event;
 
   if (!wishlistGifts || wishlistGifts.length === 0) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
@@ -29,7 +25,10 @@ async function InviteeGifts({ event, searchParams }: InvateeGiftsProps) {
   return (
     <CardContainer>
       {wishlistGifts.map(wishlistGift => (
-        <WishlistGiftModal key={wishlistGift.id} wishlistGift={wishlistGift}>
+        <WishlistGiftModal
+          key={wishlistGift.id}
+          dialogContent={<TransactionForm wishlistGift={wishlistGift} />}
+        >
           <GiftCard key={wishlistGift.id} gift={wishlistGift.gift} />
         </WishlistGiftModal>
       ))}

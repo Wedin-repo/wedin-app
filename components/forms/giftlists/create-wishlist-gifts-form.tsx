@@ -1,10 +1,10 @@
 'use client';
 
-import { addGiftsToWishList } from '@/actions/data/wishlist-gifts';
-import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
+import { addGiftsTowishlist } from '@/actions/data/wishlist-gifts';
+import WishlistFormButton from '@/components/forms/shared/wishlist-form-button';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { WishListGiftsCreateSchema } from '@/schemas/form';
+import { WishlistGiftsCreateSchema } from '@/schemas/form';
 import { useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa';
 import { IoGiftOutline } from 'react-icons/io5';
@@ -21,8 +21,8 @@ function CreateWishlistGiftsForm({
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleAddGiftsToWishList = async () => {
-    const validatedFields = WishListGiftsCreateSchema.safeParse({
+  const handleAddGiftsTowishlist = async () => {
+    const validatedFields = WishlistGiftsCreateSchema.safeParse({
       giftIds,
       wishlistId,
     });
@@ -32,7 +32,7 @@ function CreateWishlistGiftsForm({
       return;
     }
 
-    const response = await addGiftsToWishList(validatedFields.data);
+    const response = await addGiftsTowishlist(validatedFields.data);
 
     if (response?.error) {
       toast({
@@ -64,9 +64,9 @@ function CreateWishlistGiftsForm({
     router.push('/gifts?tab=predefinedGifts');
   };
   return (
-    <form action={handleAddGiftsToWishList}>
+    <form action={handleAddGiftsTowishlist}>
       <input id="giftIds" type="hidden" name="giftIds" value={giftIds} />
-      <WishListFormButton variant="chooseGiftListButton" />
+      <WishlistFormButton variant="chooseGiftlistButton" />
     </form>
   );
 }

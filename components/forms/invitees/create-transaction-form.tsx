@@ -1,38 +1,64 @@
+'use client';
+
 import { createTransaction } from '@/actions/data/transaction';
+import PriceField from '@/components/forms/shared/price-field-input';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
 import { TransactionCreateSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Gift, WishListGift } from '@prisma/client';
+import type { Gift, WishlistGift } from '@prisma/client';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
-import PriceField from '../shared/price-field-input';
 
 type TransactionFormProps = {
-  wishlistGift: WishListGift & { gift: Gift };
+  wishlistGift: WishlistGift & { gift: Gift };
 };
 
-const TransactionForm = ({ wishlistGift }: TransactionFormProps) => {
+export default function TransactionForm({
+  wishlistGift,
+}: TransactionFormProps) {
+  const [isLoading, setIsLoading] = useState(false);
+  const totalCost = Number.parseInt(wishlistGift.gift.price);
+  const router = useRouter();
+  const { toast } = useToast();
+
+  let amountToPay = totalCost;
+
+  if (wishlistGift.isGroupGift && wishlistGift.groupGiftParts) {
+    amountToPay = totalCost / Number.parseInt(wishlistGift.groupGiftParts);
+  }
+
   const form = useForm({
     resolver: zodResolver(TransactionCreateSchema),
     defaultValues: {
-      wishListGift: {
-        ...wishlistGift,
-        groupGiftParts: '0',
-      },
-      amount: '',
+      amount: amountToPay.toString(),
     },
   });
-
-  const router = useRouter();
-  const { toast } = useToast();
 
   const handleCreateTransaction = async (
     data: z.infer<typeof TransactionCreateSchema>
   ) => {
-    const response = await createTransaction(data);
+    setIsLoading(true);
+    const validatedData = TransactionCreateSchema.safeParse(data);
+
+    if (!validatedData.success) {
+      toast({
+        title: 'Error',
+        description: 'Datos inválidos. Por favor, revisa los campos.',
+        variant: 'destructive',
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
+    const response = await createTransaction({
+      ...validatedData.data,
+      wishlistGift: { ...wishlistGift },
+    });
 
     if (response?.error) {
       toast({
@@ -40,14 +66,18 @@ const TransactionForm = ({ wishlistGift }: TransactionFormProps) => {
         description: response.error,
         variant: 'destructive',
       });
+
+      setIsLoading(false);
       return;
     }
 
-    // toast({
-    //   title: 'Success!',
-    //   description: 'Transaction created successfully.',
-    // });
+    toast({
+      title: 'Success!',
+      description: 'Transaction created successfully.',
+      className: 'bg-white',
+    });
 
+    setIsLoading(false);
     router.push('/dashboard');
   };
 
@@ -57,12 +87,18 @@ const TransactionForm = ({ wishlistGift }: TransactionFormProps) => {
         <FormField
           control={form.control}
           name="amount"
-          render={({ field }) => <PriceField field={field} />}
+          render={({ field }) => <PriceField field={field} disabled={true} />}
         />
-        <Button type="submit">Create Transaction</Button>
+
+        <Button
+          variant="primaryButton"
+          className="mt-6"
+          type="submit"
+          disabled={isLoading}
+        >
+          Create Transaction
+        </Button>
       </form>
     </Form>
   );
-};
-
-export default TransactionForm;
+}

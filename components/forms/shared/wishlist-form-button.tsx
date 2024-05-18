@@ -9,11 +9,11 @@ import { GoArrowRight } from 'react-icons/go';
 import { GrUndo } from 'react-icons/gr';
 import { IoAdd } from 'react-icons/io5';
 
-type WishListFormButtonProps = {
+type WishlistFormButtonProps = {
   variant?: string;
 };
 
-function WishListFormButton({ variant }: WishListFormButtonProps) {
+function WishlistFormButton({ variant }: WishlistFormButtonProps) {
   const { pending } = useFormStatus();
 
   if (variant === 'undoButton') {
@@ -42,12 +42,12 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
     );
   }
 
-  if (variant === 'chooseGiftListButton') {
+  if (variant === 'chooseGiftlistButton') {
     return (
       <Button
         type="submit"
-        variant="chooseGiftListButton"
-        size="chooseGiftListButton"
+        variant="chooseGiftlistButton"
+        size="chooseGiftlistButton"
         disabled={pending}
       >
         Elegir lista
@@ -98,4 +98,4 @@ function WishListFormButton({ variant }: WishListFormButtonProps) {
   );
 }
 
-export default WishListFormButton;
+export default WishlistFormButton;

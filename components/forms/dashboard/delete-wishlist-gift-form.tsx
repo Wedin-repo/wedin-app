@@ -1,13 +1,13 @@
 'use client';
 
-import { deleteGiftFromWishList } from '@/actions/data/wishlist-gifts';
-import WishListFormButton from '@/components/forms/shared/wishlist-form-button';
+import { deleteGiftFromwishlist } from '@/actions/data/wishlist-gifts';
+import WishlistFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
-import { WishListGiftDeleteSchema } from '@/schemas/form';
+import { WishlistGiftDeleteSchema } from '@/schemas/form';
 import { useRouter } from 'next/navigation';
 import CreateWishlistGiftForm from '../shared/create-wishlist-gift-form';
 
-type RemoveFromWishListFormProps = {
+type RemoveFromwishlistFormProps = {
   giftId: string;
   wishlistId?: string | null;
   variant?: string;
@@ -17,17 +17,17 @@ function DeleteWishlistGiftForm({
   giftId,
   wishlistId,
   variant = 'deleteGiftIconButton',
-}: RemoveFromWishListFormProps) {
+}: RemoveFromwishlistFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleRemoveGiftFromWishList = async () => {
+  const handleRemoveGiftFromwishlist = async () => {
     if (!wishlistId) {
       router.push('/register');
       return;
     }
 
-    const validatedFields = WishListGiftDeleteSchema.safeParse({
+    const validatedFields = WishlistGiftDeleteSchema.safeParse({
       giftId,
       wishlistId,
     });
@@ -42,7 +42,7 @@ function DeleteWishlistGiftForm({
       return;
     }
 
-    const response = await deleteGiftFromWishList(validatedFields.data);
+    const response = await deleteGiftFromwishlist(validatedFields.data);
 
     if (response?.error) {
       toast({
@@ -69,9 +69,9 @@ function DeleteWishlistGiftForm({
   };
 
   return (
-    <form action={handleRemoveGiftFromWishList} id={giftId}>
+    <form action={handleRemoveGiftFromwishlist} id={giftId}>
       <input id="giftId" type="hidden" name="content" value={giftId} />
-      <WishListFormButton variant={variant} />
+      <WishlistFormButton variant={variant} />
     </form>
   );
 }

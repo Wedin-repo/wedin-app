@@ -29,6 +29,7 @@ import type { z } from 'zod';
 import PriceField from './price-field-input';
 
 type GiftFormProps = {
+  buttonLabel?: string;
   categories: Category[] | null;
   form: UseFormReturn<z.infer<typeof GiftFormSchema>>;
   gift?: Gift;
@@ -38,10 +39,10 @@ type GiftFormProps = {
   onSubmit: (values: z.infer<typeof GiftFormSchema>) => void;
   setPreviewUrl: (url: string | null) => void;
   setSelectedFile: (file: File | null) => void;
-  buttonLabel?: string;
 };
 
 const GiftForm = ({
+  buttonLabel,
   categories,
   form,
   gift,
@@ -50,7 +51,6 @@ const GiftForm = ({
   onSubmit,
   setPreviewUrl,
   setSelectedFile,
-  buttonLabel,
 }: GiftFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 

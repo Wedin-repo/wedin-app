@@ -2,14 +2,14 @@
 
 import prismaClient from '@/prisma/client';
 import {
-  WishListGiftDeleteSchema,
-  WishListGiftEditSchema,
-  WishListGiftsCreateSchema,
+  WishlistGiftDeleteSchema,
+  WishlistGiftEditSchema,
+  WishlistGiftsCreateSchema,
   WishlistGiftCreateSchema,
 } from '@/schemas/form';
 import {
-  GetWishListGiftsParams,
-  WishListGiftSearchSchema,
+  GetwishlistGiftsParams,
+  WishlistGiftSearchParams,
 } from '@/schemas/params';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
@@ -25,13 +25,14 @@ export async function createWishlistGift(
     return { error: 'Invalid Data' };
   }
 
-  const { giftId, wishlistId, isGroupGift, isFavoriteGift } =
+  const { giftId, wishlistId, isGroupGift, isFavoriteGift, eventId } =
     validatedFields.data;
 
   try {
-    await prismaClient.wishListGift.create({
+    await prismaClient.wishlistGift.create({
       data: {
-        wishListId: wishlistId,
+        wishlistId,
+        eventId,
         giftId,
         isGroupGift,
         isFavoriteGift,
@@ -43,10 +44,10 @@ export async function createWishlistGift(
   }
 }
 
-export async function addGiftsToWishList(
-  formData: z.infer<typeof WishListGiftsCreateSchema>
+export async function addGiftsTowishlist(
+  formData: z.infer<typeof WishlistGiftsCreateSchema>
 ) {
-  const validatedFields = WishListGiftsCreateSchema.safeParse(formData);
+  const validatedFields = WishlistGiftsCreateSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -54,16 +55,17 @@ export async function addGiftsToWishList(
     };
   }
 
-  const { giftIds, wishlistId } = validatedFields.data;
+  const { giftIds, wishlistId, eventId } = validatedFields.data;
 
-  const wishListGiftData = giftIds.map(giftId => ({
-    wishListId: wishlistId,
+  const wishlistGiftData = giftIds.map(giftId => ({
+    wishlistId: wishlistId,
     giftId: giftId,
+    eventId: eventId,
   }));
 
   try {
-    await prismaClient.wishListGift.createMany({
-      data: wishListGiftData,
+    await prismaClient.wishlistGift.createMany({
+      data: wishlistGiftData,
     });
   } catch (error: unknown) {
     return {
@@ -72,10 +74,10 @@ export async function addGiftsToWishList(
   }
 }
 
-export async function deleteGiftFromWishList(
-  formData: z.infer<typeof WishListGiftDeleteSchema>
+export async function deleteGiftFromwishlist(
+  formData: z.infer<typeof WishlistGiftDeleteSchema>
 ) {
-  const validatedFields = WishListGiftDeleteSchema.safeParse(formData);
+  const validatedFields = WishlistGiftDeleteSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return { error: 'Datos requeridos no fueron encontrados' };
@@ -84,9 +86,9 @@ export async function deleteGiftFromWishList(
   const { wishlistId, giftId } = validatedFields.data;
 
   try {
-    await prismaClient.wishListGift.deleteMany({
+    await prismaClient.wishlistGift.deleteMany({
       where: {
-        wishListId: wishlistId,
+        wishlistId: wishlistId,
         giftId: giftId,
       },
     });
@@ -98,9 +100,9 @@ export async function deleteGiftFromWishList(
 }
 
 export async function getWishlistGifts(
-  searchParams: z.infer<typeof GetWishListGiftsParams>
+  searchParams: z.infer<typeof GetwishlistGiftsParams>
 ) {
-  const validatedFields = GetWishListGiftsParams.safeParse(searchParams);
+  const validatedFields = GetwishlistGiftsParams.safeParse(searchParams);
 
   if (!validatedFields.success) {
     return [];
@@ -109,8 +111,8 @@ export async function getWishlistGifts(
   const { wishlistId, name, page, itemsPerPage, category } =
     validatedFields.data;
 
-  const query: Prisma.WishListGiftWhereInput = {
-    wishListId: wishlistId,
+  const query: Prisma.WishlistGiftWhereInput = {
+    wishlistId: wishlistId,
   };
 
   if (name) {
@@ -133,7 +135,7 @@ export async function getWishlistGifts(
   const take = itemsPerPage ? Number(itemsPerPage) : undefined;
 
   try {
-    return await prismaClient.wishListGift.findMany({
+    return await prismaClient.wishlistGift.findMany({
       where: query,
       include: {
         gift: true,
@@ -151,9 +153,9 @@ export async function getWishlistGifts(
 }
 
 export async function updateWishlistGift(
-  formValues: z.infer<typeof WishListGiftEditSchema>
+  formValues: z.infer<typeof WishlistGiftEditSchema>
 ) {
-  const validatedFields = WishListGiftEditSchema.safeParse(formValues);
+  const validatedFields = WishlistGiftEditSchema.safeParse(formValues);
 
   if (!validatedFields.success) {
     return { error: 'Datos inválidos, por favor verifica tus datos.' };
@@ -162,7 +164,7 @@ export async function updateWishlistGift(
   const { isFavoriteGift, isGroupGift, wishlistGiftId } = validatedFields.data;
 
   try {
-    await prismaClient.wishListGift.update({
+    await prismaClient.wishlistGift.update({
       where: { id: wishlistGiftId },
       data: {
         isFavoriteGift,
@@ -175,19 +177,19 @@ export async function updateWishlistGift(
   }
 }
 
-export async function getWishListGiftByParams(
-  searchParams: z.infer<typeof WishListGiftSearchSchema>
+export async function getwishlistGiftByParams(
+  searchParams: z.infer<typeof WishlistGiftSearchParams>
 ) {
-  const validatedFields = WishListGiftSearchSchema.safeParse(searchParams);
+  const validatedFields = WishlistGiftSearchParams.safeParse(searchParams);
 
   if (!validatedFields.success) {
     return { error: 'Invalid search parameters' };
   }
 
-  const { id, giftId, wishListId } = validatedFields.data;
+  const { id, giftId, wishlistId } = validatedFields.data;
 
   // Build the query based on provided parameters
-  const query: Prisma.WishListGiftWhereInput = {};
+  const query: Prisma.WishlistGiftWhereInput = {};
 
   if (id) {
     query.id = id;
@@ -197,8 +199,8 @@ export async function getWishListGiftByParams(
     query.giftId = giftId;
   }
 
-  if (wishListId) {
-    query.wishListId = wishListId;
+  if (wishlistId) {
+    query.wishlistId = wishlistId;
   }
 
   if (Object.keys(query).length === 0) {
@@ -206,7 +208,7 @@ export async function getWishListGiftByParams(
   }
 
   try {
-    const wishListGift = await prismaClient.wishListGift.findFirst({
+    const wishlistGift = await prismaClient.wishlistGift.findFirst({
       where: query,
       include: {
         gift: true,
@@ -214,13 +216,13 @@ export async function getWishListGiftByParams(
       },
     });
 
-    if (!wishListGift) {
-      return { error: 'WishListGift not found' };
+    if (!wishlistGift) {
+      return { error: 'wishlistGift not found' };
     }
 
-    return { wishListGift };
+    return { wishlistGift };
   } catch (error) {
-    console.error('Error retrieving WishListGift:', error);
-    return { error: 'Error retrieving WishListGift' };
+    console.error('Error retrieving wishlistGift:', error);
+    return { error: 'Error retrieving wishlistGift' };
   }
 }

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const GetWishListGiftsParams = z
+export const GetwishlistGiftsParams = z
   .object({
     name: z.string().optional(),
     wishlistId: z.string().min(1, { message: 'No se encontró un wishlist ID' }),
@@ -49,13 +49,59 @@ export const GetGiftsSearchParams = z.object({
   page: z.string().optional(),
 });
 
-export const GetGiftListsSearchParams = z.object({
+export const GetGiftlistsSearchParams = z.object({
   category: z.string().optional(),
   name: z.string().optional(),
 });
 
-export const WishListGiftSearchSchema = z.object({
+export const WishlistGiftSearchParams = z.object({
   id: z.string().optional(),
   giftId: z.string().optional(),
-  wishListId: z.string().optional(),
+  wishlistId: z.string().optional(),
 });
+
+export const CreateTransactionParams = z
+  .object({
+    wishlistGift: z.object({
+      id: z
+        .string()
+        .nonempty({ message: 'No se encontró un ID de wishlistGift' }),
+      isGroupGift: z.boolean(),
+      groupGiftParts: z.string(),
+      isFullyPaid: z.boolean(),
+      gift: z.object({
+        price: z
+          .string()
+          .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
+          .max(10, {
+            message: 'El precio no puede ser mayor de PYG 99,999,999',
+          }),
+      }),
+      transactions: z
+        .array(
+          z.object({
+            amount: z
+              .number()
+              .positive({ message: 'El monto debe ser un número positivo' }),
+          })
+        )
+        .optional(),
+    }),
+    amount: z
+      .string()
+      .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
+      .max(10, {
+        message: 'El precio no puede ser mayor de PYG 99,999,999',
+      }),
+  })
+  .refine(
+    data => {
+      const totalCost = Number.parseFloat(data.wishlistGift.gift.price);
+      const formattedAmount = Number.parseFloat(data.amount);
+      return formattedAmount === totalCost;
+    },
+    {
+      message: 'El monto debe coincidir con el precio del regalo',
+      path: ['amount'], // Set the path of the error to the `amount` field
+    }
+  );

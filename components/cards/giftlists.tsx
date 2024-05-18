@@ -7,17 +7,17 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { formatPrice } from '@/lib/utils';
-import type { Gift, GiftList } from '@prisma/client';
+import type { Gift, Giftlist } from '@prisma/client';
 import Image from 'next/image';
 import Link from 'next/link';
 import { FaChevronRight } from 'react-icons/fa';
 
-type GiftListCardProps = {
-  giftList: GiftList & { gifts: Gift[] };
+type GiftlistCardProps = {
+  giftlist: Giftlist & { gifts: Gift[] };
 };
 
-async function GiftListCard({ giftList }: GiftListCardProps) {
-  const { name, totalPrice, quantity, id, gifts } = giftList;
+async function GiftlistCard({ giftlist }: GiftlistCardProps) {
+  const { name, totalPrice, quantity, id, gifts } = giftlist;
   const formattedPrice = formatPrice(Number(totalPrice));
 
   if (!gifts || gifts.length === 0) return null;
@@ -49,7 +49,7 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
         </div>
       </CardHeader>
 
-      <Link href={`/giftLists/${id}`} className="flex flex-col flex-grow">
+      <Link href={`/giftlists/${id}`} className="flex flex-col flex-grow">
         <CardContent className="p-4">
           <p className="text-base text-secondaryTextColor">{name}</p>
           <div className="flex flex-grow justify-between items-end text-primaryTitleColor">
@@ -62,4 +62,4 @@ async function GiftListCard({ giftList }: GiftListCardProps) {
   );
 }
 
-export default GiftListCard;
+export default GiftlistCard;

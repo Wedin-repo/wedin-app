@@ -1,7 +1,7 @@
 import { createGift, editGift } from '@/actions/data/gift';
 import {
   createWishlistGift,
-  deleteGiftFromWishList,
+  deleteGiftFromwishlist,
   updateWishlistGift,
 } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
@@ -10,7 +10,7 @@ import { uploadImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
 import { GiftFormSchema, GiftPostSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Category, Gift, WishListGift } from '@prisma/client';
+import type { Category, Gift, WishlistGift } from '@prisma/client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -19,7 +19,7 @@ type EditWishlistGiftFormProps = {
   categories: Category[];
   eventId: string;
   wishlistId: string;
-  wishlistGift: WishListGift & { gift: Gift };
+  wishlistGift: WishlistGift & { gift: Gift };
   setIsOpen?: (value: boolean) => void;
 };
 
@@ -113,7 +113,7 @@ function EditWishlistGiftForm({
         return;
       }
 
-      await deleteGiftFromWishList({
+      await deleteGiftFromwishlist({
         wishlistId: wishlistId,
         giftId: gift.id,
       });

@@ -8,7 +8,7 @@ async function CreateGift() {
   const event = await getEvent();
   if (!event) return null;
 
-  const wishListId = event.wishlistId;
+  const wishlistId = event.wishlistId;
   const categories = await getCategories();
   if (!categories) return null;
 
@@ -16,7 +16,7 @@ async function CreateGift() {
     <div className="flex justify-center items-center w-full min-h-[60vh]">
       <CreateGiftForm
         eventId={event.id}
-        wishlistId={wishListId}
+        wishlistId={wishlistId}
         categories={categories}
       />
     </div>

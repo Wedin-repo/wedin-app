@@ -1,6 +1,5 @@
 import { getCategories } from '@/actions/data/category';
-import type { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
-import type { Event, User, WishListGift } from '@prisma/client';
+import type { Event, Gift, User, WishlistGift } from '@prisma/client';
 import { Suspense } from 'react';
 import Banner from '../banner';
 import Categories from '../categories';
@@ -9,14 +8,14 @@ import InviteeGifts from './invitee-gifts';
 
 type InvateePageProps = {
   event: Event & {
-    wishlistGifts: WishListGift[];
+    wishlistGifts: (WishlistGift & {
+      gift: Gift;
+    })[];
     eventPrimaryUser: User | null;
     eventSecondaryUser: User | null;
   };
-  searchParams: EventPageSearchParams;
 };
-
-async function InvateePage({ event, searchParams }: InvateePageProps) {
+async function InvateePage({ event }: InvateePageProps) {
   const categories = await getCategories();
   const { eventPrimaryUser, eventSecondaryUser } = event;
   return (
@@ -38,7 +37,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
 
       <div>
         <Suspense fallback={<Loader />}>
-          <InviteeGifts event={event} searchParams={searchParams} />
+          <InviteeGifts event={event} />
         </Suspense>
       </div>
     </>

@@ -3,14 +3,14 @@
 import EditWishlistGiftForm from '@/components/forms/dashboard/edit-wishlist-gift-form';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import type { Category, Gift, WishListGift } from '@prisma/client';
+import type { Category, Gift, WishlistGift } from '@prisma/client';
 import { useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
 
 type EditGiftModalProps = {
   categories: Category[];
   eventId: string;
-  wishlistGift: WishListGift & { gift: Gift };
+  wishlistGift: WishlistGift & { gift: Gift };
   wishlistId: string;
 };
 

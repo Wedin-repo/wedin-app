@@ -19,8 +19,8 @@ export default function GiftCard({ gift, hideCursor = false }: GiftCardProps) {
       <CardHeader className="flex items-center p-0 w-full">
         <Image
           src={imageUrl || ringsLoader}
-          width={500}
-          height={500}
+          width={252}
+          height={252}
           alt={gift.name}
           className="object-cover w-full rounded-t-lg h-[252px]"
         />

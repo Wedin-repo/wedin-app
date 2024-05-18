@@ -16,7 +16,7 @@ const buttonVariants = cva(
           'rounded-lg hover:opacity-80 hover transition w-full flex items-center justify-center gap-3 bg-[#292524] text-white text-base font-medium',
         onboardingButton:
           'w-52 bg-[#0F172A] flex items-center justify-center rounded-lg py-2 gap-3 text-white font-medium hover:opacity-80 hover transition',
-        chooseGiftListButton:
+        chooseGiftlistButton:
           'w-48 bg-[#303030] flex items-center justify-center font-normal rounded-full gap-3 text-white hover:opacity-80 hover transition text-xl',
         destructive:
           'bg-destructive text-destructive-foreground hover:bg-destructive/90',
@@ -51,7 +51,7 @@ const buttonVariants = cva(
         sm: 'h-9 rounded-md px-3',
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
-        chooseGiftListButton: 'h-12 px-2',
+        chooseGiftlistButton: 'h-12 px-2',
         iconButton: 'h-10 w-10',
         emptyStateButton: 'h-11 px-4',
       },

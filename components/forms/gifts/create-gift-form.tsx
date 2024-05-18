@@ -107,6 +107,7 @@ function CreateGiftForm({
       wishlistId: validatedFields.data.wishlistId,
       isFavoriteGift: validatedFields.data.isFavoriteGift,
       isGroupGift: validatedFields.data.isGroupGift,
+      eventId: eventId,
     });
 
     if (wishlistGiftResponse?.error) {

@@ -3,7 +3,7 @@
 import { auth } from '@/auth';
 import prismaClient from '@/prisma/client';
 import { StepOneSchema } from '@/schemas/auth';
-import type { User, WishList } from '@prisma/client';
+import type { User, Wishlist } from '@prisma/client';
 import type * as z from 'zod';
 
 export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
@@ -26,7 +26,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
 
     let primaryUser: User;
     let secondaryUser: User;
-    let wishlist: WishList;
+    let wishlist: Wishlist;
 
     try {
       primaryUser = await prismaClient.user.upsert({
@@ -76,7 +76,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
     }
 
     try {
-      wishlist = await prismaClient.wishList.create({
+      wishlist = await prismaClient.wishlist.create({
         data: {},
       });
 

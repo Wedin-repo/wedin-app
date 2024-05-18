@@ -8,7 +8,7 @@ import { Suspense } from 'react';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
 import CreateGift from './tabs/create-gift';
-import DefaultGiftLists from './tabs/default-giftlists';
+import DefaultGiftlists from './tabs/default-giftlists';
 import DefaultGifts from './tabs/default-gifts';
 
 const TABS = {
@@ -84,7 +84,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <Categories categories={categories} />
 
           <Suspense fallback={<Loader />}>
-            <DefaultGiftLists searchParams={searchParams} />
+            <DefaultGiftlists searchParams={searchParams} />
           </Suspense>
         </TabsContent>
 

@@ -3,11 +3,12 @@ import { TransactionCreateSchema } from '@/schemas/form';
 import { TransactionStatus } from '@prisma/client';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
+import { CreateTransactionParams } from '@/schemas/params';
 
 export async function createTransaction(
-  formData: z.infer<typeof TransactionCreateSchema>
+  formData: z.infer<typeof CreateTransactionParams>
 ) {
-  const validatedFields = TransactionCreateSchema.safeParse(formData);
+  const validatedFields = CreateTransactionParams.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
@@ -15,26 +16,26 @@ export async function createTransaction(
     };
   }
 
-  const { wishListGift, amount } = validatedFields.data;
+  const { wishlistGift, amount } = validatedFields.data;
 
   const formattedAmount = Number.parseFloat(amount);
 
-  if (wishListGift.isFullyPaid) {
+  if (wishlistGift.isFullyPaid) {
     return {
       error: 'Este regalo ya está completamente pagado',
     };
   }
 
-  const totalCost = Number.parseFloat(wishListGift.gift.price);
+  const totalCost = Number.parseFloat(wishlistGift.gift.price);
   const currentPaidAmount =
-    wishListGift.transactions?.reduce(
+    wishlistGift.transactions?.reduce(
       (sum, transaction) => sum + transaction.amount,
       0
     ) || 0;
 
   // Validate the amount
-  if (wishListGift.isGroupGift && wishListGift.groupGiftParts) {
-    const partCost = totalCost / wishListGift.groupGiftParts;
+  if (wishlistGift.isGroupGift && wishlistGift.groupGiftParts) {
+    const partCost = totalCost / Number.parseInt(wishlistGift.groupGiftParts);
 
     if (
       formattedAmount !== partCost &&
@@ -57,30 +58,32 @@ export async function createTransaction(
   const updatedPaidAmount = currentPaidAmount + formattedAmount;
   const isFullyPaid = updatedPaidAmount >= totalCost;
 
+  console.log('isFullyPaid: ', isFullyPaid);
+
   try {
-    const transaction = await prismaClient.transaction.create({
-      data: {
-        wishListGiftId: wishListGift.id,
-        amount: formattedAmount,
-        status: TransactionStatus.OPEN, // You can adjust this as per your workflow
-      },
-    });
-
-    // Update the WishListGift to set it as fully paid if applicable
-    if (isFullyPaid) {
-      await prismaClient.wishListGift.update({
-        where: { id: wishListGift.id },
-        data: { isFullyPaid },
-      });
-    }
-
-    return {
-      success: true,
-      transaction,
-    };
+    // const transaction = await prismaClient.transaction.create({
+    //   data: {
+    //     wishlistGiftId: wishlistGift.id,
+    //     amount: formattedAmount.toString(),
+    //     status: TransactionStatus.OPEN, // You can adjust this as per your workflow
+    //   },
+    // });
+    //
+    // // Update the wishlistGift to set it as fully paid if applicable
+    // if (isFullyPaid) {
+    //   await prismaClient.wishlistGift.update({
+    //     where: { id: wishlistGift.id },
+    //     data: { isFullyPaid },
+    //   });
+    // }
+    //
+    // return {
+    //   success: true,
+    //   transaction,
+    // };
   } catch (error: unknown) {
-    return {
-      error: getErrorMessage(error),
-    };
+    // return {
+    //   error: getErrorMessage(error),
+    // };
   }
 }

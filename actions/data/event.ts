@@ -26,12 +26,16 @@ export async function getEvent() {
   }
 }
 
-export async function getEventsByUrl(url: string) {
+export async function getEventByUrl(url: string) {
   try {
     const event = await prismaClient.event.findFirst({
       where: { url },
       include: {
-        wishlistGifts: true,
+        wishlistGifts: {
+          include: {
+            gift: true,
+          },
+        },
         eventPrimaryUser: true,
         eventSecondaryUser: true,
       },

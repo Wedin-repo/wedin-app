@@ -9,12 +9,12 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { Gift, WishListGift } from '@prisma/client';
+import type { Gift, WishlistGift } from '@prisma/client';
 import Image from 'next/image';
 
 type DashboardGiftCardProps = {
   eventId: string;
-  wishlistGift: WishListGift & { gift: Gift };
+  wishlistGift: WishlistGift & { gift: Gift };
 };
 
 const DashboardGiftCard = async ({
@@ -25,7 +25,7 @@ const DashboardGiftCard = async ({
   if (!categories) return null;
 
   const { id, name, price, imageUrl, categoryId } = wishlistGift.gift;
-  const { isFavoriteGift, isGroupGift, wishListId: wishlistId } = wishlistGift;
+  const { isFavoriteGift, isGroupGift, wishlistId } = wishlistGift;
 
   const formattedPrice = formatPrice(Number(price));
   const category = await getCategory({ searchParams: { categoryId } });

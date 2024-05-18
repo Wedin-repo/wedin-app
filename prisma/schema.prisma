@@ -91,24 +91,23 @@ model Event {
   country         String?
   city            String?
 
-  wishList           WishList       @relation(fields: [wishlistId], references: [id])
+  wishlist           Wishlist       @relation(fields: [wishlistId], references: [id])
   eventPrimaryUser   User?          @relation("primaryUser", fields: [primaryUserId], references: [id])
   eventSecondaryUser User?          @relation("secondaryUser", fields: [secondaryUserId], references: [id])
-  gifts              Gift[]
-  wishlistGifts      WishListGift[]
+  wishlistGifts      WishlistGift[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])
   @@unique([primaryUserId])
 }
 
-model WishList {
+model Wishlist {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   event         Event?
-  wishListGifts WishListGift[]
+  wishlistGifts WishlistGift[]
 }
 
 model Gift {
@@ -125,47 +124,46 @@ model Gift {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  giftlist      GiftList?      @relation(fields: [giftlistId], references: [id])
-  event         Event?         @relation(fields: [eventId], references: [id])
-  wishListGifts WishListGift[]
+  giftlist      Giftlist?      @relation(fields: [giftlistId], references: [id])
+  wishlistGifts WishlistGift[]
 }
 
-model WishListGift {
+model WishlistGift {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   isFavoriteGift Boolean  @default(false)
   isGroupGift    Boolean  @default(false)
-  groupGiftParts String?
+  groupGiftParts String   @default("0")
   isFullyPaid    Boolean  @default(false)
   isReceived     Boolean  @default(false)
-  wishListId     String   @db.ObjectId
+  wishlistId     String   @db.ObjectId
   giftId         String   @db.ObjectId
-  eventId        String?  @db.ObjectId
+  eventId        String   @db.ObjectId
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 
-  wishList     WishList      @relation(fields: [wishListId], references: [id])
+  wishlist     Wishlist      @relation(fields: [wishlistId], references: [id])
   gift         Gift          @relation(fields: [giftId], references: [id])
-  event        Event?        @relation(fields: [eventId], references: [id])
+  event        Event         @relation(fields: [eventId], references: [id])
   transactions Transaction[]
 
-  @@index([wishListId])
+  @@index([wishlistId])
   @@index([giftId])
 }
 
 model Transaction {
   id             String            @id @default(auto()) @map("_id") @db.ObjectId
-  wishListGiftId String            @db.ObjectId
+  wishlistGiftId String            @db.ObjectId
   amount         String
   status         TransactionStatus @default(PENDING)
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  wishListGift WishListGift @relation(fields: [wishListGiftId], references: [id])
+  wishlistGift WishlistGift @relation(fields: [wishlistGiftId], references: [id])
 
-  @@index([wishListGiftId])
+  @@index([wishlistGiftId])
 }
 
-model GiftList {
+model Giftlist {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   quantity   String?
