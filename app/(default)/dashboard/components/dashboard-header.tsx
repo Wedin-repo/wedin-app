@@ -1,6 +1,8 @@
+import { getEvent } from '@/actions/data/event';
 import { getWishListGifts } from '@/actions/data/wishlist-gifts';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
+import Link from 'next/link';
 import { IoIosLink } from 'react-icons/io';
 import { IoGiftOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
@@ -21,6 +23,7 @@ export default async function DashboardHeader({
       0
     ) || 0;
   const formattedTotalPrice = formatPrice(totalPrice);
+  const event = await getEvent();
 
   return (
     <div className="flex flex-col gap-4 items-center w-full">
@@ -44,10 +47,13 @@ export default async function DashboardHeader({
           <IoIosLink fontSize={'18px'} />
           Compartir link de la lista
         </div>
-        <div className="flex gap-2 items-center">
+        <Link
+          href={`/events/${event?.url}`}
+          className="flex gap-2 items-center"
+        >
           <LuScreenShare fontSize={'18px'} />
           Ver como un invitado
-        </div>
+        </Link>
       </div>
     </div>
   );

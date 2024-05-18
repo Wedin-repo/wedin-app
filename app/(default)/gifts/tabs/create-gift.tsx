@@ -6,9 +6,9 @@ import CreateGiftForm from '@/components/forms/gifts/create-gift-form';
 
 async function CreateGift() {
   const event = await getEvent();
-  const wishListId = event?.wishlistId;
-  if (!wishListId) return null;
+  if (!event) return null;
 
+  const wishListId = event.wishlistId;
   const categories = await getCategories();
   if (!categories) return null;
 

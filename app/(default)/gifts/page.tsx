@@ -44,9 +44,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
         <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] overflow-x-auto overflow-y-hidden no-scrollbar">
           <TabsTrigger value={TABS.predefinedGifts} asChild>
             <Link
-              href={{
-                query: { ...searchParams, tab: TABS.predefinedGifts },
-              }}
+              href={{ query: { ...searchParams, tab: TABS.predefinedGifts } }}
               className="flex gap-2 items-center"
             >
               <IoGiftOutline size={24} className="mb-[2.5px]" />
@@ -56,9 +54,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
 
           <TabsTrigger value={TABS.allGifts} asChild>
             <Link
-              href={{
-                query: { ...searchParams, tab: TABS.allGifts },
-              }}
+              href={{ query: { ...searchParams, tab: TABS.allGifts } }}
               className="flex gap-2 items-center"
             >
               <PiCouchLight size={24} />
@@ -68,9 +64,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
 
           <TabsTrigger value={TABS.createGift} asChild>
             <Link
-              href={{
-                query: { tab: TABS.createGift },
-              }}
+              href={{ query: { ...searchParams, tab: TABS.createGift } }}
               className="flex gap-2 items-center"
             >
               <IoAdd size={24} />

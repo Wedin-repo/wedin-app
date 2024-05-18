@@ -3,19 +3,17 @@
 import UserMenu from '@/components/navbar/user-menu';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { User } from '@prisma/client';
-import type { Session } from 'next-auth';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../logo';
 
 type NavBarProps = {
   currentUser?: User | null;
-  session?: Session | null;
 };
 
 export const NavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  let menuValue = 'addGifts';
+  let menuValue = 'gifts';
 
   // The only case where this will run or the session.user.valid == false
   // is when you are logged in but the user have been deleted from our db
@@ -28,27 +26,13 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   // }, [session, currentUser, router]);
 
   if (pathname.includes('/gifts-received')) {
-    menuValue = 'giftsRecieved';
+    menuValue = 'gifts-received';
   } else if (pathname.includes('/dashboard')) {
-    menuValue = 'myList';
+    menuValue = 'dashboard';
   }
 
   const handleTabChange = (value: string) => {
-    let url = '/';
-    switch (value) {
-      case 'myList':
-        url = '/dashboard';
-        break;
-      case 'addGifts':
-        url = '/gifts';
-        break;
-      case 'giftsRecieved':
-        url = '/gifts-received';
-        break;
-      default:
-        break;
-    }
-    router.push(url);
+    router.push(`/${value}`);
   };
 
   return (
@@ -61,20 +45,20 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
 
           <Tabs
             className="hidden sm:block mb-[-8px]"
-            defaultValue="addGifts"
+            defaultValue="gifts"
             onValueChange={handleTabChange}
             value={menuValue}
           >
             <TabsList className="overflow-x-auto overflow-y-hidden gap-4">
-              <TabsTrigger value="addGifts" className="!text-sm pb-4">
+              <TabsTrigger value="gifts" className="!text-sm pb-4">
                 Agregar regalos
               </TabsTrigger>
               {currentUser && (
                 <>
-                  <TabsTrigger value="myList" className="!text-sm pb-4">
+                  <TabsTrigger value="dashboard" className="!text-sm pb-4">
                     Mi lista
                   </TabsTrigger>
-                  <TabsTrigger value="giftsRecieved" className="!text-sm pb-4">
+                  <TabsTrigger value="gift-received" className="!text-sm pb-4">
                     Regalos recibidos
                   </TabsTrigger>
                 </>
