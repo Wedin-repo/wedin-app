@@ -8,8 +8,10 @@ type BannerProps = {
 
 function Banner({ primayUser, secondaryUser, eventDate }: BannerProps) {
   return (
-    <div className="flex flex-row w-full h-[270px] bg-primaryTextColor">
-      <div className="flex flex-col justify-center items-center w-4/12">
+    <div className="flex flex-row p-2 w-full h-[270px] bg-primaryTextColor">
+      <div className="w-1/12" />
+
+      <div className="flex flex-col justify-center items-start w-4/12">
         <h2>
           {primayUser?.name} & {''} {secondaryUser?.name}
         </h2>
@@ -26,8 +28,6 @@ function Banner({ primayUser, secondaryUser, eventDate }: BannerProps) {
           officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
           commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
           Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis
-          officia eiusmod. Aliqua reprehenderit commodo ex non excepteur duis
-          sunt velit enim. Voluptate laboris sint cupidatat ullamco ut ea
           consectetur et est culpa et culpa duis.
         </p>
       </div>

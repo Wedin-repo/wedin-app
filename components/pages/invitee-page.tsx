@@ -1,9 +1,9 @@
 import { getCategories } from '@/actions/data/category';
 import type { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
-import Categories from '@/app/(default)/gifts/components/categories';
 import type { Event, User, WishListGift } from '@prisma/client';
 import { Suspense } from 'react';
 import Banner from '../banner';
+import Categories from '../categories';
 import Loader from '../loader';
 import InviteeGifts from './invitee-gifts';
 

@@ -20,6 +20,7 @@ enum EventType {
 }
 
 enum TransactionStatus {
+  OPEN
   PENDING
   COMPLETED
   FAILED
@@ -106,8 +107,8 @@ model WishList {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  wishListGifts WishListGift[]
   event         Event?
+  wishListGifts WishListGift[]
 }
 
 model Gift {
@@ -124,15 +125,17 @@ model Gift {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  wishListGifts WishListGift[]
   giftlist      GiftList?      @relation(fields: [giftlistId], references: [id])
   event         Event?         @relation(fields: [eventId], references: [id])
+  wishListGifts WishListGift[]
 }
 
 model WishListGift {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   isFavoriteGift Boolean  @default(false)
   isGroupGift    Boolean  @default(false)
+  groupGiftParts String?
+  isFullyPaid    Boolean  @default(false)
   isReceived     Boolean  @default(false)
   wishListId     String   @db.ObjectId
   giftId         String   @db.ObjectId
@@ -142,8 +145,8 @@ model WishListGift {
 
   wishList     WishList      @relation(fields: [wishListId], references: [id])
   gift         Gift          @relation(fields: [giftId], references: [id])
-  transactions Transaction[]
   event        Event?        @relation(fields: [eventId], references: [id])
+  transactions Transaction[]
 
   @@index([wishListId])
   @@index([giftId])
@@ -152,7 +155,7 @@ model WishListGift {
 model Transaction {
   id             String            @id @default(auto()) @map("_id") @db.ObjectId
   wishListGiftId String            @db.ObjectId
-  amount         Float
+  amount         String
   status         TransactionStatus @default(PENDING)
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt

@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const { faker } = require('@faker-js/faker');
 
-const prismaClient = new PrismaClient();
+const prismaSeed = new PrismaClient();
 
 async function main() {
   // Delete existing data in a specific order due to foreign key constraints
@@ -21,7 +21,7 @@ async function main() {
       'Relax',
       'Cultura y arte',
     ].map(async name => {
-      return prismaClient.category.upsert({
+      return prismaSeed.category.upsert({
         where: { name },
         update: {},
         create: { name },
@@ -32,7 +32,7 @@ async function main() {
   // Seed gift lists without quantity and totalPrice
   const giftLists = await Promise.all(
     categories.map(async category => {
-      return prismaClient.giftList.create({
+      return prismaSeed.giftList.create({
         data: {
           name: `${category.name} Package`,
           quantity: '0', // Initial placeholder
@@ -48,7 +48,7 @@ async function main() {
   let gifts = [];
   for (let i = 0; i < 200; i++) {
     const randomGiftList = faker.helpers.arrayElement(giftLists);
-    const defaultGift = await prismaClient.gift.create({
+    const defaultGift = await prismaSeed.gift.create({
       data: {
         name: faker.commerce.productName(),
         isDefault: true,
@@ -69,7 +69,7 @@ async function main() {
       (acc, curr) => acc + Number(curr.price),
       0
     );
-    await prismaClient.giftList.update({
+    await prismaSeed.giftList.update({
       where: { id: giftList.id },
       data: {
         quantity: giftsForList.length.toString(),
@@ -87,5 +87,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prismaClient.$disconnect();
+    await prismaSeed.$disconnect();
   });

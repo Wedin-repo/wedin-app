@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import qs from 'query-string';
 import { useCallback } from 'react';
 
@@ -13,6 +13,7 @@ type CategoryPillProps = {
 const CategoryPill: React.FC<CategoryPillProps> = ({ selected, label, id }) => {
   const router = useRouter();
   const params = useSearchParams();
+  const pathname = usePathname();
 
   const handleClick = useCallback(() => {
     let currentQuery = {};
@@ -32,14 +33,14 @@ const CategoryPill: React.FC<CategoryPillProps> = ({ selected, label, id }) => {
 
     const url = qs.stringifyUrl(
       {
-        url: '/gifts',
+        url: pathname,
         query: updatedQuery,
       },
       { skipNull: true, skipEmptyString: true }
     );
 
     router.push(url);
-  }, [id, params, router]);
+  }, [id, params, router, pathname]);
 
   return (
     // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>

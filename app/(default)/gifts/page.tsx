@@ -1,4 +1,5 @@
 import { getCategories } from '@/actions/data/category';
+import Categories from '@/components/categories';
 import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -6,7 +7,6 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import Categories from './components/categories';
 import CreateGift from './tabs/create-gift';
 import DefaultGiftLists from './tabs/default-giftlists';
 import DefaultGifts from './tabs/default-gifts';

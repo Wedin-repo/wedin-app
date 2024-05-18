@@ -4,6 +4,7 @@ import EmptyState from '@/components/empty-state';
 import type { Event, User, WishListGift } from '@prisma/client';
 import GiftCard from '../cards/gifts';
 import CardContainer from '../cards/shared/card-container';
+import WishlistGiftModal from '../modals/invitee-gifts-modal';
 
 type InvateeGiftsProps = {
   event: Event & {
@@ -28,7 +29,9 @@ async function InviteeGifts({ event, searchParams }: InvateeGiftsProps) {
   return (
     <CardContainer>
       {wishlistGifts.map(wishlistGift => (
-        <GiftCard key={wishlistGift.id} gift={wishlistGift.gift} />
+        <WishlistGiftModal key={wishlistGift.id} wishlistGift={wishlistGift}>
+          <GiftCard key={wishlistGift.id} gift={wishlistGift.gift} />
+        </WishlistGiftModal>
       ))}
     </CardContainer>
   );

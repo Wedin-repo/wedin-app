@@ -1,6 +1,6 @@
 import { getEventsByUrl } from '@/actions/data/event';
 import EmptyState from '@/components/empty-state';
-import InvateeGiftsPage from '@/components/pages/invitee-gifts';
+import InvateePage from '@/components/pages/invitee-page';
 
 export type EventPageParams = {
   slug: string;
@@ -28,5 +28,5 @@ export default async function EventPage({
     return <EmptyState title="Event not found" />;
   }
 
-  return <InvateeGiftsPage event={event} searchParams={searchParams} />;
+  return <InvateePage event={event} searchParams={searchParams} />;
 }

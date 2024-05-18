@@ -1,4 +1,4 @@
-import { type ZodType, z } from 'zod';
+import { ZodType, z } from 'zod';
 
 export const GiftFormSchema = z.object({
   name: z
@@ -65,3 +65,50 @@ export const WishListGiftDeleteSchema = z.object({
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
   giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
 });
+
+export const TransactionCreateSchema = z
+  .object({
+    wishListGift: z.object({
+      id: z
+        .string()
+        .nonempty({ message: 'No se encontró un ID de WishListGift' })
+        .uuid(),
+      isGroupGift: z.boolean(),
+      groupGiftParts: z.string().optional(),
+      isFullyPaid: z.boolean(),
+      gift: z.object({
+        price: z
+          .string()
+          .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
+          .max(10, {
+            message: 'El precio no puede ser mayor de PYG 99,999,999',
+          }),
+      }),
+      transactions: z
+        .array(
+          z.object({
+            amount: z
+              .number()
+              .positive({ message: 'El monto debe ser un número positivo' }),
+          })
+        )
+        .optional(),
+    }),
+    amount: z
+      .string()
+      .min(4, { message: 'El precio debe ser mayor a 999 guaraníes' })
+      .max(10, {
+        message: 'El precio no puede ser mayor de PYG 99,999,999',
+      }),
+  })
+  .refine(
+    data => {
+      const totalCost = Number.parseFloat(data.wishListGift.gift.price);
+      const formattedAmount = Number.parseFloat(data.amount);
+      return formattedAmount === totalCost;
+    },
+    {
+      message: 'El monto debe coincidir con el precio del regalo',
+      path: ['amount'], // Set the path of the error to the `amount` field
+    }
+  );

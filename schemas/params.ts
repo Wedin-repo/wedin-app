@@ -53,3 +53,9 @@ export const GetGiftListsSearchParams = z.object({
   category: z.string().optional(),
   name: z.string().optional(),
 });
+
+export const WishListGiftSearchSchema = z.object({
+  id: z.string().optional(),
+  giftId: z.string().optional(),
+  wishListId: z.string().optional(),
+});

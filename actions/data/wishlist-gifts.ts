@@ -7,7 +7,10 @@ import {
   WishListGiftsCreateSchema,
   WishlistGiftCreateSchema,
 } from '@/schemas/form';
-import { GetWishListGiftsParams } from '@/schemas/params';
+import {
+  GetWishListGiftsParams,
+  WishListGiftSearchSchema,
+} from '@/schemas/params';
 import type { Prisma } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type * as z from 'zod';
@@ -169,5 +172,55 @@ export async function updateWishlistGift(
     revalidatePath('/dashboard');
   } catch (error) {
     return { error: getErrorMessage(error) };
+  }
+}
+
+export async function getWishListGiftByParams(
+  searchParams: z.infer<typeof WishListGiftSearchSchema>
+) {
+  const validatedFields = WishListGiftSearchSchema.safeParse(searchParams);
+
+  if (!validatedFields.success) {
+    return { error: 'Invalid search parameters' };
+  }
+
+  const { id, giftId, wishListId } = validatedFields.data;
+
+  // Build the query based on provided parameters
+  const query: Prisma.WishListGiftWhereInput = {};
+
+  if (id) {
+    query.id = id;
+  }
+
+  if (giftId) {
+    query.giftId = giftId;
+  }
+
+  if (wishListId) {
+    query.wishListId = wishListId;
+  }
+
+  if (Object.keys(query).length === 0) {
+    return { error: 'At least one search parameter must be provided' };
+  }
+
+  try {
+    const wishListGift = await prismaClient.wishListGift.findFirst({
+      where: query,
+      include: {
+        gift: true,
+        transactions: true,
+      },
+    });
+
+    if (!wishListGift) {
+      return { error: 'WishListGift not found' };
+    }
+
+    return { wishListGift };
+  } catch (error) {
+    console.error('Error retrieving WishListGift:', error);
+    return { error: 'Error retrieving WishListGift' };
   }
 }

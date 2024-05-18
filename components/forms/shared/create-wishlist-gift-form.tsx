@@ -8,18 +8,17 @@ import WishListFormButton from './wishlist-form-button';
 
 type AddToWishListFormProps = {
   giftId: string;
-  isFavoriteGift: boolean;
-  isGroupGift: boolean;
+  isFavoriteGift?: boolean;
+  isGroupGift?: boolean;
   variant?: string;
   wishlistId?: string | null;
   setIsOpen?: (value: boolean) => void;
 };
 
-// TODO: add ability to add isGroupGift and isFavoriteGift to the form
 function CreateWishlistGiftForm({
   giftId,
-  isFavoriteGift,
-  isGroupGift,
+  isFavoriteGift = false,
+  isGroupGift = false,
   variant,
   wishlistId,
   setIsOpen,
