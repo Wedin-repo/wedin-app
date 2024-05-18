@@ -1,10 +1,10 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 
 export async function getCategories() {
   try {
-    return await prisma.category.findMany();
+    return await prismaClient.category.findMany();
   } catch (error) {
     console.error(error);
     return null;
@@ -28,7 +28,7 @@ export async function getCategory({
     query.id = categoryId;
   }
   try {
-    return await prisma.category.findUnique({
+    return await prismaClient.category.findUnique({
       where: query,
     });
   } catch (error) {

@@ -1,7 +1,7 @@
 // server side get current user
 
 import { auth } from '@/auth';
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 
 export async function getCurrentUser() {
   const session = await auth();
@@ -9,7 +9,7 @@ export async function getCurrentUser() {
   if (!session?.user?.email) return null;
 
   try {
-    const currentUser = await prisma.user.findUnique({
+    const currentUser = await prismaClient.user.findUnique({
       where: {
         email: session.user.email,
       },

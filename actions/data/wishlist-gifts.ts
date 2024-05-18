@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import {
   WishListGiftDeleteSchema,
   WishListGiftEditSchema,
@@ -26,7 +26,7 @@ export async function createWishlistGift(
     validatedFields.data;
 
   try {
-    await prisma.wishListGift.create({
+    await prismaClient.wishListGift.create({
       data: {
         wishListId: wishlistId,
         giftId,
@@ -59,7 +59,7 @@ export async function addGiftsToWishList(
   }));
 
   try {
-    await prisma.wishListGift.createMany({
+    await prismaClient.wishListGift.createMany({
       data: wishListGiftData,
     });
   } catch (error: unknown) {
@@ -81,7 +81,7 @@ export async function deleteGiftFromWishList(
   const { wishlistId, giftId } = validatedFields.data;
 
   try {
-    await prisma.wishListGift.deleteMany({
+    await prismaClient.wishListGift.deleteMany({
       where: {
         wishListId: wishlistId,
         giftId: giftId,
@@ -123,7 +123,7 @@ export async function getWishListGifts(
   const take = itemsPerPage ? Number(itemsPerPage) : undefined;
 
   try {
-    return await prisma.wishListGift.findMany({
+    return await prismaClient.wishListGift.findMany({
       where: query,
       include: {
         gift: true,
@@ -152,7 +152,7 @@ export async function updateWishlistGift(
   const { isFavoriteGift, isGroupGift, wishlistGiftId } = validatedFields.data;
 
   try {
-    await prisma.wishListGift.update({
+    await prismaClient.wishListGift.update({
       where: { id: wishlistGiftId },
       data: {
         isFavoriteGift,

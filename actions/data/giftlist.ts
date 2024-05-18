@@ -1,13 +1,13 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import type { GetGiftListsSearchParams } from '@/schemas/params';
 import type { Prisma } from '@prisma/client';
 import type { z } from 'zod';
 
 export async function getGiftList(giftListId: string) {
   try {
-    const giftList = await prisma.giftList.findUnique({
+    const giftList = await prismaClient.giftList.findUnique({
       include: {
         gifts: true,
       },
@@ -48,7 +48,7 @@ export async function getGiftLists({
   }
 
   try {
-    const giftLists = await prisma.giftList.findMany({
+    const giftLists = await prismaClient.giftList.findMany({
       where: query,
       include: {
         gifts: true,

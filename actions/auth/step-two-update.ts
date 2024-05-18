@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { StepTwoSchema } from '@/schemas/auth';
 import type { User } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
@@ -24,7 +24,7 @@ export const stepTwoUpdate = async (values: z.infer<typeof StepTwoSchema>) => {
     let groom: User;
 
     try {
-      groom = await prisma.user.update({
+      groom = await prismaClient.user.update({
         where: { email: session.user.email },
         data: {
           hasPYbankAccount: hasPYbankAccount,
@@ -39,7 +39,7 @@ export const stepTwoUpdate = async (values: z.infer<typeof StepTwoSchema>) => {
     if (!groom) return { error: 'Error obteniendo tu usuario' };
 
     try {
-      await prisma.event.update({
+      await prismaClient.event.update({
         where: {
           secondaryUserId: groom.id,
         },

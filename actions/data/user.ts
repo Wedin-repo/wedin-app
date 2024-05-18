@@ -1,14 +1,14 @@
 'use server';
 
 import type { ErrorResponse } from '@/auth';
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import type { User } from '@prisma/client';
 
 export const getUserByEmail = async (
   email: string
 ): Promise<User | ErrorResponse> => {
   try {
-    const currentUser = await prisma.user.findUnique({
+    const currentUser = await prismaClient.user.findUnique({
       where: { email },
     });
 
@@ -24,7 +24,7 @@ export const getUserByEmail = async (
 
 export const getLoginUserByEmail = async (email: string) => {
   try {
-    return await prisma.user.findUnique({
+    return await prismaClient.user.findUnique({
       where: { email },
     });
   } catch (error) {
@@ -34,7 +34,7 @@ export const getLoginUserByEmail = async (email: string) => {
 
 export const updateVerifiedOn = async (email: string) => {
   try {
-    const currentUser = await prisma.user.update({
+    const currentUser = await prismaClient.user.update({
       where: { email: email },
       data: { emailVerified: new Date() },
     });
@@ -51,7 +51,7 @@ export const updateUserById = async (
   onboardingStep: number
 ) => {
   try {
-    await prisma.user.update({
+    await prismaClient.user.update({
       where: {
         id: userId,
       },
@@ -68,7 +68,7 @@ export const updateUserById = async (
 
 export const upsertUser = async (email: string, provider?: string) => {
   try {
-    return await prisma.user.upsert({
+    return await prismaClient.user.upsert({
       where: {
         email: email,
       },

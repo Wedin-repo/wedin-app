@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@/auth';
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { StepOneSchema } from '@/schemas/auth';
 import type { User, WishList } from '@prisma/client';
 import type * as z from 'zod';
@@ -29,7 +29,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
     let wishlist: WishList;
 
     try {
-      primaryUser = await prisma.user.upsert({
+      primaryUser = await prismaClient.user.upsert({
         where: {
           email: partnerEmail, // The unique identifier to search for
         },
@@ -56,7 +56,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
     if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
     try {
-      secondaryUser = await prisma.user.upsert({
+      secondaryUser = await prismaClient.user.upsert({
         where: {
           email: session.user.email, // This checks if a user exists with this email
         },
@@ -76,11 +76,11 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
     }
 
     try {
-      wishlist = await prisma.wishList.create({
+      wishlist = await prismaClient.wishList.create({
         data: {},
       });
 
-      await prisma.event.create({
+      await prismaClient.event.create({
         data: {
           secondaryUserId: secondaryUser.id,
           primaryUserId: primaryUser.id,
@@ -95,7 +95,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
     }
 
     try {
-      await prisma.user.update({
+      await prismaClient.user.update({
         where: {
           email: session.user.email,
         },

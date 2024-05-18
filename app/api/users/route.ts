@@ -1,4 +1,4 @@
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { MagicLoginSchema } from '@/schemas/auth';
 import { NextResponse } from 'next/server';
 
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Campos inválidos' }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({
+  const user = await prismaClient.user.findUnique({
     where: { email: validatedFields.data.email },
   });
 

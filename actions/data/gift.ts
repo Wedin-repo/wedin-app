@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import {
   GiftCreateSchema,
   GiftEditSchema,
@@ -14,7 +14,7 @@ import { getErrorMessage } from '../helper';
 
 export async function getGift(giftId: string) {
   try {
-    return await prisma.gift.findUnique({
+    return await prismaClient.gift.findUnique({
       where: { id: giftId },
     });
   } catch (error) {
@@ -56,7 +56,7 @@ export async function getGifts({
   const take = itemsPerPage ? Number(itemsPerPage) : undefined;
 
   try {
-    return await prisma.gift.findMany({
+    return await prismaClient.gift.findMany({
       where: query,
       orderBy: {
         createdAt: 'desc',
@@ -72,7 +72,7 @@ export async function getGifts({
 
 export async function updateGiftImageUrl(url: string, giftId: string) {
   try {
-    await prisma.gift.update({
+    await prismaClient.gift.update({
       where: { id: giftId },
       data: { imageUrl: url },
     });
@@ -95,7 +95,7 @@ export async function editGift(
   }
 
   try {
-    const gift = await prisma.gift.update({
+    const gift = await prismaClient.gift.update({
       where: { id: giftId },
       data: {
         name: validatedFields.data.name,
@@ -124,7 +124,7 @@ export async function createGift(formData: z.infer<typeof GiftPostSchema>) {
   }
 
   try {
-    const newGift = await prisma.gift.create({
+    const newGift = await prismaClient.gift.create({
       data: {
         name: validatedFields.data.name,
         categoryId: validatedFields.data.categoryId,

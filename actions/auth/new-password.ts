@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { NewPasswordSchema } from '@/schemas/auth';
 import bcrypt from 'bcryptjs';
 import type * as z from 'zod';
@@ -34,7 +34,7 @@ export const newPassword = async (
     const { password } = validatedFields.data;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prismaClient.user.findUnique({
       where: { email },
     });
 
@@ -46,7 +46,7 @@ export const newPassword = async (
     }
 
     try {
-      await prisma.user.update({
+      await prismaClient.user.update({
         where: { email },
         data: { password: hashedPassword },
       });

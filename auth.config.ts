@@ -1,4 +1,4 @@
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import bcrypt from 'bcryptjs';
 import Credentials from 'next-auth/providers/credentials';
 import Facebook from 'next-auth/providers/facebook';
@@ -8,7 +8,7 @@ import { PrismaAdapter } from '@auth/prisma-adapter';
 import { LoginSchema } from './schemas/auth';
 
 const authOptions: NextAuthConfig = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prismaClient),
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -27,7 +27,7 @@ const authOptions: NextAuthConfig = {
         if (validatedFields.success) {
           const { email, password } = validatedFields.data;
 
-          const user = await prisma.user.findUnique({
+          const user = await prismaClient.user.findUnique({
             where: { email },
           });
 

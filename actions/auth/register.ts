@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { sendVericationEmail } from '@/lib/mail';
 import { generateVerificationToken } from '@/lib/tokens';
 import { RegisterSchema } from '@/schemas/auth';
@@ -17,7 +17,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   const { email, password } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const existingUser = await prisma.user.findFirst({
+  const existingUser = await prismaClient.user.findFirst({
     where: { email },
   });
 
@@ -26,7 +26,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   }
 
   try {
-    await prisma.user.create({
+    await prismaClient.user.create({
       data: {
         email,
         password: hashedPassword,

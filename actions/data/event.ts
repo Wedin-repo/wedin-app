@@ -1,6 +1,6 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { getCurrentUser } from '../get-current-user';
 
 export async function getEvent() {
@@ -11,7 +11,7 @@ export async function getEvent() {
   const userId = user.id;
 
   try {
-    const event = await prisma.event.findFirst({
+    const event = await prismaClient.event.findFirst({
       where: {
         OR: [{ primaryUserId: userId }, { secondaryUserId: userId }],
       },
@@ -22,6 +22,21 @@ export async function getEvent() {
     return event;
   } catch (error) {
     console.error(error);
+    return null;
+  }
+}
+
+export async function getEventsByUrl(url: string) {
+  try {
+    const event = await prismaClient.event.findFirst({
+      where: { url },
+    });
+
+    if (!event) return null;
+
+    return event;
+  } catch (error) {
+    console.log(error);
     return null;
   }
 }

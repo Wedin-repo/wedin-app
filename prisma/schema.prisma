@@ -13,6 +13,19 @@ enum UserType {
   INVITEE
 }
 
+enum EventType {
+  WEDDING
+  BIRTHDAY
+  BABY_SHOWER
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -77,10 +90,11 @@ model Event {
   country         String?
   city            String?
 
-  wishList           WishList @relation(fields: [wishlistId], references: [id])
-  eventPrimaryUser   User?    @relation("primaryUser", fields: [primaryUserId], references: [id])
-  eventSecondaryUser User?    @relation("secondaryUser", fields: [secondaryUserId], references: [id])
-  Gift               Gift[]
+  wishList           WishList       @relation(fields: [wishlistId], references: [id])
+  eventPrimaryUser   User?          @relation("primaryUser", fields: [primaryUserId], references: [id])
+  eventSecondaryUser User?          @relation("secondaryUser", fields: [secondaryUserId], references: [id])
+  Gifts              Gift[]
+  WishlistGifts      WishListGift[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])
@@ -117,18 +131,35 @@ model Gift {
 
 model WishListGift {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  wishListId     String   @db.ObjectId
-  giftId         String   @db.ObjectId
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
   isFavoriteGift Boolean  @default(false)
   isGroupGift    Boolean  @default(false)
+  isReceived     Boolean  @default(false)
+  wishListId     String   @db.ObjectId
+  giftId         String   @db.ObjectId
+  eventId        String?  @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  wishList WishList @relation(fields: [wishListId], references: [id])
-  gift     Gift     @relation(fields: [giftId], references: [id])
+  wishList     WishList      @relation(fields: [wishListId], references: [id])
+  gift         Gift          @relation(fields: [giftId], references: [id])
+  transactions Transaction[]
+  Event        Event?        @relation(fields: [eventId], references: [id])
 
   @@index([wishListId])
   @@index([giftId])
+}
+
+model Transaction {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  wishListGiftId String            @db.ObjectId
+  amount         Float
+  status         TransactionStatus @default(PENDING)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  wishListGift WishListGift @relation(fields: [wishListGiftId], references: [id])
+
+  @@index([wishListGiftId])
 }
 
 model GiftList {
