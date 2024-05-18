@@ -94,7 +94,7 @@ export async function deleteGiftFromWishList(
   revalidatePath('/dashboard');
 }
 
-export async function getWishListGifts(
+export async function getWishlistGifts(
   searchParams: z.infer<typeof GetWishListGiftsParams>
 ) {
   const validatedFields = GetWishListGiftsParams.safeParse(searchParams);
@@ -103,7 +103,8 @@ export async function getWishListGifts(
     return [];
   }
 
-  const { wishlistId, name, page, itemsPerPage } = validatedFields.data;
+  const { wishlistId, name, page, itemsPerPage, category } =
+    validatedFields.data;
 
   const query: Prisma.WishListGiftWhereInput = {
     wishListId: wishlistId,
@@ -115,6 +116,12 @@ export async function getWishListGifts(
         contains: name,
         mode: 'insensitive',
       },
+    };
+  }
+
+  if (category) {
+    query.gift = {
+      categoryId: category,
     };
   }
 

@@ -20,6 +20,8 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
   const { name, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
   const [isOpen, setIsOpen] = useState(false);
+  const [isFavoriteGift, setIsFavoriteGift] = useState(false);
+  const [isGroupGift, setIsGroupGift] = useState(false);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -45,11 +47,14 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
             <div className="flex flex-col gap-3 text-base sm:text-lg">
               <div className="flex justify-between items-center">
                 <p>Marcar como el que más queremos ⭐</p>
-                <Switch id="favorite-gift" />
+                <Switch
+                  onCheckedChange={setIsFavoriteGift}
+                  id="favorite-gift"
+                />
               </div>
               <div className="flex justify-between items-center">
                 <p>Regalo grupal</p>
-                <Switch id="group-gift" />
+                <Switch onCheckedChange={setIsGroupGift} id="group-gift" />
               </div>
             </div>
 
@@ -61,6 +66,8 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
             <CreateWishlistGiftForm
               giftId={id}
               wishlistId={wishlistId}
+              isFavoriteGift={isFavoriteGift}
+              isGroupGift={isGroupGift}
               setIsOpen={setIsOpen}
             />
           </div>

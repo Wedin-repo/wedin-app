@@ -30,6 +30,11 @@ export async function getEventsByUrl(url: string) {
   try {
     const event = await prismaClient.event.findFirst({
       where: { url },
+      include: {
+        wishlistGifts: true,
+        eventPrimaryUser: true,
+        eventSecondaryUser: true,
+      },
     });
 
     if (!event) return null;

@@ -3,7 +3,7 @@ import { getGifts } from '@/actions/data/gift';
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
-import GiftModal from '@/components/modals/gift';
+import GiftModal from '@/components/modals/gift-modal';
 import type { GiftPageSearchParams } from '../page';
 
 type DefaultGiftsProps = {

@@ -1,5 +1,5 @@
 import { getEvent } from '@/actions/data/event';
-import { getWishListGifts } from '@/actions/data/wishlist-gifts';
+import { getWishlistGifts } from '@/actions/data/wishlist-gifts';
 import type { GiftsReceivedPageSearchParams } from '@/app/(default)/gifts-received/page';
 import GiftsReceivedGiftCard from '@/components/cards/gifts-received';
 import CardContainer from '@/components/cards/shared/card-container';
@@ -24,14 +24,14 @@ export default async function GiftsReceived({
   const { page = '1', name } = searchParams;
 
   // Get total wishlist gifts to determine if the wishlist is empty
-  const totalWishlistGifts = await getWishListGifts({ wishlistId });
+  const totalWishlistGifts = await getWishlistGifts({ wishlistId });
 
   if (!totalWishlistGifts || totalWishlistGifts.length === 0) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
   // Fetch filtered wishlist gifts based on search params
-  const filteredWishlistGifts = await getWishListGifts({
+  const filteredWishlistGifts = await getWishlistGifts({
     wishlistId,
     name,
   });
@@ -42,7 +42,7 @@ export default async function GiftsReceived({
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredWishlistGifts.length / itemsPerPage);
-  const paginatedWishlistGifts = await getWishListGifts({
+  const paginatedWishlistGifts = await getWishlistGifts({
     wishlistId,
     name,
     page,

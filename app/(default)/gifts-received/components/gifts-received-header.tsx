@@ -1,5 +1,5 @@
 import { getEvent } from '@/actions/data/event';
-import { getWishListGifts } from '@/actions/data/wishlist-gifts';
+import { getWishlistGifts } from '@/actions/data/wishlist-gifts';
 import EmptyState from '@/components/empty-state';
 import { Button } from '@/components/ui/button';
 import { formatPrice } from '@/lib/utils';
@@ -13,7 +13,7 @@ export default async function GiftsReceivedHeader() {
     return <EmptyState showReset title="Ocurrió un error al crear tu cuenta" />;
   }
   const wishlistId = event.wishlistId;
-  const wishlistGifts = await getWishListGifts({ wishlistId });
+  const wishlistGifts = await getWishlistGifts({ wishlistId });
   const totalPrice =
     wishlistGifts.reduce(
       (acc, wishlistGift) => acc + Number.parseFloat(wishlistGift.gift.price),

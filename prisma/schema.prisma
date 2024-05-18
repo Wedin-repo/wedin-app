@@ -93,8 +93,8 @@ model Event {
   wishList           WishList       @relation(fields: [wishlistId], references: [id])
   eventPrimaryUser   User?          @relation("primaryUser", fields: [primaryUserId], references: [id])
   eventSecondaryUser User?          @relation("secondaryUser", fields: [secondaryUserId], references: [id])
-  Gifts              Gift[]
-  WishlistGifts      WishListGift[]
+  gifts              Gift[]
+  wishlistGifts      WishListGift[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])
@@ -143,7 +143,7 @@ model WishListGift {
   wishList     WishList      @relation(fields: [wishListId], references: [id])
   gift         Gift          @relation(fields: [giftId], references: [id])
   transactions Transaction[]
-  Event        Event?        @relation(fields: [eventId], references: [id])
+  event        Event?        @relation(fields: [eventId], references: [id])
 
   @@index([wishListId])
   @@index([giftId])

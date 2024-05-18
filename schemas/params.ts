@@ -6,6 +6,7 @@ export const GetWishListGiftsParams = z
     wishlistId: z.string().min(1, { message: 'No se encontró un wishlist ID' }),
     page: z.string().optional(),
     itemsPerPage: z.number().optional(),
+    category: z.string().optional(),
   })
   .refine(
     data => {

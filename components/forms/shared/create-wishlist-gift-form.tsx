@@ -8,6 +8,8 @@ import WishListFormButton from './wishlist-form-button';
 
 type AddToWishListFormProps = {
   giftId: string;
+  isFavoriteGift: boolean;
+  isGroupGift: boolean;
   variant?: string;
   wishlistId?: string | null;
   setIsOpen?: (value: boolean) => void;
@@ -16,9 +18,11 @@ type AddToWishListFormProps = {
 // TODO: add ability to add isGroupGift and isFavoriteGift to the form
 function CreateWishlistGiftForm({
   giftId,
+  isFavoriteGift,
+  isGroupGift,
+  variant,
   wishlistId,
   setIsOpen,
-  variant,
 }: AddToWishListFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -33,7 +37,11 @@ function CreateWishlistGiftForm({
       return redirect('/register');
     }
 
-    const response = await createWishlistGift(validatedFields.data);
+    const response = await createWishlistGift({
+      ...validatedFields.data,
+      isFavoriteGift,
+      isGroupGift,
+    });
 
     if (response?.error) {
       toast({

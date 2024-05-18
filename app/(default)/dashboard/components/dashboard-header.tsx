@@ -1,5 +1,5 @@
 import { getEvent } from '@/actions/data/event';
-import { getWishListGifts } from '@/actions/data/wishlist-gifts';
+import { getWishlistGifts } from '@/actions/data/wishlist-gifts';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ type DashboardHeaderProps = {
 export default async function DashboardHeader({
   wishlistId,
 }: DashboardHeaderProps) {
-  const wishlistGifts = await getWishListGifts({ wishlistId });
+  const wishlistGifts = await getWishlistGifts({ wishlistId });
 
   const totalPrice =
     wishlistGifts?.reduce(

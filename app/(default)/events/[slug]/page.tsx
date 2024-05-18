@@ -1,9 +1,32 @@
-import { getEvent, getEventsByUrl } from '@/actions/data/event';
+import { getEventsByUrl } from '@/actions/data/event';
+import EmptyState from '@/components/empty-state';
+import InvateeGiftsPage from '@/components/pages/invitee-gifts';
 
-export default function Event({ params }: { params: { slug: string } }) {
+export type EventPageParams = {
+  slug: string;
+};
+
+export type EventPageSearchParams = {
+  category: string;
+  page: string;
+};
+
+type EventPageProps = {
+  searchParams: EventPageSearchParams;
+  params: EventPageParams;
+};
+
+export default async function EventPage({
+  params,
+  searchParams,
+}: EventPageProps) {
   const { slug } = params;
 
-  const event = getEventsByUrl(slug);
+  const event = await getEventsByUrl(slug);
 
-  return <div>event with slug {slug}</div>;
+  if (!event) {
+    return <EmptyState title="Event not found" />;
+  }
+
+  return <InvateeGiftsPage event={event} searchParams={searchParams} />;
 }
