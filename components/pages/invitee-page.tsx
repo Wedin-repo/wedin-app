@@ -1,5 +1,11 @@
 import { getCategories } from '@/actions/data/category';
-import type { Event, Gift, User, WishlistGift } from '@prisma/client';
+import type {
+  Event,
+  Gift,
+  Transaction,
+  User,
+  WishlistGift,
+} from '@prisma/client';
 import { Suspense } from 'react';
 import Banner from '../banner';
 import Categories from '../categories';
@@ -10,6 +16,7 @@ type InvateePageProps = {
   event: Event & {
     wishlistGifts: (WishlistGift & {
       gift: Gift;
+      transactions: Transaction[];
     })[];
     eventPrimaryUser: User | null;
     eventSecondaryUser: User | null;

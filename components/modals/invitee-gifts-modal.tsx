@@ -3,15 +3,15 @@
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { useState } from 'react';
 
-type WishlistGiftModalProps = {
+type InviteeGiftModalProps = {
   children: React.ReactNode;
   dialogContent: React.ReactNode;
 };
 
-function WishlistGiftModal({
+function InviteeWishlistGiftModal({
   children,
   dialogContent,
-}: WishlistGiftModalProps) {
+}: InviteeGiftModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -25,4 +25,4 @@ function WishlistGiftModal({
   );
 }
 
-export default WishlistGiftModal;
+export default InviteeWishlistGiftModal;

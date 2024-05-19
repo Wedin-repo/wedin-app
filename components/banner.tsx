@@ -7,15 +7,18 @@ type BannerProps = {
 };
 
 function Banner({ primayUser, secondaryUser, eventDate }: BannerProps) {
+  console.log({ eventDate: eventDate });
   return (
     <div className="flex flex-row p-2 w-full h-[270px] bg-primaryBorderColor">
       <div className="w-1/12" />
 
       <div className="flex flex-col justify-center items-start w-4/12">
-        <h2>
+        <p>
           {primayUser?.name} & {''} {secondaryUser?.name}
-        </h2>
-        <p>{eventDate?.getDate() ?? 'Todavia sin decidir'}</p>
+        </p>
+        <p className="text-2xl">
+          {eventDate?.toLocaleDateString() ?? 'Todavia sin decidir'}
+        </p>
       </div>
 
       <div className="flex flex-row justify-center items-center w-6/12">

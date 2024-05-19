@@ -12,11 +12,19 @@ import {
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 import React from 'react';
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
+interface PaginationProps {
+  totalPages: number;
+  pageVarName?: string;
+}
+
+export default function Pagination({
+  totalPages,
+  pageVarName = 'page',
+}: PaginationProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = Number(searchParams.get(pageVarName)) || 1;
 
   const paginationRange = () => {
     const range = [];
@@ -36,7 +44,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
 
   const setPage = (pageNumber: number) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', pageNumber.toString());
+    params.set(pageVarName, pageNumber.toString());
     router.push(`${pathname}?${params.toString()}`);
   };
 

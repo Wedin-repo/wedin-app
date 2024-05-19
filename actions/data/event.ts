@@ -34,6 +34,7 @@ export async function getEventByUrl(url: string) {
         wishlistGifts: {
           include: {
             gift: true,
+            transactions: true,
           },
         },
         eventPrimaryUser: true,

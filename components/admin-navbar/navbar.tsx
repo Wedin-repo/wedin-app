@@ -10,27 +10,14 @@ type NavBarProps = {
   currentUser?: User | null;
 };
 
-export const NavBar = ({ currentUser }: NavBarProps) => {
+export const AdminNavBar = ({ currentUser }: NavBarProps) => {
   const router = useRouter();
   const pathname = usePathname();
-  let menuValue = 'gifts';
+  let menuValue = 'transactions';
 
-  // The only case where this will run or the session.user.valid == false
-  // is when you are logged in but the user have been deleted from our db
-  // this will sign out the user
-  // useEffect(() => {
-  //   if (session && !currentUser)   {
-  //     signOut();
-  //     router.push('/login');
-  //   }
-  // }, [session, currentUser, router]);
-
-  if (pathname.includes('/gifts-received')) {
-    menuValue = 'gifts-received';
-  } else if (pathname.includes('/dashboard') || pathname.includes('/events')) {
-    menuValue = 'dashboard';
+  if (pathname.includes('/transactions')) {
+    menuValue = 'transactions';
   }
-
   const handleTabChange = (value: string) => {
     router.push(`/${value}`);
   };
@@ -45,21 +32,14 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
 
           <Tabs
             className="hidden sm:block mb-[-8px]"
-            defaultValue="gifts"
+            defaultValue="transactions"
             onValueChange={handleTabChange}
-            value={menuValue}
           >
             <TabsList className="overflow-x-auto overflow-y-hidden gap-4">
-              <TabsTrigger value="gifts" className="!text-sm pb-4">
-                Agregar regalos
-              </TabsTrigger>
               {currentUser && (
                 <>
-                  <TabsTrigger value="dashboard" className="!text-sm pb-4">
-                    Mi lista
-                  </TabsTrigger>
-                  <TabsTrigger value="gifts-received" className="!text-sm pb-4">
-                    Regalos recibidos
+                  <TabsTrigger value="transactions" className="!text-sm pb-4">
+                    Transacciones
                   </TabsTrigger>
                 </>
               )}
@@ -74,4 +54,4 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   );
 };
 
-export default NavBar;
+export default AdminNavBar;

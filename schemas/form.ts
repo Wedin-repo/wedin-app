@@ -1,3 +1,5 @@
+import { fail } from 'assert';
+import { Zeyada } from 'next/font/google';
 import { type ZodType, z } from 'zod';
 
 export const GiftFormSchema = z.object({
@@ -78,4 +80,30 @@ export const TransactionCreateSchema = z.object({
     .max(10, {
       message: 'El precio no puede ser mayor de PYG 99,999,999',
     }),
+});
+
+// Define the TransactionStatus enum to match your Prisma schema
+const TransactionStatus = z.enum([
+  'OPEN',
+  'PENDING',
+  'COMPLETED',
+  'FAILED',
+  'REFUNDED',
+]);
+
+export const TransactionEditSchema = z.object({
+  status: TransactionStatus,
+  notes: z.string().optional(),
+});
+
+export const TransactionStatusLogUpdateSchema = z.object({
+  transaction: z.object({
+    id: z.string().min(1, { message: 'No se encontró un ID de transacción' }),
+    status: TransactionStatus, // This is the previous status
+  }),
+  status: TransactionStatus, // This is the new status
+  changedById: z
+    .string()
+    .min(1, { message: 'No se encontró un ID de usuario' }),
+  changedAt: z.string().transform(str => new Date(str)), // Ensure changedAt is a valid Date
 });
