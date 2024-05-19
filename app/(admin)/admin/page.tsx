@@ -1,10 +1,11 @@
-import WislistGifts from '@/app/(default)/dashboard/components/wislists-gifts';
 import SearchBar from '@/components/search-bar';
 import { Loader } from 'lucide-react';
 import { Suspense } from 'react';
 import AdminHeader from './admin-header';
+import Transactions from './transactions';
 
 export type AdminPageSearchParams = {
+  name?: string;
   page?: string;
   userId?: string;
   eventId?: string;
@@ -22,7 +23,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
       <SearchBar scrollValue={200} scrollValueMobile={250} />
 
       <Suspense fallback={<Loader />}>
-        <WislistGifts searchParams={searchParams} />
+        <Transactions searchParams={searchParams} />
       </Suspense>
     </div>
   );

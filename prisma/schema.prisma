@@ -10,6 +10,7 @@ datasource db {
 enum UserType {
   ADMIN
   ORGANIZER
+  COUPLE
   INVITEE
 }
 
@@ -73,8 +74,8 @@ model User {
 
   accounts             Account[]
   sessions             Session[]
-  eventPrimaryUser     Event[]                @relation("primaryUser")
-  eventSecondaryUser   Event[]                @relation("secondaryUser")
+  eventPrimaryUsers    Event[]                @relation("primaryUser")
+  eventSecondaryUsers  Event[]                @relation("secondaryUser")
   TransactionStatusLog TransactionStatusLog[]
 }
 
@@ -128,8 +129,8 @@ model Gift {
   updatedAt       DateTime @updatedAt
 
   giftlist      Giftlist?      @relation(fields: [giftlistId], references: [id])
-  wishlistGifts WishlistGift[]
   event         Event?         @relation(fields: [eventId], references: [id])
+  wishlistGifts WishlistGift[]
 }
 
 model WishlistGift {
@@ -158,15 +159,17 @@ model Transaction {
   id             String            @id @default(auto()) @map("_id") @db.ObjectId
   wishlistGiftId String            @db.ObjectId
   amount         String
-  status         TransactionStatus @default(PENDING)
-  payerRole      UserType
-  payeeRole      UserType
+  status         TransactionStatus @default(OPEN)
+  notes          String?
+  payerRole      UserType          @default(INVITEE)
+  payeeRole      UserType          @default(ORGANIZER)
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  wishlistGift         WishlistGift           @relation(fields: [wishlistGiftId], references: [id])
-  event                Event                  @relation(fields: [wishlistGiftId], references: [id])
-  TransactionStatusLog TransactionStatusLog[]
+  wishlistGift          WishlistGift           @relation(fields: [wishlistGiftId], references: [id])
+  event                 Event                  @relation(fields: [wishlistGiftId], references: [id])
+  transactionStatusLogs TransactionStatusLog[]
+  images                Image[]
 
   @@index([wishlistGiftId])
 }
@@ -217,4 +220,14 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+model Image {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  url           String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  transactionId String?  @db.ObjectId
+
+  transaction Transaction? @relation(fields: [transactionId], references: [id])
 }

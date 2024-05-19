@@ -1,11 +1,12 @@
 'use server';
 
 import prismaClient from '@/prisma/client';
+import { TransactionEditSchema } from '@/schemas/form';
 import {
   CreateTransactionParams,
   GetTransactionsParams,
 } from '@/schemas/params';
-import { type Prisma, TransactionStatus } from '@prisma/client';
+import { type Prisma, TransactionStatus, UserType } from '@prisma/client';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
 
@@ -67,6 +68,8 @@ export async function createTransaction(
         wishlistGiftId: wishlistGift.id,
         amount: formattedAmount.toString(),
         status: TransactionStatus.OPEN, // You can adjust this as per your workflow
+        payeeRole: UserType.INVITEE,
+        payerRole: UserType.ORGANIZER,
       },
     });
     if (!transaction) {
@@ -90,9 +93,32 @@ export async function createTransaction(
     };
   }
 }
+
 export async function getTransactions(
-  searchParams: z.infer<typeof GetTransactionsParams>
+  searchParams?: z.infer<typeof GetTransactionsParams>
 ) {
+  if (!searchParams) {
+    try {
+      const transactions = await prismaClient.transaction.findMany({
+        include: {
+          wishlistGift: {
+            include: {
+              event: true,
+              gift: true,
+            },
+          },
+        },
+      });
+      const totalAmount = transactions.reduce((sum, transaction) => {
+        return sum + Number.parseInt(transaction.amount);
+      }, 0);
+
+      return { transactions, totalAmount };
+    } catch (error) {
+      return { error: getErrorMessage(error) };
+    }
+  }
+
   const validatedParams = GetTransactionsParams.safeParse(searchParams);
 
   if (!validatedParams.success) {
@@ -101,7 +127,13 @@ export async function getTransactions(
     };
   }
 
-  const { eventId, userId, page, itemsPerPage = 15 } = validatedParams.data;
+  const {
+    eventId,
+    userId,
+    page,
+    itemsPerPage = 15,
+    name,
+  } = validatedParams.data;
 
   const query: Prisma.TransactionWhereInput = {};
 
@@ -116,8 +148,19 @@ export async function getTransactions(
     ];
   }
 
+  if (name) {
+    query.wishlistGift = {
+      gift: {
+        name: {
+          contains: name.trim(),
+          mode: 'insensitive',
+        },
+      },
+    };
+  }
+
   const skip = page ? (Number(page) - 1) * itemsPerPage : undefined;
-  const take = page ? Number(itemsPerPage) : undefined;
+  const take = page ? itemsPerPage : undefined;
 
   try {
     const transactions = await prismaClient.transaction.findMany({
@@ -145,6 +188,30 @@ export async function getTransactions(
     return { transactions, totalAmount };
   } catch (error) {
     console.error('Error retrieving transactions:', error);
+    return { error: getErrorMessage(error) };
+  }
+}
+
+export async function editTransaction(
+  formData: z.infer<typeof TransactionEditSchema>,
+  transactionId: string
+) {
+  const validatedFields = TransactionEditSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return {
+      error: validatedFields.error.errors.map(e => e.message).join(', '),
+    };
+  }
+
+  const { status, notes } = validatedFields.data;
+
+  try {
+    await prismaClient.transaction.update({
+      where: { id: transactionId },
+      data: { status, notes },
+    });
+  } catch (error) {
     return { error: getErrorMessage(error) };
   }
 }

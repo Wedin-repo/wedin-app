@@ -5,7 +5,7 @@ import PriceField from '@/components/forms/shared/price-field-input';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { TransactionCreateSchema } from '@/schemas/form';
+import { TransactionEditSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Gift, WishlistGift } from '@prisma/client';
 import { useState } from 'react';
@@ -30,17 +30,17 @@ export default function TransactionForm({
   }
 
   const form = useForm({
-    resolver: zodResolver(TransactionCreateSchema),
+    resolver: zodResolver(TransactionEditSchema),
     defaultValues: {
       amount: amountToPay.toString(),
     },
   });
 
   const handleCreateTransaction = async (
-    data: z.infer<typeof TransactionCreateSchema>
+    data: z.infer<typeof TransactionEditSchema>
   ) => {
     setIsLoading(true);
-    const validatedData = TransactionCreateSchema.safeParse(data);
+    const validatedData = TransactionEditSchema.safeParse(data);
 
     if (!validatedData.success) {
       toast({

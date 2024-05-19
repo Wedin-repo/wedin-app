@@ -9,7 +9,6 @@ export const publicRoutes: string[] = [
   '/giftlists',
   '/',
   '/email-verfiy',
-  '/admin',
 ];
 
 /**

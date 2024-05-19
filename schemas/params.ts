@@ -60,9 +60,6 @@ export const WishlistGiftSearchParams = z.object({
   wishlistId: z.string().optional(),
 });
 
-// Define the TransactionStatus enum to match your Prisma schema
-const UserTypes = z.enum(['ADMIN', 'ORGANIZER', 'INVITEE']);
-
 export const CreateTransactionParams = z
   .object({
     wishlistGift: z.object({
@@ -96,8 +93,8 @@ export const CreateTransactionParams = z
       .max(10, {
         message: 'El precio no puede ser mayor de PYG 99,999,999',
       }),
-    payerRole: UserTypes,
-    payeeRole: UserTypes,
+    payerRole: z.string(),
+    payeeRole: z.string(),
   })
   .refine(
     data => {
@@ -112,6 +109,7 @@ export const CreateTransactionParams = z
   );
 
 export const GetTransactionsParams = z.object({
+  name: z.string().optional(),
   eventId: z.string().optional(),
   userId: z.string().optional(),
   page: z.string().optional(),

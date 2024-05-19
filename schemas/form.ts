@@ -1,3 +1,5 @@
+import { fail } from 'assert';
+import { Zeyada } from 'next/font/google';
 import { type ZodType, z } from 'zod';
 
 export const GiftFormSchema = z.object({
@@ -88,6 +90,11 @@ const TransactionStatus = z.enum([
   'FAILED',
   'REFUNDED',
 ]);
+
+export const TransactionEditSchema = z.object({
+  status: TransactionStatus,
+  notes: z.string().optional(),
+});
 
 export const TransactionStatusLogUpdateSchema = z.object({
   transaction: z.object({

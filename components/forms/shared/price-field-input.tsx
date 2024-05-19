@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/utils';
-import type { GiftFormSchema, TransactionCreateSchema } from '@/schemas/form';
+import type { GiftFormSchema, TransactionEditSchema } from '@/schemas/form';
 import { useEffect, useState } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 import type { z } from 'zod';
@@ -14,7 +14,7 @@ import type { z } from 'zod';
 type PriceFieldProps = {
   field:
     | ControllerRenderProps<z.infer<typeof GiftFormSchema>, 'price'>
-    | ControllerRenderProps<z.infer<typeof TransactionCreateSchema>, 'amount'>;
+    | ControllerRenderProps<z.infer<typeof TransactionEditSchema>, 'amount'>;
   disabled?: boolean;
 };
 
