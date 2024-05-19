@@ -79,11 +79,3 @@ export const TransactionCreateSchema = z.object({
       message: 'El precio no puede ser mayor de PYG 99,999,999',
     }),
 });
-
-export const WishlistGiftCreateWithGiftSchema = z.object({
-  wishlistId: z.string(),
-  eventId: z.string(),
-  isGroupGift: z.boolean().optional(),
-  isFavoriteGift: z.boolean().optional(),
-  giftData: GiftCreateSchema,
-});

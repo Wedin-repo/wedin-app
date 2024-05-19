@@ -92,7 +92,7 @@ function EditWishlistGiftWithGiftForm({
           error?: undefined;
         };
 
-    let newWishlistGiftId: WishlistGift | null = null;
+    let newWishlistGift: WishlistGift | null = null;
 
     if (gift.isDefault) {
       giftResponse = await createGift({
@@ -124,8 +124,16 @@ function EditWishlistGiftWithGiftForm({
         wishlistId: wishlistId,
       });
 
+      if (createWishlistGiftResponse.error) {
+        toast({
+          title: 'Error',
+          description: createWishlistGiftResponse.error,
+          variant: 'destructive',
+        });
+      }
+
       if (createWishlistGiftResponse.wishlistGift) {
-        newWishlistGiftId = createWishlistGiftResponse.wishlistGift;
+        newWishlistGift = createWishlistGiftResponse.wishlistGift;
       }
     } else {
       giftResponse = await editGift(validatedParams.data, gift.id);
@@ -163,11 +171,11 @@ function EditWishlistGiftWithGiftForm({
     if (
       (formState.dirtyFields.isGroupGift ||
         formState.dirtyFields.isFavoriteGift) &&
-      newWishlistGiftId
+      newWishlistGift
     ) {
       const wishlistGiftResponse = await updateWishlistGift({
         ...validatedParams.data,
-        wishlistGiftId: newWishlistGiftId.id,
+        wishlistGiftId: newWishlistGift.id,
         giftId: giftResponse.giftId,
       });
 

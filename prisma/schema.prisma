@@ -95,7 +95,7 @@ model Event {
   eventPrimaryUser   User?          @relation("primaryUser", fields: [primaryUserId], references: [id])
   eventSecondaryUser User?          @relation("secondaryUser", fields: [secondaryUserId], references: [id])
   wishlistGifts      WishlistGift[]
-  gifts               Gift[]
+  gifts              Gift[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])
@@ -114,11 +114,11 @@ model Wishlist {
 model Gift {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  categoryId      String   @db.ObjectId
   price           String
   imageUrl        String?
   isDefault       Boolean  @default(false)
   isEditedVersion Boolean  @default(false)
+  categoryId      String   @db.ObjectId
   giftlistId      String?  @db.ObjectId
   eventId         String?  @db.ObjectId
   sourceGiftId    String?  @db.ObjectId
