@@ -6,6 +6,7 @@ import { PiWallet } from 'react-icons/pi';
 export default async function AdminHeader() {
   const { totalAmount, transactions } = await getTransactions();
   const formattedTotalPrice = formatPrice(totalAmount ?? 0);
+
   return (
     <div className="flex flex-col gap-4 items-center w-full">
       <h1 className="text-4xl font-semibold text-primaryTextColor">Mi lista</h1>

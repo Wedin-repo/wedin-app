@@ -12,28 +12,30 @@ async function Transactions({ searchParams }: TransactionProps) {
   const itemsPerPage = 15;
   const { page = '1', name } = searchParams;
 
-  // Get total wishlist gifts to determine if the wishlist is empty
-  const { transactions } = await getTransactions(searchParams);
+  const { transactions: totalTransactions } = await getTransactions();
 
-  if (!transactions) {
+  if (!totalTransactions || totalTransactions.length === 0) {
+    return <EmptyState showReset title="Aún no hay transactiones" />;
+  }
+
+  const { transactions: filteredTransactions } = await getTransactions({
+    ...searchParams,
+    page,
+  });
+
+  if (!filteredTransactions) {
     return <EmptyState showReset title="Ocurrió un error al crear tu cuenta" />;
   }
 
-  // If there are no transactions, show empty state
-  if (transactions.length === 0 && name) {
+  if (filteredTransactions.length === 0 && name) {
     return <EmptyState title="No se encontraron regalos" />;
   }
 
-  // Calculate pagination
-  const totalPages = Math.ceil(transactions.length / itemsPerPage);
-  const paginatedTransactions = transactions.slice(
-    (Number(page) - 1) * itemsPerPage,
-    Number(page) * itemsPerPage
-  );
+  const totalPages = Math.ceil(totalTransactions.length / itemsPerPage);
 
   return (
     <>
-      {paginatedTransactions.map(transaction => (
+      {filteredTransactions.map(transaction => (
         <TransactionCard key={transaction.id} transaction={transaction} />
       ))}
 

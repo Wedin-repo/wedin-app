@@ -16,6 +16,8 @@ import {
 } from '@prisma/client';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
+import { updateTransactionStatus } from './transaction-log';
+import { getCurrentUser } from '../get-current-user';
 
 export async function createTransaction(
   formData: z.infer<typeof CreateTransactionParams>,
@@ -81,8 +83,8 @@ export async function createTransaction(
         wishlistGiftId: wishlistGift.id,
         amount: formattedAmount.toString(),
         status: TransactionStatus.OPEN, // You can adjust this as per your workflow
-        payeeRole: payerRole,
-        payerRole: payeeRole,
+        payerRole: payerRole, // Who is paying
+        payeeRole: payeeRole, // Who is receiving
       },
     });
     if (!transaction) {
@@ -209,6 +211,12 @@ export async function editTransaction(
   formData: z.infer<typeof TransactionEditSchema>,
   transactionId: string
 ) {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return { error: 'No se pudo obtener el usuario actual' };
+  }
+
   const validatedFields = TransactionEditSchema.safeParse(formData);
 
   if (!validatedFields.success) {
@@ -220,10 +228,27 @@ export async function editTransaction(
   const { status, notes } = validatedFields.data;
 
   try {
-    await prismaClient.transaction.update({
+    // Update the transaction
+    const updatedTransaction = await prismaClient.transaction.update({
       where: { id: transactionId },
       data: { status, notes },
     });
+
+    // Create the transaction status log
+    const logData = {
+      transaction: { id: transactionId, status: updatedTransaction.status },
+      status,
+      changedById: currentUser.id,
+      changedAt: new Date(),
+    };
+
+    const logResponse = await updateTransactionStatus(logData);
+
+    if (logResponse?.error) {
+      return { error: logResponse.error };
+    }
+
+    return { success: true, transaction: updatedTransaction };
   } catch (error) {
     return { error: getErrorMessage(error) };
   }

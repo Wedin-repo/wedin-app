@@ -15,7 +15,7 @@ type AdminPageProps = {
   searchParams: AdminPageSearchParams;
 };
 
-export default async function AdminPage({ searchParams }: AdminPageProps) {
+export default function AdminPage({ searchParams }: AdminPageProps) {
   return (
     <div className="flex flex-col justify-start mt-12 h-full">
       <AdminHeader />

@@ -1,3 +1,4 @@
+import { editTransaction } from '@/actions/data/transaction';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -8,26 +9,25 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/use-toast';
-import { TransactionEditSchema } from '@/schemas/form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@radix-ui/react-select';
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+import { TransactionEditSchema } from '@/schemas/form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import type { Event, Gift, Transaction, WishlistGift } from '@prisma/client';
+import { Switch } from '@radix-ui/react-switch';
 import { Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiEdit3 } from 'react-icons/fi';
+import type { z } from 'zod';
 import { Input } from '../ui/input';
-import type { Event, Gift, Transaction, WishlistGift } from '@prisma/client';
-import { Switch } from '@radix-ui/react-switch';
-import { z } from 'zod';
-import { editTransaction } from '@/actions/data/transaction';
 
 type EditTransactionFormProps = {
   setIsOpen: (value: boolean) => void;
@@ -119,55 +119,18 @@ export default function EditTransactionForm({
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>Notas</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Add your notes here"
+                      placeholder="Agregar notas..."
                       className="resize-none"
                       {...field}
                     />
                   </FormControl>
                   <FormDescription>
-                    You can <span>@mention</span> other users and organizations.
+                    Alguna nota especial que quieras agregar a esta transacción.
                   </FormDescription>
                   <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-
-          <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12">
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel className="">Status</FormLabel>
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent className="max-h-60 bg-white">
-                      {[
-                        'OPEN',
-                        'PENDING',
-                        'COMPLETED',
-                        'FAILED',
-                        'REFUNDED',
-                      ].map(status => (
-                        <SelectItem
-                          key={status}
-                          value={status}
-                          className="cursor-pointer"
-                        >
-                          {status}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="font-normal text-red-600" />
                 </FormItem>
               )}
             />
@@ -184,6 +147,37 @@ export default function EditTransactionForm({
                   </FormControl>
                 </FormItem>
               </div>
+
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel className="">Status</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="max-h-60 bg-white">
+                        {[
+                          'OPEN',
+                          'PENDING',
+                          'COMPLETED',
+                          'FAILED',
+                          'REFUNDED',
+                        ].map(status => (
+                          <SelectItem key={status} value={status}>
+                            {status}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
 
               <div className="w-full">
                 <FormItem>
@@ -207,7 +201,11 @@ export default function EditTransactionForm({
             </div>
 
             <div className="w-full">
-              <Button type="submit" disabled={isLoading}>
+              <Button
+                type="submit"
+                variant="primaryButton"
+                disabled={isLoading}
+              >
                 Guardar
                 {isLoading ? (
                   <Loader2 className="ml-2 w-4 h-4 animate-spin" />
