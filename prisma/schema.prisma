@@ -112,6 +112,7 @@ model Wishlist {
 
   event         Event?
   wishlistGifts WishlistGift[]
+  transactions  Transaction[]
 }
 
 model Gift {
@@ -158,6 +159,8 @@ model WishlistGift {
 model Transaction {
   id             String            @id @default(auto()) @map("_id") @db.ObjectId
   wishlistGiftId String            @db.ObjectId
+  wishlistId     String?           @db.ObjectId
+  eventId        String            @db.ObjectId
   amount         String
   status         TransactionStatus @default(OPEN)
   notes          String?
@@ -167,11 +170,14 @@ model Transaction {
   updatedAt      DateTime          @updatedAt
 
   wishlistGift          WishlistGift           @relation(fields: [wishlistGiftId], references: [id])
-  event                 Event                  @relation(fields: [wishlistGiftId], references: [id])
+  event                 Event                  @relation(fields: [eventId], references: [id])
+  wishlist              Wishlist?              @relation(fields: [wishlistId], references: [id])
   transactionStatusLogs TransactionStatusLog[]
   images                Image[]
 
   @@index([wishlistGiftId])
+  @@index([eventId])
+  @@index([wishlistId])
 }
 
 model TransactionStatusLog {

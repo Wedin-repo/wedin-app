@@ -96,7 +96,7 @@ export default function CreateTransactionForm({
           type="submit"
           disabled={isLoading}
         >
-          Create Transaction
+          Pagar
         </Button>
       </form>
     </Form>

@@ -2,11 +2,13 @@ import Loader from '@/components/loader';
 import { Suspense } from 'react';
 import GiftsReceived from './components/gifts-received';
 import GiftsReceivedHeader from './components/gifts-received-header';
+import Wallet from './components/wallet';
 //import SearchBar from '@/components/search-bar';
 
 export type GiftsReceivedPageSearchParams = {
   name?: string;
   page?: string;
+  transactionPage?: string;
 };
 
 type GiftsReceivedPageProps = {
@@ -19,6 +21,7 @@ const GiftsReceivedPage = ({ searchParams }: GiftsReceivedPageProps) => {
       <GiftsReceivedHeader />
 
       {/* <SearchBar scrollValue={200} scrollValueMobile={250} /> */}
+      <Wallet searchParams={searchParams} />
 
       <Suspense fallback={<Loader />}>
         <GiftsReceived searchParams={searchParams} />

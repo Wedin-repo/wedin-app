@@ -85,11 +85,14 @@ export async function createTransaction(
         status: TransactionStatus.OPEN, // You can adjust this as per your workflow
         payerRole: payerRole, // Who is paying
         payeeRole: payeeRole, // Who is receiving
+        wishlistId: wishlistGift.wishlistId,
+        eventId: wishlistGift.eventId,
       },
     });
     if (!transaction) {
       return { error: 'No se pudo crear la transacción' };
     }
+    revalidatePath('/events', 'page');
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
@@ -102,6 +105,7 @@ export async function createTransaction(
         data: { isFullyPaid },
       });
     }
+    revalidatePath('/events', 'page');
   } catch (error: unknown) {
     return {
       error: getErrorMessage(error),
@@ -153,12 +157,17 @@ export async function getTransactions(
     page,
     itemsPerPage = 15,
     name,
+    wishlistId,
   } = validatedParams.data;
 
   const query: Prisma.TransactionWhereInput = {};
 
   if (eventId) {
     query.wishlistGift = { eventId };
+  }
+
+  if (wishlistId) {
+    query.wishlistId = wishlistId;
   }
 
   if (userId) {

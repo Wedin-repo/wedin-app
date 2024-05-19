@@ -28,7 +28,7 @@ export const authRoutes: string[] = [
   and onboarded user
  * @type {string[]}
  */
-export const protectedRoutes: string[] = ['/dashboard'];
+export const protectedRoutes: string[] = ['/dashboard', '/gifts-received'];
 
 /**
  * An array of routes that are accessible to the admin in

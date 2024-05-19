@@ -73,6 +73,7 @@ export const GetTransactionsParams = z.object({
   name: z.string().optional(),
   eventId: z.string().optional(),
   userId: z.string().optional(),
+  wishlistId: z.string().optional(),
   page: z.string().optional(),
   itemsPerPage: z.number().optional(),
 });
