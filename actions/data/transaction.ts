@@ -116,6 +116,11 @@ export async function getTransactions(
     try {
       const transactions = await prismaClient.transaction.findMany({
         include: {
+          transactionStatusLogs: {
+            include: {
+              changedBy: true,
+            },
+          },
           wishlistGift: {
             include: {
               event: true,
@@ -181,6 +186,11 @@ export async function getTransactions(
     const transactions = await prismaClient.transaction.findMany({
       where: query,
       include: {
+        transactionStatusLogs: {
+          include: {
+            changedBy: true,
+          },
+        },
         wishlistGift: {
           include: {
             event: true,

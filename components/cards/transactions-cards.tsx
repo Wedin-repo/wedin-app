@@ -6,17 +6,28 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { Event, Gift, Transaction, WishlistGift } from '@prisma/client';
+import type {
+  Event,
+  Gift,
+  Transaction,
+  TransactionStatusLog,
+  User,
+  WishlistGift,
+} from '@prisma/client';
 import Image from 'next/image';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import EditTransactionModal from '../modals/edit-transaction-modal';
+import ShowTransactionLogModal from '../modals/transaction-log-modal';
 
-type TransactionsCardProps = {
+export type TransactionsCardProps = {
   transaction: Transaction & {
     wishlistGift: WishlistGift & {
       gift: Gift;
       event: Event;
     };
+    transactionStatusLogs: (TransactionStatusLog & {
+      changedBy: User;
+    })[];
   };
 };
 
@@ -60,6 +71,7 @@ const TransactionCard = async ({ transaction }: TransactionsCardProps) => {
 
       <CardFooter variant="dashboard">
         <EditTransactionModal transaction={transaction} />
+        <ShowTransactionLogModal transaction={transaction} />
       </CardFooter>
     </Card>
   );

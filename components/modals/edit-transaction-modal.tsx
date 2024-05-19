@@ -2,21 +2,12 @@
 
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import type { Event, Gift, Transaction, WishlistGift } from '@prisma/client';
 import { useState } from 'react';
 import { FiEdit3 } from 'react-icons/fi';
+import type { TransactionsCardProps } from '../cards/transactions-cards';
 import EditTransactionForm from '../forms/edit-transaction-form';
 
-type EditTransactionModalProps = {
-  transaction: Transaction & {
-    wishlistGift: WishlistGift & {
-      gift: Gift;
-      event: Event;
-    };
-  };
-};
-
-function EditTransactionModal({ transaction }: EditTransactionModalProps) {
+function EditTransactionModal({ transaction }: TransactionsCardProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
