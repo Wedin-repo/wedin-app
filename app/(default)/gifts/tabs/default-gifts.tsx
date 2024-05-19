@@ -1,6 +1,5 @@
 import { getEvent } from '@/actions/data/event';
 import { getGifts } from '@/actions/data/gift';
-import { getCurrentUser } from '@/actions/get-current-user';
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
@@ -18,17 +17,11 @@ async function DefaultGifts({ searchParams }: DefaultGiftsProps) {
     return <EmptyState title="No se encontraron regalos" />;
 
   const event = await getEvent();
-  const currentUser = await getCurrentUser();
 
   return (
     <CardContainer>
       {gifts.map(gift => (
-        <GiftModal
-          key={gift.id}
-          gift={gift}
-          event={event}
-          currentUser={currentUser}
-        >
+        <GiftModal key={gift.id} gift={gift} event={event}>
           <GiftCard gift={gift} />
         </GiftModal>
       ))}
