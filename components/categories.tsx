@@ -18,7 +18,7 @@ const Categories = ({ categories }: CategoryProps) => {
         key="all-gifts"
         id="all-gifts"
         label="Todos"
-        selected={!currentCategory || currentCategory === 'allGifts'}
+        selected={!currentCategory}
       />
       {categories?.map(category => (
         <CategoryPill

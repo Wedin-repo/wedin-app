@@ -17,7 +17,8 @@ export const GiftFormSchema = z.object({
   isEditedVersion: z.boolean().default(false),
   eventId: z.string().min(1, { message: 'No se encontro un event ID' }),
 
-  imageUrl: z.any().optional() as ZodType<File>,
+  image: z.any().optional() as ZodType<File>,
+  imageUrl: z.string(),
 
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }), // wishlistGiftPostSchema
   isFavoriteGift: z.boolean().default(false), // wishlistGiftPostSchema
@@ -25,7 +26,7 @@ export const GiftFormSchema = z.object({
 });
 
 // We want to ignore the imageUrl field when creating/editing a gift
-export const GiftPostSchema = GiftFormSchema.omit({ imageUrl: true });
+export const GiftPostSchema = GiftFormSchema.omit({ image: true });
 
 export const GiftEditSchema = GiftPostSchema.pick({
   name: true,
@@ -40,6 +41,7 @@ export const GiftCreateSchema = GiftPostSchema.pick({
   isDefault: true,
   isEditedVersion: true,
   eventId: true,
+  imageUrl: true,
 });
 
 export const WishlistGiftCreateSchema = z.object({
@@ -59,6 +61,7 @@ export const WishlistGiftsCreateSchema = z.object({
 export const WishlistGiftEditSchema = z.object({
   wishlistGiftId: z.string().min(1, { message: 'No se encontro un ID' }),
   wishlistId: z.string().min(1, { message: 'No se encontro un wishlist ID' }),
+  giftId: z.string().min(1, { message: 'No se encontro un gift ID' }),
   isFavoriteGift: z.boolean().default(false),
   isGroupGift: z.boolean().default(false),
 });
@@ -75,4 +78,12 @@ export const TransactionCreateSchema = z.object({
     .max(10, {
       message: 'El precio no puede ser mayor de PYG 99,999,999',
     }),
+});
+
+export const WishlistGiftCreateWithGiftSchema = z.object({
+  wishlistId: z.string(),
+  eventId: z.string(),
+  isGroupGift: z.boolean().optional(),
+  isFavoriteGift: z.boolean().optional(),
+  giftData: GiftCreateSchema,
 });

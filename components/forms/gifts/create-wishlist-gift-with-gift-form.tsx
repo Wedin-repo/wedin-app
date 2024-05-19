@@ -16,17 +16,17 @@ import { useForm } from 'react-hook-form';
 import { IoGiftOutline } from 'react-icons/io5';
 import type { z } from 'zod';
 
-type CreateGiftFormProps = {
+type CreateWishlistGiftFormProps = {
   eventId: string;
   wishlistId: string;
   categories: Category[];
 };
 
-function CreateGiftForm({
+function CreateWishlistGiftForm({
   eventId,
   categories,
   wishlistId,
-}: CreateGiftFormProps) {
+}: CreateWishlistGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -48,7 +48,8 @@ function CreateGiftForm({
       // here is the actual image file object we dont
       // upload the image to mongoDB, we upload it to AWS
       // and save the url in our DB
-      imageUrl: ringSvg,
+      image: ringSvg,
+      imageUrl: '',
 
       // Wishlist Gift params
       wishlistId: wishlistId,
@@ -103,11 +104,8 @@ function CreateGiftForm({
     }
 
     const wishlistGiftResponse = await createWishlistGift({
+      ...validatedFields.data,
       giftId: giftResponse.giftId,
-      wishlistId: validatedFields.data.wishlistId,
-      isFavoriteGift: validatedFields.data.isFavoriteGift,
-      isGroupGift: validatedFields.data.isGroupGift,
-      eventId: eventId,
     });
 
     if (wishlistGiftResponse?.error) {
@@ -158,4 +156,4 @@ function CreateGiftForm({
   );
 }
 
-export default CreateGiftForm;
+export default CreateWishlistGiftForm;

@@ -1,4 +1,3 @@
-import { createWishlistGift } from '@/actions/data/wishlist-gifts';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { WishlistGiftCreateSchema } from '@/schemas/form';
@@ -6,6 +5,7 @@ import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishlistFormButton from './wishlist-form-button';
 
+import { createWishlistGift } from '@/actions/data/wishlist-gifts';
 type AddTowishlistFormProps = {
   giftId: string;
   isFavoriteGift?: boolean;

@@ -2,9 +2,9 @@
 
 import { getCategories } from '@/actions/data/category';
 import { getEvent } from '@/actions/data/event';
-import CreateGiftForm from '@/components/forms/gifts/create-gift-form';
+import CreateWishlistGiftForm from '@/components/forms/gifts/create-wishlist-gift-with-gift-form';
 
-async function CreateGift() {
+async function CreateWishlistGift() {
   const event = await getEvent();
   if (!event) return null;
 
@@ -14,7 +14,7 @@ async function CreateGift() {
 
   return (
     <div className="flex justify-center items-center w-full min-h-[60vh]">
-      <CreateGiftForm
+      <CreateWishlistGiftForm
         eventId={event.id}
         wishlistId={wishlistId}
         categories={categories}
@@ -23,4 +23,4 @@ async function CreateGift() {
   );
 }
 
-export default CreateGift;
+export default CreateWishlistGift;

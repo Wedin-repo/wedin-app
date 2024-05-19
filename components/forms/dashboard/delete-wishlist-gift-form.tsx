@@ -5,7 +5,7 @@ import WishlistFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
 import { WishlistGiftDeleteSchema } from '@/schemas/form';
 import { useRouter } from 'next/navigation';
-import CreateWishlistGiftForm from '../shared/create-wishlist-gift-form';
+import CreateWishlistGiftForm from '../shared/create-wishlist-gift-with-gift-form';
 
 type RemoveFromwishlistFormProps = {
   giftId: string;

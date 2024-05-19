@@ -2,10 +2,11 @@
 
 import prismaClient from '@/prisma/client';
 import {
+  WishlistGiftCreateSchema,
+  WishlistGiftCreateWithGiftSchema,
   WishlistGiftDeleteSchema,
   WishlistGiftEditSchema,
   WishlistGiftsCreateSchema,
-  WishlistGiftCreateSchema,
 } from '@/schemas/form';
 import {
   GetwishlistGiftsParams,
@@ -29,7 +30,7 @@ export async function createWishlistGift(
     validatedFields.data;
 
   try {
-    await prismaClient.wishlistGift.create({
+    const wishlistGift = await prismaClient.wishlistGift.create({
       data: {
         wishlistId,
         eventId,
@@ -39,12 +40,13 @@ export async function createWishlistGift(
       },
     });
     revalidatePath('/dashboard');
+    return { wishlistGift };
   } catch (error: unknown) {
     return { error: getErrorMessage(error) };
   }
 }
 
-export async function addGiftsTowishlist(
+export async function createWishlistGifts(
   formData: z.infer<typeof WishlistGiftsCreateSchema>
 ) {
   const validatedFields = WishlistGiftsCreateSchema.safeParse(formData);
@@ -224,5 +226,42 @@ export async function getwishlistGiftByParams(
   } catch (error) {
     console.error('Error retrieving wishlistGift:', error);
     return { error: 'Error retrieving wishlistGift' };
+  }
+}
+
+export async function addWishlistGiftWithGift(
+  formData: z.infer<typeof WishlistGiftCreateWithGiftSchema>
+) {
+  const validatedFields = WishlistGiftCreateWithGiftSchema.safeParse(formData);
+
+  if (!validatedFields.success) {
+    return { error: 'Invalid Data' };
+  }
+
+  const { wishlistId, isGroupGift, isFavoriteGift, eventId, giftData } =
+    validatedFields.data;
+
+  try {
+    const wishlistGift = await prismaClient.wishlistGift.create({
+      data: {
+        wishlistId,
+        eventId,
+        isGroupGift,
+        isFavoriteGift,
+        gift: {
+          create: {
+            ...giftData,
+            isDefault: false, // Ensure this is set according to your business logic
+          },
+        },
+      },
+      include: {
+        gift: true,
+      },
+    });
+    revalidatePath('/dashboard');
+    return { wishlistGift };
+  } catch (error: unknown) {
+    return { error: getErrorMessage(error) };
   }
 }

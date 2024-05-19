@@ -1,6 +1,6 @@
 'use client';
 
-import CreateWishlistGiftForm from '@/components/forms/shared/create-wishlist-gift-form';
+import CreateWishlistGiftForm from '@/components/forms/shared/create-wishlist-gift-with-gift-form';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';

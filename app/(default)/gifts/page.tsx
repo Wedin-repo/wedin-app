@@ -7,17 +7,17 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import CreateGift from './tabs/create-gift';
+import CreateWishlistGift from './tabs/create-wishlist-gift';
 import DefaultGiftlists from './tabs/default-giftlists';
 import DefaultGifts from './tabs/default-gifts';
 
 const TABS = {
+  predefinedGiftlists: 'predefinedGiftlists',
   predefinedGifts: 'predefinedGifts',
-  allGifts: 'allGifts',
   createGift: 'createGift',
 };
 
-const DEFAULT_TAB = TABS.predefinedGifts;
+const DEFAULT_TAB = TABS.predefinedGiftlists;
 
 export type GiftPageSearchParams = {
   tab?: string;
@@ -42,9 +42,11 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
       </h1>
       <Tabs defaultValue={DEFAULT_TAB} value={currentTab}>
         <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] overflow-x-auto overflow-y-hidden no-scrollbar">
-          <TabsTrigger value={TABS.predefinedGifts} asChild>
+          <TabsTrigger value={TABS.predefinedGiftlists} asChild>
             <Link
-              href={{ query: { ...searchParams, tab: TABS.predefinedGifts } }}
+              href={{
+                query: { ...searchParams, tab: TABS.predefinedGiftlists },
+              }}
               className="flex gap-2 items-center"
             >
               <IoGiftOutline size={24} className="mb-[2.5px]" />
@@ -52,9 +54,9 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             </Link>
           </TabsTrigger>
 
-          <TabsTrigger value={TABS.allGifts} asChild>
+          <TabsTrigger value={TABS.predefinedGifts} asChild>
             <Link
-              href={{ query: { ...searchParams, tab: TABS.allGifts } }}
+              href={{ query: { ...searchParams, tab: TABS.predefinedGifts } }}
               className="flex gap-2 items-center"
             >
               <PiCouchLight size={24} />
@@ -73,7 +75,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value={TABS.predefinedGifts}>
+        <TabsContent value={TABS.predefinedGiftlists}>
           <SearchBar />
 
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
@@ -88,7 +90,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </Suspense>
         </TabsContent>
 
-        <TabsContent value={TABS.allGifts}>
+        <TabsContent value={TABS.predefinedGifts}>
           <SearchBar />
 
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
@@ -104,7 +106,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
 
         <TabsContent value={TABS.createGift}>
           <Suspense fallback={<Loader />}>
-            <CreateGift />
+            <CreateWishlistGift />
           </Suspense>
         </TabsContent>
       </Tabs>

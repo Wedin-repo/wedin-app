@@ -15,7 +15,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-type EditWishlistGiftFormProps = {
+type EditWishlistGiftWithGiftFormProps = {
   categories: Category[];
   eventId: string;
   wishlistId: string;
@@ -23,13 +23,13 @@ type EditWishlistGiftFormProps = {
   setIsOpen?: (value: boolean) => void;
 };
 
-function EditWishlistGiftForm({
+function EditWishlistGiftWithGiftForm({
   categories,
   eventId,
   wishlistGift,
   wishlistId,
   setIsOpen,
-}: EditWishlistGiftFormProps) {
+}: EditWishlistGiftWithGiftFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -47,7 +47,8 @@ function EditWishlistGiftForm({
       sourceGiftId: gift.sourceGiftId ?? '',
       eventId: eventId,
 
-      imageUrl: ringSvg,
+      image: ringSvg,
+      imageUrl: gift.imageUrl ?? '',
 
       isFavoriteGift: wishlistGift.isFavoriteGift,
       isGroupGift: wishlistGift.isGroupGift,
@@ -91,16 +92,15 @@ function EditWishlistGiftForm({
           error?: undefined;
         };
 
+    let newWishlistGiftId: WishlistGift | null = null;
+
     if (gift.isDefault) {
-      // Create a new gift based on the default one
-      const newGiftParams = {
+      giftResponse = await createGift({
         ...validatedParams.data,
         isEditedVersion: true,
         sourceGiftId: gift.id,
         isDefault: false,
-      };
-
-      giftResponse = await createGift(newGiftParams);
+      });
 
       if (giftResponse?.error || !giftResponse.giftId) {
         toast({
@@ -118,11 +118,15 @@ function EditWishlistGiftForm({
         giftId: gift.id,
       });
 
-      await createWishlistGift({
+      const createWishlistGiftResponse = await createWishlistGift({
         ...validatedParams.data,
         giftId: giftResponse.giftId,
         wishlistId: wishlistId,
       });
+
+      if (createWishlistGiftResponse.wishlistGift) {
+        newWishlistGiftId = createWishlistGiftResponse.wishlistGift;
+      }
     } else {
       giftResponse = await editGift(validatedParams.data, gift.id);
     }
@@ -157,12 +161,14 @@ function EditWishlistGiftForm({
     }
 
     if (
-      formState.dirtyFields.isGroupGift ||
-      formState.dirtyFields.isFavoriteGift
+      (formState.dirtyFields.isGroupGift ||
+        formState.dirtyFields.isFavoriteGift) &&
+      newWishlistGiftId
     ) {
       const wishlistGiftResponse = await updateWishlistGift({
         ...validatedParams.data,
-        wishlistGiftId: wishlistGift.id,
+        wishlistGiftId: newWishlistGiftId.id,
+        giftId: giftResponse.giftId,
       });
 
       if (wishlistGiftResponse?.error) {
@@ -206,4 +212,4 @@ function EditWishlistGiftForm({
   );
 }
 
-export default EditWishlistGiftForm;
+export default EditWishlistGiftWithGiftForm;

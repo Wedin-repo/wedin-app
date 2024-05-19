@@ -51,10 +51,7 @@ export default async function GiftlistPage({ params }: GiftlistPageProps) {
         </div>
 
         <div className="flex justify-center w-full">
-          <CreateWishlistGiftsForm
-            wishlistId={event?.wishlistId}
-            giftIds={giftIds}
-          />
+          <CreateWishlistGiftsForm event={event} giftIds={giftIds} />
         </div>
       </div>
 

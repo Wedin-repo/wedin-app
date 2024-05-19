@@ -1,30 +1,29 @@
 'use client';
 
-import { addGiftsTowishlist } from '@/actions/data/wishlist-gifts';
+import { createWishlistGifts } from '@/actions/data/wishlist-gifts';
 import WishlistFormButton from '@/components/forms/shared/wishlist-form-button';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { WishlistGiftsCreateSchema } from '@/schemas/form';
+import type { Event } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { FaCheck } from 'react-icons/fa';
 import { IoGiftOutline } from 'react-icons/io5';
 
 type AddToWishlistFormProps = {
   giftIds?: string[];
-  wishlistId?: string;
+  event: Event | null;
 };
 
-function CreateWishlistGiftsForm({
-  giftIds,
-  wishlistId,
-}: AddToWishlistFormProps) {
+function CreateWishlistGiftsForm({ giftIds, event }: AddToWishlistFormProps) {
   const router = useRouter();
   const { toast } = useToast();
 
   const handleAddGiftsTowishlist = async () => {
     const validatedFields = WishlistGiftsCreateSchema.safeParse({
       giftIds,
-      wishlistId,
+      wishlistId: event?.wishlistId,
+      eventId: event?.id,
     });
 
     if (!validatedFields.success) {
@@ -32,7 +31,7 @@ function CreateWishlistGiftsForm({
       return;
     }
 
-    const response = await addGiftsTowishlist(validatedFields.data);
+    const response = await createWishlistGifts(validatedFields.data);
 
     if (response?.error) {
       toast({
@@ -61,7 +60,7 @@ function CreateWishlistGiftsForm({
       className: 'bg-white',
     });
 
-    router.push('/gifts?tab=predefinedGifts');
+    router.push('/gifts?tab=predefinedGiftlists');
   };
   return (
     <form action={handleAddGiftsTowishlist}>

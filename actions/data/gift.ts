@@ -126,12 +126,7 @@ export async function createGift(formData: z.infer<typeof GiftPostSchema>) {
   try {
     const newGift = await prismaClient.gift.create({
       data: {
-        name: validatedFields.data.name,
-        categoryId: validatedFields.data.categoryId,
-        price: validatedFields.data.price,
-        isDefault: validatedFields.data.isDefault,
-        isEditedVersion: validatedFields.data.isEditedVersion,
-        eventId: validatedFields.data.eventId,
+        ...validatedFields.data,
       },
     });
 

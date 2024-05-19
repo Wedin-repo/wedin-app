@@ -84,7 +84,7 @@ const GiftForm = ({
           <div className="w-full lg:w-7/12">
             <FormField
               control={form.control}
-              name="imageUrl"
+              name="image"
               render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem className="w-full">
                   <FormLabel>Imagen del regalo</FormLabel>
@@ -132,7 +132,21 @@ const GiftForm = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type="text" className="hidden" {...field} />
+                  </FormControl>
+                  <FormMessage className="font-normal text-red-600" />
+                </FormItem>
+              )}
+            />
           </div>
+
           <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12">
             <FormField
               control={form.control}
