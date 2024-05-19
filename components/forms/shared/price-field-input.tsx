@@ -13,7 +13,7 @@ import type { z } from 'zod';
 
 type PriceFieldProps = {
   field:
-    | ControllerRenderProps<z.infer<typeof GiftFormSchema>, 'pric w'>
+    | ControllerRenderProps<z.infer<typeof GiftFormSchema>, 'price'>
     | ControllerRenderProps<z.infer<typeof TransactionCreateSchema>, 'amount'>;
   disabled?: boolean;
 };
