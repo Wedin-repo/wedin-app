@@ -2,7 +2,7 @@ import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
 import TransactionForm from '@/components/forms/invitees/create-transaction-form';
-import WishlistGiftModal from '@/components/modals/invitee-gifts-modal';
+import InviteeWishlistGiftModal from '@/components/modals/invitee-gifts-modal';
 import type { Event, Gift, User, WishlistGift } from '@prisma/client';
 
 type InvateeGiftsProps = {
@@ -25,12 +25,12 @@ async function InviteeGifts({ event }: InvateeGiftsProps) {
   return (
     <CardContainer>
       {wishlistGifts.map(wishlistGift => (
-        <WishlistGiftModal
+        <InviteeWishlistGiftModal
           key={wishlistGift.id}
           dialogContent={<TransactionForm wishlistGift={wishlistGift} />}
         >
           <GiftCard key={wishlistGift.id} gift={wishlistGift.gift} />
-        </WishlistGiftModal>
+        </InviteeWishlistGiftModal>
       ))}
     </CardContainer>
   );

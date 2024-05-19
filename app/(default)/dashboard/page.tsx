@@ -3,7 +3,7 @@ import EmptyState from '@/components/empty-state';
 import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
 import { Suspense } from 'react';
-import DashboardHeader from './components/dashboard-header';
+import AdminDashboardHeader from './components/dashboard-header';
 import WislistGifts from './components/wislists-gifts';
 
 export type DashboardPageSearchParams = {
@@ -28,7 +28,7 @@ export default async function DashboardPage({
 
   return (
     <div className="flex flex-col justify-start mt-12 h-full">
-      <DashboardHeader wishlistId={wishlistId} />
+      <AdminDashboardHeader wishlistId={wishlistId} />
 
       <SearchBar scrollValue={200} scrollValueMobile={250} />
 

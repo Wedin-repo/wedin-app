@@ -1,9 +1,13 @@
-import prismaClient from '@/prisma/client'; // Adjust the import path according to your project structure
-import { TransactionCreateSchema } from '@/schemas/form';
-import { TransactionStatus } from '@prisma/client';
+'use server';
+
+import prismaClient from '@/prisma/client';
+import {
+  CreateTransactionParams,
+  GetTransactionsParams,
+} from '@/schemas/params';
+import { type Prisma, TransactionStatus } from '@prisma/client';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
-import { CreateTransactionParams } from '@/schemas/params';
 
 export async function createTransaction(
   formData: z.infer<typeof CreateTransactionParams>
@@ -33,7 +37,6 @@ export async function createTransaction(
       0
     ) || 0;
 
-  // Validate the amount
   if (wishlistGift.isGroupGift && wishlistGift.groupGiftParts) {
     const partCost = totalCost / Number.parseInt(wishlistGift.groupGiftParts);
 
@@ -58,32 +61,90 @@ export async function createTransaction(
   const updatedPaidAmount = currentPaidAmount + formattedAmount;
   const isFullyPaid = updatedPaidAmount >= totalCost;
 
-  console.log('isFullyPaid: ', isFullyPaid);
+  try {
+    const transaction = await prismaClient.transaction.create({
+      data: {
+        wishlistGiftId: wishlistGift.id,
+        amount: formattedAmount.toString(),
+        status: TransactionStatus.OPEN, // You can adjust this as per your workflow
+      },
+    });
+    if (!transaction) {
+      return { error: 'No se pudo crear la transacción' };
+    }
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
 
   try {
-    // const transaction = await prismaClient.transaction.create({
-    //   data: {
-    //     wishlistGiftId: wishlistGift.id,
-    //     amount: formattedAmount.toString(),
-    //     status: TransactionStatus.OPEN, // You can adjust this as per your workflow
-    //   },
-    // });
-    //
-    // // Update the wishlistGift to set it as fully paid if applicable
-    // if (isFullyPaid) {
-    //   await prismaClient.wishlistGift.update({
-    //     where: { id: wishlistGift.id },
-    //     data: { isFullyPaid },
-    //   });
-    // }
-    //
-    // return {
-    //   success: true,
-    //   transaction,
-    // };
+    // Update the wishlistGift to set it as fully paid if applicable
+    if (isFullyPaid) {
+      await prismaClient.wishlistGift.update({
+        where: { id: wishlistGift.id },
+        data: { isFullyPaid },
+      });
+    }
   } catch (error: unknown) {
-    // return {
-    //   error: getErrorMessage(error),
-    // };
+    return {
+      error: getErrorMessage(error),
+    };
+  }
+}
+export async function getTransactions(
+  searchParams: z.infer<typeof GetTransactionsParams>
+) {
+  const validatedParams = GetTransactionsParams.safeParse(searchParams);
+
+  if (!validatedParams.success) {
+    return {
+      error: validatedParams.error.errors.map(err => err.message).join(', '),
+    };
+  }
+
+  const { eventId, userId, page, itemsPerPage = 15 } = validatedParams.data;
+
+  const query: Prisma.TransactionWhereInput = {};
+
+  if (eventId) {
+    query.wishlistGift = { eventId };
+  }
+
+  if (userId) {
+    query.OR = [
+      { wishlistGift: { event: { primaryUserId: userId } } },
+      { wishlistGift: { event: { secondaryUserId: userId } } },
+    ];
+  }
+
+  const skip = page ? (Number(page) - 1) * itemsPerPage : undefined;
+  const take = page ? Number(itemsPerPage) : undefined;
+
+  try {
+    const transactions = await prismaClient.transaction.findMany({
+      where: query,
+      include: {
+        wishlistGift: {
+          include: {
+            event: true,
+            gift: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip,
+      take,
+    });
+
+    // Calculate the sum of transaction amounts
+    const totalAmount = transactions.reduce((sum, transaction) => {
+      return sum + Number.parseInt(transaction.amount);
+    }, 0);
+
+    return { transactions, totalAmount };
+  } catch (error) {
+    console.error('Error retrieving transactions:', error);
+    return { error: getErrorMessage(error) };
   }
 }

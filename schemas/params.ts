@@ -60,12 +60,15 @@ export const WishlistGiftSearchParams = z.object({
   wishlistId: z.string().optional(),
 });
 
+// Define the TransactionStatus enum to match your Prisma schema
+const UserTypes = z.enum(['ADMIN', 'ORGANIZER', 'INVITEE']);
+
 export const CreateTransactionParams = z
   .object({
     wishlistGift: z.object({
       id: z
         .string()
-        .nonempty({ message: 'No se encontró un ID de wishlistGift' }),
+        .min(1, { message: 'No se encontró un ID de wishlistGift' }),
       isGroupGift: z.boolean(),
       groupGiftParts: z.string(),
       isFullyPaid: z.boolean(),
@@ -93,6 +96,8 @@ export const CreateTransactionParams = z
       .max(10, {
         message: 'El precio no puede ser mayor de PYG 99,999,999',
       }),
+    payerRole: UserTypes,
+    payeeRole: UserTypes,
   })
   .refine(
     data => {
@@ -105,3 +110,10 @@ export const CreateTransactionParams = z
       path: ['amount'], // Set the path of the error to the `amount` field
     }
   );
+
+export const GetTransactionsParams = z.object({
+  eventId: z.string().optional(),
+  userId: z.string().optional(),
+  page: z.string().optional(),
+  itemsPerPage: z.number().optional(),
+});

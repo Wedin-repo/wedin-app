@@ -9,6 +9,7 @@ export const publicRoutes: string[] = [
   '/giftlists',
   '/',
   '/email-verfiy',
+  '/admin',
 ];
 
 /**
@@ -29,6 +30,13 @@ export const authRoutes: string[] = [
  * @type {string[]}
  */
 export const protectedRoutes: string[] = ['/dashboard'];
+
+/**
+ * An array of routes that are accessible to the admin in
+  and onboarded user
+ * @type {string[]}
+ */
+export const adminRoutes: string[] = ['/admin'];
 
 /**
  * An array of routes that are accessible to the logged in user

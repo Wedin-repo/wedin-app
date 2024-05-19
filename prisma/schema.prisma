@@ -9,7 +9,7 @@ datasource db {
 
 enum UserType {
   ADMIN
-  COUPLE
+  ORGANIZER
   INVITEE
 }
 
@@ -65,16 +65,17 @@ model User {
   password         String?
   emailVerified    DateTime?
   image            String?
-  role             UserType  @default(COUPLE)
+  role             UserType  @default(ORGANIZER)
   isOnboarded      Boolean   @default(false)
   hasPYbankAccount Boolean   @default(false)
   isMagicLinkLogin Boolean   @default(false)
   onboardingStep   Int       @default(1)
 
-  accounts           Account[]
-  sessions           Session[]
-  eventPrimaryUser   Event[]   @relation("primaryUser")
-  eventSecondaryUser Event[]   @relation("secondaryUser")
+  accounts             Account[]
+  sessions             Session[]
+  eventPrimaryUser     Event[]                @relation("primaryUser")
+  eventSecondaryUser   Event[]                @relation("secondaryUser")
+  TransactionStatusLog TransactionStatusLog[]
 }
 
 model Event {
@@ -92,9 +93,10 @@ model Event {
   city            String?
 
   wishlist           Wishlist       @relation(fields: [wishlistId], references: [id])
-  eventPrimaryUser   User?          @relation("primaryUser", fields: [primaryUserId], references: [id])
+  eventPrimaryUser   User           @relation("primaryUser", fields: [primaryUserId], references: [id])
   eventSecondaryUser User?          @relation("secondaryUser", fields: [secondaryUserId], references: [id])
   wishlistGifts      WishlistGift[]
+  transactions       Transaction[]
   gifts              Gift[]
 
   @@unique([wishlistId])
@@ -157,12 +159,31 @@ model Transaction {
   wishlistGiftId String            @db.ObjectId
   amount         String
   status         TransactionStatus @default(PENDING)
+  payerRole      UserType
+  payeeRole      UserType
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  wishlistGift WishlistGift @relation(fields: [wishlistGiftId], references: [id])
+  wishlistGift         WishlistGift           @relation(fields: [wishlistGiftId], references: [id])
+  event                Event                  @relation(fields: [wishlistGiftId], references: [id])
+  TransactionStatusLog TransactionStatusLog[]
 
   @@index([wishlistGiftId])
+}
+
+model TransactionStatusLog {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  transactionId  String            @db.ObjectId
+  previousStatus TransactionStatus
+  status         TransactionStatus
+  changedAt      DateTime          @default(now())
+  changedById    String            @db.ObjectId
+
+  changedBy   User        @relation(fields: [changedById], references: [id])
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+
+  @@index([transactionId])
+  @@index([changedById])
 }
 
 model Giftlist {

@@ -8,7 +8,6 @@ import { useToast } from '@/components/ui/use-toast';
 import { TransactionCreateSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Gift, WishlistGift } from '@prisma/client';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
@@ -22,7 +21,6 @@ export default function TransactionForm({
 }: TransactionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const totalCost = Number.parseInt(wishlistGift.gift.price);
-  const router = useRouter();
   const { toast } = useToast();
 
   let amountToPay = totalCost;
@@ -57,6 +55,8 @@ export default function TransactionForm({
 
     const response = await createTransaction({
       ...validatedData.data,
+      payerRole: 'INVITEE',
+      payeeRole: 'ORGANIZER',
       wishlistGift: { ...wishlistGift },
     });
 
@@ -78,7 +78,6 @@ export default function TransactionForm({
     });
 
     setIsLoading(false);
-    router.push('/dashboard');
   };
 
   return (
