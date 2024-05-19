@@ -9,23 +9,23 @@ import {
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { Gift, WishlistGift } from '@prisma/client';
+import type { Event, Gift, WishlistGift } from '@prisma/client';
 import Image from 'next/image';
 
 type DashboardGiftCardProps = {
-  eventId: string;
+  event: Event;
   wishlistGift: WishlistGift & { gift: Gift };
 };
 
 const DashboardGiftCard = async ({
-  eventId,
+  event,
   wishlistGift,
 }: DashboardGiftCardProps) => {
   const categories = await getCategories();
   if (!categories) return null;
 
-  const { id, name, price, imageUrl, categoryId } = wishlistGift.gift;
-  const { isFavoriteGift, isGroupGift, wishlistId } = wishlistGift;
+  const { isFavoriteGift, isGroupGift, wishlistId, gift } = wishlistGift;
+  const { id, name, price, imageUrl, categoryId } = gift;
 
   const formattedPrice = formatPrice(Number(price));
   const category = await getCategory({ searchParams: { categoryId } });
@@ -65,11 +65,11 @@ const DashboardGiftCard = async ({
       <CardFooter variant="dashboard">
         <EditGiftModal
           categories={categories}
-          eventId={eventId}
+          eventId={event.id}
           wishlistGift={wishlistGift}
           wishlistId={wishlistId}
         />
-        <DeleteWishlistGiftForm giftId={id} wishlistId={wishlistId} />
+        <DeleteWishlistGiftForm giftId={id} event={event} />
       </CardFooter>
     </Card>
   );

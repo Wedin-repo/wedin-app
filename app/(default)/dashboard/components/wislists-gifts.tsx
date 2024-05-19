@@ -51,7 +51,7 @@ async function WislistGifts({ searchParams }: WislistGiftsProps) {
       {paginatedWishlistGifts.map(wishlistGift => (
         <DashboardGiftCard
           key={wishlistGift.id}
-          eventId={event.id}
+          event={event}
           wishlistGift={wishlistGift}
         />
       ))}

@@ -1,35 +1,36 @@
 'use client';
 
-import { deleteGiftFromwishlist } from '@/actions/data/wishlist-gifts';
+import { deleteGiftFromWishlist } from '@/actions/data/wishlist-gifts';
 import WishlistFormButton from '@/components/forms/shared/wishlist-form-button';
 import { useToast } from '@/components/ui/use-toast';
 import { WishlistGiftDeleteSchema } from '@/schemas/form';
 import { useRouter } from 'next/navigation';
 import CreateWishlistGiftForm from '../shared/create-wishlist-gift-with-gift-form';
+import type { Event } from '@prisma/client';
 
-type RemoveFromwishlistFormProps = {
+type DeleteFromWishlistFormProps = {
   giftId: string;
-  wishlistId?: string | null;
+  event?: Event | null;
   variant?: string;
 };
 
 function DeleteWishlistGiftForm({
   giftId,
-  wishlistId,
+  event,
   variant = 'deleteGiftIconButton',
-}: RemoveFromwishlistFormProps) {
+}: DeleteFromWishlistFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
   const handleRemoveGiftFromwishlist = async () => {
-    if (!wishlistId) {
+    if (!event) {
       router.push('/register');
       return;
     }
 
     const validatedFields = WishlistGiftDeleteSchema.safeParse({
       giftId,
-      wishlistId,
+      wishlistId: event.wishlistId,
     });
 
     if (!validatedFields.success) {
@@ -42,14 +43,13 @@ function DeleteWishlistGiftForm({
       return;
     }
 
-    const response = await deleteGiftFromwishlist(validatedFields.data);
+    const response = await deleteGiftFromWishlist(validatedFields.data);
 
     if (response?.error) {
       toast({
         title: 'Error',
         description: response.error,
         variant: 'destructive',
-        className: 'bg-white',
       });
 
       return;
@@ -58,10 +58,11 @@ function DeleteWishlistGiftForm({
     toast({
       title: 'Éxito! 🎁🗑',
       description: 'Regalo eliminado de tu lista',
+      className: 'bg-white',
       action: (
         <CreateWishlistGiftForm
+          event={event}
           giftId={giftId}
-          wishlistId={wishlistId}
           variant="undoButton"
         />
       ),

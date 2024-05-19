@@ -3,7 +3,6 @@
 import prismaClient from '@/prisma/client';
 import {
   WishlistGiftCreateSchema,
-  WishlistGiftCreateWithGiftSchema,
   WishlistGiftDeleteSchema,
   WishlistGiftEditSchema,
   WishlistGiftsCreateSchema,
@@ -76,7 +75,7 @@ export async function createWishlistGifts(
   }
 }
 
-export async function deleteGiftFromwishlist(
+export async function deleteGiftFromWishlist(
   formData: z.infer<typeof WishlistGiftDeleteSchema>
 ) {
   const validatedFields = WishlistGiftDeleteSchema.safeParse(formData);

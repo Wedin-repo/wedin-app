@@ -5,18 +5,19 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import ringsLoader from '@/public/images/rings.svg';
-import type { Gift } from '@prisma/client';
+import type { Gift, User, Event } from '@prisma/client';
 import Image from 'next/image';
 import { useState } from 'react';
 
 type GiftModalProps = {
   gift: Gift;
-  wishlistId?: string | null;
+  event: Event | null;
+  currentUser: User | null;
   children: React.ReactNode;
 };
 
 // TODO add use state for the toggle buttons
-function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
+function GiftModal({ gift, event, children, currentUser }: GiftModalProps) {
   const { name, price, id, imageUrl } = gift;
   const formattedPrice = formatPrice(Number(price));
   const [isOpen, setIsOpen] = useState(false);
@@ -65,7 +66,8 @@ function GiftModal({ gift, wishlistId, children }: GiftModalProps) {
             </div>
             <CreateWishlistGiftForm
               giftId={id}
-              wishlistId={wishlistId}
+              event={event}
+              currentUser={currentUser}
               isFavoriteGift={isFavoriteGift}
               isGroupGift={isGroupGift}
               setIsOpen={setIsOpen}

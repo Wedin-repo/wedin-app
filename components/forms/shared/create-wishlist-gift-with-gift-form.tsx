@@ -1,39 +1,60 @@
+import { createWishlistGift } from '@/actions/data/wishlist-gifts';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { WishlistGiftCreateSchema } from '@/schemas/form';
+import type { Event } from '@prisma/client';
 import { redirect, useRouter } from 'next/navigation';
 import { IoGiftOutline } from 'react-icons/io5';
 import WishlistFormButton from './wishlist-form-button';
 
-import { createWishlistGift } from '@/actions/data/wishlist-gifts';
-type AddTowishlistFormProps = {
+type CreateWishlistFormProps = {
+  event: Event | null;
   giftId: string;
   isFavoriteGift?: boolean;
   isGroupGift?: boolean;
   variant?: string;
-  wishlistId?: string | null;
   setIsOpen?: (value: boolean) => void;
 };
 
 function CreateWishlistGiftForm({
+  event,
   giftId,
   isFavoriteGift = false,
   isGroupGift = false,
   variant,
-  wishlistId,
   setIsOpen,
-}: AddTowishlistFormProps) {
+}: CreateWishlistFormProps) {
   const router = useRouter();
   const { toast } = useToast();
 
-  const handleAddGiftTowishlist = async () => {
+  const handleAddGiftToWishlist = async () => {
+    if (!event) {
+      toast({
+        title: 'Parece que no tienes cuenta',
+        description:
+          'Create una cuenta o inicia sesión para poder agregar regalos a tu lista.',
+        className: 'bg-white',
+      });
+
+      redirect('/register');
+    }
+
+    const { wishlistId, id } = event;
+
     const validatedFields = WishlistGiftCreateSchema.safeParse({
+      eventId: id,
       wishlistId,
       giftId,
     });
 
     if (!validatedFields.success) {
-      return redirect('/register');
+      toast({
+        title: 'Error',
+        description: 'Error al agregar el regalo a la lista',
+        variant: 'destructive',
+      });
+
+      return;
     }
 
     const response = await createWishlistGift({
@@ -76,7 +97,7 @@ function CreateWishlistGiftForm({
   };
 
   return (
-    <form action={handleAddGiftTowishlist}>
+    <form action={handleAddGiftToWishlist}>
       <input id="giftId" type="hidden" name="giftId" value={giftId} />
       <WishlistFormButton variant={variant} />
     </form>

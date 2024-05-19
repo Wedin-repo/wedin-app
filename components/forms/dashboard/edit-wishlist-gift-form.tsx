@@ -1,7 +1,7 @@
 import { createGift, editGift } from '@/actions/data/gift';
 import {
   createWishlistGift,
-  deleteGiftFromwishlist,
+  deleteGiftFromWishlist,
   updateWishlistGift,
 } from '@/actions/data/wishlist-gifts';
 import GiftForm from '@/components/forms/shared/gift-form';
@@ -113,7 +113,7 @@ function EditWishlistGiftWithGiftForm({
         return;
       }
 
-      await deleteGiftFromwishlist({
+      await deleteGiftFromWishlist({
         wishlistId: wishlistId,
         giftId: gift.id,
       });
@@ -150,7 +150,7 @@ function EditWishlistGiftWithGiftForm({
       return;
     }
 
-    if (selectedFile && formState.dirtyFields.imageUrl) {
+    if (selectedFile && formState.dirtyFields.image) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
         giftId: giftResponse.giftId,
