@@ -83,15 +83,12 @@ export default function EditTransactionForm({
       return;
     }
 
-    const response = await editTransaction(
-      validatedFields.data,
-      transaction.id
-    );
+    const response = await editTransaction(validatedFields.data, transaction);
 
     if (response?.error) {
       toast({
         title: 'Error',
-        description: 'Datos inválidos, por favor verifica tus datos.',
+        description: response.error,
         variant: 'destructive',
       });
 

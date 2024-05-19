@@ -16,8 +16,8 @@ import {
 } from '@prisma/client';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
-import { updateTransactionStatus } from './transaction-log';
 import { getCurrentUser } from '../get-current-user';
+import { revalidatePath } from 'next/cache';
 
 export async function createTransaction(
   formData: z.infer<typeof CreateTransactionParams>,
@@ -209,7 +209,7 @@ export async function getTransactions(
 
 export async function editTransaction(
   formData: z.infer<typeof TransactionEditSchema>,
-  transactionId: string
+  transaction: Transaction
 ) {
   const currentUser = await getCurrentUser();
 
@@ -224,30 +224,28 @@ export async function editTransaction(
       error: validatedFields.error.errors.map(e => e.message).join(', '),
     };
   }
-
+  const { status: previousStatus, id: transactionId } = transaction;
   const { status, notes } = validatedFields.data;
 
   try {
-    // Update the transaction
-    const updatedTransaction = await prismaClient.transaction.update({
-      where: { id: transactionId },
-      data: { status, notes },
-    });
+    const [updatedTransaction] = await prismaClient.$transaction([
+      prismaClient.transaction.update({
+        where: { id: transactionId },
+        data: { status, notes },
+      }),
 
-    // Create the transaction status log
-    const logData = {
-      transaction: { id: transactionId, status: updatedTransaction.status },
-      status,
-      changedById: currentUser.id,
-      changedAt: new Date(),
-    };
+      prismaClient.transactionStatusLog.create({
+        data: {
+          transactionId,
+          previousStatus: previousStatus, // assuming you have the previous status
+          status,
+          changedById: currentUser.id,
+          changedAt: new Date(),
+        },
+      }),
+    ]);
 
-    const logResponse = await updateTransactionStatus(logData);
-
-    if (logResponse?.error) {
-      return { error: logResponse.error };
-    }
-
+    revalidatePath('/admin', 'page');
     return { success: true, transaction: updatedTransaction };
   } catch (error) {
     return { error: getErrorMessage(error) };
