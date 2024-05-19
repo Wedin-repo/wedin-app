@@ -58,7 +58,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
                   <TabsTrigger value="dashboard" className="!text-sm pb-4">
                     Mi lista
                   </TabsTrigger>
-                  <TabsTrigger value="gift-received" className="!text-sm pb-4">
+                  <TabsTrigger value="gifts-received" className="!text-sm pb-4">
                     Regalos recibidos
                   </TabsTrigger>
                 </>
