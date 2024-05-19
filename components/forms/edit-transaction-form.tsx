@@ -134,7 +134,6 @@ export default function EditTransactionForm({
           </div>
 
           <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12">
-            {/* Display-only fields */}
             <div className="flex flex-col gap-4">
               <div className="w-full">
                 <FormItem>

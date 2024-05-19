@@ -93,6 +93,7 @@ export async function createTransaction(
       return { error: 'No se pudo crear la transacción' };
     }
     revalidatePath('/events', 'page');
+    revalidatePath('/gifts-received', 'page');
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
@@ -106,6 +107,7 @@ export async function createTransaction(
       });
     }
     revalidatePath('/events', 'page');
+    revalidatePath('/gifts-received', 'page');
   } catch (error: unknown) {
     return {
       error: getErrorMessage(error),
@@ -265,6 +267,7 @@ export async function editTransaction(
     ]);
 
     revalidatePath('/admin', 'page');
+    revalidatePath('/gifts-received', 'page');
     return { success: true, transaction: updatedTransaction };
   } catch (error) {
     return { error: getErrorMessage(error) };
