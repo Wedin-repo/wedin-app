@@ -94,25 +94,19 @@ export default function EditTransactionForm({
         description: 'Datos inválidos, por favor verifica tus datos.',
         variant: 'destructive',
       });
-    }
 
-    try {
-      toast({
-        title: 'Éxito! 🎁🎉',
-        description: 'Transacción actualizada.',
-        className: 'bg-white',
-      });
-
-      setIsOpen(false);
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Datos inválidos, por favor verifica tus datos.',
-        variant: 'destructive',
-      });
-    } finally {
       setIsLoading(false);
+      return;
     }
+
+    toast({
+      title: 'Éxito! 🎁🎉',
+      description: 'Transacción actualizada.',
+      className: 'bg-white',
+    });
+
+    setIsOpen(false);
+    setIsLoading(false);
   };
 
   return (

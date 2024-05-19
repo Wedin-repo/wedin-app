@@ -6,12 +6,25 @@ import {
   CreateTransactionParams,
   GetTransactionsParams,
 } from '@/schemas/params';
-import { type Prisma, TransactionStatus, UserType } from '@prisma/client';
+import {
+  TransactionStatus,
+  type Gift,
+  type Prisma,
+  type Transaction,
+  type UserType,
+  type WishlistGift,
+} from '@prisma/client';
 import type { z } from 'zod';
 import { getErrorMessage } from '../helper';
 
 export async function createTransaction(
-  formData: z.infer<typeof CreateTransactionParams>
+  formData: z.infer<typeof CreateTransactionParams>,
+  payerRole: UserType,
+  payeeRole: UserType,
+  wishlistGift: WishlistGift & {
+    gift: Gift;
+    transactions: Transaction[];
+  }
 ) {
   const validatedFields = CreateTransactionParams.safeParse(formData);
 
@@ -21,7 +34,7 @@ export async function createTransaction(
     };
   }
 
-  const { wishlistGift, amount } = validatedFields.data;
+  const { amount } = validatedFields.data;
 
   const formattedAmount = Number.parseFloat(amount);
 
@@ -34,7 +47,7 @@ export async function createTransaction(
   const totalCost = Number.parseFloat(wishlistGift.gift.price);
   const currentPaidAmount =
     wishlistGift.transactions?.reduce(
-      (sum, transaction) => sum + transaction.amount,
+      (sum, transaction) => sum + Number.parseInt(transaction.amount),
       0
     ) || 0;
 
@@ -68,8 +81,8 @@ export async function createTransaction(
         wishlistGiftId: wishlistGift.id,
         amount: formattedAmount.toString(),
         status: TransactionStatus.OPEN, // You can adjust this as per your workflow
-        payeeRole: UserType.INVITEE,
-        payerRole: UserType.ORGANIZER,
+        payeeRole: payerRole,
+        payerRole: payeeRole,
       },
     });
     if (!transaction) {

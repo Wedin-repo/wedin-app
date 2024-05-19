@@ -5,20 +5,20 @@ import PriceField from '@/components/forms/shared/price-field-input';
 import { Button } from '@/components/ui/button';
 import { Form, FormField } from '@/components/ui/form';
 import { useToast } from '@/components/ui/use-toast';
-import { TransactionEditSchema } from '@/schemas/form';
+import { TransactionCreateSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { Gift, WishlistGift } from '@prisma/client';
+import type { Gift, Transaction, WishlistGift } from '@prisma/client';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 
-type TransactionFormProps = {
-  wishlistGift: WishlistGift & { gift: Gift };
+type CreateTransactionFormProps = {
+  wishlistGift: WishlistGift & { gift: Gift; transactions: Transaction[] };
 };
 
-export default function TransactionForm({
+export default function CreateTransactionForm({
   wishlistGift,
-}: TransactionFormProps) {
+}: CreateTransactionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const totalCost = Number.parseInt(wishlistGift.gift.price);
   const { toast } = useToast();
@@ -30,17 +30,17 @@ export default function TransactionForm({
   }
 
   const form = useForm({
-    resolver: zodResolver(TransactionEditSchema),
+    resolver: zodResolver(TransactionCreateSchema),
     defaultValues: {
       amount: amountToPay.toString(),
     },
   });
 
   const handleCreateTransaction = async (
-    data: z.infer<typeof TransactionEditSchema>
+    data: z.infer<typeof TransactionCreateSchema>
   ) => {
     setIsLoading(true);
-    const validatedData = TransactionEditSchema.safeParse(data);
+    const validatedData = TransactionCreateSchema.safeParse(data);
 
     if (!validatedData.success) {
       toast({
@@ -53,12 +53,12 @@ export default function TransactionForm({
       return;
     }
 
-    const response = await createTransaction({
-      ...validatedData.data,
-      payerRole: 'INVITEE',
-      payeeRole: 'ORGANIZER',
-      wishlistGift: { ...wishlistGift },
-    });
+    const response = await createTransaction(
+      validatedData.data,
+      'INVITEE',
+      'ORGANIZER',
+      wishlistGift
+    );
 
     if (response?.error) {
       toast({
