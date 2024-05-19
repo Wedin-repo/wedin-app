@@ -1,6 +1,3 @@
-import { getCategories, getCategory } from '@/actions/data/category';
-import DeleteWishlistGiftForm from '@/components/forms/dashboard/delete-wishlist-gift-form';
-import EditGiftModal from '@/components/modals/edit-gift-modal';
 import {
   Card,
   CardContent,
@@ -8,9 +5,14 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
-import ringsLoader from '@/public/images/rings.svg';
-import type { Event, Gift, WishlistGift } from '@prisma/client';
-import Image from 'next/image';
+import type {
+  Event,
+  Gift,
+  Transaction,
+  TransactionStatusLog,
+  User,
+  WishlistGift,
+} from '@prisma/client';
 
 type WishlistgiftTransactionsCardProps = {
   transaction: Transaction & {
