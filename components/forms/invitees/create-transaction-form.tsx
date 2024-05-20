@@ -14,9 +14,11 @@ import type { z } from 'zod';
 
 type CreateTransactionFormProps = {
   wishlistGift: WishlistGift & { gift: Gift; transactions: Transaction[] };
+  setIsOpen?: (value: boolean) => void;
 };
 
 export default function CreateTransactionForm({
+  setIsOpen,
   wishlistGift,
 }: CreateTransactionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -78,6 +80,7 @@ export default function CreateTransactionForm({
     });
 
     setIsLoading(false);
+    setIsOpen?.(false);
   };
 
   return (

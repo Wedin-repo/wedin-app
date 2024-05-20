@@ -1,7 +1,6 @@
 import GiftCard from '@/components/cards/gifts';
 import CardContainer from '@/components/cards/shared/card-container';
 import EmptyState from '@/components/empty-state';
-import CreateTransactionForm from '@/components/forms/invitees/create-transaction-form';
 import InviteeWishlistGiftModal from '@/components/modals/invitee-gifts-modal';
 import type {
   Event,
@@ -34,7 +33,7 @@ async function InviteeGifts({ event }: InvateeGiftsProps) {
       {wishlistGifts.map(wishlistGift => (
         <InviteeWishlistGiftModal
           key={wishlistGift.id}
-          dialogContent={<CreateTransactionForm wishlistGift={wishlistGift} />}
+          wishlistGift={wishlistGift}
         >
           <GiftCard key={wishlistGift.id} gift={wishlistGift.gift} />
         </InviteeWishlistGiftModal>
