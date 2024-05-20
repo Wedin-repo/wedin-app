@@ -46,7 +46,7 @@ export async function getEventByUrl(url: string) {
 
     return event;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return null;
   }
 }

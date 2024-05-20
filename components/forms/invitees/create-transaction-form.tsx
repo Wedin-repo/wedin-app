@@ -40,7 +40,6 @@ export default function CreateTransactionForm({
     data: z.infer<typeof TransactionCreateSchema>
   ) => {
     setIsLoading(true);
-    console.log(wishlistGift.isFullyPaid);
     const validatedData = TransactionCreateSchema.safeParse(data);
 
     if (!validatedData.success) {

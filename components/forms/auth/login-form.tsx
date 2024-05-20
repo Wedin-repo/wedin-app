@@ -28,7 +28,6 @@ export default function LoginForm() {
   // // Setup debouncing for email input changes
   // const handleEmailSearch = async (email: string) => {
   //   const response = await fetch(`/api/users?email=${email}`);
-  //   console.log(response); // Here you might want to handle the response properly
   // };
   //
   // // useDebounceCallback to delay the handleEmailSearch execution

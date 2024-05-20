@@ -46,7 +46,7 @@ async function main() {
   // Seed gifts and assign to gift lists
   // biome-ignore lint/style/useConst: <explanation>
   let gifts = [];
-  for (let i = 0; i < 200; i++) {
+  for (let i = 0; i < 150; i++) {
     const randomGiftlist = faker.helpers.arrayElement(giftlists);
     const defaultGift = await prismaSeed.gift.create({
       data: {

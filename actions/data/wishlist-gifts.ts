@@ -68,6 +68,7 @@ export async function createWishlistGifts(
     await prismaClient.wishlistGift.createMany({
       data: wishlistGiftData,
     });
+    revalidatePath('/dashboard');
   } catch (error: unknown) {
     return {
       error: getErrorMessage(error),

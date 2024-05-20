@@ -40,7 +40,7 @@ function SearchBar({
       sp.delete('name');
     } else {
       sp.set('name', value);
-      sp.set('page', '1');
+      // sp.set('page', '1');
     }
 
     router.push(`${pathname}?${sp.toString()}`, { scroll: false });
