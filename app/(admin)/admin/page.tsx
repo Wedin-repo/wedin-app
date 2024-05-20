@@ -1,5 +1,5 @@
+import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
-import { Loader } from 'lucide-react';
 import { Suspense } from 'react';
 import AdminHeader from './admin-header';
 import Transactions from './transactions';

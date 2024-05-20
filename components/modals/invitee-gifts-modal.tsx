@@ -13,11 +13,8 @@ type InviteeGiftModalProps = {
 function InviteeWishlistGiftModal({
   children,
   wishlistGift,
-  // dialogContent,
 }: InviteeGiftModalProps) {
   const [isOpen, setIsOpen] = useState(false);
-
-  console.log('wishlistGift', wishlistGift);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

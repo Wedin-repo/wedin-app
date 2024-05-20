@@ -245,30 +245,35 @@ export async function editTransaction(
       error: validatedFields.error.errors.map(e => e.message).join(', '),
     };
   }
+
   const { status: previousStatus, id: transactionId } = transaction;
   const { status, notes } = validatedFields.data;
 
   try {
-    const [updatedTransaction] = await prismaClient.$transaction([
-      prismaClient.transaction.update({
+    const result = await prismaClient.$transaction(async prismaCon => {
+      const updatedTransaction = await prismaCon.transaction.update({
         where: { id: transactionId },
         data: { status, notes },
-      }),
+      });
 
-      prismaClient.transactionStatusLog.create({
-        data: {
-          transactionId,
-          previousStatus: previousStatus, // assuming you have the previous status
-          status,
-          changedById: currentUser.id,
-          changedAt: new Date(),
-        },
-      }),
-    ]);
+      if (previousStatus !== status) {
+        await prismaCon.transactionStatusLog.create({
+          data: {
+            transactionId,
+            previousStatus,
+            status,
+            changedById: currentUser.id,
+            changedAt: new Date(),
+          },
+        });
+      }
+
+      return updatedTransaction;
+    });
 
     revalidatePath('/admin', 'page');
     revalidatePath('/gifts-received', 'page');
-    return { success: true, transaction: updatedTransaction };
+    return { success: true, transaction: result };
   } catch (error) {
     return { error: getErrorMessage(error) };
   }
