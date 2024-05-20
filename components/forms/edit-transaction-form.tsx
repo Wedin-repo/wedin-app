@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
+import { formatPrice } from '@/lib/utils';
 import { TransactionEditSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Event, Gift, Transaction, WishlistGift } from '@prisma/client';
@@ -179,7 +180,7 @@ export default function EditTransactionForm({
                 <FormItem>
                   <FormLabel>Precio</FormLabel>
                   <FormControl>
-                    <Input value={gift.price} disabled />
+                    <Input value={formatPrice(Number(gift.price))} disabled />
                   </FormControl>
                 </FormItem>
               </div>
