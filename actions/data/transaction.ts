@@ -234,6 +234,7 @@ export async function editTransaction(
 ) {
   const currentUser = await getCurrentUser();
 
+  // TODO: Check if the user is admin
   if (!currentUser) {
     return { error: 'No se pudo obtener el usuario actual' };
   }
