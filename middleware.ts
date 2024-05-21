@@ -11,10 +11,8 @@ import { auth } from './auth';
 export default auth(req => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  const isOnboarded = isLoggedIn ? req.auth?.user?.isOnboarded ?? false : false;
-  const isAdmin = isLoggedIn
-    ? req.auth?.user?.role === 'ADMIN' ?? false
-    : false;
+  const isOnboarded = isLoggedIn ? req.auth?.user.isOnboarded ?? false : false;
+  const isAdmin = isLoggedIn ? req.auth?.user.role === 'ADMIN' ?? false : false;
   const isExistingUser = isLoggedIn
     ? req.auth?.user.isExistingUser ?? false
     : false;
@@ -34,15 +32,15 @@ export default auth(req => {
     console.log('redirecting to dashboard');
   }
 
-  if (!isExistingUser) {
+  if (isLoggedIn && !isExistingUser) {
     return Response.redirect(new URL('/api/auth/signout', nextUrl));
   }
 
-  if (!isOnboarded && !isOnboardingRoute) {
+  if (isLoggedIn && !isOnboarded && !isOnboardingRoute) {
     return Response.redirect(new URL('/onboarding', nextUrl));
   }
 
-  if (isOnboarded && (isAuthRoute || isOnboardingRoute)) {
+  if (isLoggedIn && isOnboarded && (isAuthRoute || isOnboardingRoute)) {
     return Response.redirect(new URL('/dashboard', nextUrl));
   }
 
