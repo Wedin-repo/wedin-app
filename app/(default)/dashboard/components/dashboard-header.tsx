@@ -4,9 +4,10 @@ import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
 import Link from 'next/link';
 import { IoIosLink } from 'react-icons/io';
-import { IoGiftOutline } from 'react-icons/io5';
+import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
 import { PiWallet } from 'react-icons/pi';
+import WishlistConfigModal from '@/components/modals/wishlist-config-modal';
 
 type DashboardHeaderProps = {
   wishlistId: string;
@@ -37,6 +38,7 @@ export default async function DashboardHeader({
           <PiWallet fontSize={'18px'} />
           {formattedTotalPrice}
         </div>
+        <WishlistConfigModal />
       </div>
       <div className="flex flex-col gap-4 justify-start w-full sm:flex-row sm:justify-center">
         <div className="flex gap-2 items-center">

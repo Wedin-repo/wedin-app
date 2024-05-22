@@ -107,3 +107,14 @@ export const TransactionStatusLogUpdateSchema = z.object({
     .min(1, { message: 'No se encontró un ID de usuario' }),
   changedAt: z.string().transform(str => new Date(str)), // Ensure changedAt is a valid Date
 });
+
+export const EventDetailsFormSchema = z.object({
+  eventType: z.string(),
+  name: z.string(),
+  lastName: z.string(),
+  partnerName: z.string(),
+  partnerLastName: z.string(),
+  eventCity: z.string(),
+  eventCountry: z.string(),
+  eventGuestList: z.string(),
+});
