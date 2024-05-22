@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import ringSvg from '@/public/images/rings.svg';
-import type { GiftFormPostSchema } from '@/schemas/forms';
+import type { GiftFormSchema } from '@/schemas/form';
 import type { Category, Gift } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
@@ -29,19 +29,20 @@ import type { z } from 'zod';
 import PriceField from './price-field-input';
 
 type GiftFormProps = {
+  buttonLabel?: string;
   categories: Category[] | null;
-  form: UseFormReturn<z.infer<typeof GiftFormPostSchema>>;
+  form: UseFormReturn<z.infer<typeof GiftFormSchema>>;
   gift?: Gift;
   isLoading: boolean;
   previewUrl: string | null;
   selectedFile: File | null;
-  onSubmit: (values: z.infer<typeof GiftFormPostSchema>) => void;
+  onSubmit: (values: z.infer<typeof GiftFormSchema>) => void;
   setPreviewUrl: (url: string | null) => void;
   setSelectedFile: (file: File | null) => void;
-  buttonLabel?: string;
 };
 
 const GiftForm = ({
+  buttonLabel,
   categories,
   form,
   gift,
@@ -50,7 +51,6 @@ const GiftForm = ({
   onSubmit,
   setPreviewUrl,
   setSelectedFile,
-  buttonLabel,
 }: GiftFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -84,7 +84,7 @@ const GiftForm = ({
           <div className="w-full lg:w-7/12">
             <FormField
               control={form.control}
-              name="imageUrl"
+              name="image"
               render={({ field: { onChange, value, ...fieldProps } }) => (
                 <FormItem className="w-full">
                   <FormLabel>Imagen del regalo</FormLabel>
@@ -132,7 +132,21 @@ const GiftForm = ({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="imageUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input type="text" className="hidden" {...field} />
+                  </FormControl>
+                  <FormMessage className="font-normal text-red-600" />
+                </FormItem>
+              )}
+            />
           </div>
+
           <div className="flex flex-col gap-4 justify-evenly w-full lg:w-6/12">
             <FormField
               control={form.control}

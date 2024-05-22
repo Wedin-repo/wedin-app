@@ -1,36 +1,34 @@
-import { getGifts } from '@/actions/data/gift';
-import { getGiftList } from '@/actions/data/giftlist';
 import { getEvent } from '@/actions/data/event';
+import { getGiftlist } from '@/actions/data/giftlist';
+import GiftCard from '@/components/cards/gifts';
+import CardContainer from '@/components/cards/shared/card-container';
+import EmptyState from '@/components/empty-state';
+import CreateWishlistGiftsForm from '@/components/forms/giftlists/create-wishlist-gifts-form';
 import { formatPrice } from '@/lib/utils';
 import { IoGiftOutline } from 'react-icons/io5';
 import { PiWallet } from 'react-icons/pi';
-import AddToWishlistForm from './add-to-wishlist-form';
-import GiftCard from '@/components/cards/gifts/card';
-import CardContainer from '@/components/cards/shared/card-container';
-import EmptyState from '@/components/EmptyState';
 
-export type GiftListPageParams = {
+export type GiftlistPageParams = {
   giftlistId: string;
 };
 
-type GiftListPageProps = {
-  params: GiftListPageParams;
+type GiftlistPageProps = {
+  params: GiftlistPageParams;
 };
 
-export default async function GiftListPage({ params }: GiftListPageProps) {
+export default async function GiftlistPage({ params }: GiftlistPageProps) {
   const { giftlistId } = params;
-  const giftList = await getGiftList(giftlistId);
+  const giftlist = await getGiftlist(giftlistId);
 
-  if (!giftList) return null;
+  if (!giftlist) return null;
 
-  const event = await getEvent();
-  const gifts = await getGifts({ searchParams: { giftlistId } });
-
+  const { gifts } = giftlist;
   if (gifts?.length === 0 || !gifts)
     return <EmptyState title="No se encontraron regalos" />;
 
+  const event = await getEvent();
   const giftIds = gifts?.map(gift => gift.id);
-  const { name, quantity, totalPrice } = giftList;
+  const { name, quantity, totalPrice } = giftlist;
   const formattedPrice = formatPrice(Number(totalPrice));
 
   return (
@@ -53,7 +51,7 @@ export default async function GiftListPage({ params }: GiftListPageProps) {
         </div>
 
         <div className="flex justify-center w-full">
-          <AddToWishlistForm wishlistId={event?.wishlistId} giftIds={giftIds} />
+          <CreateWishlistGiftsForm event={event} giftIds={giftIds} />
         </div>
       </div>
 

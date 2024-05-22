@@ -1,7 +1,7 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
-import Logo from '@/components/Logo';
+import { getCurrentUser } from '@/actions/get-current-user';
+import Logo from '@/components/logo';
 import { CiImageOn } from 'react-icons/ci';
-import OnboardingForm from './components/onboarding-form';
+import OnboardingStepper from './components/onboarding-stepper';
 
 export default async function OnboardingPage() {
   const currentUser = await getCurrentUser();
@@ -14,7 +14,7 @@ export default async function OnboardingPage() {
       <div className="flex justify-center items-center">
         <div className="flex flex-col gap-8 items-center">
           <Logo />
-          <OnboardingForm currentUser={currentUser} />
+          <OnboardingStepper currentUser={currentUser} />
         </div>
       </div>
     </div>

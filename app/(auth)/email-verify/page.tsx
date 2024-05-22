@@ -1,4 +1,4 @@
-import EmailVerifyCard from '@/components/cards/auth/email-verify';
+import EmailVerifyCard from '@/components/cards/email-verify';
 
 export default function EmailVerifyPages() {
   return <EmailVerifyCard />;

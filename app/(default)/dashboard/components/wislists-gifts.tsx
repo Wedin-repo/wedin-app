@@ -1,8 +1,8 @@
 import { getEvent } from '@/actions/data/event';
-import { getWishListGifts } from '@/actions/data/wishlist-gifts';
-import EmptyState from '@/components/EmptyState';
-import Pagination from '@/components/Pagination';
-import DashboardGiftCard from '@/components/cards/wishlist-gifts/card';
+import { getWishlistGifts } from '@/actions/data/wishlist-gifts';
+import DashboardGiftCard from '@/components/cards/wishlist-gifts';
+import EmptyState from '@/components/empty-state';
+import Pagination from '@/components/pagination';
 import type { DashboardPageSearchParams } from '../page';
 
 type WislistGiftsProps = {
@@ -21,14 +21,14 @@ async function WislistGifts({ searchParams }: WislistGiftsProps) {
   const { page = '1', name } = searchParams;
 
   // Get total wishlist gifts to determine if the wishlist is empty
-  const totalWishlistGifts = await getWishListGifts({ wishlistId });
+  const totalWishlistGifts = await getWishlistGifts({ wishlistId });
 
   if (!totalWishlistGifts || totalWishlistGifts.length === 0) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
   }
 
   // Fetch filtered wishlist gifts based on search params
-  const filteredWishlistGifts = await getWishListGifts({
+  const filteredWishlistGifts = await getWishlistGifts({
     wishlistId,
     name,
   });
@@ -39,7 +39,7 @@ async function WislistGifts({ searchParams }: WislistGiftsProps) {
 
   // Calculate pagination
   const totalPages = Math.ceil(filteredWishlistGifts.length / itemsPerPage);
-  const paginatedWishlistGifts = await getWishListGifts({
+  const paginatedWishlistGifts = await getWishlistGifts({
     wishlistId,
     name,
     page,
@@ -51,8 +51,7 @@ async function WislistGifts({ searchParams }: WislistGiftsProps) {
       {paginatedWishlistGifts.map(wishlistGift => (
         <DashboardGiftCard
           key={wishlistGift.id}
-          eventId={event.id}
-          wishlistId={wishlistId}
+          event={event}
           wishlistGift={wishlistGift}
         />
       ))}

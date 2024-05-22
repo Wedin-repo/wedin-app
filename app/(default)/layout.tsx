@@ -1,7 +1,6 @@
-import { getCurrentUser } from '@/actions/getCurrentUser';
+import { getCurrentUser } from '@/actions/get-current-user';
 import DefaultLayoutContainer from '@/components/default-layout-container';
-import Footer from '@/components/Footer';
-import NavBar from '@/components/navbar/Navbar';
+import NavBar from '@/components/navbar/navbar';
 
 export default async function DefaultLayout({
   children,
@@ -15,7 +14,9 @@ export default async function DefaultLayout({
       <NavBar currentUser={currentUser} />
       <div className="pt-16" />
       <DefaultLayoutContainer>{children}</DefaultLayoutContainer>
-      <Footer />
+      <div className="bg-[#333333] w-full h-[90px] flex items-center justify-center font-medium text-xl text-white mt-auto">
+        wedin
+      </div>
     </div>
   );
 }

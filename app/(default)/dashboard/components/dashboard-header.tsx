@@ -1,10 +1,13 @@
-import { getWishListGifts } from '@/actions/data/wishlist-gifts';
+import { getEvent } from '@/actions/data/event';
+import { getWishlistGifts } from '@/actions/data/wishlist-gifts';
 import { Switch } from '@/components/ui/switch';
 import { formatPrice } from '@/lib/utils';
+import Link from 'next/link';
 import { IoIosLink } from 'react-icons/io';
-import { IoGiftOutline } from 'react-icons/io5';
+import { IoGiftOutline, IoSettingsOutline } from 'react-icons/io5';
 import { LuScreenShare } from 'react-icons/lu';
 import { PiWallet } from 'react-icons/pi';
+import WishlistConfigModal from '@/components/modals/wishlist-config-modal';
 
 type DashboardHeaderProps = {
   wishlistId: string;
@@ -13,7 +16,7 @@ type DashboardHeaderProps = {
 export default async function DashboardHeader({
   wishlistId,
 }: DashboardHeaderProps) {
-  const wishlistGifts = await getWishListGifts({ wishlistId });
+  const wishlistGifts = await getWishlistGifts({ wishlistId });
 
   const totalPrice =
     wishlistGifts?.reduce(
@@ -21,6 +24,7 @@ export default async function DashboardHeader({
       0
     ) || 0;
   const formattedTotalPrice = formatPrice(totalPrice);
+  const event = await getEvent();
 
   return (
     <div className="flex flex-col gap-4 items-center w-full">
@@ -34,6 +38,7 @@ export default async function DashboardHeader({
           <PiWallet fontSize={'18px'} />
           {formattedTotalPrice}
         </div>
+        <WishlistConfigModal />
       </div>
       <div className="flex flex-col gap-4 justify-start w-full sm:flex-row sm:justify-center">
         <div className="flex gap-2 items-center">
@@ -44,10 +49,13 @@ export default async function DashboardHeader({
           <IoIosLink fontSize={'18px'} />
           Compartir link de la lista
         </div>
-        <div className="flex gap-2 items-center">
+        <Link
+          href={`/events/${event?.url}`}
+          className="flex gap-2 items-center"
+        >
           <LuScreenShare fontSize={'18px'} />
           Ver como un invitado
-        </div>
+        </Link>
       </div>
     </div>
   );

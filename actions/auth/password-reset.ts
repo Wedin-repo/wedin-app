@@ -1,9 +1,9 @@
 'use server';
 
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { sendPasswordResetEmail } from '@/lib/mail';
 import { generatePasswordResetToken } from '@/lib/tokens';
-import { PasswordResetSchema } from '@/schemas/forms/auth';
+import { PasswordResetSchema } from '@/schemas/auth';
 import type { PasswordResetToken } from '@prisma/client';
 import type * as z from 'zod';
 
@@ -19,7 +19,7 @@ export const passwordReset = async (
   if (validatedFields.success) {
     const { email } = validatedFields.data;
 
-    const existingUser = await prisma.user.findUnique({
+    const existingUser = await prismaClient.user.findUnique({
       where: { email },
     });
 
@@ -27,7 +27,7 @@ export const passwordReset = async (
       return { error: 'No hay una cuenta asociada a este email' };
     }
 
-    const existingUserAccount = await prisma.account.findFirst({
+    const existingUserAccount = await prismaClient.account.findFirst({
       where: { userId: existingUser.id },
     });
 

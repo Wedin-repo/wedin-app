@@ -2,7 +2,7 @@
 
 import { Input } from '@/components/ui/input';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { type ChangeEvent, useEffect, useState } from 'react';
 import { BiSearch } from 'react-icons/bi';
 import { useDebounceCallback } from 'usehooks-ts';
 
@@ -40,7 +40,7 @@ function SearchBar({
       sp.delete('name');
     } else {
       sp.set('name', value);
-      sp.set('page', '1');
+      // sp.set('page', '1');
     }
 
     router.push(`${pathname}?${sp.toString()}`, { scroll: false });

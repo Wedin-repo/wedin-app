@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/popover';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { StepOneSchema } from '@/schemas/forms/auth';
+import { StepOneSchema } from '@/schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';

@@ -10,11 +10,14 @@ const cardVariants = cva('', {
       dashboard:
         'border-b-primaryBackgroundColor border-b py-3 w-full flex items-normal sm:items-center justify-between gap-4',
       emailVerification: 'grid grid-rows-2 gap-4',
+      giftsReceived:
+        'flex flex-col gap-0 p-0 rounded-2xl transition border border-[#E0E0E0]',
     },
     size: {
       default: 'h-[360px]',
       dashboard: '',
       emailVerification: 'w-full sm:w-[400px] sm:h-[320px]',
+      giftsReceived: 'h-[390px]',
     },
   },
   defaultVariants: {

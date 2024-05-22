@@ -1,12 +1,12 @@
 const { PrismaClient } = require('@prisma/client');
 const { faker } = require('@faker-js/faker');
 
-const prismaClient = new PrismaClient();
+const prismaSeed = new PrismaClient();
 
 async function main() {
   // Delete existing data in a specific order due to foreign key constraints
   // await prismaClient.gift.deleteMany();
-  // await prismaClient.giftList.deleteMany();
+  // await prismaClient..deleteMany();
   // await prismaClient.category.deleteMany();
 
   // Seed categories
@@ -21,7 +21,7 @@ async function main() {
       'Relax',
       'Cultura y arte',
     ].map(async name => {
-      return prismaClient.category.upsert({
+      return prismaSeed.category.upsert({
         where: { name },
         update: {},
         create: { name },
@@ -30,9 +30,9 @@ async function main() {
   );
 
   // Seed gift lists without quantity and totalPrice
-  const giftLists = await Promise.all(
+  const giftlists = await Promise.all(
     categories.map(async category => {
-      return prismaClient.giftList.create({
+      return prismaSeed.giftlist.create({
         data: {
           name: `${category.name} Package`,
           quantity: '0', // Initial placeholder
@@ -46,15 +46,15 @@ async function main() {
   // Seed gifts and assign to gift lists
   // biome-ignore lint/style/useConst: <explanation>
   let gifts = [];
-  for (let i = 0; i < 200; i++) {
-    const randomGiftList = faker.helpers.arrayElement(giftLists);
-    const defaultGift = await prismaClient.gift.create({
+  for (let i = 0; i < 150; i++) {
+    const randomGiftlist = faker.helpers.arrayElement(giftlists);
+    const defaultGift = await prismaSeed.gift.create({
       data: {
         name: faker.commerce.productName(),
         isDefault: true,
         price: faker.number.int({ min: 89000, max: 1820000 }).toString(),
-        giftListId: randomGiftList.id,
-        categoryId: randomGiftList.categoryId,
+        giftlistId: randomGiftlist.id,
+        categoryId: randomGiftlist.categoryId,
         imageUrl: faker.image.url(),
       },
     });
@@ -63,14 +63,14 @@ async function main() {
 
   // Update gift lists with calculated quantity and totalPrice
   // biome-ignore lint/style/useConst: <explanation>
-  for (let giftList of giftLists) {
-    const giftsForList = gifts.filter(gift => gift.giftListId === giftList.id);
+  for (let giftlist of giftlists) {
+    const giftsForList = gifts.filter(gift => gift.giftlistId === giftlist.id);
     const totalPrice = giftsForList.reduce(
       (acc, curr) => acc + Number(curr.price),
       0
     );
-    await prismaClient.giftList.update({
-      where: { id: giftList.id },
+    await prismaSeed.giftlist.update({
+      where: { id: giftlist.id },
       data: {
         quantity: giftsForList.length.toString(),
         totalPrice: totalPrice.toString(),
@@ -87,5 +87,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prismaClient.$disconnect();
+    await prismaSeed.$disconnect();
   });

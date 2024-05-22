@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { LoginSchema } from '@/schemas/forms/auth';
+import { LoginSchema } from '@/schemas/auth';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -28,7 +28,6 @@ export default function LoginForm() {
   // // Setup debouncing for email input changes
   // const handleEmailSearch = async (email: string) => {
   //   const response = await fetch(`/api/users?email=${email}`);
-  //   console.log(response); // Here you might want to handle the response properly
   // };
   //
   // // useDebounceCallback to delay the handleEmailSearch execution

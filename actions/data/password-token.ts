@@ -1,9 +1,9 @@
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { getLoginUserByEmail } from './user';
 
 export const getPasswordTokenResetByEmail = async (email: string) => {
   try {
-    const passwordResetToken = await prisma.passwordResetToken.findFirst({
+    const passwordResetToken = await prismaClient.passwordResetToken.findFirst({
       where: { email },
     });
     return passwordResetToken;
@@ -14,9 +14,11 @@ export const getPasswordTokenResetByEmail = async (email: string) => {
 
 export const getPasswordResetTokenByToken = async (token: string) => {
   try {
-    const passwordResetToken = await prisma.passwordResetToken.findUnique({
-      where: { token },
-    });
+    const passwordResetToken = await prismaClient.passwordResetToken.findUnique(
+      {
+        where: { token },
+      }
+    );
 
     return passwordResetToken;
   } catch (error) {
@@ -40,7 +42,7 @@ export const newPasswordReset = async (token: string) => {
   }
 
   try {
-    await prisma.user.update({
+    await prismaClient.user.update({
       where: { email: existingToken.email },
       data: { emailVerified: new Date() },
     });
@@ -49,7 +51,7 @@ export const newPasswordReset = async (token: string) => {
   }
 
   try {
-    await prisma.passwordResetToken.delete({
+    await prismaClient.passwordResetToken.delete({
       where: { id: existingToken.id },
     });
   } catch (error) {

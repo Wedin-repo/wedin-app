@@ -9,8 +9,23 @@ datasource db {
 
 enum UserType {
   ADMIN
+  ORGANIZER
   COUPLE
   INVITEE
+}
+
+enum EventType {
+  WEDDING
+  BIRTHDAY
+  BABY_SHOWER
+}
+
+enum TransactionStatus {
+  OPEN
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
 }
 
 model Account {
@@ -51,16 +66,17 @@ model User {
   password         String?
   emailVerified    DateTime?
   image            String?
-  role             UserType  @default(COUPLE)
+  role             UserType  @default(ORGANIZER)
   isOnboarded      Boolean   @default(false)
   hasPYbankAccount Boolean   @default(false)
   isMagicLinkLogin Boolean   @default(false)
   onboardingStep   Int       @default(1)
 
-  accounts           Account[]
-  sessions           Session[]
-  eventPrimaryUser   Event[]   @relation("primaryUser")
-  eventSecondaryUser Event[]   @relation("secondaryUser")
+  accounts             Account[]
+  sessions             Session[]
+  eventPrimaryUsers    Event[]                @relation("primaryUser")
+  eventSecondaryUsers  Event[]                @relation("secondaryUser")
+  TransactionStatusLog TransactionStatusLog[]
 }
 
 model Event {
@@ -77,61 +93,109 @@ model Event {
   country         String?
   city            String?
 
-  wishList           WishList @relation(fields: [wishlistId], references: [id])
-  eventPrimaryUser   User?    @relation("primaryUser", fields: [primaryUserId], references: [id])
-  eventSecondaryUser User?    @relation("secondaryUser", fields: [secondaryUserId], references: [id])
-  Gift               Gift[]
+  wishlist           Wishlist       @relation(fields: [wishlistId], references: [id])
+  eventPrimaryUser   User           @relation("primaryUser", fields: [primaryUserId], references: [id])
+  eventSecondaryUser User?          @relation("secondaryUser", fields: [secondaryUserId], references: [id])
+  wishlistGifts      WishlistGift[]
+  transactions       Transaction[]
+  gifts              Gift[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])
   @@unique([primaryUserId])
 }
 
-model WishList {
+model Wishlist {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  wishListGifts WishListGift[]
   event         Event?
+  wishlistGifts WishlistGift[]
+  transactions  Transaction[]
 }
 
 model Gift {
   id              String   @id @default(auto()) @map("_id") @db.ObjectId
   name            String
-  categoryId      String   @db.ObjectId
   price           String
   imageUrl        String?
   isDefault       Boolean  @default(false)
   isEditedVersion Boolean  @default(false)
-  eventId         String?  @db.ObjectId
+  categoryId      String   @db.ObjectId
   giftlistId      String?  @db.ObjectId
+  eventId         String?  @db.ObjectId
   sourceGiftId    String?  @db.ObjectId
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  wishListGifts WishListGift[]
-  giftlist      GiftList?      @relation(fields: [giftlistId], references: [id])
+  giftlist      Giftlist?      @relation(fields: [giftlistId], references: [id])
   event         Event?         @relation(fields: [eventId], references: [id])
+  wishlistGifts WishlistGift[]
 }
 
-model WishListGift {
+model WishlistGift {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  wishListId     String   @db.ObjectId
-  giftId         String   @db.ObjectId
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
   isFavoriteGift Boolean  @default(false)
   isGroupGift    Boolean  @default(false)
+  groupGiftParts String   @default("0")
+  isFullyPaid    Boolean  @default(false)
+  isReceived     Boolean  @default(false)
+  wishlistId     String   @db.ObjectId
+  giftId         String   @db.ObjectId
+  eventId        String   @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  wishList WishList @relation(fields: [wishListId], references: [id])
-  gift     Gift     @relation(fields: [giftId], references: [id])
+  wishlist     Wishlist      @relation(fields: [wishlistId], references: [id])
+  gift         Gift          @relation(fields: [giftId], references: [id])
+  event        Event         @relation(fields: [eventId], references: [id])
+  transactions Transaction[]
 
-  @@index([wishListId])
+  @@index([wishlistId])
   @@index([giftId])
 }
 
-model GiftList {
+model Transaction {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  wishlistGiftId String            @db.ObjectId
+  wishlistId     String?           @db.ObjectId
+  eventId        String            @db.ObjectId
+  amount         String
+  status         TransactionStatus @default(OPEN)
+  notes          String?
+  payerRole      UserType          @default(INVITEE)
+  payeeRole      UserType          @default(ORGANIZER)
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  wishlistGift          WishlistGift           @relation(fields: [wishlistGiftId], references: [id])
+  event                 Event                  @relation(fields: [eventId], references: [id])
+  wishlist              Wishlist?              @relation(fields: [wishlistId], references: [id])
+  transactionStatusLogs TransactionStatusLog[]
+  images                Image[]
+
+  @@index([wishlistGiftId])
+  @@index([eventId])
+  @@index([wishlistId])
+}
+
+model TransactionStatusLog {
+  id             String            @id @default(auto()) @map("_id") @db.ObjectId
+  transactionId  String            @db.ObjectId
+  previousStatus TransactionStatus
+  status         TransactionStatus
+  changedAt      DateTime          @default(now())
+  changedById    String            @db.ObjectId
+
+  changedBy   User        @relation(fields: [changedById], references: [id])
+  transaction Transaction @relation(fields: [transactionId], references: [id])
+
+  @@index([id, transactionId])
+  @@index([changedById])
+}
+
+model Giftlist {
   id         String  @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   quantity   String?
@@ -162,4 +226,14 @@ model PasswordResetToken {
   expires DateTime
 
   @@unique([email, token])
+}
+
+model Image {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  url           String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  transactionId String?  @db.ObjectId
+
+  transaction Transaction? @relation(fields: [transactionId], references: [id])
 }

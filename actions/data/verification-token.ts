@@ -1,9 +1,9 @@
-import prisma from '@/db/client';
+import prismaClient from '@/prisma/client';
 import { getLoginUserByEmail } from './user';
 
 export const getVerificationTokenByEmail = async (email: string) => {
   try {
-    const verificationToken = await prisma.verificationToken.findFirst({
+    const verificationToken = await prismaClient.verificationToken.findFirst({
       where: { identifier: email },
     });
     return verificationToken;
@@ -14,7 +14,7 @@ export const getVerificationTokenByEmail = async (email: string) => {
 
 export const getVerificationTokenByToken = async (token: string) => {
   try {
-    const verificationToken = await prisma.verificationToken.findUnique({
+    const verificationToken = await prismaClient.verificationToken.findUnique({
       where: { token },
     });
 
@@ -38,7 +38,7 @@ export const newVerification = async (token: string) => {
   }
 
   try {
-    await prisma.user.update({
+    await prismaClient.user.update({
       where: { email: existingToken.identifier },
       data: { emailVerified: new Date() },
     });
@@ -47,7 +47,7 @@ export const newVerification = async (token: string) => {
   }
 
   try {
-    await prisma.verificationToken.delete({
+    await prismaClient.verificationToken.delete({
       where: { id: existingToken.id },
     });
   } catch (error) {

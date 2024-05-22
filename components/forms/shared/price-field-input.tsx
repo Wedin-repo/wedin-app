@@ -6,16 +6,19 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { formatPrice } from '@/lib/utils';
-import type { GiftFormPostSchema } from '@/schemas/forms';
+import type { GiftFormSchema, TransactionCreateSchema } from '@/schemas/form';
 import { useEffect, useState } from 'react';
 import type { ControllerRenderProps } from 'react-hook-form';
 import type { z } from 'zod';
 
 type PriceFieldProps = {
-  field: ControllerRenderProps<z.infer<typeof GiftFormPostSchema>, 'price'>;
+  field:
+    | ControllerRenderProps<z.infer<typeof GiftFormSchema>, 'price'>
+    | ControllerRenderProps<z.infer<typeof TransactionCreateSchema>, 'amount'>;
+  disabled?: boolean;
 };
 
-const PriceField = ({ field }: PriceFieldProps) => {
+const PriceField = ({ field, disabled = false }: PriceFieldProps) => {
   const [displayValue, setDisplayValue] = useState(
     formatPrice(Number(field.value))
   );
@@ -37,7 +40,12 @@ const PriceField = ({ field }: PriceFieldProps) => {
     <FormItem className="w-full">
       <FormLabel>Precio</FormLabel>
       <FormControl>
-        <Input type="text" value={displayValue} onChange={handleInputChange} />
+        <Input
+          type="text"
+          value={displayValue}
+          onChange={handleInputChange}
+          disabled={disabled}
+        />
       </FormControl>
       <FormMessage className="font-normal text-red-600" />
     </FormItem>

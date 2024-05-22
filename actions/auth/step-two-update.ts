@@ -1,19 +1,13 @@
 'use server';
 
 import { auth } from '@/auth';
-import prisma from '@/db/client';
-import { StepTwoSchema } from '@/schemas/forms/auth';
+import prismaClient from '@/prisma/client';
+import { StepTwoSchema } from '@/schemas/auth';
 import type { User } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
 import type { z } from 'zod';
 
-export const stepTwoUpdate = async (
-  values: z.infer<typeof StepTwoSchema> | null = null
-) => {
-  if (values === undefined || values === null) {
-    return { error: 'Algo salio mal! reintanta' };
-  }
-
+export const stepTwoUpdate = async (values: z.infer<typeof StepTwoSchema>) => {
   const validatedFields = StepTwoSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -30,7 +24,7 @@ export const stepTwoUpdate = async (
     let groom: User;
 
     try {
-      groom = await prisma.user.update({
+      groom = await prismaClient.user.update({
         where: { email: session.user.email },
         data: {
           hasPYbankAccount: hasPYbankAccount,
@@ -45,7 +39,7 @@ export const stepTwoUpdate = async (
     if (!groom) return { error: 'Error obteniendo tu usuario' };
 
     try {
-      await prisma.event.update({
+      await prismaClient.event.update({
         where: {
           secondaryUserId: groom.id,
         },

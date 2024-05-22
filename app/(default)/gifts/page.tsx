@@ -1,35 +1,30 @@
 import { getCategories } from '@/actions/data/category';
-import type { GetGiftsParams } from '@/actions/data/gift';
-import type { GetGiftListsParams } from '@/actions/data/giftlist';
-import Loader from '@/components/Loader';
+import Categories from '@/components/categories';
+import Loader from '@/components/loader';
 import SearchBar from '@/components/search-bar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { IoAdd, IoGiftOutline } from 'react-icons/io5';
 import { PiCouchLight } from 'react-icons/pi';
-import Categories from './components/categories';
-import AllGifts from './components/tabs/all-gifts';
-import CreateGift from './components/tabs/create-gift';
-import DefaultGiftLists from './components/tabs/default-giftlists';
+import CreateWishlistGift from './tabs/create-wishlist-gift';
+import DefaultGiftlists from './tabs/default-giftlists';
+import DefaultGifts from './tabs/default-gifts';
 
 const TABS = {
+  predefinedGiftlists: 'predefinedGiftlists',
   predefinedGifts: 'predefinedGifts',
-  allGifts: 'allGifts',
   createGift: 'createGift',
 };
 
-const DEFAULT_TAB = TABS.predefinedGifts;
+const DEFAULT_TAB = TABS.predefinedGiftlists;
 
-export type GetGiftListsSerachParams = GetGiftListsParams;
-export type GetGiftsSearchParams = Pick<
-  GetGiftsParams,
-  'category' | 'page' | 'name'
->;
 export type GiftPageSearchParams = {
   tab?: string;
-} & GetGiftsSearchParams &
-  GetGiftListsSerachParams;
+  category?: string; // -> Gift and Giftlist params
+  name?: string; // -> Gift and Giftlist params
+  page?: string; // -> Gift
+};
 
 type GiftsPageProps = {
   searchParams: GiftPageSearchParams;
@@ -41,16 +36,16 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
   const currentTab = TABS[tab as keyof typeof TABS] || DEFAULT_TAB;
 
   return (
-    <div className="flex flex-col justify-start">
+    <div className="flex flex-col justify-start no-scrollbar">
       <h1 className="flex justify-center items-center my-8 w-full text-4xl font-medium sm:text-5xl text-primaryTextColor">
         Agregar regalos
       </h1>
       <Tabs defaultValue={DEFAULT_TAB} value={currentTab}>
         <TabsList className="flex items-center justify-start gap-4 my-4 sm:my-8 border-b border-[#D7D7D7] overflow-x-auto overflow-y-hidden no-scrollbar">
-          <TabsTrigger value={TABS.predefinedGifts} asChild>
+          <TabsTrigger value={TABS.predefinedGiftlists} asChild>
             <Link
               href={{
-                query: { ...searchParams, tab: TABS.predefinedGifts },
+                query: { ...searchParams, tab: TABS.predefinedGiftlists },
               }}
               className="flex gap-2 items-center"
             >
@@ -59,11 +54,9 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
             </Link>
           </TabsTrigger>
 
-          <TabsTrigger value={TABS.allGifts} asChild>
+          <TabsTrigger value={TABS.predefinedGifts} asChild>
             <Link
-              href={{
-                query: { ...searchParams, tab: TABS.allGifts },
-              }}
+              href={{ query: { ...searchParams, tab: TABS.predefinedGifts } }}
               className="flex gap-2 items-center"
             >
               <PiCouchLight size={24} />
@@ -73,9 +66,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
 
           <TabsTrigger value={TABS.createGift} asChild>
             <Link
-              href={{
-                query: { tab: TABS.createGift },
-              }}
+              href={{ query: { ...searchParams, tab: TABS.createGift } }}
               className="flex gap-2 items-center"
             >
               <IoAdd size={24} />
@@ -84,7 +75,7 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value={TABS.predefinedGifts}>
+        <TabsContent value={TABS.predefinedGiftlists}>
           <SearchBar />
 
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
@@ -95,11 +86,11 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <Categories categories={categories} />
 
           <Suspense fallback={<Loader />}>
-            <DefaultGiftLists searchParams={searchParams} />
+            <DefaultGiftlists searchParams={searchParams} />
           </Suspense>
         </TabsContent>
 
-        <TabsContent value={TABS.allGifts}>
+        <TabsContent value={TABS.predefinedGifts}>
           <SearchBar />
 
           <p className="mb-4 text-lg sm:mb-6 sm:text-xl text-secondaryTextColor">
@@ -109,13 +100,13 @@ const GiftsPage = async ({ searchParams }: GiftsPageProps) => {
           <Categories categories={categories} />
 
           <Suspense fallback={<Loader />}>
-            <AllGifts searchParams={searchParams} />
+            <DefaultGifts searchParams={searchParams} />
           </Suspense>
         </TabsContent>
 
         <TabsContent value={TABS.createGift}>
           <Suspense fallback={<Loader />}>
-            <CreateGift />
+            <CreateWishlistGift />
           </Suspense>
         </TabsContent>
       </Tabs>
