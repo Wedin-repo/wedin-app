@@ -49,7 +49,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof EventDetailsFormSchema>) => {
+  const onSubmit = () => {
     console.log('hello world');
   };
   return (
