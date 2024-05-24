@@ -1,14 +1,13 @@
-import { FaChevronRight, FaRegTrashAlt } from 'react-icons/fa';
-import { TbListDetails } from 'react-icons/tb';
-import { FiCalendar } from 'react-icons/fi';
-import { IoIosLink } from 'react-icons/io';
-import { LuMessageSquare, LuImage } from 'react-icons/lu';
-import { PiBank } from 'react-icons/pi';
 import WishlistConfigModalLeft from './wishlist-config-modal-left';
 import EventDetailsForm from './event-details-form';
-import WishlistConfigCard from '@/components/cards/wishlist-config-card';
+import WishlistUrlForm from './wishlist-url-form';
+import { getEvent } from '@/actions/data/event';
+import { Suspense } from 'react';
+import Loader from '@/components/loader';
 
 const WishlistConfigModalForm = () => {
+  // const event = await getEvent();
+
   return (
     <div className="flex flex-col">
       <div>
@@ -18,13 +17,15 @@ const WishlistConfigModalForm = () => {
         <div className="w-full border rounded-full border-borderColor mt-4"></div>
       </div>
 
-      <div className="flex justify-between pt-6 gap-6">
+      <div className="flex justify-between pt-4 gap-6">
         <div className="w-1/2 flex flex-col justify-center">
           <WishlistConfigModalLeft />
         </div>
 
         <div className="w-1/2">
-          <EventDetailsForm />
+          <Suspense fallback={<Loader />}>
+            <WishlistUrlForm />
+          </Suspense>
         </div>
       </div>
     </div>

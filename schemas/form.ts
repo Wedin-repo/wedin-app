@@ -119,3 +119,7 @@ export const EventDetailsFormSchema = z.object({
   eventCountry: z.string(),
   eventGuestList: z.string(),
 });
+
+export const WishlistUrlFormSchema = z.object({
+  wishlistUrl: z.string().url(),
+});

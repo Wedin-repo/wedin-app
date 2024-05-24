@@ -1,4 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -16,18 +19,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from '@/components/ui/command';
 import { EventDetailsFormSchema } from '@/schemas/form';
 import Image from 'next/image';
-import { useRef } from 'react';
-import type { UseFormReturn } from 'react-hook-form';
 import { Event } from '@prisma/client';
 import { FiEdit3 } from 'react-icons/fi';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import { Loader2 } from 'lucide-react';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
-
-import type { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { countries } from '@/app/(onboarding)/onboarding/countries';
+import { cn } from '@/lib/utils';
 
 type EventDetailsFormProps = {
   event?: Event;
@@ -45,7 +63,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
       partnerLastName: 'Alicia',
       partnerEmail: 'felicia@thagoat.com',
       eventCity: event?.city ?? 'San Lorenzo',
-      eventCountry: event?.country ?? 'China',
+      eventCountry: event?.country ?? 'Paraguay',
       eventGuestList: '252',
     },
   });
@@ -183,7 +201,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name="eventCountry"
               render={({ field }) => (
@@ -193,6 +211,64 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                     <Input className="!mt-1" {...field} />
                   </FormControl>
                   <FormMessage className="font-normal text-red-600" />
+                </FormItem>
+              )}
+            /> */}
+            <FormField
+              control={form.control}
+              name="eventCountry"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Pais del evento</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl className="!mt-1">
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn('w-[200px] justify-between')}
+                        >
+                          {field.value
+                            ? countries.find(
+                                country => country?.name === field.value
+                              )?.name
+                            : 'Elige un pais'}
+                          <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput
+                          placeholder="Buscar pais"
+                          className="h-9"
+                        />
+                        <CommandEmpty>No framework found.</CommandEmpty>
+                        <CommandGroup>
+                          {countries.map(country => (
+                            <CommandItem
+                              value={country?.name}
+                              key={country?.id}
+                              onSelect={() => {
+                                form.setValue('eventCountry', country.name);
+                              }}
+                            >
+                              {country?.name}
+                              <CheckIcon
+                                className={cn(
+                                  'ml-auto h-4 w-4',
+                                  country?.name === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -206,7 +282,16 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
                     Cantidad de invitados
-                    <AiOutlineQuestionCircle fontSize={'18px'} />
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <AiOutlineQuestionCircle fontSize={'20px'} />
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-white">
+                          <p>this is probably some info tooltip or som shit</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </FormLabel>
                   <FormControl>
                     <Input className="!mt-1" {...field} />
