@@ -18,6 +18,7 @@ enum EventType {
   WEDDING
   BIRTHDAY
   BABY_SHOWER
+  OTHER
 }
 
 enum TransactionStatus {

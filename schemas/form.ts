@@ -114,6 +114,7 @@ export const EventDetailsFormSchema = z.object({
   lastName: z.string(),
   partnerName: z.string(),
   partnerLastName: z.string(),
+  partnerEmail: z.string().email(),
   eventCity: z.string(),
   eventCountry: z.string(),
   eventGuestList: z.string(),
