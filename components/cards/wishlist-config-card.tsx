@@ -1,63 +1,50 @@
-import { FaChevronRight, FaRegTrashAlt } from 'react-icons/fa';
+import { FaChevronRight } from 'react-icons/fa';
 
 type WishlistConfigCardProps = {
   icon: React.ReactNode;
   title: string;
-  isSelected?: boolean;
+  isActive?: boolean;
   isCompleted?: boolean;
   isDeleteButton?: boolean;
+  onClick?: () => void;
 };
 
 const WishlistConfigCard = ({
   icon,
   title,
-  isSelected,
-  isCompleted,
-  isDeleteButton,
+  isActive = false,
+  isDeleteButton = false,
+  isCompleted = false,
+  onClick,
 }: WishlistConfigCardProps) => {
-  if (isDeleteButton) {
-    return (
-      <div className="flex flex-col">
-        <div className="flex justify-between items-center cursor-pointer hover:opacity-70 transition-all">
-          <div className="flex gap-4 items-center">
-            <div className={`bg-[#F3F4F6] text-[#DC2626] p-4 rounded-lg`}>
-              {icon}
-            </div>
-            <p className={`text-[#DC2626] font-normal`}>{title}</p>
-          </div>
-          <div className="text-[#DC2626]">
-            <FaChevronRight fontSize={'18px'} />
-          </div>
-        </div>
-        <div>
-          <div className="w-full border rounded-full border-borderColor mt-2"></div>
-        </div>
-      </div>
-    );
-  }
+  const baseTextColor = isDeleteButton ? 'text-[#DC2626]' : 'text-[#2E2E2E]';
+  const baseBgColor = isDeleteButton ? 'bg-[#F3F4F6]' : 'bg-[#F3F4F6]';
+  const textColor = isActive ? 'font-semibold' : 'font-normal';
+  const isActiveHover = isActive
+    ? 'cursor-not-allowed'
+    : 'cursor-pointer hover:opacity-70 transition-all';
+  const hideLastBorder = isDeleteButton ? 'mb-0' : 'mb-4';
+
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between items-center cursor-pointer hover:opacity-70 transition-all">
+      <div
+        className={`flex justify-between items-center ${isActiveHover}`}
+        onClick={onClick}
+      >
         <div className="flex gap-4 items-center">
-          <div className={`bg-[#F3F4F6] text-[#1E293B] p-4 rounded-lg`}>
+          <div className={`${baseBgColor} ${baseTextColor} p-4 rounded-lg`}>
             {icon}
           </div>
-          <p
-            className={
-              isSelected
-                ? `text-[#2E2E2E] font-semibold`
-                : `text-[#2E2E2E] font-normal`
-            }
-          >
-            {title}
-          </p>
+          <p className={`${baseTextColor} ${textColor}`}>{title}</p>
         </div>
-        <div>
+        <div className={baseTextColor}>
           <FaChevronRight fontSize={'18px'} />
         </div>
       </div>
       <div>
-        <div className="w-full border rounded-full border-borderColor mt-2 mb-4"></div>
+        <div
+          className={`w-full border rounded-full border-borderColor mt-2 ${hideLastBorder}`}
+        ></div>
       </div>
     </div>
   );
