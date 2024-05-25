@@ -1,0 +1,18 @@
+export const bankEntitiesPY = [
+  { value: 1, label: 'Banco Nacional de Fomento (BNF)' },
+  { value: 2, label: 'Banco Central del Paraguay' },
+  { value: 3, label: 'Banco Regional' },
+  { value: 4, label: 'Banco Itaú Paraguay' },
+  { value: 5, label: 'Banco Continental' },
+  { value: 6, label: 'Banco BBVA Paraguay' },
+  { value: 7, label: 'Banco GNB Paraguay' },
+  { value: 8, label: 'Banco Atlas' },
+  { value: 9, label: 'Banco Vision' },
+  { value: 10, label: 'Banco Familiar' },
+  { value: 11, label: 'Banco Sudameris' },
+  { value: 12, label: 'Banco Amambay' },
+  { value: 13, label: 'Banco BASA' },
+  { value: 14, label: 'Banco Rio' },
+  { value: 15, label: 'Banco Interfisa' },
+  { value: 16, label: 'ueno Bank' },
+];

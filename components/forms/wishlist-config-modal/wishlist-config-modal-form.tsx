@@ -3,6 +3,7 @@ import EventDetailsForm from './event-details-form';
 import WishlistUrlForm from './wishlist-url-form';
 import { getEvent } from '@/actions/data/event';
 import { Suspense } from 'react';
+import WishlistConfigModalRight from './wishlist-config-modal-right';
 import Loader from '@/components/loader';
 
 const WishlistConfigModalForm = () => {
@@ -24,7 +25,9 @@ const WishlistConfigModalForm = () => {
 
         <div className="w-1/2">
           <Suspense fallback={<Loader />}>
-            <WishlistUrlForm />
+            <WishlistConfigModalRight
+              content={'Datos bancarios y de facturación'}
+            />
           </Suspense>
         </div>
       </div>

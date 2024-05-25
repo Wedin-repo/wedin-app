@@ -6,7 +6,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -16,16 +15,10 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-
-import { EventDetailsFormSchema } from '@/schemas/form';
+import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import { WishlistUrlFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 import { Loader2 } from 'lucide-react';
-import { AiOutlineQuestionCircle } from 'react-icons/ai';
 
 type WishlistUrlFormProps = {
   event?: Event | null;
@@ -33,7 +26,7 @@ type WishlistUrlFormProps = {
 
 const WishlistUrlForm = ({ event }: WishlistUrlFormProps) => {
   const form = useForm({
-    resolver: zodResolver(EventDetailsFormSchema),
+    resolver: zodResolver(WishlistUrlFormSchema),
     defaultValues: {
       wishlistUrl: event?.url ?? '30crisley',
     },

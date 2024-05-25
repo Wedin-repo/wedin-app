@@ -7,6 +7,45 @@ import { IoIosLink } from 'react-icons/io';
 import { LuMessageSquare, LuImage } from 'react-icons/lu';
 import { PiBank } from 'react-icons/pi';
 
+const options = [
+  {
+    id: '1',
+    label: 'Tipo y datos del evento',
+    icon: <TbListDetails fontSize={'18px'} />,
+  },
+  {
+    id: '2',
+    label: 'Link de la lista',
+    icon: <IoIosLink fontSize={'18px'} />,
+  },
+  {
+    id: '3',
+    label: 'Imagen de la portada',
+    icon: <LuImage fontSize={'18px'} />,
+  },
+  {
+    id: '4',
+    label: 'Mensaje de la portada',
+    icon: <LuMessageSquare fontSize={'18px'} />,
+  },
+  {
+    id: '5',
+    label: 'Fecha del evento',
+    icon: <FiCalendar fontSize={'18px'} />,
+  },
+  {
+    id: '6',
+    label: 'Datos bancarios y de facturación',
+    icon: <PiBank fontSize={'18px'} />,
+  },
+  {
+    id: '7',
+    label: 'Eliminar mi lista',
+    icon: <FaRegTrashAlt fontSize={'18px'} />,
+    isDeleteButton: true,
+  },
+];
+
 const WishlistConfigModalLeft = () => {
   const [activeCard, setActiveCard] = useState<string>(
     'Tipo y datos del evento'
@@ -18,49 +57,16 @@ const WishlistConfigModalLeft = () => {
 
   return (
     <>
-      <WishlistConfigCard
-        icon={<TbListDetails fontSize={'18px'} />}
-        title="Tipo y datos del evento"
-        isActive={activeCard === 'Tipo y datos del evento'}
-        onClick={() => handleCardClick('Tipo y datos del evento')}
-      />
-      <WishlistConfigCard
-        icon={<IoIosLink fontSize={'18px'} />}
-        title="Link de la lista"
-        isActive={activeCard === 'Link de la lista'}
-        onClick={() => handleCardClick('Link de la lista')}
-      />
-      <WishlistConfigCard
-        icon={<LuImage fontSize={'18px'} />}
-        title="Imagen de la portada"
-        isActive={activeCard === 'Imagen de la portada'}
-        onClick={() => handleCardClick('Imagen de la portada')}
-      />
-      <WishlistConfigCard
-        icon={<LuMessageSquare fontSize={'18px'} />}
-        title="Mensaje de la portada"
-        isActive={activeCard === 'Mensaje de la portada'}
-        onClick={() => handleCardClick('Mensaje de la portada')}
-      />
-      <WishlistConfigCard
-        icon={<FiCalendar fontSize={'18px'} />}
-        title="Fecha del evento"
-        isActive={activeCard === 'Fecha del evento'}
-        onClick={() => handleCardClick('Fecha del evento')}
-      />
-      <WishlistConfigCard
-        icon={<PiBank fontSize={'18px'} />}
-        title="Datos bancarios y de facturación"
-        isActive={activeCard === 'Datos bancarios y de facturación'}
-        onClick={() => handleCardClick('Datos bancarios y de facturación')}
-      />
-      <WishlistConfigCard
-        icon={<FaRegTrashAlt fontSize={'18px'} />}
-        title="Eliminar mi lista"
-        isDeleteButton
-        isActive={activeCard === 'Eliminar mi lista'}
-        onClick={() => handleCardClick('Eliminar mi lista')}
-      />
+      {options.map(option => (
+        <WishlistConfigCard
+          key={option.id}
+          icon={option.icon}
+          title={option.label}
+          isActive={activeCard === option.label}
+          isDeleteButton={option.isDeleteButton}
+          onClick={() => handleCardClick(option.label)}
+        />
+      ))}
     </>
   );
 };

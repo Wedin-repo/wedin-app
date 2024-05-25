@@ -123,3 +123,28 @@ export const EventDetailsFormSchema = z.object({
 export const WishlistUrlFormSchema = z.object({
   wishlistUrl: z.string().url(),
 });
+
+export const WishlistCoverImgFormSchema = z.object({
+  coverImg: z.any().optional() as ZodType<File>,
+  coverImgUrl: z.string(),
+});
+
+export const WishlistCoverMessageFormSchema = z.object({
+  coverMessage: z.string(),
+});
+
+export const EventDateFormSchema = z.object({
+  eventDate: z.date().optional(),
+  isDecidingEventDate: z.boolean(),
+});
+
+export const BankDetailsFormSchema = z.object({
+  bankEntity: z.string(),
+  accountHolder: z.string(),
+  identificationType: z.string(),
+  identificationNumber: z.string(),
+  accountNumber: z.string(),
+  accountCurrency: z.string(),
+  razonSocial: z.string(),
+  ruc: z.string(),
+});
