@@ -48,8 +48,8 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState<string>('');
 
-  console.log('Combobox options:', options);
-  console.log('Combobox selected:', selected);
+  // console.log('Combobox options:', options);
+  // console.log('Combobox selected:', selected);
 
   const handleSelect = (value: string) => {
     if (onChange) {
@@ -106,12 +106,12 @@ export function Combobox({
                 <span>{renderSelectedItems()}</span>
               </div>
             ) : (
-              placeholder ?? 'Select Item...'
+              <p className="font-normal">{placeholder ?? 'Select Item...'}</p>
             )}
             <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-80 max-w-sm p-0 bg-white">
+        <PopoverContent className="w-72 max-w-sm p-0 bg-white">
           <Command filter={(value, search) => (value.includes(search) ? 1 : 0)}>
             <CommandInput
               placeholder={placeholder ?? 'Search Item...'}
@@ -137,7 +137,7 @@ export function Combobox({
                         key={option.value}
                         value={option.label}
                         onSelect={() => handleSelect(option.value)}
-                        className="cursor-pointer"
+                        className="cursor-pointer hover:bg-secondaryBackgroundColor border-b-[1px]"
                       >
                         <Check
                           className={cn(

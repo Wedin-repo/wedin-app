@@ -15,7 +15,7 @@ const WishlistConfigModal = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="bg-white !rounded-2xl ">
+      <DialogContent className="bg-white !rounded-2xl !max-w-5xl">
         <WishlistConfigModalForm />
       </DialogContent>
     </Dialog>

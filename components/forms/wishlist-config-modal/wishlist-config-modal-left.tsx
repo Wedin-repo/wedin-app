@@ -46,13 +46,18 @@ const options = [
   },
 ];
 
-const WishlistConfigModalLeft = () => {
-  const [activeCard, setActiveCard] = useState<string>(
-    'Tipo y datos del evento'
-  );
+type WishlistConfigModalLeftProps = {
+  onCardClick: (id: string) => void;
+};
 
-  const handleCardClick = (title: string) => {
-    setActiveCard(title);
+const WishlistConfigModalLeft = ({
+  onCardClick,
+}: WishlistConfigModalLeftProps) => {
+  const [activeCardId, setActiveCardId] = useState<string>('1');
+
+  const handleCardClick = (id: string) => {
+    setActiveCardId(id);
+    onCardClick(id);
   };
 
   return (
@@ -62,9 +67,9 @@ const WishlistConfigModalLeft = () => {
           key={option.id}
           icon={option.icon}
           title={option.label}
-          isActive={activeCard === option.label}
+          isActive={activeCardId === option.id}
           isDeleteButton={option.isDeleteButton}
-          onClick={() => handleCardClick(option.label)}
+          onClick={() => handleCardClick(option.id)}
         />
       ))}
     </>

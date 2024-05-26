@@ -186,11 +186,6 @@ const GiftForm = ({
                           >
                             {category.name}
                           </SelectItem>
-                          {/* this is just a border for aesthetic purposes */}
-                          <div
-                            className="flex justify-center items-center w-5/6 border border-b-secondaryBorderColor"
-                            style={{ margin: '0 auto' }}
-                          />
                         </div>
                       ))}
                     </SelectContent>

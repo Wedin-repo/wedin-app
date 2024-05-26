@@ -1,13 +1,19 @@
+import React, { useState } from 'react';
+
+//import { getEvent } from '@/actions/data/event';
 import WishlistConfigModalLeft from './wishlist-config-modal-left';
-import EventDetailsForm from './event-details-form';
-import WishlistUrlForm from './wishlist-url-form';
-import { getEvent } from '@/actions/data/event';
 import { Suspense } from 'react';
 import WishlistConfigModalRight from './wishlist-config-modal-right';
 import Loader from '@/components/loader';
 
 const WishlistConfigModalForm = () => {
   // const event = await getEvent();
+
+  const [activeContentId, setActiveContentId] = useState<string>('1');
+
+  const handleContentChange = (id: string) => {
+    setActiveContentId(id);
+  };
 
   return (
     <div className="flex flex-col">
@@ -20,14 +26,12 @@ const WishlistConfigModalForm = () => {
 
       <div className="flex justify-between pt-4 gap-6">
         <div className="w-1/2 flex flex-col justify-center">
-          <WishlistConfigModalLeft />
+          <WishlistConfigModalLeft onCardClick={handleContentChange} />
         </div>
 
         <div className="w-1/2">
           <Suspense fallback={<Loader />}>
-            <WishlistConfigModalRight
-              content={'Datos bancarios y de facturación'}
-            />
+            <WishlistConfigModalRight contentId={activeContentId} />
           </Suspense>
         </div>
       </div>

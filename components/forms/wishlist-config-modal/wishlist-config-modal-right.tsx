@@ -6,35 +6,19 @@ import EventDateForm from './event-date-form';
 import BankDetailsForm from './bank-details-form';
 
 type WishlistConfigModalRightProps = {
-  content: string | null;
+  contentId: string | null;
 };
 
 const WishlistConfigModalRight = ({
-  content,
+  contentId,
 }: WishlistConfigModalRightProps) => {
-  if (content === 'Tipo y datos del evento') {
-    return <EventDetailsForm />;
-  }
-
-  if (content === 'Link de la lista') {
-    return <WishlistUrlForm />;
-  }
-
-  if (content === 'Imagen de la portada') {
-    return <WishlistCoverImgForm />;
-  }
-
-  if (content === 'Mensaje de la portada') {
-    return <WishlistMessageForm />;
-  }
-
-  if (content === 'Fecha del evento') {
-    return <EventDateForm />;
-  }
-
-  if (content === 'Datos bancarios y de facturación') {
-    return <BankDetailsForm />;
-  }
+  if (contentId === '1') return <EventDetailsForm />;
+  if (contentId === '2') return <WishlistUrlForm />;
+  if (contentId === '3') return <WishlistCoverImgForm />;
+  if (contentId === '4') return <WishlistMessageForm />;
+  if (contentId === '5') return <EventDateForm />;
+  if (contentId === '6') return <BankDetailsForm />;
+  return null;
 };
 
 export default WishlistConfigModalRight;

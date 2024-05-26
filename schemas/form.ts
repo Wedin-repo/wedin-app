@@ -139,7 +139,8 @@ export const EventDateFormSchema = z.object({
 });
 
 export const BankDetailsFormSchema = z.object({
-  bankEntity: z.string(),
+  entityType: z.string(),
+  entityName: z.string(),
   accountHolder: z.string(),
   identificationType: z.string(),
   identificationNumber: z.string(),
