@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
@@ -28,14 +27,11 @@ import {
 } from '@/components/ui/tooltip';
 import { Combobox } from '@/components/ui/combobox';
 import { EventDetailsFormSchema } from '@/schemas/form';
-import Image from 'next/image';
 import { Event } from '@prisma/client';
-import { FiEdit3 } from 'react-icons/fi';
-import { MdOutlineFileUpload } from 'react-icons/md';
-import { Loader2 } from 'lucide-react';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { cn } from '@/lib/utils';
 import { countries } from '@/lib/countries';
+import { Loader2 } from 'lucide-react';
 
 type EventDetailsFormProps = {
   event?: Event;
@@ -58,18 +54,11 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
     },
   });
 
-  const [typeSelected, setTypeSelected] = useState<string | string[]>('');
-  const [options, setOptions] = useState(
-    countries.map(option => ({
-      value: option.value.toString(),
-      label: option.label,
-    }))
-  );
-  const handleCreateOptions = (value: string) => {
-    const newOption = { value, label: value };
-    setOptions([...options, newOption]);
-    setTypeSelected(value);
-  };
+  const [typeSelected, setTypeSelected] = useState<string>('');
+  const options = countries.map(country => ({
+    value: country.value.toString(),
+    label: country.label,
+  }));
 
   const onSubmit = () => {
     console.log('hello world');
@@ -94,7 +83,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
-                      <FormControl className="!mt-1">
+                      <FormControl className="!mt-1 text-base">
                         <SelectTrigger>
                           <SelectValue placeholder="Selecciona un tipo de evento" />
                         </SelectTrigger>
@@ -102,6 +91,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                       <SelectContent className="bg-white">
                         <SelectItem value="wedding">Boda</SelectItem>
                         <SelectItem value="birthday">Cumpleaños</SelectItem>
+                        <SelectItem value="babyShower">Baby Shower</SelectItem>
                         <SelectItem value="other">Otro</SelectItem>
                       </SelectContent>
                     </Select>
@@ -124,7 +114,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                           <TooltipContent className="bg-white">
                             <p>
                               necesitamos saber la cantidad de tus invitados
-                              porque SIII
+                              porque Si
                             </p>
                           </TooltipContent>
                         </Tooltip>
@@ -242,21 +232,19 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                 name="eventCountry"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Entidad</FormLabel>
+                    <FormLabel>País del evento</FormLabel>
                     <FormControl className="!mt-1">
                       <Combobox
-                        mode="single"
-                        options={countries.map(country => ({
-                          value: country.value.toString(),
-                          label: country.label,
-                        }))}
-                        placeholder="Elegí una entidad"
+                        options={options}
+                        placeholder="Elegí un país"
                         selected={typeSelected}
                         onChange={value => {
-                          setTypeSelected(value);
+                          setTypeSelected(
+                            Array.isArray(value) ? value[0] : value
+                          ); // what is thiss!!!! need to change
                           field.onChange(value);
                         }}
-                        onCreate={handleCreateOptions}
+                        width="w-60"
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />

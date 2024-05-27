@@ -157,6 +157,8 @@ model WishlistGift {
   @@index([giftId])
 }
 
+// create BankAccount model with User reference
+
 model Transaction {
   id             String            @id @default(auto()) @map("_id") @db.ObjectId
   wishlistGiftId String            @db.ObjectId

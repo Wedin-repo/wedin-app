@@ -23,6 +23,14 @@ import { BankDetailsFormSchema } from '@/schemas/form';
 import { bankEntitiesPY } from '@/lib/bank-entities-py';
 
 const BankDetailsForm = () => {
+  const [typeSelected, setTypeSelected] = useState<string>('');
+  const [options, setOptions] = useState(
+    bankEntitiesPY.map(option => ({
+      value: option.value.toString(),
+      label: option.label,
+    }))
+  );
+
   const form = useForm({
     resolver: zodResolver(BankDetailsFormSchema),
     defaultValues: {
@@ -37,14 +45,6 @@ const BankDetailsForm = () => {
       ruc: '',
     },
   });
-
-  const [typeSelected, setTypeSelected] = useState<string | string[]>('');
-  const [options, setOptions] = useState(
-    bankEntitiesPY.map(option => ({
-      value: option.value.toString(),
-      label: option.label,
-    }))
-  );
 
   const handleCreateOptions = (value: string) => {
     const newOption = { value, label: value };
@@ -100,7 +100,6 @@ const BankDetailsForm = () => {
                     <FormLabel>Entidad</FormLabel>
                     <FormControl className="!mt-1">
                       <Combobox
-                        mode="single"
                         options={options}
                         placeholder="Elegí una entidad"
                         selected={typeSelected}
@@ -108,7 +107,6 @@ const BankDetailsForm = () => {
                           setTypeSelected(value);
                           field.onChange(value);
                         }}
-                        onCreate={handleCreateOptions}
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />

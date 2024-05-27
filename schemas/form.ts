@@ -120,8 +120,18 @@ export const EventDetailsFormSchema = z.object({
   eventGuestList: z.string(),
 });
 
-export const WishlistUrlFormSchema = z.object({
-  wishlistUrl: z.string().url(),
+export const EventUrlFormSchema = z.object({
+  eventId: z.string(),
+  eventUrl: z
+    .string()
+    .min(1, { message: 'La dirección de tu evento no puede estar vacío' })
+    .min(3, {
+      message: 'La dirección de tu evento debe contener al menos 3 caracteres',
+    })
+    .max(255, {
+      message:
+        'La dirección de tu evento debe contener un máximo de 255 caracteres',
+    }),
 });
 
 export const WishlistCoverImgFormSchema = z.object({

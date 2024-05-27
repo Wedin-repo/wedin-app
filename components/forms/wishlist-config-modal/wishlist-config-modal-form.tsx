@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 //import { getEvent } from '@/actions/data/event';
 import WishlistConfigModalLeft from './wishlist-config-modal-left';
 import { Suspense } from 'react';

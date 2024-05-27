@@ -1,7 +1,9 @@
 'use server';
 
+import type * as z from 'zod';
 import prismaClient from '@/prisma/client';
 import { getCurrentUser } from '../get-current-user';
+import { EventUrlFormSchema } from '@/schemas/form';
 
 export async function getEvent() {
   const user = await getCurrentUser();
@@ -48,5 +50,31 @@ export async function getEventByUrl(url: string) {
   } catch (error) {
     console.error(error);
     return null;
+  }
+}
+
+export async function updateEventUrl(
+  values: z.infer<typeof EventUrlFormSchema>
+) {
+  const validatedField = EventUrlFormSchema.safeParse(values);
+
+  if (!validatedField.success) {
+    return { error: 'Campo inválido' };
+  }
+
+  try {
+    const updatedEventUrl = await prismaClient.event.update({
+      where: { id: values.eventId },
+      data: { url: values.eventUrl },
+    });
+
+    return {
+      status: 'Exito! 🔗🎉',
+      description:
+        'La dirección de tu evento ha sido actualizada correctamente.',
+    };
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to update event URL' };
   }
 }
