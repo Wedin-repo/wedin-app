@@ -18,27 +18,33 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { es } from 'date-fns/locale';
+import { z } from 'zod';
 import { EventDateFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
-import { Input } from '@/components/ui/input';
-import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import { updateEventDate } from '@/actions/data/event';
 
 type EventDateFormProps = {
-  event?: Event | null;
+  event: Event | null;
 };
 
 const EventDateForm = ({ event }: EventDateFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const [isDeciding, setIsDeciding] = useState<boolean | string>(false);
+
   const form = useForm({
     resolver: zodResolver(EventDateFormSchema),
     defaultValues: {
+      eventId: event?.id ?? '',
       eventDate: event?.date ?? undefined,
       isDecidingEventDate: false,
     },
   });
+
+  const { formState } = form;
 
   const handleIsDecidingChange = (value: boolean | string) => {
     setIsDeciding(value);
@@ -47,8 +53,37 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
     }
   };
 
-  const onSubmit = () => {
-    console.log('hello world');
+  const onSubmit = async (values: z.infer<typeof EventDateFormSchema>) => {
+    setIsLoading(true);
+
+    if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
+      return;
+    }
+
+    const validatedFields = EventDateFormSchema.safeParse(values);
+
+    if (validatedFields.success) {
+      const response = await updateEventDate(validatedFields.data);
+
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error! 😢',
+          description:
+            'Ocurrio un error al actualizar la fecha de tu evento. Por favor intenta de nuevo.',
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      toast({
+        title: 'Exito! 🔗🎉',
+        description: 'La fecha de tu evento ha sido actualizada correctamente.',
+        className: 'bg-white',
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -57,8 +92,8 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-full flex flex-col justify-between"
       >
-        <div className="flex flex-col gap-2 items-center">
-          <div className="flex flex-col justify-start items-start sm:items-center w-full font-medium sm:flex-row">
+        <div className="flex flex-col gap-1">
+          <div className="flex flex-col text-[#0F172A] justify-start items-start sm:items-center w-full font-medium sm:flex-row text-lg">
             Fecha del evento
             {/* <span className="font-normal text-xs text-[#64748B]">
               (No te preocupes, puede cambiarlo mas adelante)
@@ -78,7 +113,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
                           <Button
                             variant={'outline'}
                             className={cn(
-                              'w-full pl-3 text-left font-normal',
+                              'w-full pl-3 text-left font-normal text-base',
                               !field.value && 'text-[#94A3B8]'
                             )}
                           >
@@ -148,8 +183,9 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
           </div>
         </div>
 
-        <Button variant="editGiftButton" type="submit" className="mt-5">
+        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
           Guardar
+          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
         </Button>
       </form>
     </Form>

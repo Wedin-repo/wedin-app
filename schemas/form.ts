@@ -131,6 +131,10 @@ export const EventUrlFormSchema = z.object({
     .max(255, {
       message:
         'La dirección de tu evento debe contener un máximo de 255 caracteres',
+    })
+    .refine(value => /^[a-zA-Z0-9-]*$/.test(value), {
+      message:
+        'La dirección de tu evento no puede contener caracteres especiales (.*%$#&...)',
     }),
 });
 
@@ -139,11 +143,23 @@ export const WishlistCoverImgFormSchema = z.object({
   coverImgUrl: z.string(),
 });
 
-export const WishlistCoverMessageFormSchema = z.object({
-  coverMessage: z.string(),
+export const EventCoverMessageFormSchema = z.object({
+  eventId: z.string(),
+  eventCoverMessage: z
+    .string()
+    .min(1, { message: 'El mensaje para tus invitados no puede esta vacío' })
+    .min(3, {
+      message:
+        'El mensaje para tus invitados debe contener al menos 3 caracteres',
+    })
+    .max(255, {
+      message:
+        'El mensaje para tus invitados debe contener un máximo de 255 caracteres',
+    }),
 });
 
 export const EventDateFormSchema = z.object({
+  eventId: z.string(),
   eventDate: z.date().optional(),
   isDecidingEventDate: z.boolean(),
 });

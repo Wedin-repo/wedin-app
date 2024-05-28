@@ -3,7 +3,12 @@
 import type * as z from 'zod';
 import prismaClient from '@/prisma/client';
 import { getCurrentUser } from '../get-current-user';
-import { EventUrlFormSchema } from '@/schemas/form';
+import {
+  EventUrlFormSchema,
+  EventCoverMessageFormSchema,
+  EventDateFormSchema,
+} from '@/schemas/form';
+import { revalidatePath } from 'next/cache';
 
 export async function getEvent() {
   const user = await getCurrentUser();
@@ -63,18 +68,55 @@ export async function updateEventUrl(
   }
 
   try {
-    const updatedEventUrl = await prismaClient.event.update({
+    await prismaClient.event.update({
       where: { id: values.eventId },
       data: { url: values.eventUrl },
     });
-
-    return {
-      status: 'Exito! 🔗🎉',
-      description:
-        'La dirección de tu evento ha sido actualizada correctamente.',
-    };
+    revalidatePath('/dashboard');
   } catch (error) {
     console.error(error);
     return { error: 'Failed to update event URL' };
+  }
+}
+
+export async function updateEventCoverMessage(
+  values: z.infer<typeof EventCoverMessageFormSchema>
+) {
+  const validatedField = EventCoverMessageFormSchema.safeParse(values);
+
+  if (!validatedField.success) {
+    return { error: 'Campo inválido' };
+  }
+
+  try {
+    await prismaClient.event.update({
+      where: { id: values.eventId },
+      data: { coverMessage: values.eventCoverMessage },
+    });
+    revalidatePath('/dashboard');
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to update event cover message' };
+  }
+}
+
+export async function updateEventDate(
+  values: z.infer<typeof EventDateFormSchema>
+) {
+  const validatedField = EventDateFormSchema.safeParse(values);
+
+  if (!validatedField.success) {
+    return { error: 'Campo inválido' };
+  }
+
+  try {
+    await prismaClient.event.update({
+      where: { id: values.eventId },
+      data: { date: values.eventDate },
+    });
+    revalidatePath('/dashboard');
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to update event date' };
   }
 }

@@ -86,7 +86,8 @@ model Event {
   primaryUserId   String    @db.ObjectId
   secondaryUserId String    @db.ObjectId
   date            DateTime?
-  location        String?
+  coverMessage    String?
+  coverImageUrl   String?
   url             String?   @unique
   wishlistId      String    @db.ObjectId
   createdAt       DateTime  @default(now())
