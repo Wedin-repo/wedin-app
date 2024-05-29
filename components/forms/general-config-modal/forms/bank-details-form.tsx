@@ -46,12 +46,6 @@ const BankDetailsForm = () => {
     },
   });
 
-  const handleCreateOptions = (value: string) => {
-    const newOption = { value, label: value };
-    setOptions([...options, newOption]);
-    setTypeSelected(value);
-  };
-
   const onSubmit = (data: any) => {
     console.log('Form data:', data);
   };
@@ -104,7 +98,9 @@ const BankDetailsForm = () => {
                         placeholder="Elegí una entidad"
                         selected={typeSelected}
                         onChange={value => {
-                          setTypeSelected(value);
+                          setTypeSelected(
+                            Array.isArray(value) ? value[0] : value
+                          ); // what is thiss!!!! need to change
                           field.onChange(value);
                         }}
                       />

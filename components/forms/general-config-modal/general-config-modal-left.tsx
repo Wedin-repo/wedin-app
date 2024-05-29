@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import WishlistConfigCard from '@/components/cards/wishlist-config-card';
+import GeneralConfigCard from '@/components/cards/general-config-card';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb';
 import { FiCalendar } from 'react-icons/fi';
@@ -46,13 +46,13 @@ const options = [
   },
 ];
 
-type WishlistConfigModalLeftProps = {
+type GeneralConfigModalLeftProps = {
   onCardClick: (id: string) => void;
 };
 
-const WishlistConfigModalLeft = ({
+const GeneralConfigModalLeft = ({
   onCardClick,
-}: WishlistConfigModalLeftProps) => {
+}: GeneralConfigModalLeftProps) => {
   const [activeCardId, setActiveCardId] = useState<string>('1');
 
   const handleCardClick = (id: string) => {
@@ -63,7 +63,7 @@ const WishlistConfigModalLeft = ({
   return (
     <>
       {options.map(option => (
-        <WishlistConfigCard
+        <GeneralConfigCard
           key={option.id}
           icon={option.icon}
           title={option.label}
@@ -76,4 +76,4 @@ const WishlistConfigModalLeft = ({
   );
 };
 
-export default WishlistConfigModalLeft;
+export default GeneralConfigModalLeft;

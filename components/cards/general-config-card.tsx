@@ -1,6 +1,6 @@
 import { FaChevronRight } from 'react-icons/fa';
 
-type WishlistConfigCardProps = {
+type GeneralConfigCardProps = {
   icon: React.ReactNode;
   title: string;
   isActive?: boolean;
@@ -9,14 +9,14 @@ type WishlistConfigCardProps = {
   onClick?: () => void;
 };
 
-const WishlistConfigCard = ({
+const GeneralConfigCard = ({
   icon,
   title,
   isActive = false,
   isDeleteButton = false,
   isCompleted = false,
   onClick,
-}: WishlistConfigCardProps) => {
+}: GeneralConfigCardProps) => {
   const baseTextColor = isDeleteButton ? 'text-[#DC2626]' : 'text-[#2E2E2E]';
   const baseBgColor = isDeleteButton ? 'bg-[#F3F4F6]' : 'bg-[#F3F4F6]';
   const textColor = isActive ? 'font-semibold' : 'font-normal';
@@ -50,4 +50,4 @@ const WishlistConfigCard = ({
   );
 };
 
-export default WishlistConfigCard;
+export default GeneralConfigCard;

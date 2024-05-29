@@ -20,7 +20,7 @@ import { Loader2 } from 'lucide-react';
 import { updateEventCoverMessage } from '@/actions/data/event';
 
 type EventCoverMessageFormProps = {
-  event?: Event | null;
+  event: Event | null;
 };
 
 const EventCoverMessageForm = ({ event }: EventCoverMessageFormProps) => {

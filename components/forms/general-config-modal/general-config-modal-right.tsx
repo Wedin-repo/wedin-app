@@ -1,20 +1,18 @@
-'use client';
-
-import EventDetailsForm from './event-details-form';
-import EventUrlForm from './event-url-form';
-import EventCoverImageForm from './event-cover-image-form';
-import EventCoverMessageForm from './event-cover-message-form';
-import EventDateForm from './event-date-form';
-import BankDetailsForm from './bank-details-form';
 import { getEvent } from '@/actions/data/event';
+import EventDetailsForm from './forms/event-details-form';
+import EventUrlForm from './forms/event-url-form';
+import EventCoverImageForm from './forms/event-cover-image-form';
+import EventCoverMessageForm from './forms/event-cover-message-form';
+import EventDateForm from './forms/event-date-form';
+import BankDetailsForm from './forms/bank-details-form';
 
-type WishlistConfigModalRightProps = {
+type GeneralConfigModalRightProps = {
   contentId: string | null;
 };
 
-const WishlistConfigModalRight = async ({
+const GeneralConfigModalRight = async ({
   contentId,
-}: WishlistConfigModalRightProps) => {
+}: GeneralConfigModalRightProps) => {
   const event = await getEvent();
 
   if (contentId === '1') return <EventDetailsForm />;
@@ -26,4 +24,4 @@ const WishlistConfigModalRight = async ({
   return null;
 };
 
-export default WishlistConfigModalRight;
+export default GeneralConfigModalRight;
