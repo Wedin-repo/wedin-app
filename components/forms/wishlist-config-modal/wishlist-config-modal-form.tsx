@@ -29,7 +29,7 @@ const WishlistConfigModalForm = () => {
         </div>
 
         <div className="w-1/2">
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader mfHeight="h-full" />}>
             <WishlistConfigModalRight contentId={activeContentId} />
           </Suspense>
         </div>

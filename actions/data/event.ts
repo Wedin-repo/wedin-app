@@ -7,6 +7,7 @@ import {
   EventUrlFormSchema,
   EventCoverMessageFormSchema,
   EventDateFormSchema,
+  EventCoverImageFormSchema,
 } from '@/schemas/form';
 import { revalidatePath } from 'next/cache';
 
@@ -112,11 +113,32 @@ export async function updateEventDate(
   try {
     await prismaClient.event.update({
       where: { id: values.eventId },
-      data: { date: values.eventDate },
+      data: { date: values.eventDate ?? null },
     });
     revalidatePath('/dashboard');
   } catch (error) {
     console.error(error);
     return { error: 'Failed to update event date' };
+  }
+}
+
+export async function updateEventCoverImage(
+  values: z.infer<typeof EventCoverImageFormSchema>
+) {
+  const validatedField = EventCoverImageFormSchema.safeParse(values);
+
+  if (!validatedField.success) {
+    return { error: 'Campo inválido' };
+  }
+
+  try {
+    await prismaClient.event.update({
+      where: { id: values.eventId },
+      data: { coverImageUrl: values.eventCoverImageUrl },
+    });
+    revalidatePath('/dashboard');
+  } catch (error) {
+    console.error(error);
+    return { error: 'Failed to update event cover image url' };
   }
 }

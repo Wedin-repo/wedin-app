@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 import { useRef } from 'react';
 import Image from 'next/image';
 import {
@@ -12,74 +14,111 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import ringSvg from '@/public/images/rings.svg';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-
-import { WishlistCoverImgFormSchema } from '@/schemas/form';
+import { EventCoverImageFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
+import { LuImage } from 'react-icons/lu';
+import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
-import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { MdOutlineFileUpload } from 'react-icons/md';
+import { updateEventCoverImage } from '@/actions/data/event';
 
-type WishlistCoverImgFormProps = {
-  event?: Event | null;
+type EventCoverImageFormProps = {
+  event: Event | null;
 };
 
-const WishlistCoverImgForm = ({ event }: WishlistCoverImgFormProps) => {
+const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
   const form = useForm({
-    resolver: zodResolver(WishlistCoverImgFormSchema),
+    resolver: zodResolver(EventCoverImageFormSchema),
     defaultValues: {
-      coverImg: '',
-      coverImgUrl: '',
+      eventId: event?.id ?? '',
+      eventCoverImage: event?.coverImageUrl ?? null,
+      eventCoverImgUrl: event?.coverImageUrl ?? '',
     },
   });
+
+  const { formState } = form;
+
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0] ?? null;
   };
+
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const onSubmit = () => {
-    console.log('hello world');
+  const onSubmit = async (
+    values: z.infer<typeof EventCoverImageFormSchema>
+  ) => {
+    setIsLoading(true);
+
+    if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
+      return;
+    }
+
+    const validatedFields = EventCoverImageFormSchema.safeParse(values);
+
+    if (validatedFields.success) {
+      const response = await updateEventCoverImage(validatedFields.data);
+
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error! 😢',
+          description:
+            'Ocurrio un error al actualizar la dirección de tu evento. Por favor intenta de nuevo.',
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      toast({
+        title: 'Exito! 🔗🎉',
+        description:
+          'La dirección de tu evento ha sido actualizada correctamente.',
+        className: 'bg-white',
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-full flex flex-col justify-between"
+        className="flex flex-col justify-between h-full"
       >
         <FormField
           control={form.control}
-          name="coverImg"
+          name="eventCoverImage"
           render={({ field: { onChange, value, ...fieldProps } }) => (
             <FormItem className="w-full">
-              <FormLabel>
+              <FormLabel className="text-lg text-[#0F172A] font-medium">
                 Imagen de la portada
-                <span className="!text-xs font-normal text-secondaryTextColor ml-2">
-                  0idk0px por 0idk0px
+                <span className="!text-sm font-normal text-secondaryTextColor ml-2">
+                  1px por 1px
                 </span>
               </FormLabel>
               <FormControl>
                 <div className="flex flex-col gap-1.5">
                   <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
                     <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
-                      <Image
-                        src={event?.name || ringSvg}
-                        width={390}
-                        height={340}
-                        alt="Vista previa de la imagen seleccionada"
-                        className="object-cover min-w-full min-h-full rounded-xl"
-                      />
+                      {event?.coverImageUrl ? (
+                        <Image
+                          src={event?.coverImageUrl}
+                          width={390}
+                          height={340}
+                          alt="Vista previa de la imagen seleccionada"
+                          className="object-cover min-w-full min-h-full rounded-xl"
+                        />
+                      ) : (
+                        <LuImage className="text-secondaryBorderColor w-10 h-10" />
+                      )}
                     </div>
                     <div className="">
                       <Input
@@ -111,7 +150,7 @@ const WishlistCoverImgForm = ({ event }: WishlistCoverImgFormProps) => {
           )}
         />
 
-        <Button variant="editGiftButton" type="submit" className="mt-5">
+        <Button variant="editGiftButton" type="submit">
           Guardar
         </Button>
       </form>
@@ -119,4 +158,4 @@ const WishlistCoverImgForm = ({ event }: WishlistCoverImgFormProps) => {
   );
 };
 
-export default WishlistCoverImgForm;
+export default EventCoverImageForm;

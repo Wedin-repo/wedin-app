@@ -39,7 +39,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
     resolver: zodResolver(EventDateFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
-      eventDate: event?.date ?? undefined,
+      eventDate: event?.date ?? null,
       isDecidingEventDate: false,
     },
   });
@@ -49,7 +49,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
   const handleIsDecidingChange = (value: boolean | string) => {
     setIsDeciding(value);
     if (value) {
-      form.setValue('eventDate', undefined);
+      form.setValue('eventDate', null);
     }
   };
 
@@ -133,7 +133,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
                         <Calendar
                           locale={es}
                           mode="single"
-                          selected={field.value}
+                          selected={field.value || undefined}
                           onSelect={field.onChange}
                           disabled={date => date < new Date()}
                           initialFocus
@@ -153,7 +153,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
                     'w-full pl-3 text-left font-normal text-[#94A3B8]'
                   )}
                 >
-                  <span className="text-[#94A3B8]">dd/mm/aa</span>
+                  <span className="text-[#94A3B8] text-base">dd/mm/aa</span>
                   <CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
                 </Button>
               </div>

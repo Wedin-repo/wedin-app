@@ -138,9 +138,10 @@ export const EventUrlFormSchema = z.object({
     }),
 });
 
-export const WishlistCoverImgFormSchema = z.object({
-  coverImg: z.any().optional() as ZodType<File>,
-  coverImgUrl: z.string(),
+export const EventCoverImageFormSchema = z.object({
+  eventId: z.string(),
+  eventCoverImage: z.any().optional() as ZodType<File>,
+  eventCoverImageUrl: z.string(),
 });
 
 export const EventCoverMessageFormSchema = z.object({
@@ -160,7 +161,7 @@ export const EventCoverMessageFormSchema = z.object({
 
 export const EventDateFormSchema = z.object({
   eventId: z.string(),
-  eventDate: z.date().optional(),
+  eventDate: z.date().nullable(),
   isDecidingEventDate: z.boolean(),
 });
 
