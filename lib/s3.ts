@@ -1,21 +1,16 @@
-import { updateGiftImageUrl } from '@/actions/data/gift';
-import { updateEventCoverImageUrl } from '@/actions/data/event';
 import { getSignedURL } from '@/actions/upload-to-s3';
 import { computeSHA256 } from './utils';
 
 type UploadImageToAwsParams = {
   file: File;
-  giftId: string;
-};
-
-type UploadEventCoverImageToAwsParams = {
-  file: File;
-  eventId: string;
+  id: string;
+  type?: 'giftId' | 'eventId';
 };
 
 export const uploadImageToAws = async ({
   file,
-  giftId,
+  id,
+  type = 'giftId',
 }: UploadImageToAwsParams) => {
   const checksum = await computeSHA256(file);
 
@@ -23,7 +18,8 @@ export const uploadImageToAws = async ({
     fileName: file.name,
     fileType: file.type,
     fileSize: file.size,
-    giftId,
+    id,
+    type,
     checksum,
   });
 
@@ -33,12 +29,16 @@ export const uploadImageToAws = async ({
 
   const imageUrl = presignResponse.success.split('?')[0];
 
+  if (!imageUrl) {
+    return { error: 'Failed to upload image' };
+  }
+
   const awsImagePosting = await fetch(imageUrl, {
     method: 'PUT',
     body: file,
     headers: {
       'Content-Type': file.type,
-      metadata: JSON.stringify({ giftId }),
+      metadata: JSON.stringify({ id }),
     },
   });
 
@@ -46,54 +46,21 @@ export const uploadImageToAws = async ({
     return { error: awsImagePosting.statusText };
   }
 
-  const updatedGift = await updateGiftImageUrl(imageUrl, giftId);
-
-  if (updatedGift?.error) {
-    return { error: updatedGift.error };
-  }
+  return { imageUrl: imageUrl };
 };
+//handle whats under this comment in the frontend where this function is triggered
 
-export const uploadEventCoverImageToAws = async ({
-  file,
-  eventId,
-}: UploadEventCoverImageToAwsParams) => {
-  const checksum = await computeSHA256(file);
+//const updatedGift = await updateGiftImageUrl(imageUrl, giftId);
 
-  const presignResponse = await getSignedURL({
-    fileName: file.name,
-    fileType: file.type,
-    fileSize: file.size,
-    eventId,
-    checksum,
-  });
+// if (updatedGift?.error) {
+//   return { error: updatedGift.error };
+// }
 
-  if (presignResponse.error || !presignResponse?.success) {
-    return { error: presignResponse.error };
-  }
+// const updatedEvent = await updateEventCoverImageUrl({
+//     eventId,
+//     eventCoverImageUrl: imageUrl,
+//   });
 
-  const imageUrl = presignResponse.success.split('?')[0];
-
-  const awsImagePosting = await fetch(imageUrl, {
-    method: 'PUT',
-    body: file,
-    headers: {
-      'Content-Type': file.type,
-      metadata: JSON.stringify({ eventId }),
-    },
-  });
-
-  if (!awsImagePosting.ok) {
-    return { error: awsImagePosting.statusText };
-  }
-
-  const updatedEvent = await updateEventCoverImageUrl({
-    eventId,
-    eventCoverImageUrl: imageUrl,
-  });
-
-  if (updatedEvent?.error) {
-    return { error: updatedEvent.error };
-  }
-
-  return { success: 'Image uploaded and event updated successfully' };
-};
+//   if (updatedEvent?.error) {
+//     return { error: updatedEvent.error };
+//   }

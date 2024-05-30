@@ -135,7 +135,7 @@ export async function createGift(formData: z.infer<typeof GiftPostSchema>) {
     }
 
     revalidatePath('/dashboard');
-    return { giftId: newGift.id };
+    return { giftId: newGift.id, imageUrl: newGift.imageUrl };
   } catch (error) {
     console.error('Error creating gift:', error);
     return { error: getErrorMessage(error) };

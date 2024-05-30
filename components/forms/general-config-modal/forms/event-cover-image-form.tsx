@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
+import { updateEventCoverImageUrl } from '@/actions/data/event';
+import { uploadImageToAws } from '@/lib/s3';
 import { toast } from '@/components/ui/use-toast';
 import { useRef } from 'react';
 import Image from 'next/image';
@@ -16,11 +18,10 @@ import {
 import { Input } from '@/components/ui/input';
 import { EventCoverImageFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
-import { LuImage } from 'react-icons/lu';
+//import { LuImage } from 'react-icons/lu';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import { MdOutlineFileUpload } from 'react-icons/md';
-import { uploadEventCoverImageToAws } from '@/lib/s3';
 import ringSvg from '@/public/images/rings.svg';
 
 type EventCoverImageFormProps = {
@@ -89,13 +90,11 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
     }
 
     if (selectedFile) {
-      console.log('im here');
-      const uploadResponse = await uploadEventCoverImageToAws({
+      const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        eventId: event?.id ?? '',
+        id: event?.id ?? '',
+        type: 'eventId',
       });
-
-      console.log(uploadResponse);
 
       if (uploadResponse?.error) {
         toast({
@@ -105,6 +104,16 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
         });
 
         setIsLoading(false);
+        return;
+      }
+
+      const updatedEvent = await updateEventCoverImageUrl({
+        eventId: event?.id ?? '',
+        eventCoverImageUrl: event?.coverImageUrl ?? '',
+      });
+
+      if (updatedEvent?.error) {
+        return { error: updatedEvent.error };
       }
 
       toast({

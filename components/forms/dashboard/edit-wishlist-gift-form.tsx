@@ -7,6 +7,7 @@ import {
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
+import { updateGiftImageUrl } from '@/actions/data/gift';
 import ringSvg from '@/public/images/rings.svg';
 import { GiftFormSchema, GiftPostSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -153,7 +154,7 @@ function EditWishlistGiftWithGiftForm({
     if (selectedFile && formState.dirtyFields.image) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: giftResponse.giftId,
+        id: giftResponse.giftId,
       });
 
       if (uploadResponse?.error) {
@@ -188,6 +189,15 @@ function EditWishlistGiftWithGiftForm({
 
         setIsLoading(false);
         return;
+      }
+
+      const updatedGift = await updateGiftImageUrl(
+        gift?.imageUrl ?? '',
+        gift?.id ?? ''
+      );
+
+      if (updatedGift?.error) {
+        return { error: updatedGift.error };
       }
     }
 

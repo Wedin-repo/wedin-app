@@ -23,8 +23,8 @@ type GetSignedURLParams = {
   fileName: string;
   fileType: string;
   fileSize: number;
-  giftId?: string;
-  eventId?: string;
+  id: string;
+  type: 'giftId' | 'eventId';
   checksum: string;
 };
 
@@ -34,8 +34,8 @@ export const getSignedURL = async ({
   fileName,
   fileType,
   fileSize,
-  giftId,
-  eventId,
+  id,
+  type,
   checksum,
 }: GetSignedURLParams) => {
   const session = await auth();
@@ -54,12 +54,12 @@ export const getSignedURL = async ({
 
   const metadata: { [key: string]: string } = { checksum };
 
-  if (giftId) {
-    metadata.giftId = giftId;
+  if (type === 'giftId') {
+    metadata.giftId = id;
   }
 
-  if (eventId) {
-    metadata.eventId = eventId;
+  if (type === 'eventId') {
+    metadata.eventId = id;
   }
 
   const putObjectCommand = new PutObjectCommand({

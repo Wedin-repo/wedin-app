@@ -6,6 +6,7 @@ import GiftForm from '@/components/forms/shared/gift-form';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
+import { updateGiftImageUrl } from '@/actions/data/gift';
 import ringSvg from '@/public/images/rings.svg';
 import { GiftFormSchema, GiftPostSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -89,7 +90,7 @@ function CreateWishlistGiftForm({
     if (selectedFile) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: giftResponse.giftId,
+        id: giftResponse.giftId,
       });
 
       if (uploadResponse?.error) {
@@ -100,6 +101,15 @@ function CreateWishlistGiftForm({
         });
 
         setIsLoading(false);
+      }
+
+      const updatedGift = await updateGiftImageUrl(
+        uploadResponse.imageUrl ?? '',
+        giftResponse.giftId
+      );
+
+      if (updatedGift?.error) {
+        return { error: updatedGift.error };
       }
     }
 
