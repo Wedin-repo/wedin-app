@@ -109,15 +109,33 @@ export const TransactionStatusLogUpdateSchema = z.object({
 });
 
 export const EventDetailsFormSchema = z.object({
-  eventType: z.string(),
-  name: z.string(),
-  lastName: z.string(),
-  partnerName: z.string(),
-  partnerLastName: z.string(),
-  partnerEmail: z.string().email(),
-  eventCity: z.string(),
-  eventCountry: z.string(),
-  eventGuestList: z.string(),
+  eventType: z
+    .string()
+    .min(1, { message: 'Debes seleccionar un tipo de evento' }),
+  name: z
+    .string()
+    .min(1, { message: 'El nombre no puede estar vacío' })
+    .min(2, { message: 'Nombre muy corto' })
+    .max(255, { message: 'Nombre muy largo' }),
+  lastName: z
+    .string()
+    .min(1, { message: 'El apellido no puede estar vacío' })
+    .min(2, { message: 'Apellido muy corto' })
+    .max(255, { message: 'Apellido muy largo' }),
+  partnerName: z
+    .string()
+    .min(1, { message: 'El nombre de tu pareja no puede estar vacío' })
+    .min(2, { message: 'Nombre muy corto' })
+    .max(255, { message: 'Nombre muy largo' }),
+  partnerLastName: z
+    .string()
+    .min(1, { message: 'El apellido de tu pareja no puede estar vacío' })
+    .min(2, { message: 'Apellido muy corto' })
+    .max(255, { message: 'Apellido muy largo' }),
+  partnerEmail: z.string(),
+  eventCity: z.string().optional(),
+  eventCountry: z.string().optional(),
+  eventGuests: z.string().optional(),
 });
 
 export const EventUrlFormSchema = z.object({
@@ -162,7 +180,6 @@ export const EventCoverMessageFormSchema = z.object({
 export const EventDateFormSchema = z.object({
   eventId: z.string(),
   eventDate: z.date().nullable(),
-  isDecidingEventDate: z.boolean(),
 });
 
 export const BankDetailsFormSchema = z.object({

@@ -5,6 +5,7 @@ import { TbListDetails } from 'react-icons/tb';
 import { FiCalendar } from 'react-icons/fi';
 import { IoIosLink } from 'react-icons/io';
 import { LuMessageSquare, LuImage } from 'react-icons/lu';
+import { IoGiftOutline } from 'react-icons/io5';
 import { PiBank } from 'react-icons/pi';
 
 const options = [
@@ -35,11 +36,16 @@ const options = [
   },
   {
     id: '6',
+    label: 'Sugerencia monto de regalo',
+    icon: <IoGiftOutline fontSize={'18px'} />,
+  },
+  {
+    id: '7',
     label: 'Datos bancarios y de facturación',
     icon: <PiBank fontSize={'18px'} />,
   },
   {
-    id: '7',
+    id: '8',
     label: 'Eliminar mi lista',
     icon: <FaRegTrashAlt fontSize={'18px'} />,
     isDeleteButton: true,

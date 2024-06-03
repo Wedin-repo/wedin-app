@@ -24,12 +24,10 @@ import { bankEntitiesPY } from '@/lib/bank-entities-py';
 
 const BankDetailsForm = () => {
   const [typeSelected, setTypeSelected] = useState<string>('');
-  const [options, setOptions] = useState(
-    bankEntitiesPY.map(option => ({
-      value: option.value.toString(),
-      label: option.label,
-    }))
-  );
+  const options = bankEntitiesPY.map(option => ({
+    value: option.value.toString(),
+    label: option.label,
+  }));
 
   const form = useForm({
     resolver: zodResolver(BankDetailsFormSchema),

@@ -19,10 +19,11 @@ import { Input } from '@/components/ui/input';
 import { EventCoverImageFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 //import { LuImage } from 'react-icons/lu';
+//import imageSvg from '@/public/images/image-icon.svg';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import { MdOutlineFileUpload } from 'react-icons/md';
-import ringSvg from '@/public/images/rings.svg';
+import imageOutline from '@/public/images/image.svg';
 
 type EventCoverImageFormProps = {
   event: Event | null;
@@ -38,7 +39,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
     resolver: zodResolver(EventCoverImageFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
-      eventCoverImage: ringSvg,
+      eventCoverImage: imageOutline,
       eventCoverImageUrl: event?.coverImageUrl ?? '',
     },
   });
@@ -141,16 +142,18 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
               <FormItem className="w-full">
                 <FormLabel className="text-lg flex items-end gap-2">
                   Imagen del regalo
-                  <span className="!text-sm font-normal text-secondaryTextColor">
+                  {/* <span className="!text-sm font-normal text-secondaryTextColor">
                     372px por 322px
-                  </span>
+                  </span> */}
                 </FormLabel>
                 <FormControl>
                   <div className="flex flex-col gap-1.5">
                     <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
                       <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
                         <Image
-                          src={previewUrl || event?.coverImageUrl || ringSvg}
+                          src={
+                            previewUrl || event?.coverImageUrl || imageOutline
+                          }
                           width={390}
                           height={340}
                           alt="Vista previa de la imagen seleccionada"

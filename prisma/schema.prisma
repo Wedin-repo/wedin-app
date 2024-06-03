@@ -69,7 +69,6 @@ model User {
   image            String?
   role             UserType  @default(ORGANIZER)
   isOnboarded      Boolean   @default(false)
-  hasPYbankAccount Boolean   @default(false)
   isMagicLinkLogin Boolean   @default(false)
   onboardingStep   Int       @default(1)
 
@@ -81,19 +80,22 @@ model User {
 }
 
 model Event {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  name            String?
-  primaryUserId   String    @db.ObjectId
-  secondaryUserId String    @db.ObjectId
-  date            DateTime?
-  coverMessage    String?
-  coverImageUrl   String?
-  url             String?   @unique
-  wishlistId      String    @db.ObjectId
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  country         String?
-  city            String?
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  primaryUserId    String    @db.ObjectId
+  secondaryUserId  String    @db.ObjectId
+  date             DateTime?
+  coverMessage     String?
+  coverImageUrl    String?
+  url              String?   @unique
+  wishlistId       String    @db.ObjectId
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  country          String?
+  city             String?
+  eventType        EventType @default(WEDDING)
+  guests           String?
+  hasPYbankAccount Boolean   @default(false)
 
   wishlist           Wishlist       @relation(fields: [wishlistId], references: [id])
   eventPrimaryUser   User           @relation("primaryUser", fields: [primaryUserId], references: [id])

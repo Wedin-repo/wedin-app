@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Form,
   FormControl,
@@ -33,25 +32,16 @@ type EventDateFormProps = {
 
 const EventDateForm = ({ event }: EventDateFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [isDeciding, setIsDeciding] = useState<boolean | string>(false);
 
   const form = useForm({
     resolver: zodResolver(EventDateFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
       eventDate: event?.date ?? null,
-      isDecidingEventDate: false,
     },
   });
 
   const { formState } = form;
-
-  const handleIsDecidingChange = (value: boolean | string) => {
-    setIsDeciding(value);
-    if (value) {
-      form.setValue('eventDate', null);
-    }
-  };
 
   const onSubmit = async (values: z.infer<typeof EventDateFormSchema>) => {
     setIsLoading(true);
@@ -92,96 +82,48 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-full flex flex-col justify-between"
       >
-        <div className="flex flex-col gap-1">
-          <div className="flex flex-col text-[#0F172A] justify-start items-start sm:items-center w-full font-medium sm:flex-row text-lg">
-            Fecha del evento
-            {/* <span className="font-normal text-xs text-[#64748B]">
-              (No te preocupes, puede cambiarlo mas adelante)
-            </span> */}
-          </div>
-
-          <div className="flex flex-col gap-3 w-full">
-            {!isDeciding ? (
-              <FormField
-                control={form.control}
-                name="eventDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={'outline'}
-                            className={cn(
-                              'w-full pl-3 text-left font-normal text-base',
-                              !field.value && 'text-[#94A3B8]'
-                            )}
-                          >
-                            {field.value ? (
-                              format(field.value, 'PPP', { locale: es })
-                            ) : (
-                              <span className="text-[#94A3B8]">dd/mm/aa</span>
-                            )}
-                            <CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        className="p-0 w-auto bg-white"
-                        align="start"
-                      >
-                        <Calendar
-                          locale={es}
-                          mode="single"
-                          selected={field.value || undefined}
-                          onSelect={field.onChange}
-                          disabled={date => date < new Date()}
-                          initialFocus
-                        />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage className="font-normal text-red-600" />
-                  </FormItem>
-                )}
-              />
-            ) : (
-              <div className="w-full">
-                <Button
-                  disabled
-                  variant={'outline'}
-                  className={cn(
-                    'w-full pl-3 text-left font-normal text-[#94A3B8]'
-                  )}
-                >
-                  <span className="text-[#94A3B8] text-base">dd/mm/aa</span>
-                  <CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
-                </Button>
-              </div>
-            )}
-            <FormField
-              control={form.control}
-              name="isDecidingEventDate"
-              render={({ field }) => (
-                <FormItem className="flex gap-3 items-center">
+        <FormField
+          control={form.control}
+          name="eventDate"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-lg flex items-end gap-2 text-[#0F172A]">
+                Imagen del regalo
+              </FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={checked => {
-                        field.onChange(checked);
-                        handleIsDecidingChange(checked);
-                      }}
-                    />
+                    <Button
+                      variant={'outline'}
+                      className={cn(
+                        'w-full pl-3 text-left font-normal text-base',
+                        !field.value && 'text-[#94A3B8]'
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, 'PPP', { locale: es })
+                      ) : (
+                        <span className="text-[#94A3B8]">dd/mm/aa</span>
+                      )}
+                      <CalendarIcon className="ml-auto w-4 h-4 opacity-50" />
+                    </Button>
                   </FormControl>
-                  <div className="!m-0">
-                    <FormLabel className="font-normal cursor-pointer sm:text-base">
-                      Aún estamos decidiendo
-                    </FormLabel>
-                  </div>
-                </FormItem>
-              )}
-            />
-          </div>
-        </div>
+                </PopoverTrigger>
+                <PopoverContent className="p-0 w-auto bg-white" align="start">
+                  <Calendar
+                    locale={es}
+                    mode="single"
+                    selected={field.value || undefined}
+                    onSelect={field.onChange}
+                    disabled={date => date < new Date()}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage className="font-normal text-red-600" />
+            </FormItem>
+          )}
+        />
 
         <Button variant="editGiftButton" type="submit" disabled={isLoading}>
           Guardar

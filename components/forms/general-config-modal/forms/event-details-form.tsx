@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -27,41 +27,63 @@ import {
 } from '@/components/ui/tooltip';
 import { Combobox } from '@/components/ui/combobox';
 import { EventDetailsFormSchema } from '@/schemas/form';
-import { Event } from '@prisma/client';
+import { toast } from '@/components/ui/use-toast';
+import { Event, User } from '@prisma/client';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { cn } from '@/lib/utils';
 import { countries } from '@/lib/countries';
 import { Loader2 } from 'lucide-react';
 
 type EventDetailsFormProps = {
-  event?: Event;
-  //currentUser?: User | null;
+  event: Event & {
+    eventPrimaryUser: User | null;
+    eventSecondaryUser: User | null;
+  };
 };
 
 const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+  if (!event) return null;
+  const { eventPrimaryUser, eventSecondaryUser } = event;
+
   const form = useForm({
     resolver: zodResolver(EventDetailsFormSchema),
     defaultValues: {
-      eventType: 'wedding',
-      name: 'Alex',
-      lastName: 'Nico',
-      partnerName: 'Fernan',
-      partnerLastName: 'Alicia',
-      partnerEmail: 'felicia@thagoat.com',
-      eventCity: event?.city ?? 'San Lorenzo',
-      eventCountry: event?.country ?? 'Paraguay',
-      eventGuestList: '252',
+      eventType: event?.eventType.toString() ?? '',
+      name: eventPrimaryUser?.name ?? '',
+      lastName: eventPrimaryUser?.lastName ?? '',
+      partnerName: eventSecondaryUser?.name ?? '',
+      partnerLastName: eventSecondaryUser?.lastName ?? '',
+      partnerEmail: eventSecondaryUser?.email ?? '',
+      eventCity: event?.city ?? '',
+      eventCountry: event?.country ?? '',
+      eventGuests: event?.guests ?? '',
     },
   });
 
-  const [typeSelected, setTypeSelected] = useState<string>('');
-  const options = countries.map(country => ({
-    value: country.value.toString(),
-    label: country.label,
-  }));
+  const { formState } = form;
 
-  const onSubmit = () => {
-    console.log('hello world');
+  const onSubmit = async (values: z.infer<typeof EventDetailsFormSchema>) => {
+    setIsLoading(true);
+
+    if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
+      console.log('No hay campos modificados');
+      return;
+    }
+
+    const validatedFields = EventDetailsFormSchema.safeParse(values);
+
+    if (validatedFields.success) {
+      console.log('values', values);
+      toast({
+        title: 'Exito! 🔗🎉',
+        description:
+          'La dirección de tu evento ha sido actualizada correctamente.',
+        className: 'bg-white',
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -72,63 +94,33 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
       >
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-5">
-            <div className="flex justify-between w-full gap-4">
-              <FormField
-                control={form.control}
-                name="eventType"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Tipo de evento</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="!mt-1 text-base">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Selecciona un tipo de evento" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="wedding">Boda</SelectItem>
-                        <SelectItem value="birthday">Cumpleaños</SelectItem>
-                        <SelectItem value="babyShower">Baby Shower</SelectItem>
-                        <SelectItem value="other">Otro</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage className="font-normal text-red-600" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="eventGuestList"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel className="flex items-center gap-2">
-                      Cantidad de invitados
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <AiOutlineQuestionCircle fontSize={'20px'} />
-                          </TooltipTrigger>
-                          <TooltipContent className="bg-white">
-                            <p>
-                              necesitamos saber la cantidad de tus invitados
-                              porque Si
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </FormLabel>
-                    <FormControl>
-                      <Input className="!mt-2" {...field} />
+            <FormField
+              control={form.control}
+              name="eventType"
+              render={({ field }) => (
+                <FormItem className="w-1/2">
+                  <FormLabel>Tipo de evento</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl className="!mt-1 text-base">
+                      <SelectTrigger>
+                        <SelectValue placeholder="Selecciona un tipo de evento" />
+                      </SelectTrigger>
                     </FormControl>
+                    <SelectContent className="bg-white">
+                      <SelectItem value="WEDDING">Boda</SelectItem>
+                      <SelectItem value="BIRTHDAY">Cumpleaños</SelectItem>
+                      <SelectItem value="BABY_SHOWER">Baby Shower</SelectItem>
+                      <SelectItem value="OTHER">Otro</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage className="font-normal text-red-600" />
+                </FormItem>
+              )}
+            />
 
-                    <FormMessage className="font-normal text-red-600" />
-                  </FormItem>
-                )}
-              />
-            </div>
             <div className="border border-[#E2E8F0] w-full rounded-full"></div>
           </div>
           <div className="flex flex-col gap-4">
@@ -142,7 +134,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                     <FormControl>
                       <Input
                         className="!mt-1"
-                        placeholder={event?.name ?? ''}
+                        placeholder={eventPrimaryUser?.name ?? ''}
                         {...field}
                       />
                     </FormControl>
@@ -159,7 +151,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                     <FormControl>
                       <Input
                         className="!mt-1"
-                        placeholder={event?.city ?? ''}
+                        placeholder={eventPrimaryUser?.lastName ?? ''}
                         {...field}
                       />
                     </FormControl>
@@ -177,7 +169,13 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                   <FormItem>
                     <FormLabel>El nombre de tu pareja</FormLabel>
                     <FormControl>
-                      <Input className="!mt-1" {...field} />
+                      <Input
+                        className="!mt-1"
+                        placeholder={
+                          eventSecondaryUser?.name ?? 'Nombre de tu pareja'
+                        }
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
@@ -190,7 +188,14 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                   <FormItem>
                     <FormLabel>El apellido de tu pareja</FormLabel>
                     <FormControl>
-                      <Input className="!mt-1" {...field} />
+                      <Input
+                        className="!mt-1"
+                        placeholder={
+                          eventSecondaryUser?.lastName ??
+                          'Apellido de tu pareja'
+                        }
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
@@ -205,7 +210,7 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                 <FormItem>
                   <FormLabel>E-mail de tu pareja</FormLabel>
                   <FormControl>
-                    <Input className="!mt-1" {...field} />
+                    <Input className="!mt-1" {...field} disabled />
                   </FormControl>
                   <FormMessage className="font-normal text-red-600" />
                 </FormItem>
@@ -235,15 +240,10 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                     <FormLabel>País del evento</FormLabel>
                     <FormControl className="!mt-1">
                       <Combobox
-                        options={options}
+                        options={countries}
                         placeholder="Elegí un país"
-                        selected={typeSelected}
-                        onChange={value => {
-                          setTypeSelected(
-                            Array.isArray(value) ? value[0] : value
-                          ); // what is thiss!!!! need to change
-                          field.onChange(value);
-                        }}
+                        selected={field.value}
+                        onChange={field.onChange}
                         width="w-60"
                       />
                     </FormControl>
@@ -252,11 +252,47 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="eventGuests"
+              render={({ field }) => (
+                <FormItem className="w-1/2">
+                  <FormLabel className="flex items-center gap-2">
+                    Cantidad de invitados
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <AiOutlineQuestionCircle fontSize={'20px'} />
+                        </TooltipTrigger>
+                        <TooltipContent className="bg-white">
+                          <p>
+                            necesitamos saber la cantidad de tus invitados
+                            porque Si
+                          </p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className="!mt-2"
+                      type="number"
+                      placeholder=""
+                      {...field}
+                    />
+                  </FormControl>
+
+                  <FormMessage className="font-normal text-red-600" />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
 
-        <Button variant="editGiftButton" type="submit">
+        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
           Guardar
+          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
         </Button>
       </form>
     </Form>

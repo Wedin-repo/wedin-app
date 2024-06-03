@@ -48,9 +48,9 @@ export function Combobox({
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState<string>('');
 
-  const handleSelect = (value: string) => {
+  const handleSelect = (label: string) => {
     if (onChange) {
-      onChange(value);
+      onChange(label);
     }
     setOpen(false);
   };
@@ -63,7 +63,7 @@ export function Combobox({
   };
 
   const renderSelectedItems = () => {
-    return options.find(item => item.value === selected)?.label || '';
+    return options.find(item => item.label === selected)?.label || '';
   };
 
   return (
@@ -133,13 +133,13 @@ export function Combobox({
                         <CommandItem
                           key={option.value}
                           value={option.label}
-                          onSelect={() => handleSelect(option.value)}
+                          onSelect={() => handleSelect(option.label)}
                           className="cursor-pointer hover:bg-secondaryBackgroundColor border-b-[1px]"
                         >
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              selected === option.value
+                              selected === option.label
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}

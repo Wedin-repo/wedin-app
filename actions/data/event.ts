@@ -20,6 +20,10 @@ export async function getEvent() {
 
   try {
     const event = await prismaClient.event.findFirst({
+      include: {
+        eventPrimaryUser: true,
+        eventSecondaryUser: true,
+      },
       where: {
         OR: [{ primaryUserId: userId }, { secondaryUserId: userId }],
       },

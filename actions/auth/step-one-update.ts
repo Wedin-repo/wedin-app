@@ -28,7 +28,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
   let wishlist: Wishlist;
 
   try {
-    primaryUser = await prismaClient.user.upsert({
+    secondaryUser = await prismaClient.user.upsert({
       where: {
         email: partnerEmail, // The unique identifier to search for
       },
@@ -55,7 +55,7 @@ export const stepOneUpdate = async (values: z.infer<typeof StepOneSchema>) => {
   if (!session?.user?.email) return { error: 'Error obteniendo tu sesión' };
 
   try {
-    secondaryUser = await prismaClient.user.upsert({
+    primaryUser = await prismaClient.user.upsert({
       where: {
         email: session.user.email, // This checks if a user exists with this email
       },
