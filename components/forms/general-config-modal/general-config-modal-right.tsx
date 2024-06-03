@@ -15,11 +15,19 @@ const GeneralConfigModalRight = async ({
   contentId,
 }: GeneralConfigModalRightProps) => {
   const event = await getEvent();
-
   if (!event) return null;
+  const { eventPrimaryUser, eventSecondaryUser } = event;
+
   //const currentUser = await getCurrentUser();
 
-  if (contentId === '1') return <EventDetailsForm event={event} />;
+  if (contentId === '1')
+    return (
+      <EventDetailsForm
+        event={event}
+        eventPrimaryUser={eventPrimaryUser}
+        eventSecondaryUser={eventSecondaryUser}
+      />
+    );
   if (contentId === '2') return <EventUrlForm event={event} />;
   if (contentId === '3') return <EventCoverImageForm event={event} />;
   if (contentId === '4') return <EventCoverMessageForm event={event} />;

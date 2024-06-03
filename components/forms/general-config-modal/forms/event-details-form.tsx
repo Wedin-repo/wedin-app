@@ -35,17 +35,16 @@ import { countries } from '@/lib/countries';
 import { Loader2 } from 'lucide-react';
 
 type EventDetailsFormProps = {
-  event: Event & {
-    eventPrimaryUser: User | null;
-    eventSecondaryUser: User | null;
-  };
+  event: Event;
+  eventPrimaryUser: User | null;
+  eventSecondaryUser: User | null;
 };
 
-const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  if (!event) return null;
-  const { eventPrimaryUser, eventSecondaryUser } = event;
-
+const EventDetailsForm = ({
+  event,
+  eventPrimaryUser,
+  eventSecondaryUser,
+}: EventDetailsFormProps) => {
   const form = useForm({
     resolver: zodResolver(EventDetailsFormSchema),
     defaultValues: {
@@ -60,8 +59,9 @@ const EventDetailsForm = ({ event }: EventDetailsFormProps) => {
       eventGuests: event?.guests ?? '',
     },
   });
-
   const { formState } = form;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit = async (values: z.infer<typeof EventDetailsFormSchema>) => {
     setIsLoading(true);
