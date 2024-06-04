@@ -1,36 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import GeneralConfigModalLeft from './general-config-modal-left';
-import { getEvent } from '@/actions/data/event';
 import { Suspense } from 'react';
 import GeneralConfigModalRight from './general-config-modal-right';
 import Loader from '@/components/loader';
-import { Event, User } from '@prisma/client';
-
-type EventType = Event & {
-  eventPrimaryUser: User | null;
-  eventSecondaryUser: User | null;
-};
 
 const GeneralConfigModalForm = () => {
-  const [event, setEvent] = useState<EventType | null>(null);
   const [activeContentId, setActiveContentId] = useState<string>('1');
 
   const handleContentChange = (id: string) => {
     setActiveContentId(id);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const event = await getEvent();
-        setEvent(event);
-      } catch (error) {
-        console.error('Error fetching event:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="flex flex-col">
@@ -47,15 +26,7 @@ const GeneralConfigModalForm = () => {
         </div>
 
         <div className="w-1/2">
-          <Suspense fallback={<Loader mfHeight="h-full" />}>
-            {/* unsure about this suspense fallback */}
-            {event && (
-              <GeneralConfigModalRight
-                contentId={activeContentId}
-                event={event}
-              />
-            )}
-          </Suspense>
+          <GeneralConfigModalRight contentId={activeContentId} />
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ import { Loader2 } from 'lucide-react';
 import { updateEventDetails } from '@/actions/data/event';
 
 type EventDetailsFormProps = {
-  event: Event;
+  event: Event | null;
   eventPrimaryUser: User | null;
   eventSecondaryUser: User | null;
 };

@@ -28,7 +28,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
     resolver: zodResolver(EventUrlFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
-      eventUrl: event?.url ?? '30crisley',
+      eventUrl: event?.url ?? 'Dirección de tu evento',
     },
   });
 
