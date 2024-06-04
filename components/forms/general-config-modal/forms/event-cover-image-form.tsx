@@ -111,6 +111,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
       const updatedEvent = await updateEventCoverImageUrl({
         eventId: event?.id ?? '',
         eventCoverImageUrl: event?.coverImageUrl ?? '',
+        eventCoverImage: selectedFile,
       });
 
       if (updatedEvent?.error) {
@@ -149,7 +150,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                 <FormControl>
                   <div className="flex flex-col gap-1.5">
                     <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
-                      <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
+                      <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-secondaryBorderColor h-[322px]">
                         <Image
                           src={
                             previewUrl || event?.coverImageUrl || imageOutline

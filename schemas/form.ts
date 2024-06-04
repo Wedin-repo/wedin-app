@@ -109,6 +109,7 @@ export const TransactionStatusLogUpdateSchema = z.object({
 });
 
 export const EventDetailsFormSchema = z.object({
+  eventId: z.string(),
   eventType: z
     .string()
     .min(1, { message: 'Debes seleccionar un tipo de evento' }),

@@ -5,7 +5,7 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { IoSettingsOutline } from 'react-icons/io5';
 import GeneralConfigModalForm from '../forms/general-config-modal/general-config-modal-form';
 
-const WishlistConfigModal = () => {
+const GeneralConfigModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -22,4 +22,4 @@ const WishlistConfigModal = () => {
   );
 };
 
-export default WishlistConfigModal;
+export default GeneralConfigModal;

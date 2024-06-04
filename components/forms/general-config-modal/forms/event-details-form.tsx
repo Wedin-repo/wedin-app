@@ -30,9 +30,9 @@ import { EventDetailsFormSchema } from '@/schemas/form';
 import { toast } from '@/components/ui/use-toast';
 import { Event, User } from '@prisma/client';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
-import { cn } from '@/lib/utils';
 import { countries } from '@/lib/countries';
 import { Loader2 } from 'lucide-react';
+import { updateEventDetails } from '@/actions/data/event';
 
 type EventDetailsFormProps = {
   event: Event;
@@ -48,6 +48,7 @@ const EventDetailsForm = ({
   const form = useForm({
     resolver: zodResolver(EventDetailsFormSchema),
     defaultValues: {
+      eventId: event?.id ?? '',
       eventType: event?.eventType.toString() ?? '',
       name: eventPrimaryUser?.name ?? '',
       lastName: eventPrimaryUser?.lastName ?? '',
@@ -65,21 +66,27 @@ const EventDetailsForm = ({
 
   const onSubmit = async (values: z.infer<typeof EventDetailsFormSchema>) => {
     setIsLoading(true);
-
     if (!Object.keys(formState.dirtyFields).length) {
       setIsLoading(false);
       console.log('No hay campos modificados');
       return;
     }
-
     const validatedFields = EventDetailsFormSchema.safeParse(values);
-
     if (validatedFields.success) {
-      console.log('values', values);
+      const response = await updateEventDetails(validatedFields.data);
+
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error! 😢',
+          description: response.error,
+        });
+      }
+
       toast({
         title: 'Exito! 🔗🎉',
         description:
-          'La dirección de tu evento ha sido actualizada correctamente.',
+          'Los detalles de tu evento han sido actualizados correctamente.',
         className: 'bg-white',
       });
     }

@@ -88,7 +88,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg flex items-end gap-2 text-[#0F172A]">
-                Imagen del regalo
+                Fecha del evento
               </FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
