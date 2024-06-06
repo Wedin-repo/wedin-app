@@ -6,6 +6,7 @@ type GeneralConfigCardProps = {
   isActive?: boolean;
   isCompleted?: boolean;
   isDeleteButton?: boolean;
+  isLastItem?: boolean;
   onClick?: () => void;
 };
 
@@ -15,15 +16,16 @@ const GeneralConfigCard = ({
   isActive = false,
   isDeleteButton = false,
   isCompleted = false,
+  isLastItem = false,
   onClick,
 }: GeneralConfigCardProps) => {
-  const baseTextColor = isDeleteButton ? 'text-[#DC2626]' : 'text-[#2E2E2E]';
-  const baseBgColor = isDeleteButton ? 'bg-[#F3F4F6]' : 'bg-[#F3F4F6]';
+  const baseTextColor = isDeleteButton ? 'text-red-600' : 'text-gray-800';
+  const baseBgColor = isDeleteButton ? 'bg-gray-100' : 'bg-gray-100';
   const textColor = isActive ? 'font-semibold' : 'font-normal';
   const isActiveHover = isActive
     ? 'cursor-not-allowed'
     : 'cursor-pointer hover:opacity-70 transition-all';
-  const hideLastBorder = isDeleteButton ? 'mb-0' : 'mb-4';
+  const hideLastBorder = isLastItem ? 'mb-0' : 'mb-4';
 
   return (
     <div className="flex flex-col">

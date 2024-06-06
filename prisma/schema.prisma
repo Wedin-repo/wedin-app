@@ -103,6 +103,7 @@ model Event {
   wishlistGifts      WishlistGift[]
   transactions       Transaction[]
   gifts              Gift[]
+  giftAmounts        String[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])

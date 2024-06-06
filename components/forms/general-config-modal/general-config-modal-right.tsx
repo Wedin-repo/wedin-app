@@ -7,8 +7,8 @@ import EventDateForm from './forms/event-date-form';
 import BankDetailsForm from './forms/bank-details-form';
 import { getEvent } from '@/actions/data/event';
 import { Event, User } from '@prisma/client';
-import { Suspense } from 'react';
 import Loader from '@/components/loader';
+import GiftAmountsForm from './forms/gift-amounts-form';
 
 type GeneralConfigModalRightProps = {
   contentId: string | null;
@@ -49,22 +49,19 @@ const GeneralConfigModalRight = ({
     return <Loader mfHeight="h-full" />;
   }
 
-  if (contentId === '1') {
+  if (contentId === '1')
     return (
-      event && (
-        <EventDetailsForm
-          event={event}
-          eventPrimaryUser={primaryUser}
-          eventSecondaryUser={secondaryUser}
-        />
-      )
+      <EventDetailsForm
+        event={event}
+        eventPrimaryUser={primaryUser}
+        eventSecondaryUser={secondaryUser}
+      />
     );
-  }
-
   if (contentId === '2') return <EventUrlForm event={event} />;
   if (contentId === '3') return <EventCoverImageForm event={event} />;
   if (contentId === '4') return <EventCoverMessageForm event={event} />;
   if (contentId === '5') return <EventDateForm event={event} />;
+  if (contentId === '6') return <GiftAmountsForm event={event} />;
   if (contentId === '7') return <BankDetailsForm />;
   return null;
 };

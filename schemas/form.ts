@@ -194,3 +194,12 @@ export const BankDetailsFormSchema = z.object({
   razonSocial: z.string(),
   ruc: z.string(),
 });
+
+export const GiftAmountsFormSchema = z.object({
+  eventId: z.string(),
+  giftAmounts: z
+    .array(z.string())
+    .nonempty({ message: 'Debe seleccionar al menos una opcion' }),
+});
+
+export const GiftAmountsArrayFormSchema = z.array(GiftAmountsFormSchema);

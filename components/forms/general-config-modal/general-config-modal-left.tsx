@@ -43,13 +43,14 @@ const options = [
     id: '7',
     label: 'Datos bancarios y de facturación',
     icon: <PiBank fontSize={'18px'} />,
+    isLastItem: true,
   },
-  {
+  /* {
     id: '8',
     label: 'Eliminar mi lista',
     icon: <FaRegTrashAlt fontSize={'18px'} />,
     isDeleteButton: true,
-  },
+  }, */
 ];
 
 type GeneralConfigModalLeftProps = {
@@ -74,7 +75,8 @@ const GeneralConfigModalLeft = ({
           icon={option.icon}
           title={option.label}
           isActive={activeCardId === option.id}
-          isDeleteButton={option.isDeleteButton}
+          //isDeleteButton={option.isDeleteButton}
+          isLastItem={option.isLastItem}
           onClick={() => handleCardClick(option.id)}
         />
       ))}

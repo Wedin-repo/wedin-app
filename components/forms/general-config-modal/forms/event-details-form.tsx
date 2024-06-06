@@ -86,7 +86,7 @@ const EventDetailsForm = ({
       toast({
         title: 'Exito! 🔗🎉',
         description:
-          'Los detalles de tu evento han sido actualizados correctamente.',
+          'Los datos de tu evento han sido actualizados correctamente.',
         className: 'bg-white',
       });
     }
@@ -101,32 +101,68 @@ const EventDetailsForm = ({
       >
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-5">
-            <FormField
-              control={form.control}
-              name="eventType"
-              render={({ field }) => (
-                <FormItem className="w-1/2">
-                  <FormLabel>Tipo de evento</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl className="!mt-1 text-base">
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona un tipo de evento" />
-                      </SelectTrigger>
+            <div className="flex justify-between gap-4">
+              <FormField
+                control={form.control}
+                name="eventType"
+                render={({ field }) => (
+                  <FormItem className="w-1/2">
+                    <FormLabel>Tipo de evento</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl className="!mt-1 text-base">
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecciona un tipo de evento" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="bg-white">
+                        <SelectItem value="WEDDING">Boda</SelectItem>
+                        <SelectItem value="BIRTHDAY">Cumpleaños</SelectItem>
+                        <SelectItem value="BABY_SHOWER">Baby Shower</SelectItem>
+                        <SelectItem value="OTHER">Otro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="eventGuests"
+                render={({ field }) => (
+                  <FormItem className="w-1/2">
+                    <FormLabel className="flex items-center gap-1.5">
+                      Cantidad de invitados
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <AiOutlineQuestionCircle fontSize={'18px'} />
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-white">
+                            <p>
+                              necesitamos saber la cantidad de tus invitados
+                              porque Si
+                            </p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className="!mt-2.5"
+                        type="number"
+                        placeholder=""
+                        {...field}
+                      />
                     </FormControl>
-                    <SelectContent className="bg-white">
-                      <SelectItem value="WEDDING">Boda</SelectItem>
-                      <SelectItem value="BIRTHDAY">Cumpleaños</SelectItem>
-                      <SelectItem value="BABY_SHOWER">Baby Shower</SelectItem>
-                      <SelectItem value="OTHER">Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage className="font-normal text-red-600" />
-                </FormItem>
-              )}
-            />
+
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="border border-[#E2E8F0] w-full rounded-full"></div>
           </div>
@@ -259,41 +295,6 @@ const EventDetailsForm = ({
                 )}
               />
             </div>
-
-            <FormField
-              control={form.control}
-              name="eventGuests"
-              render={({ field }) => (
-                <FormItem className="w-1/2">
-                  <FormLabel className="flex items-center gap-2">
-                    Cantidad de invitados
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <AiOutlineQuestionCircle fontSize={'20px'} />
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-white">
-                          <p>
-                            necesitamos saber la cantidad de tus invitados
-                            porque Si
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      className="!mt-2"
-                      type="number"
-                      placeholder=""
-                      {...field}
-                    />
-                  </FormControl>
-
-                  <FormMessage className="font-normal text-red-600" />
-                </FormItem>
-              )}
-            />
           </div>
         </div>
 

@@ -226,6 +226,6 @@ export async function updateEventDetails(
     });
   } catch (error) {
     console.error(error);
-    return { error: 'Error actualizando los detalles de tu evento' };
+    return { error: 'Error actualizando los datos de tu evento' };
   }
 }
