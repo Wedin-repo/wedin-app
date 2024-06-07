@@ -199,7 +199,8 @@ export const GiftAmountsFormSchema = z.object({
   eventId: z.string(),
   giftAmounts: z
     .array(z.string())
-    .nonempty({ message: 'Debe seleccionar al menos una opcion' }),
+    .nonempty({ message: 'Debe seleccionar al menos una opción' })
+    .refine(val => val.length <= 3, {
+      message: 'Puedes seleccionar hasta 3 opciones.',
+    }),
 });
-
-export const GiftAmountsArrayFormSchema = z.array(GiftAmountsFormSchema);

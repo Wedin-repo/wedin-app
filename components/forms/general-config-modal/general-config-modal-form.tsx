@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import GeneralConfigModalLeft from './general-config-modal-left';
-import { Suspense } from 'react';
 import GeneralConfigModalRight from './general-config-modal-right';
-import Loader from '@/components/loader';
 
 const GeneralConfigModalForm = () => {
   const [activeContentId, setActiveContentId] = useState<string>('1');

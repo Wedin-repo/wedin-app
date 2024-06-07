@@ -10,23 +10,26 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { GiftAmountsFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 import { toast } from '@/components/ui/use-toast';
 import { z } from 'zod';
 import { Loader2 } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
+import { updateEventGiftAmounts } from '@/actions/data/event';
 import { giftAmounts } from '@/lib/gift-amounts';
+import { formatPrice } from '@/lib/utils';
 
 type GiftAmountsFormProps = {
   event: Event | null;
 };
 
+type GiftAmountsFormValues = z.infer<typeof GiftAmountsFormSchema>;
+
 const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm({
+  const form = useForm<GiftAmountsFormValues>({
     resolver: zodResolver(GiftAmountsFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
@@ -34,17 +37,58 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     },
   });
 
-  const { formState, watch } = form;
-  const selectedAmounts = watch('giftAmounts');
+  const { watch, setValue, formState } = form;
+  const selectedAmounts = watch('giftAmounts') as string[];
 
-  const onSubmit = async (values: z.infer<typeof GiftAmountsFormSchema>) => {
+  const handleCheckboxChange = (value: string) => {
+    console.log('value');
+    if (selectedAmounts.includes(value)) {
+      setValue(
+        'giftAmounts',
+        selectedAmounts.filter((item: string) => item !== value) as string[]
+      );
+    } else {
+      setValue('giftAmounts', [...selectedAmounts, value] as string[]);
+    }
+  };
+
+  const renderCheckbox = (value: string, label: string) => (
+    <div key={value} className="flex items-center gap-3">
+      <Checkbox
+        value={value}
+        checked={selectedAmounts.includes(value)}
+        onChange={() => handleCheckboxChange(value)}
+      />
+      <p>{`${formatPrice(Number(label))}`}</p>
+    </div>
+  );
+
+  const onSubmit = async (values: GiftAmountsFormValues) => {
     setIsLoading(true);
-    toast({
-      title: 'Exito! 🔗🎉',
-      description:
-        'La dirección de tu evento ha sido actualizada correctamente.',
-      className: 'bg-white',
-    });
+    if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
+      console.log('No hay campos modificados');
+      return;
+    }
+    const validatedFields = GiftAmountsFormSchema.safeParse(values);
+    if (validatedFields.success) {
+      const response = await updateEventGiftAmounts(validatedFields.data);
+
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error! 😢',
+          description: response.error,
+        });
+      }
+
+      toast({
+        title: 'Exito! 🎁🎉',
+        description:
+          'Lo sugerencia de regalo ha sido actualizado correctamente.',
+        className: 'bg-white',
+      });
+    }
     setIsLoading(false);
   };
 
@@ -59,76 +103,15 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
           name="giftAmounts"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-lg font-normal">
+              <FormLabel className="text-lg font-medium">
                 Monto que sugerís que los invitados te regalen caso seleccionen
                 regalo en efectivo, podes elegir hasta 3 opciones.
               </FormLabel>
               <FormControl>
                 <div className="grid grid-cols-3 gap-4">
-                  {giftAmounts.map(amount => (
-                    <div key={amount.value} className="flex items-center gap-3">
-                      <Checkbox
-                        value={amount.value}
-                        checked={selectedAmounts.includes(amount.value)}
-                        onChange={() => {
-                          if (selectedAmounts.includes(amount.value)) {
-                            form.setValue(
-                              'giftAmounts',
-                              selectedAmounts.filter(
-                                (item: string) => item !== amount.value
-                              )
-                            );
-                          } else {
-                            if (selectedAmounts.length < 3) {
-                              form.setValue('giftAmounts', [
-                                ...selectedAmounts,
-                                amount.value,
-                              ]);
-                            } else {
-                              toast({
-                                title: 'Error',
-                                description:
-                                  'Puedes seleccionar hasta 3 opciones.',
-                                className: 'bg-white',
-                              });
-                            }
-                          }
-                        }}
-                      />
-                      <p>{`Gs. ${amount.label}`}</p>
-                    </div>
-                  ))}
-                  <div className="flex items-center gap-3">
-                    <Checkbox
-                      value="other"
-                      checked={selectedAmounts.includes('other')}
-                      onChange={() => {
-                        if (selectedAmounts.includes('other')) {
-                          form.setValue(
-                            'giftAmounts',
-                            selectedAmounts.filter(
-                              (item: string) => item !== 'other'
-                            )
-                          );
-                        } else {
-                          if (selectedAmounts.length < 3) {
-                            form.setValue('giftAmounts', [
-                              ...selectedAmounts,
-                              'other',
-                            ]);
-                          } else {
-                            toast({
-                              title: 'Error',
-                              description:
-                                'Puedes seleccionar hasta 3 opciones.',
-                              className: 'bg-white',
-                            });
-                          }
-                        }
-                      }}
-                    />
-                    <p>Otro monto</p>
-                  </div>
+                  {giftAmounts.map(amount =>
+                    renderCheckbox(amount.value, amount.label)
+                  )}
                 </div>
               </FormControl>
               <FormMessage className="font-normal text-red-600" />

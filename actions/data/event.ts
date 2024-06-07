@@ -11,6 +11,7 @@ import {
   EventDateFormSchema,
   EventCoverImageFormSchema,
   EventDetailsFormSchema,
+  GiftAmountsFormSchema,
 } from '@/schemas/form';
 import { revalidatePath } from 'next/cache';
 
@@ -227,5 +228,28 @@ export async function updateEventDetails(
   } catch (error) {
     console.error(error);
     return { error: 'Error actualizando los datos de tu evento' };
+  }
+}
+
+export async function updateEventGiftAmounts(
+  values: z.infer<typeof GiftAmountsFormSchema>
+) {
+  const validatedField = GiftAmountsFormSchema.safeParse(values);
+
+  if (!validatedField.success) {
+    return { error: 'Campo inválido' };
+  }
+
+  try {
+    await prismaClient.event.update({
+      where: { id: values.eventId },
+      data: { giftAmounts: values.giftAmounts },
+    });
+
+    revalidatePath('/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Error updating event gift sugestions:', error);
+    return { error: 'Error updating event gift sugestions.' };
   }
 }
