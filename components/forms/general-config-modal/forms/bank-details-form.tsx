@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,152 +18,238 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { toast } from '@/components/ui/use-toast';
 import { Input } from '@/components/ui/input';
 import { Combobox } from '@/components/ui/combobox';
 import { BankDetailsFormSchema } from '@/schemas/form';
 import { bankEntitiesPY } from '@/lib/bank-entities-py';
+import { Loader2 } from 'lucide-react';
+import IdentificationNumberField from '../../shared/identification-number-field-input';
 
-const BankDetailsForm = () => {
-  const [typeSelected, setTypeSelected] = useState<string>('');
-  const options = bankEntitiesPY.map(option => ({
-    value: option.value.toString(),
-    label: option.label,
-  }));
+type BankDetailsFormProps = {
+  eventId: string | undefined | null;
+};
 
+const BankDetailsForm = ({ eventId }: BankDetailsFormProps) => {
   const form = useForm({
     resolver: zodResolver(BankDetailsFormSchema),
     defaultValues: {
-      entityType: '',
-      entityName: '',
+      eventId: eventId ?? '',
+      bankName: '',
       accountHolder: '',
-      identificationType: 'ruc',
-      identificationNumber: '',
       accountNumber: '',
-      accountCurrency: '',
+      accountType: '',
+      identificationType: '',
+      identificationNumber: '',
       razonSocial: '',
       ruc: '',
     },
   });
 
-  const onSubmit = (data: any) => {
-    console.log('Form data:', data);
+  const { formState } = form;
+  const [isLoading, setIsLoading] = useState(false);
+
+  const onSubmit = async (values: z.infer<typeof BankDetailsFormSchema>) => {
+    setIsLoading(true);
+    if (!Object.keys(formState.dirtyFields).length) {
+      setIsLoading(false);
+      console.log('No hay campos modificados');
+      return;
+    }
+    const validatedFields = BankDetailsFormSchema.safeParse(values);
+    if (validatedFields.success) {
+      // const response = await updateEventDetails(validatedFields.data);
+
+      // if (response?.error) {
+      //   toast({
+      //     variant: 'destructive',
+      //     title: 'Error! 😢',
+      //     description: response.error,
+      //   });
+      // }
+
+      toast({
+        title: 'Exito! 🔗🎉',
+        description: 'Tus datos bancarios han sido actualizados correctamente.',
+        className: 'bg-white',
+      });
+    }
+    setIsLoading(false);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-3">
-          <div>
-            <h3 className="text-[#4B5563]">
-              Datos bancários para recibir el monto de tus regalos.
-            </h3>
-          </div>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex flex-col h-full justify-between"
+      >
+        <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 justify-between w-full">
+            <div>
+              <h3 className="text-[#4B5563]">
+                Datos bancários para recibir el monto de tus regalos.
+              </h3>
+            </div>
+            <div className="flex flex-col gap-2">
               <FormField
                 control={form.control}
-                name="entityType"
+                name="accountHolder"
                 render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Tipo de entidad</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="!mt-1">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Elegí tu entidad kp" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="ci">Banco</SelectItem>
-                        <SelectItem value="ruc">Cooperativa</SelectItem>
-                        <SelectItem value="passport">Financiera</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
+                  <FormItem>
+                    <FormLabel>Nombre y apellido</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Ej. Santiago Dominguez"
+                        className="!mt-1"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
               <FormField
                 control={form.control}
-                name="entityName"
+                name="bankName"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>Entidad</FormLabel>
                     <FormControl className="!mt-1">
                       <Combobox
-                        options={options}
+                        options={bankEntitiesPY}
                         placeholder="Elegí una entidad"
-                        selected={typeSelected}
-                        onChange={value => {
-                          setTypeSelected(
-                            Array.isArray(value) ? value[0] : value
-                          ); // what is thiss!!!! need to change
-                          field.onChange(value);
-                        }}
+                        selected={field.value}
+                        onChange={field.onChange}
+                        width="w-96"
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
+
+              <div className="flex items-center gap-2 justify-between w-full">
+                <FormField
+                  control={form.control}
+                  name="identificationType"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Tipo de documento</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="!mt-1 text-base">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Documento" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white">
+                          <SelectItem value="ci">
+                            <span className="font-semibold">CI - </span>Cédula
+                            de Identidad
+                          </SelectItem>
+                          <SelectItem value="ruc">
+                            <span className="font-semibold">RUC - </span>
+                            Registro Único de Contribuyentes
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="font-normal text-red-600" />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="identificationNumber"
+                  render={({ field }) => (
+                    <IdentificationNumberField field={field} />
+                  )}
+                />
+              </div>
+
+              <div className="flex items-center gap-2 justify-between w-full">
+                <FormField
+                  control={form.control}
+                  name="accountNumber"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Número de cuenta</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Ej. 61920381"
+                          className="!mt-1"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage className="font-normal text-red-600" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="accountType"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Moneda de la cuenta</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl className="!mt-1 text-base">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Moneda" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent className="bg-white">
+                          <SelectItem value="pyg">
+                            <span className="font-semibold">PYG - </span>
+                            Guaraníes
+                          </SelectItem>
+                          <SelectItem value="usd">
+                            <span className="font-semibold">USD - </span>Dolares
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage className="font-normal text-red-600" />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
-
-            <FormField
-              control={form.control}
-              name="accountHolder"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nombre y apellido</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Santiago Dominguez"
-                      className="!mt-1"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="font-normal text-red-600" />
-                </FormItem>
-              )}
-            />
-
+          </div>
+          <div className="flex flex-col gap-2">
+            <div>
+              <h3 className="text-[#4B5563]">Datos de facturación</h3>
+            </div>
             <div className="flex items-center gap-2 justify-between w-full">
               <FormField
                 control={form.control}
-                name="identificationType"
+                name="razonSocial"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Tipo de documento</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="!mt-1">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Elegí tu documento kp" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="ci">C.I.</SelectItem>
-                        <SelectItem value="ruc">RUC</SelectItem>
-                        <SelectItem value="passport">Pasaporte</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
+                    <FormLabel>Razón social</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Nombre"
+                        className="!mt-1"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
-                name="identificationNumber"
+                name="ruc"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Número de documento</FormLabel>
+                    <FormLabel>CI o RUC</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="4.420.420"
+                        placeholder="Documento"
                         className="!mt-1"
                         {...field}
                       />
@@ -172,90 +259,16 @@ const BankDetailsForm = () => {
                 )}
               />
             </div>
-
-            <div className="flex items-center gap-2 justify-between w-full">
-              <FormField
-                control={form.control}
-                name="accountNumber"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Número de cuenta</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="61920381"
-                        className="!mt-1"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className="font-normal text-red-600" />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="accountCurrency"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Moneda de la cuenta</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl className="!mt-1">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Moneda de tu cuenta" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="ci">Guaranies</SelectItem>
-                        <SelectItem value="ruc">Dolares</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <div>
-            <h3 className="text-[#4B5563]">Datos de facturación</h3>
-          </div>
-
-          <div className="flex items-center gap-2 justify-between w-full">
-            <FormField
-              control={form.control}
-              name="razonSocial"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>Razón social</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nombre" className="!mt-1" {...field} />
-                  </FormControl>
-                  <FormMessage className="font-normal text-red-600" />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="ruc"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormLabel>CI o RUC</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Documento"
-                      className="!mt-1"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage className="font-normal text-red-600" />
-                </FormItem>
-              )}
-            />
           </div>
         </div>
-        <Button variant="editGiftButton" type="submit" className="mt-5">
+        <Button
+          variant="editGiftButton"
+          type="submit"
+          disabled={isLoading}
+          className="mt-4"
+        >
           Guardar
+          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
         </Button>
       </form>
     </Form>

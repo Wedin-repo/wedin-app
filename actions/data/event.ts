@@ -240,10 +240,16 @@ export async function updateEventGiftAmounts(
     return { error: 'Campo inválido' };
   }
 
+  const giftAmounts = [
+    values.giftAmount1.toString(),
+    values.giftAmount2.toString(),
+    values.giftAmount3.toString(),
+  ];
+
   try {
     await prismaClient.event.update({
       where: { id: values.eventId },
-      data: { giftAmounts: values.giftAmounts },
+      data: { giftAmounts: giftAmounts },
     });
 
     revalidatePath('/dashboard');

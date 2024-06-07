@@ -33,6 +33,9 @@ const config = {
         tertiaryTextColor: '#696969',
         borderColor: '#E0E0E0',
       },
+      width: {
+        '128': '32rem',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },

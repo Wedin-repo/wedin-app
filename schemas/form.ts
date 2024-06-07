@@ -184,23 +184,32 @@ export const EventDateFormSchema = z.object({
 });
 
 export const BankDetailsFormSchema = z.object({
-  entityType: z.string(),
-  entityName: z.string(),
-  accountHolder: z.string(),
-  identificationType: z.string(),
-  identificationNumber: z.string(),
-  accountNumber: z.string(),
-  accountCurrency: z.string(),
-  razonSocial: z.string(),
-  ruc: z.string(),
+  eventId: z.string(),
+  bankName: z.string().min(1, { message: 'Debe seleccionar una entidad' }),
+  accountHolder: z
+    .string()
+    .min(1, { message: 'Nombre y apellido no puede estar vacío' })
+    .min(2, { message: 'Nombre y Apellido muy corto' })
+    .max(255, { message: 'Nombre y Apellido muy largo' }),
+  accountNumber: z
+    .string()
+    .min(1, { message: 'Número de cuenta no puede estar vacío' })
+    .max(24, { message: 'Número de cuenta muy largo' }),
+  accountType: z.string().min(1, { message: 'Debe seleccionar una moneda' }),
+  identificationType: z
+    .string()
+    .min(1, { message: 'Debe seleccionar un documento' }),
+  identificationNumber: z
+    .string()
+    .min(1, { message: 'Número de documento no puede estar vacío' })
+    .max(12, { message: 'Número de documento muy largo' }),
+  razonSocial: z.string().optional(),
+  ruc: z.string().optional(),
 });
 
 export const GiftAmountsFormSchema = z.object({
   eventId: z.string(),
-  giftAmounts: z
-    .array(z.string())
-    .nonempty({ message: 'Debe seleccionar al menos una opción' })
-    .refine(val => val.length <= 3, {
-      message: 'Puedes seleccionar hasta 3 opciones.',
-    }),
+  giftAmount1: z.string(),
+  giftAmount2: z.string(),
+  giftAmount3: z.string(),
 });

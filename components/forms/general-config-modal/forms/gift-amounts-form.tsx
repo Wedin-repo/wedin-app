@@ -33,35 +33,13 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     resolver: zodResolver(GiftAmountsFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
-      giftAmounts: [],
+      giftAmount1: '',
+      giftAmount2: '',
+      giftAmount3: '',
     },
   });
 
-  const { watch, setValue, formState } = form;
-  const selectedAmounts = watch('giftAmounts') as string[];
-
-  const handleCheckboxChange = (value: string) => {
-    console.log('value');
-    if (selectedAmounts.includes(value)) {
-      setValue(
-        'giftAmounts',
-        selectedAmounts.filter((item: string) => item !== value) as string[]
-      );
-    } else {
-      setValue('giftAmounts', [...selectedAmounts, value] as string[]);
-    }
-  };
-
-  const renderCheckbox = (value: string, label: string) => (
-    <div key={value} className="flex items-center gap-3">
-      <Checkbox
-        value={value}
-        checked={selectedAmounts.includes(value)}
-        onChange={() => handleCheckboxChange(value)}
-      />
-      <p>{`${formatPrice(Number(label))}`}</p>
-    </div>
-  );
+  const { formState } = form;
 
   const onSubmit = async (values: GiftAmountsFormValues) => {
     setIsLoading(true);
@@ -92,6 +70,13 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     setIsLoading(false);
   };
 
+  const handleCheckboxChange = (
+    fieldName: keyof GiftAmountsFormValues,
+    value: string
+  ) => {
+    form.setValue(fieldName, value);
+  };
+
   return (
     <Form {...form}>
       <form
@@ -100,7 +85,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
       >
         <FormField
           control={form.control}
-          name="giftAmounts"
+          name="giftAmount1" // i dont know what goes here
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-lg font-medium">
@@ -109,15 +94,24 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
               </FormLabel>
               <FormControl>
                 <div className="grid grid-cols-3 gap-4">
-                  {giftAmounts.map(amount =>
-                    renderCheckbox(amount.value, amount.label)
-                  )}
+                  {giftAmounts.map(amount => (
+                    <div key={amount.value} className="flex items-center gap-3">
+                      <Checkbox
+                        value={field.value}
+                        checked={field.value === amount.label}
+                        onChange={field.onChange}
+                      />
+                      <p>{`${formatPrice(Number(amount.label))}`}</p>
+                    </div>
+                  ))}
                 </div>
               </FormControl>
               <FormMessage className="font-normal text-red-600" />
             </FormItem>
           )}
         />
+
+        {/* <Checkbox /> */}
 
         <Button variant="editGiftButton" type="submit" disabled={isLoading}>
           Guardar

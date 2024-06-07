@@ -62,7 +62,7 @@ const GeneralConfigModalRight = ({
   if (contentId === '4') return <EventCoverMessageForm event={event} />;
   if (contentId === '5') return <EventDateForm event={event} />;
   if (contentId === '6') return <GiftAmountsForm event={event} />;
-  if (contentId === '7') return <BankDetailsForm />;
+  if (contentId === '7') return <BankDetailsForm eventId={event?.id} />;
   return null;
 };
 

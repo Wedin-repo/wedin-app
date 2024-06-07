@@ -104,6 +104,7 @@ model Event {
   transactions       Transaction[]
   gifts              Gift[]
   giftAmounts        String[]
+  BankDetails        BankDetails[]
 
   @@unique([wishlistId])
   @@unique([secondaryUserId])
@@ -161,7 +162,26 @@ model WishlistGift {
   @@index([giftId])
 }
 
-// create BankAccount model with User reference
+// create BankAccount model with Event as reference
+
+model BankDetails {
+  id                   String   @id @default(auto()) @map("_id") @db.ObjectId
+  bankName             String
+  accountHolder        String
+  accountNumber        String
+  accountType          String
+  identificationType   String
+  identificationNumber String
+  eventId              String   @db.ObjectId
+  razonSocial          String?
+  ruc                  String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@index([eventId])
+}
 
 model Transaction {
   id             String            @id @default(auto()) @map("_id") @db.ObjectId
