@@ -61,9 +61,8 @@ const EventCoverMessageForm = ({ event }: EventCoverMessageFormProps) => {
       }
 
       toast({
-        title: 'Exito! 🎎🎉',
-        description:
-          'El mensaje para tus invitados ha sido actualizado correctamente.',
+        title: 'Exito! 💌🎉',
+        description: 'Mensaje de la portada actualizado correctamente.',
         className: 'bg-white',
       });
     }

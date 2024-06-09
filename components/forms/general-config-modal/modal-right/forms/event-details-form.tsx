@@ -83,9 +83,8 @@ const EventDetailsForm = ({
       }
 
       toast({
-        title: 'Exito! 🔗🎉',
-        description:
-          'Los datos de tu evento han sido actualizados correctamente.',
+        title: 'Exito! ⛪🥳',
+        description: 'Tipo y datos del evento actualizados correctamente.',
         className: 'bg-white',
       });
     }

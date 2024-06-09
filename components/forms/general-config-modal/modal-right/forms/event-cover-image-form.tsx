@@ -114,8 +114,8 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
         });
       }
       toast({
-        title: 'Exito!',
-        description: 'Se actualizo la imagen de portada del evento.',
+        title: 'Exito! 🖼️🎉',
+        description: 'Imagen de la portada actualizada correctamente.',
         className: 'bg-white',
       });
     }
@@ -146,7 +146,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                           width={390}
                           height={340}
                           alt="Vista previa de la imagen seleccionada"
-                          className="object-cover min-w-full min-h-full rounded-xl"
+                          className="object-cover w-full h-full rounded-xl"
                         />
                       </div>
                       <div className="">
@@ -167,7 +167,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                           onClick={handleButtonClick}
                         >
                           <MdOutlineFileUpload fontSize={'18px'} />
-                          {event?.coverImageUrl
+                          {event?.coverImageUrl || previewUrl
                             ? 'Cambiar imagen'
                             : 'Subir imagen'}
                         </Button>

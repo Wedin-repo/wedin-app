@@ -69,8 +69,8 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
       }
 
       toast({
-        title: 'Exito! 🔗🎉',
-        description: 'La fecha de tu evento ha sido actualizada correctamente.',
+        title: 'Exito! 📅🎉',
+        description: 'Fecha del evento actualizada correctamente.',
         className: 'bg-white',
       });
     }

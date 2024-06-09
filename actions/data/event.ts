@@ -131,19 +131,17 @@ export async function updateEventDate(
   }
 }
 
-export async function updateEventCoverImageUrl(
-  values: z.infer<typeof EventCoverImageFormSchema>
-) {
-  const validatedField = EventCoverImageFormSchema.safeParse(values);
-
-  if (!validatedField.success) {
-    return { error: 'Campo inválido' };
-  }
-
+export async function updateEventCoverImageUrl({
+  eventId,
+  eventCoverImageUrl,
+}: {
+  eventId: string;
+  eventCoverImageUrl: string | undefined;
+}) {
   try {
     await prismaClient.event.update({
-      where: { id: values.eventId },
-      data: { coverImageUrl: values.eventCoverImageUrl },
+      where: { id: eventId },
+      data: { coverImageUrl: eventCoverImageUrl },
     });
 
     revalidatePath('/dashboard');

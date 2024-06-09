@@ -19,6 +19,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { updateEventGiftAmounts } from '@/actions/data/event';
 import { giftAmounts } from '@/lib/gift-amounts';
 import { formatPrice } from '@/lib/utils';
+import ModalSubmitButton from '../modal-submit-button';
 
 type GiftAmountsFormProps = {
   event: Event | null;
@@ -62,8 +63,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
 
       toast({
         title: 'Exito! 🎁🎉',
-        description:
-          'Lo sugerencia de regalo ha sido actualizado correctamente.',
+        description: 'Sugerencia monto de regalo actualizado correctamente.',
         className: 'bg-white',
       });
     }
@@ -113,10 +113,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
 
         {/* <Checkbox /> */}
 
-        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <ModalSubmitButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

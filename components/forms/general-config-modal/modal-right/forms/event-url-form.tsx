@@ -59,8 +59,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
 
       toast({
         title: 'Exito! 🔗🎉',
-        description:
-          'La dirección de tu evento ha sido actualizada correctamente.',
+        description: 'Link de la lista actualizado correctamente.',
         className: 'bg-white',
       });
     }

@@ -70,8 +70,8 @@ const BankDetailsForm = ({ eventId, bankDetails }: BankDetailsFormProps) => {
       }
 
       toast({
-        title: 'Exito! 🔗🎉',
-        description: 'Tus datos bancarios han sido actualizados correctamente.',
+        title: 'Exito! 🏦🎉',
+        description: 'Datos bancarios actualizados correctamente.',
         className: 'bg-white',
       });
     }
