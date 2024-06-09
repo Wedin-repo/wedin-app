@@ -1,4 +1,4 @@
-import { createGift, editGift } from '@/actions/data/gift';
+import { createGift, editGift, updateGiftImageUrl } from '@/actions/data/gift';
 import {
   createWishlistGift,
   deleteGiftFromWishlist,
@@ -7,7 +7,6 @@ import {
 import GiftForm from '@/components/forms/shared/gift-form';
 import { useToast } from '@/components/ui/use-toast';
 import { uploadImageToAws } from '@/lib/s3';
-import { updateGiftImageUrl } from '@/actions/data/gift';
 import ringSvg from '@/public/images/rings.svg';
 import { GiftFormSchema, GiftPostSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
