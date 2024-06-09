@@ -84,7 +84,7 @@ const cardContentVariants = cva('flex flex-col', {
   variants: {
     variant: {
       default: 'flex-grow w-full p-0',
-      dashboard: 'gap-1 flex-grow justify-between items-normal',
+      dashboard: 'gap-1 justify-evenly sm:justify-between items-normal',
     },
     size: {
       default: '',
