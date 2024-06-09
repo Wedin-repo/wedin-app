@@ -27,21 +27,21 @@ type EventCoverImageFormProps = {
 };
 
 const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   if (!event) return null;
 
   const form = useForm({
     resolver: zodResolver(EventCoverImageFormSchema),
     defaultValues: {
-      eventId: event?.id ?? '',
+      eventId: event?.id,
       eventCoverImage: imageOutline,
       eventCoverImageUrl: event?.coverImageUrl ?? '',
     },
   });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { formState } = form;
 
