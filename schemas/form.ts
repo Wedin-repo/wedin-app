@@ -209,7 +209,12 @@ export const BankDetailsFormSchema = z.object({
 
 export const GiftAmountsFormSchema = z.object({
   eventId: z.string(),
-  giftAmount1: z.string(),
+  giftAmount1: z
+    .string()
+    .min(1, { message: 'Debes seleccionar al menos un monto' })
+    .min(5, { message: 'no puede ser menor a 99.909' })
+    .max(10, { message: 'El monto no puede ser mayor de PYG 99,999,999' }),
   giftAmount2: z.string(),
   giftAmount3: z.string(),
+  giftAmount4: z.string(),
 });

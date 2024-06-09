@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormLabel,
@@ -14,11 +14,7 @@ import { GiftAmountsFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 import { toast } from '@/components/ui/use-toast';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { updateEventGiftAmounts } from '@/actions/data/event';
-import { giftAmounts } from '@/lib/gift-amounts';
-import { formatPrice } from '@/lib/utils';
 import ModalSubmitButton from '../modal-submit-button';
 
 type GiftAmountsFormProps = {
@@ -37,6 +33,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
       giftAmount1: '',
       giftAmount2: '',
       giftAmount3: '',
+      giftAmount4: '',
     },
   });
 
@@ -70,46 +67,96 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     setIsLoading(false);
   };
 
-  const handleCheckboxChange = (
-    fieldName: keyof GiftAmountsFormValues,
-    value: string
-  ) => {
-    form.setValue(fieldName, value);
-  };
-
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="h-full flex flex-col justify-between"
       >
-        <FormField
-          control={form.control}
-          name="giftAmount1" // i dont know what goes here
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-lg font-medium">
-                Monto que sugerís que los invitados te regalen caso seleccionen
-                regalo en efectivo, podes elegir hasta 3 opciones.
-              </FormLabel>
-              <FormControl>
-                <div className="grid grid-cols-3 gap-4">
-                  {giftAmounts.map(amount => (
-                    <div key={amount.value} className="flex items-center gap-3">
-                      <Checkbox
-                        value={field.value}
-                        checked={field.value === amount.label}
-                        onChange={field.onChange}
+        <div className="flex flex-col gap-5">
+          <p className="text-lg font-medium text-[#0F172A]">
+            Monto que sugerís que los invitados te regalen caso seleccionen
+            regalo en efectivo, podes elegir hasta 4 opciones.{' '}
+            <span className="font-normal text-xs text-Zinc400">
+              Desde Gs. 99.999 hasta Gs. 9.999.999
+            </span>
+          </p>
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between w-full gap-4">
+              <FormField
+                control={form.control}
+                name="giftAmount1"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Monto de regalo 1</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="!mt-1"
+                        placeholder={'Ej: Gs. 119.000'}
+                        {...field}
                       />
-                      <p>{`${formatPrice(Number(amount.label))}`}</p>
-                    </div>
-                  ))}
-                </div>
-              </FormControl>
-              <FormMessage className="font-normal text-red-600" />
-            </FormItem>
-          )}
-        />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="giftAmount2"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Monto de regalo 2</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="!mt-1"
+                        placeholder={'Ej: Gs. 899.000'}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex justify-between w-full gap-4">
+              <FormField
+                control={form.control}
+                name="giftAmount3"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Monto de regalo 3</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="!mt-1"
+                        placeholder={'Ej: Gs. 2.099.000'}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="giftAmount4"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Monto de regalo 4</FormLabel>
+                    <FormControl>
+                      <Input
+                        className="!mt-1"
+                        placeholder={'Ej: Gs. 9.800.000'}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage className="font-normal text-red-600" />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </div>
 
         {/* <Checkbox /> */}
 

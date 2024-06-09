@@ -28,7 +28,6 @@ type EventCoverImageFormProps = {
 
 const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
   if (!event) return null;
-
   const form = useForm({
     resolver: zodResolver(EventCoverImageFormSchema),
     defaultValues: {
