@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import EventDetailsForm from './forms/event-details-form';
-import EventUrlForm from './forms/event-url-form';
-import EventCoverImageForm from './forms/event-cover-image-form';
-import EventCoverMessageForm from './forms/event-cover-message-form';
-import EventDateForm from './forms/event-date-form';
-import BankDetailsForm from './forms/bank-details-form';
+import EventDetailsForm from './modal-right/forms/event-details-form';
+import EventUrlForm from './modal-right/forms/event-url-form';
+import EventCoverImageForm from './modal-right/forms/event-cover-image-form';
+import EventCoverMessageForm from './modal-right/forms/event-cover-message-form';
+import EventDateForm from './modal-right/forms/event-date-form';
+import BankDetailsForm from './modal-right/forms/bank-details-form';
 import { getEvent } from '@/actions/data/event';
 import { Event, User, BankDetails } from '@prisma/client';
 import Loader from '@/components/loader';
-import GiftAmountsForm from './forms/gift-amounts-form';
+import GiftAmountsForm from './modal-right/forms/gift-amounts-form';
 
-type ModalRightControllerProps = {
+type ModalControllerProps = {
   contentId: string | null;
 };
 
-const ModalRightController = ({ contentId }: ModalRightControllerProps) => {
+const ModalController = ({ contentId }: ModalControllerProps) => {
   const [event, setEvent] = useState<Event | null>(null);
   const [primaryUser, setPrimaryUser] = useState<User | null>(null);
   const [secondaryUser, setSecondaryUser] = useState<User | null>(null);
@@ -62,4 +62,4 @@ const ModalRightController = ({ contentId }: ModalRightControllerProps) => {
   return null;
 };
 
-export default ModalRightController;
+export default ModalController;

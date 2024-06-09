@@ -72,7 +72,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-full flex flex-col justify-between"
+        className="h-full flex flex-col justify-between gap-8 md:gap-0"
       >
         <div className="flex flex-col gap-5">
           <p className="text-lg font-medium text-[#0F172A]">

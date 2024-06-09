@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ModalLeft from './modal-left/modal-left';
-import ModalRightController from './modal-right/modal-right-controller';
+import ModalController from './modal-controller';
 
 const ModalContent = () => {
   const [activeContentId, setActiveContentId] = useState<string>('1');
@@ -24,7 +24,7 @@ const ModalContent = () => {
         </div>
 
         <div className="w-1/2">
-          <ModalRightController contentId={activeContentId} />
+          <ModalController contentId={activeContentId} />
         </div>
       </div>
     </div>

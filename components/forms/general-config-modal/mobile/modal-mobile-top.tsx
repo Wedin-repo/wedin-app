@@ -74,27 +74,32 @@ const ModalTopMobile = ({ onCardClick }: ModalTopMobileProps) => {
   };
 
   return (
-    <Select>
-      <SelectTrigger>
-        <SelectValue placeholder="Selecciona una opción" />
-      </SelectTrigger>
-      <SelectContent className="bg-white">
-        <SelectGroup>
-          {options.map(option => (
-            <SelectItem
-              key={option.id}
-              value={option.id}
-              onClick={() => handleCardClick(option.id)}
-            >
-              <div className="flex items-center gap-4 py-2 text-base">
-                {option.icon}
-                <span>{option.label}</span>
-              </div>
-            </SelectItem>
-          ))}
-        </SelectGroup>
-      </SelectContent>
-    </Select>
+    <div className="flex flex-col gap-4">
+      <h2 className="font-medium w-full justify-center flex text-xl">
+        Configurar mi lista
+      </h2>
+      <Select defaultValue="1" onValueChange={value => handleCardClick(value)}>
+        <SelectTrigger>
+          <SelectValue placeholder="Selecciona una opción" />
+        </SelectTrigger>
+        <SelectContent className="bg-white">
+          <SelectGroup>
+            {options.map(option => (
+              <SelectItem
+                key={option.id}
+                value={option.id}
+                //onClick={() => handleCardClick(option.id)}
+              >
+                <div className="flex items-center gap-4 py-2 text-base">
+                  {option.icon}
+                  <span>{option.label}</span>
+                </div>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </div>
   );
 };
 

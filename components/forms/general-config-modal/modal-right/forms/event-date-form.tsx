@@ -81,7 +81,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-full flex flex-col justify-between"
+        className="h-full flex flex-col justify-between gap-8 md:gap-0"
       >
         <FormField
           control={form.control}

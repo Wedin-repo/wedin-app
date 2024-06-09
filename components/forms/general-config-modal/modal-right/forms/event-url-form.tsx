@@ -70,7 +70,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="h-full flex flex-col justify-between"
+        className="h-full flex flex-col justify-between gap-8 md:gap-0"
       >
         <FormField
           control={form.control}
@@ -79,7 +79,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
             <FormItem>
               <FormControl>
                 <div className="flex flex-col">
-                  <p className="font-medium text-[#0F172A] mb-2 sm:text-start text-center text-lg">
+                  <p className="font-medium text-[#0F172A] mb-4 sm:mb-2 text-lg">
                     ¿Qué dirección quieres para tu evento? Escribe la dirección
                     para comprobar su disponibilidad
                   </p>

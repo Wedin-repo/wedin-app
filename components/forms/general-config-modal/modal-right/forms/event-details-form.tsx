@@ -95,7 +95,7 @@ const EventDetailsForm = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col h-full justify-between"
+        className="flex flex-col h-full justify-between gap-8 md:gap-0"
       >
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-5">
@@ -131,7 +131,7 @@ const EventDetailsForm = ({
                 name="eventGuests"
                 render={({ field }) => (
                   <FormItem className="w-1/2">
-                    <FormLabel className="flex items-center gap-1.5">
+                    <FormLabel className="flex items-center gap-1.5 text-xs sm:text-sm">
                       Cantidad de invitados
                       <TooltipProvider>
                         <Tooltip>

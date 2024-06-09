@@ -82,7 +82,7 @@ const BankDetailsForm = ({ eventId, bankDetails }: BankDetailsFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col h-full justify-between"
+        className="flex flex-col h-full justify-between gap-8 md:gap-0"
       >
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">

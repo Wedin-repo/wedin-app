@@ -125,7 +125,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col justify-between h-full"
+        className="flex flex-col justify-between h-full gap-8 md:gap-0"
       >
         <div>
           <FormField
