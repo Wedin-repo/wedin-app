@@ -207,14 +207,20 @@ export const BankDetailsFormSchema = z.object({
   ruc: z.string().optional(),
 });
 
+const giftAmountSchema = z
+  .string()
+  .regex(/^\d{1,3}(\d{3})*$/, { message: 'Formato inválido' })
+  .refine(val => parseInt(val.replace(/,/g, ''), 10) >= 99999, {
+    message: 'El monto no puede ser menor a Gs. 99,999',
+  })
+  .refine(val => parseInt(val.replace(/,/g, ''), 10) <= 9999999, {
+    message: 'El monto no puede ser mayor de Gs. 9,999,999',
+  });
+
 export const GiftAmountsFormSchema = z.object({
   eventId: z.string(),
-  giftAmount1: z
-    .string()
-    .min(1, { message: 'Debes seleccionar al menos un monto' })
-    .min(5, { message: 'no puede ser menor a 99.909' })
-    .max(10, { message: 'El monto no puede ser mayor de PYG 99,999,999' }),
-  giftAmount2: z.string(),
-  giftAmount3: z.string(),
-  giftAmount4: z.string(),
+  giftAmount1: giftAmountSchema,
+  giftAmount2: giftAmountSchema.optional(),
+  giftAmount3: giftAmountSchema.optional(),
+  giftAmount4: giftAmountSchema.optional(),
 });

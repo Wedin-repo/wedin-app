@@ -1,0 +1,101 @@
+import React, { useState } from 'react';
+import GeneralConfigCard from '@/components/cards/general-config-card';
+//import { FaRegTrashAlt } from 'react-icons/fa';
+import { TbListDetails } from 'react-icons/tb';
+import { FiCalendar } from 'react-icons/fi';
+import { IoIosLink } from 'react-icons/io';
+import { LuMessageSquare, LuImage } from 'react-icons/lu';
+import { IoGiftOutline } from 'react-icons/io5';
+import { PiBank } from 'react-icons/pi';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+const options = [
+  {
+    id: '1',
+    label: 'Tipo y datos del evento',
+    icon: <TbListDetails fontSize={'20px'} />,
+  },
+  {
+    id: '2',
+    label: 'Link de la lista',
+    icon: <IoIosLink fontSize={'20px'} />,
+  },
+  {
+    id: '3',
+    label: 'Imagen de la portada',
+    icon: <LuImage fontSize={'20px'} />,
+  },
+  {
+    id: '4',
+    label: 'Mensaje de la portada',
+    icon: <LuMessageSquare fontSize={'20px'} />,
+  },
+  {
+    id: '5',
+    label: 'Fecha del evento',
+    icon: <FiCalendar fontSize={'20px'} />,
+  },
+  {
+    id: '6',
+    label: 'Sugerencia monto de regalo',
+    icon: <IoGiftOutline fontSize={'20px'} />,
+  },
+  {
+    id: '7',
+    label: 'Datos bancarios y de facturación',
+    icon: <PiBank fontSize={'20px'} />,
+    isLastItem: true,
+  },
+  /* {
+    id: '8',
+    label: 'Eliminar mi lista',
+    icon: <FaRegTrashAlt fontSize={'20px'} />,
+    isDeleteButton: true,
+  }, */
+];
+
+type ModalTopMobileProps = {
+  onCardClick: (id: string) => void;
+};
+
+const ModalTopMobile = ({ onCardClick }: ModalTopMobileProps) => {
+  const [activeCardId, setActiveCardId] = useState<string>('1');
+
+  const handleCardClick = (id: string) => {
+    setActiveCardId(id);
+    onCardClick(id);
+  };
+
+  return (
+    <Select>
+      <SelectTrigger>
+        <SelectValue placeholder="Selecciona una opción" />
+      </SelectTrigger>
+      <SelectContent className="bg-white">
+        <SelectGroup>
+          {options.map(option => (
+            <SelectItem
+              key={option.id}
+              value={option.id}
+              onClick={() => handleCardClick(option.id)}
+            >
+              <div className="flex items-center gap-4 py-2 text-base">
+                {option.icon}
+                <span>{option.label}</span>
+              </div>
+            </SelectItem>
+          ))}
+        </SelectGroup>
+      </SelectContent>
+    </Select>
+  );
+};
+
+export default ModalTopMobile;

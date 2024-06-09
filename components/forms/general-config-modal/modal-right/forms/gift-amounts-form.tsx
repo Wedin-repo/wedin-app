@@ -16,6 +16,7 @@ import { toast } from '@/components/ui/use-toast';
 import { z } from 'zod';
 import { updateEventGiftAmounts } from '@/actions/data/event';
 import ModalSubmitButton from '../modal-submit-button';
+import GiftAmountsFormPriceInput from '../gift-amounts-form-price-input';
 
 type GiftAmountsFormProps = {
   event: Event | null;
@@ -30,14 +31,14 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     resolver: zodResolver(GiftAmountsFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
-      giftAmount1: '',
-      giftAmount2: '',
-      giftAmount3: '',
-      giftAmount4: '',
+      giftAmount1: event?.giftAmounts[0] ?? '',
+      giftAmount2: event?.giftAmounts[1] ?? '',
+      giftAmount3: event?.giftAmounts[2] ?? '',
+      giftAmount4: event?.giftAmounts[3] ?? '',
     },
   });
 
-  const { formState } = form;
+  const { formState, setValue, watch } = form;
 
   const onSubmit = async (values: GiftAmountsFormValues) => {
     setIsLoading(true);
@@ -60,7 +61,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
 
       toast({
         title: 'Exito! 🎁🎉',
-        description: 'Sugerencia monto de regalo actualizado correctamente.',
+        description: 'Sugerencia montos de regalos actualizados correctamente.',
         className: 'bg-white',
       });
     }
@@ -88,12 +89,11 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                 name="giftAmount1"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monto de regalo 1</FormLabel>
+                    <FormLabel>Sugerencia de regalo 1</FormLabel>
                     <FormControl>
-                      <Input
-                        className="!mt-1"
-                        placeholder={'Ej: Gs. 119.000'}
-                        {...field}
+                      <GiftAmountsFormPriceInput
+                        value={field.value}
+                        onChange={value => setValue('giftAmount1', value)}
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
@@ -105,11 +105,11 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                 name="giftAmount2"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monto de regalo 2</FormLabel>
+                    <FormLabel>Sugerencia de regalo 2</FormLabel>
                     <FormControl>
                       <Input
                         className="!mt-1"
-                        placeholder={'Ej: Gs. 899.000'}
+                        placeholder={'Ej: Gs. 840,000'}
                         {...field}
                       />
                     </FormControl>
@@ -125,11 +125,11 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                 name="giftAmount3"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monto de regalo 3</FormLabel>
+                    <FormLabel>Sugerencia de regalo 3</FormLabel>
                     <FormControl>
                       <Input
                         className="!mt-1"
-                        placeholder={'Ej: Gs. 2.099.000'}
+                        placeholder={'Ej: Gs. 2,399,000'}
                         {...field}
                       />
                     </FormControl>
@@ -142,11 +142,11 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                 name="giftAmount4"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Monto de regalo 4</FormLabel>
+                    <FormLabel>Sugerencia de regalo 4</FormLabel>
                     <FormControl>
                       <Input
                         className="!mt-1"
-                        placeholder={'Ej: Gs. 9.800.000'}
+                        placeholder={'Ej: Gs. 9,860,000'}
                         {...field}
                       />
                     </FormControl>
@@ -157,9 +157,6 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
             </div>
           </div>
         </div>
-
-        {/* <Checkbox /> */}
-
         <ModalSubmitButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>

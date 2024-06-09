@@ -240,9 +240,10 @@ export async function updateEventGiftAmounts(
   }
 
   const giftAmounts = [
-    values.giftAmount1.toString(),
-    values.giftAmount2.toString(),
-    values.giftAmount3.toString(),
+    values.giftAmount1,
+    values.giftAmount2 ?? '',
+    values.giftAmount3 ?? '',
+    values.giftAmount4 ?? '',
   ];
 
   try {
