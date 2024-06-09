@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
 import { MdOutlineFileUpload } from 'react-icons/md';
 import { Button } from '@/components/ui/button';
@@ -27,11 +27,10 @@ type EventCoverImageFormProps = {
 };
 
 const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
-  if (!event) return null;
   const form = useForm({
     resolver: zodResolver(EventCoverImageFormSchema),
     defaultValues: {
-      eventId: event?.id,
+      eventId: event?.id ?? '',
       eventCoverImage: imageOutline,
       eventCoverImageUrl: event?.coverImageUrl ?? '',
     },
@@ -43,6 +42,8 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { formState } = form;
+
+  if (!event) return null;
 
   const handleFileChange = (action: React.ChangeEvent<HTMLInputElement>) => {
     const file = action.target.files?.[0] ?? null;
@@ -154,6 +155,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                           type="file"
                           className="hidden"
                           accept="image/jpeg, image/png, image/heic, image/webp, image/svg+xml"
+                          {...fieldProps}
                           ref={fileInputRef}
                           onChange={event => {
                             onChange(event.target.files?.[0]);
