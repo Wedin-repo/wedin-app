@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -23,26 +22,29 @@ import { Input } from '@/components/ui/input';
 import { Combobox } from '@/components/ui/combobox';
 import { BankDetailsFormSchema } from '@/schemas/form';
 import { bankEntitiesPY } from '@/lib/bank-entities-py';
-import { Loader2 } from 'lucide-react';
-import IdentificationNumberField from '../../shared/identification-number-field-input';
+import IdentificationNumberField from '../../../shared/identification-number-field-input';
+import { updateBankDetails } from '@/actions/data/bank-details';
+import { BankDetails } from '@prisma/client';
+import ModalSubmitButton from '../modal-submit-button';
 
 type BankDetailsFormProps = {
-  eventId: string | undefined | null;
+  eventId: string | undefined;
+  bankDetails: BankDetails | null;
 };
 
-const BankDetailsForm = ({ eventId }: BankDetailsFormProps) => {
+const BankDetailsForm = ({ eventId, bankDetails }: BankDetailsFormProps) => {
   const form = useForm({
     resolver: zodResolver(BankDetailsFormSchema),
     defaultValues: {
       eventId: eventId ?? '',
-      bankName: '',
-      accountHolder: '',
-      accountNumber: '',
-      accountType: '',
-      identificationType: '',
-      identificationNumber: '',
-      razonSocial: '',
-      ruc: '',
+      bankName: bankDetails?.bankName ?? '',
+      accountHolder: bankDetails?.accountHolder ?? '',
+      accountNumber: bankDetails?.accountNumber ?? '',
+      accountType: bankDetails?.accountType ?? '',
+      identificationType: bankDetails?.identificationType ?? '',
+      identificationNumber: bankDetails?.identificationNumber ?? '',
+      razonSocial: bankDetails?.razonSocial ?? '',
+      ruc: bankDetails?.ruc ?? '',
     },
   });
 
@@ -53,20 +55,19 @@ const BankDetailsForm = ({ eventId }: BankDetailsFormProps) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
       setIsLoading(false);
-      console.log('No hay campos modificados');
       return;
     }
     const validatedFields = BankDetailsFormSchema.safeParse(values);
     if (validatedFields.success) {
-      // const response = await updateEventDetails(validatedFields.data);
+      const response = await updateBankDetails(validatedFields.data);
 
-      // if (response?.error) {
-      //   toast({
-      //     variant: 'destructive',
-      //     title: 'Error! 😢',
-      //     description: response.error,
-      //   });
-      // }
+      if (response?.error) {
+        toast({
+          variant: 'destructive',
+          title: 'Error! 😢',
+          description: response.error,
+        });
+      }
 
       toast({
         title: 'Exito! 🔗🎉',
@@ -261,15 +262,7 @@ const BankDetailsForm = ({ eventId }: BankDetailsFormProps) => {
             </div>
           </div>
         </div>
-        <Button
-          variant="editGiftButton"
-          type="submit"
-          disabled={isLoading}
-          className="mt-4"
-        >
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <ModalSubmitButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

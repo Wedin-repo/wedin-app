@@ -32,6 +32,13 @@ const config = {
         secondaryBorderColor: '#B4B4B4',
         tertiaryTextColor: '#696969',
         borderColor: '#E0E0E0',
+        Gray100: '#F3F4F6',
+        Gray300: '#D1D5DB',
+        Zinc400: '#A1A1AA',
+        Neutral700: '#404040',
+        Slate800: '#1E293B',
+        Slate900: '#0F172A',
+        Primary400: '#2E2E2E',
       },
       width: {
         '128': '32rem',

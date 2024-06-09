@@ -39,7 +39,7 @@ const IdentificationNumberField = ({
   return (
     <FormItem className="w-full">
       <FormLabel>Número de documento</FormLabel>
-      <FormControl>
+      <FormControl className="!mt-1 text-base">
         <Input
           type="text"
           placeholder="Ej. 4.705.899"

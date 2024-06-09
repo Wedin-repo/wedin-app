@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -14,8 +13,8 @@ import { EventUrlFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 import { toast } from '@/components/ui/use-toast';
 import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
 import { updateEventUrl } from '@/actions/data/event';
+import GeneralConfigModalButton from '../modal-submit-button';
 
 type EventUrlFormProps = {
   event: Event | null;
@@ -28,7 +27,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
     resolver: zodResolver(EventUrlFormSchema),
     defaultValues: {
       eventId: event?.id ?? '',
-      eventUrl: event?.url ?? 'Dirección de tu evento',
+      eventUrl: event?.url ?? '',
     },
   });
 
@@ -91,7 +90,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
                     </div>
                     <Input
                       className="text-base"
-                      placeholder={event?.url ?? '30crisley'}
+                      placeholder={event?.url ?? 'Ej. 30Crisley'}
                       {...field}
                     />
                   </div>
@@ -101,11 +100,7 @@ const EventUrlForm = ({ event }: EventUrlFormProps) => {
             </FormItem>
           )}
         />
-
-        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <GeneralConfigModalButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

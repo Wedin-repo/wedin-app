@@ -158,9 +158,9 @@ export const EventUrlFormSchema = z.object({
 });
 
 export const EventCoverImageFormSchema = z.object({
-  eventId: z.string().min(1, { message: 'No puede estar vacío' }),
+  eventId: z.string(),
   eventCoverImage: z.any().nullable() as ZodType<File>,
-  eventCoverImageUrl: z.string().min(1, { message: 'No puede estar vacío' }),
+  eventCoverImageUrl: z.string(),
 });
 
 export const EventCoverMessageFormSchema = z.object({

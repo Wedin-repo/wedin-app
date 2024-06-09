@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -31,8 +30,8 @@ import { toast } from '@/components/ui/use-toast';
 import { Event, User } from '@prisma/client';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { countries } from '@/lib/countries';
-import { Loader2 } from 'lucide-react';
 import { updateEventDetails } from '@/actions/data/event';
+import ModalSubmitButton from '../modal-submit-button';
 
 type EventDetailsFormProps = {
   event: Event | null;
@@ -297,11 +296,7 @@ const EventDetailsForm = ({
             </div>
           </div>
         </div>
-
-        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <ModalSubmitButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

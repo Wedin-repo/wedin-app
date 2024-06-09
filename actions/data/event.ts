@@ -27,6 +27,7 @@ export async function getEvent() {
       include: {
         eventPrimaryUser: true,
         eventSecondaryUser: true,
+        bankDetails: true,
       },
       where: {
         OR: [{ primaryUserId: userId }, { secondaryUserId: userId }],

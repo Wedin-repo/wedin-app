@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GeneralConfigCard from '@/components/cards/general-config-card';
-import { FaRegTrashAlt } from 'react-icons/fa';
+//import { FaRegTrashAlt } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb';
 import { FiCalendar } from 'react-icons/fi';
 import { IoIosLink } from 'react-icons/io';
@@ -53,13 +53,11 @@ const options = [
   }, */
 ];
 
-type GeneralConfigModalLeftProps = {
+type ModalLeftProps = {
   onCardClick: (id: string) => void;
 };
 
-const GeneralConfigModalLeft = ({
-  onCardClick,
-}: GeneralConfigModalLeftProps) => {
+const ModalLeft = ({ onCardClick }: ModalLeftProps) => {
   const [activeCardId, setActiveCardId] = useState<string>('1');
 
   const handleCardClick = (id: string) => {
@@ -84,4 +82,4 @@ const GeneralConfigModalLeft = ({
   );
 };
 
-export default GeneralConfigModalLeft;
+export default ModalLeft;

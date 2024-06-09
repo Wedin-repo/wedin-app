@@ -3,7 +3,8 @@
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { IoSettingsOutline } from 'react-icons/io5';
-import GeneralConfigModalForm from '../forms/general-config-modal/general-config-modal-form';
+import ModalContent from '../forms/general-config-modal/modal-content';
+import ModalMobileContent from '../forms/general-config-modal/mobile/modal-mobile-content';
 
 const GeneralConfigModal = () => {
   return (
@@ -16,7 +17,8 @@ const GeneralConfigModal = () => {
       </DialogTrigger>
 
       <DialogContent className="bg-white !rounded-2xl !max-w-5xl">
-        <GeneralConfigModalForm />
+        <ModalContent />
+        <ModalMobileContent />
       </DialogContent>
     </Dialog>
   );

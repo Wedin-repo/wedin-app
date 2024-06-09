@@ -1,12 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { updateEventCoverImageUrl } from '@/actions/data/event';
-import { uploadImageToAws } from '@/lib/s3';
-import { toast } from '@/components/ui/use-toast';
-import { useRef } from 'react';
 import Image from 'next/image';
+import { MdOutlineFileUpload } from 'react-icons/md';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 import {
   Form,
   FormControl,
@@ -17,13 +15,12 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { EventCoverImageFormSchema } from '@/schemas/form';
-import { Event } from '@prisma/client';
-//import { LuImage } from 'react-icons/lu';
-//import imageSvg from '@/public/images/image-icon.svg';
-import { z } from 'zod';
-import { Loader2 } from 'lucide-react';
-import { MdOutlineFileUpload } from 'react-icons/md';
+import { updateEventCoverImageUrl } from '@/actions/data/event';
+import { uploadImageToAws } from '@/lib/s3';
 import imageOutline from '@/public/images/image.svg';
+import GeneralConfigModalButton from '../modal-submit-button';
+import { Event } from '@prisma/client';
+import { z } from 'zod';
 
 type EventCoverImageFormProps = {
   event: Event | null;
@@ -34,6 +31,8 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  if (!event) return null;
 
   const form = useForm({
     resolver: zodResolver(EventCoverImageFormSchema),
@@ -46,14 +45,8 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
 
   const { formState } = form;
 
-  const handleFileChange = async (
-    action: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFileChange = (action: React.ChangeEvent<HTMLInputElement>) => {
     const file = action.target.files?.[0] ?? null;
-
-    if (event?.coverImageUrl) {
-      URL.revokeObjectURL(event?.coverImageUrl);
-    }
 
     if (file) {
       const url = URL.createObjectURL(file);
@@ -73,10 +66,12 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
     values: z.infer<typeof EventCoverImageFormSchema>
   ) => {
     setIsLoading(true);
+
     if (!Object.keys(formState.dirtyFields).length) {
       setIsLoading(false);
       return;
     }
+
     const validatedFields = EventCoverImageFormSchema.safeParse(values);
 
     if (!validatedFields.success) {
@@ -85,7 +80,6 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
         description: 'Archivo invalido, por favor intenta de nuevo.',
         variant: 'destructive',
       });
-
       setIsLoading(false);
       return;
     }
@@ -93,7 +87,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
     if (selectedFile) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        id: event?.id ?? '',
+        id: event?.id,
         type: 'eventId',
       });
 
@@ -103,29 +97,28 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
           description: uploadResponse.error,
           variant: 'destructive',
         });
-
         setIsLoading(false);
         return;
       }
 
       const updatedEvent = await updateEventCoverImageUrl({
-        eventId: event?.id ?? '',
-        eventCoverImageUrl: event?.coverImageUrl ?? '',
-        eventCoverImage: selectedFile,
+        eventId: event?.id,
+        eventCoverImageUrl: uploadResponse?.imageUrl,
       });
 
       if (updatedEvent?.error) {
-        return { error: updatedEvent.error };
+        toast({
+          title: 'Error',
+          description: updatedEvent.error,
+          variant: 'destructive',
+        });
       }
-
       toast({
         title: 'Exito!',
-        description: 'se actualizo la imagen de portada del evento.',
+        description: 'Se actualizo la imagen de portada del evento.',
         className: 'bg-white',
       });
-      setIsLoading(false);
     }
-
     setIsLoading(false);
   };
 
@@ -139,18 +132,13 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
           <FormField
             control={form.control}
             name="eventCoverImage"
-            render={({ field: { onChange, value, ...fieldProps } }) => (
+            render={({ field: { onChange, ...fieldProps } }) => (
               <FormItem className="w-full">
-                <FormLabel className="text-lg flex items-end gap-2">
-                  Imagen del regalo
-                  {/* <span className="!text-sm font-normal text-secondaryTextColor">
-                    372px por 322px
-                  </span> */}
-                </FormLabel>
+                <FormLabel className="text-lg">Imagen del regalo</FormLabel>
                 <FormControl>
                   <div className="flex flex-col gap-1.5">
-                    <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
-                      <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-secondaryBorderColor h-[322px]">
+                    <div className="flex flex-col gap-3 p-4 rounded-xl bg-Gray100">
+                      <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-Gray300 h-[322px]">
                         <Image
                           src={
                             previewUrl || event?.coverImageUrl || imageOutline
@@ -162,12 +150,11 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                         />
                       </div>
                       <div className="">
-                        <Input
+                        <input
                           id="imageUpload"
                           type="file"
                           className="hidden"
                           accept="image/jpeg, image/png, image/heic, image/webp, image/svg+xml"
-                          {...fieldProps}
                           ref={fileInputRef}
                           onChange={event => {
                             onChange(event.target.files?.[0]);
@@ -206,11 +193,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
             )}
           />
         </div>
-
-        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <GeneralConfigModalButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

@@ -6,25 +6,19 @@ import EventCoverMessageForm from './forms/event-cover-message-form';
 import EventDateForm from './forms/event-date-form';
 import BankDetailsForm from './forms/bank-details-form';
 import { getEvent } from '@/actions/data/event';
-import { Event, User } from '@prisma/client';
+import { Event, User, BankDetails } from '@prisma/client';
 import Loader from '@/components/loader';
 import GiftAmountsForm from './forms/gift-amounts-form';
 
-type GeneralConfigModalRightProps = {
+type ModalRightControllerProps = {
   contentId: string | null;
 };
 
-type EventType = Event & {
-  eventPrimaryUser: User | null;
-  eventSecondaryUser: User | null;
-};
-
-const GeneralConfigModalRight = ({
-  contentId,
-}: GeneralConfigModalRightProps) => {
-  const [event, setEvent] = useState<EventType | null>(null);
+const ModalRightController = ({ contentId }: ModalRightControllerProps) => {
+  const [event, setEvent] = useState<Event | null>(null);
   const [primaryUser, setPrimaryUser] = useState<User | null>(null);
   const [secondaryUser, setSecondaryUser] = useState<User | null>(null);
+  const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,6 +29,7 @@ const GeneralConfigModalRight = ({
         setEvent(event);
         setPrimaryUser(event?.eventPrimaryUser);
         setSecondaryUser(event?.eventSecondaryUser);
+        setBankDetails(event?.bankDetails);
       } catch (error) {
         console.error('Error fetching event:', error);
       } finally {
@@ -62,8 +57,9 @@ const GeneralConfigModalRight = ({
   if (contentId === '4') return <EventCoverMessageForm event={event} />;
   if (contentId === '5') return <EventDateForm event={event} />;
   if (contentId === '6') return <GiftAmountsForm event={event} />;
-  if (contentId === '7') return <BankDetailsForm eventId={event?.id} />;
+  if (contentId === '7')
+    return <BankDetailsForm eventId={event?.id} bankDetails={bankDetails} />;
   return null;
 };
 
-export default GeneralConfigModalRight;
+export default ModalRightController;

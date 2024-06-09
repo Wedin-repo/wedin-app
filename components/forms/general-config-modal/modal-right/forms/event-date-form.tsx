@@ -23,8 +23,9 @@ import { es } from 'date-fns/locale';
 import { z } from 'zod';
 import { EventDateFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
-import { Calendar as CalendarIcon, Loader2 } from 'lucide-react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { updateEventDate } from '@/actions/data/event';
+import GeneralConfigModalButton from '../modal-submit-button';
 
 type EventDateFormProps = {
   event: Event | null;
@@ -125,10 +126,7 @@ const EventDateForm = ({ event }: EventDateFormProps) => {
           )}
         />
 
-        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <GeneralConfigModalButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

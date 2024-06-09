@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -10,14 +9,13 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import { z } from 'zod';
 import { Textarea } from '@/components/ui/textarea';
 import { EventCoverMessageFormSchema } from '@/schemas/form';
 import { Event } from '@prisma/client';
 import { toast } from '@/components/ui/use-toast';
-import { Loader2 } from 'lucide-react';
 import { updateEventCoverMessage } from '@/actions/data/event';
+import GeneralConfigModalButton from '../modal-submit-button';
 
 type EventCoverMessageFormProps = {
   event: Event | null;
@@ -100,11 +98,7 @@ const EventCoverMessageForm = ({ event }: EventCoverMessageFormProps) => {
             </FormItem>
           )}
         />
-
-        <Button variant="editGiftButton" type="submit" disabled={isLoading}>
-          Guardar
-          {isLoading && <Loader2 className="w-4 h-4 animate-spin" />}
-        </Button>
+        <GeneralConfigModalButton isLoading={isLoading} formState={formState} />
       </form>
     </Form>
   );

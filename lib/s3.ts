@@ -48,19 +48,3 @@ export const uploadImageToAws = async ({
 
   return { imageUrl: imageUrl };
 };
-//handle whats under this comment in the frontend where this function is triggered
-
-//const updatedGift = await updateGiftImageUrl(imageUrl, giftId);
-
-// if (updatedGift?.error) {
-//   return { error: updatedGift.error };
-// }
-
-// const updatedEvent = await updateEventCoverImageUrl({
-//     eventId,
-//     eventCoverImageUrl: imageUrl,
-//   });
-
-//   if (updatedEvent?.error) {
-//     return { error: updatedEvent.error };
-//   }
