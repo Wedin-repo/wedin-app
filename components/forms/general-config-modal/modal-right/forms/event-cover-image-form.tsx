@@ -112,6 +112,8 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
           description: updatedEvent.error,
           variant: 'destructive',
         });
+        setIsLoading(false);
+        return;
       }
       toast({
         title: 'Exito! 🖼️🎉',
@@ -155,10 +157,10 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                           type="file"
                           className="hidden"
                           accept="image/jpeg, image/png, image/heic, image/webp, image/svg+xml"
-                          {...fieldProps}
+                          //{...fieldProps}
                           ref={fileInputRef}
                           onChange={event => {
-                            onChange(event.target.files?.[0]);
+                            //onChange(event.target.files?.[0]);
                             handleFileChange(event);
                           }}
                         />
