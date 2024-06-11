@@ -27,7 +27,6 @@ export default async function GiftlistPage({ params }: GiftlistPageProps) {
     return <EmptyState title="No se encontraron regalos" />;
 
   const event = await getEvent();
-  console.log(event);
   const giftIds = gifts?.map(gift => gift.id);
   const { name, quantity, totalPrice } = giftlist;
   const formattedPrice = formatPrice(Number(totalPrice));

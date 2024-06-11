@@ -99,12 +99,12 @@ function CreateWishlistGiftForm({
           description: uploadResponse.error,
           variant: 'destructive',
         });
-
         setIsLoading(false);
+        return;
       }
 
       const updatedGift = await updateGiftImageUrl(
-        uploadResponse.imageUrl ?? '',
+        uploadResponse?.imageUrl,
         giftResponse.giftId
       );
 
@@ -124,7 +124,6 @@ function CreateWishlistGiftForm({
         description: wishlistGiftResponse.error,
         variant: 'destructive',
       });
-
       setIsLoading(false);
       return;
     }

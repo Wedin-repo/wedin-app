@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import GeneralConfigCard from '@/components/cards/general-config-card';
-//import { FaRegTrashAlt } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb';
 import { FiCalendar } from 'react-icons/fi';
 import { IoIosLink } from 'react-icons/io';
@@ -66,10 +65,7 @@ type ModalTopMobileProps = {
 };
 
 const ModalTopMobile = ({ onCardClick }: ModalTopMobileProps) => {
-  const [activeCardId, setActiveCardId] = useState<string>('1');
-
   const handleCardClick = (id: string) => {
-    setActiveCardId(id);
     onCardClick(id);
   };
 
@@ -85,11 +81,7 @@ const ModalTopMobile = ({ onCardClick }: ModalTopMobileProps) => {
         <SelectContent className="bg-white">
           <SelectGroup>
             {options.map(option => (
-              <SelectItem
-                key={option.id}
-                value={option.id}
-                //onClick={() => handleCardClick(option.id)}
-              >
+              <SelectItem key={option.id} value={option.id}>
                 <div className="flex items-center gap-4 py-2 text-base">
                   {option.icon}
                   <span>{option.label}</span>

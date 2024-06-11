@@ -67,7 +67,6 @@ const EventDetailsForm = ({
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
       setIsLoading(false);
-      console.log('No hay campos modificados');
       return;
     }
     const validatedFields = EventDetailsFormSchema.safeParse(values);
@@ -80,6 +79,8 @@ const EventDetailsForm = ({
           title: 'Error! 😢',
           description: response.error,
         });
+        setIsLoading(false);
+        return;
       }
 
       toast({

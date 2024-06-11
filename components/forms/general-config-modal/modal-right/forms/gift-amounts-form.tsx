@@ -44,7 +44,6 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     setIsLoading(true);
     if (!Object.keys(formState.dirtyFields).length) {
       setIsLoading(false);
-      console.log('No hay campos modificados');
       return;
     }
     const validatedFields = GiftAmountsFormSchema.safeParse(values);
@@ -57,6 +56,8 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
           title: 'Error! 😢',
           description: response.error,
         });
+        setIsLoading(false);
+        return;
       }
 
       toast({

@@ -67,6 +67,8 @@ const BankDetailsForm = ({ eventId, bankDetails }: BankDetailsFormProps) => {
           title: 'Error! 😢',
           description: response.error,
         });
+        setIsLoading(false);
+        return;
       }
 
       toast({

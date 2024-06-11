@@ -70,7 +70,10 @@ export async function getGifts({
   }
 }
 
-export async function updateGiftImageUrl(url: string, giftId: string) {
+export async function updateGiftImageUrl(
+  url: string | null | undefined,
+  giftId: string
+) {
   try {
     await prismaClient.gift.update({
       where: { id: giftId },

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import GeneralConfigCard from '@/components/cards/general-config-card';
-//import { FaRegTrashAlt } from 'react-icons/fa';
 import { TbListDetails } from 'react-icons/tb';
 import { FiCalendar } from 'react-icons/fi';
 import { IoIosLink } from 'react-icons/io';

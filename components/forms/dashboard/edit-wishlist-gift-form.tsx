@@ -1,4 +1,9 @@
-import { createGift, editGift, updateGiftImageUrl } from '@/actions/data/gift';
+import {
+  createGift,
+  editGift,
+  updateGiftImageUrl,
+  getGift,
+} from '@/actions/data/gift';
 import {
   createWishlistGift,
   deleteGiftFromWishlist,
@@ -168,6 +173,20 @@ function EditWishlistGiftWithGiftForm({
       }
     }
 
+    const latestGift = await getGift(giftResponse.giftId);
+
+    if (!latestGift) {
+      toast({
+        title: 'Error',
+        description:
+          'Error obteniendo los datos del regalo para actualizar la url de la imagen.',
+        variant: 'destructive',
+      });
+
+      setIsLoading(false);
+      return;
+    }
+
     if (
       (formState.dirtyFields.isGroupGift ||
         formState.dirtyFields.isFavoriteGift) &&
@@ -191,8 +210,8 @@ function EditWishlistGiftWithGiftForm({
       }
 
       const updatedGift = await updateGiftImageUrl(
-        gift?.imageUrl ?? '',
-        gift?.id ?? ''
+        latestGift.imageUrl,
+        latestGift.id
       );
 
       if (updatedGift?.error) {
