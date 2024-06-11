@@ -209,7 +209,7 @@ export const BankDetailsFormSchema = z.object({
 
 const giftAmountSchema = z
   .string()
-  .regex(/^\d{1,3}(,\d{3})*$/, { message: 'Formato inválido' }) // Ensure the format allows commas
+  .regex(/^\d{1,3}(\d{3})*$/, { message: 'Formato inválido' }) // Ensure the format allows commas
   .refine(val => parseInt(val.replace(/,/g, ''), 10) >= 99999, {
     message: 'El monto no puede ser menor a Gs. 99,999',
   })
@@ -220,7 +220,7 @@ const giftAmountSchema = z
 export const GiftAmountsFormSchema = z.object({
   eventId: z.string(),
   giftAmount1: giftAmountSchema,
-  giftAmount2: giftAmountSchema.optional(),
-  giftAmount3: giftAmountSchema.optional(),
-  giftAmount4: giftAmountSchema.optional(),
+  giftAmount2: giftAmountSchema,
+  giftAmount3: giftAmountSchema,
+  giftAmount4: giftAmountSchema,
 });

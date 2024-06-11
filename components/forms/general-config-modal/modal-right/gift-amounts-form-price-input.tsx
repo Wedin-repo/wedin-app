@@ -1,24 +1,30 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Input } from '@/components/ui/input';
+import { useFormContext } from 'react-hook-form';
 
 type GiftAmountsFormPriceInputProps = {
-  value: string;
-  onChange: (value: string) => void;
+  name: string;
 };
 
 const GiftAmountsFormPriceInput = ({
-  value,
-  onChange,
+  name,
   ...props
 }: GiftAmountsFormPriceInputProps) => {
-  const [displayValue, setDisplayValue] = useState(formatPrice(value));
+  const { setValue, trigger, watch } = useFormContext();
+  const value = watch(name);
+  const [displayValue, setDisplayValue] = useState(formatPrice(value || ''));
+
+  useEffect(() => {
+    setDisplayValue(formatPrice(value || ''));
+  }, [value]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     const rawValue = unformatPrice(value);
     if (/^\d*$/.test(rawValue)) {
       setDisplayValue(formatPrice(rawValue));
-      onChange(rawValue);
+      setValue(name, rawValue, { shouldDirty: true });
+      trigger(name);
     }
   };
 

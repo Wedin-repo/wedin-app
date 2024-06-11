@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Input } from '@/components/ui/input';
 import {
   Form,
   FormLabel,
@@ -38,7 +37,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
     },
   });
 
-  const { formState, setValue, watch } = form;
+  const { formState } = form;
 
   const onSubmit = async (values: GiftAmountsFormValues) => {
     setIsLoading(true);
@@ -92,10 +91,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 1</FormLabel>
                     <FormControl>
-                      <GiftAmountsFormPriceInput
-                        value={field.value || ''}
-                        onChange={value => setValue('giftAmount1', value)}
-                      />
+                      <GiftAmountsFormPriceInput name={field.name} />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
@@ -108,10 +104,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 2</FormLabel>
                     <FormControl>
-                      <GiftAmountsFormPriceInput
-                        value={field.value || ''}
-                        onChange={value => setValue('giftAmount2', value)}
-                      />
+                      <GiftAmountsFormPriceInput name={field.name} />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
@@ -127,10 +120,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 3</FormLabel>
                     <FormControl>
-                      <GiftAmountsFormPriceInput
-                        value={field.value || ''}
-                        onChange={value => setValue('giftAmount3', value)}
-                      />
+                      <GiftAmountsFormPriceInput name={field.name} />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
@@ -143,10 +133,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 4</FormLabel>
                     <FormControl>
-                      <GiftAmountsFormPriceInput
-                        value={field.value || ''}
-                        onChange={value => setValue('giftAmount4', value)}
-                      />
+                      <GiftAmountsFormPriceInput name={field.name} />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
                   </FormItem>
