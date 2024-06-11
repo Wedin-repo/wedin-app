@@ -93,7 +93,7 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                     <FormLabel>Sugerencia de regalo 1</FormLabel>
                     <FormControl>
                       <GiftAmountsFormPriceInput
-                        value={field.value}
+                        value={field.value || ''}
                         onChange={value => setValue('giftAmount1', value)}
                       />
                     </FormControl>
@@ -108,10 +108,9 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 2</FormLabel>
                     <FormControl>
-                      <Input
-                        className="!mt-1"
-                        placeholder={'Ej: Gs. 840,000'}
-                        {...field}
+                      <GiftAmountsFormPriceInput
+                        value={field.value || ''}
+                        onChange={value => setValue('giftAmount2', value)}
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
@@ -128,10 +127,9 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 3</FormLabel>
                     <FormControl>
-                      <Input
-                        className="!mt-1"
-                        placeholder={'Ej: Gs. 2,399,000'}
-                        {...field}
+                      <GiftAmountsFormPriceInput
+                        value={field.value || ''}
+                        onChange={value => setValue('giftAmount3', value)}
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />
@@ -145,10 +143,9 @@ const GiftAmountsForm = ({ event }: GiftAmountsFormProps) => {
                   <FormItem>
                     <FormLabel>Sugerencia de regalo 4</FormLabel>
                     <FormControl>
-                      <Input
-                        className="!mt-1"
-                        placeholder={'Ej: Gs. 9,860,000'}
-                        {...field}
+                      <GiftAmountsFormPriceInput
+                        value={field.value || ''}
+                        onChange={value => setValue('giftAmount4', value)}
                       />
                     </FormControl>
                     <FormMessage className="font-normal text-red-600" />

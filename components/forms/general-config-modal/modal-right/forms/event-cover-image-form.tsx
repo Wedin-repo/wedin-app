@@ -134,7 +134,7 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
           <FormField
             control={form.control}
             name="eventCoverImage"
-            render={({ field: { onChange, ...fieldProps } }) => (
+            render={({ field: { onChange } }) => (
               <FormItem className="w-full">
                 <FormLabel className="text-lg">Imagen del regalo</FormLabel>
                 <FormControl>
@@ -157,10 +157,9 @@ const EventCoverImageForm = ({ event }: EventCoverImageFormProps) => {
                           type="file"
                           className="hidden"
                           accept="image/jpeg, image/png, image/heic, image/webp, image/svg+xml"
-                          //{...fieldProps}
                           ref={fileInputRef}
                           onChange={event => {
-                            //onChange(event.target.files?.[0]);
+                            onChange(event.target.files?.[0]);
                             handleFileChange(event);
                           }}
                         />
