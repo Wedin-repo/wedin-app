@@ -1,4 +1,9 @@
-import { createGift, editGift } from '@/actions/data/gift';
+import {
+  createGift,
+  editGift,
+  updateGiftImageUrl,
+  getGift,
+} from '@/actions/data/gift';
 import {
   createWishlistGift,
   deleteGiftFromWishlist,
@@ -153,7 +158,7 @@ function EditWishlistGiftWithGiftForm({
     if (selectedFile && formState.dirtyFields.image) {
       const uploadResponse = await uploadImageToAws({
         file: selectedFile,
-        giftId: giftResponse.giftId,
+        id: giftResponse.giftId,
       });
 
       if (uploadResponse?.error) {
@@ -166,6 +171,20 @@ function EditWishlistGiftWithGiftForm({
         setIsLoading(false);
         return;
       }
+    }
+
+    const latestGift = await getGift(giftResponse.giftId);
+
+    if (!latestGift) {
+      toast({
+        title: 'Error',
+        description:
+          'Error obteniendo los datos del regalo para actualizar la url de la imagen.',
+        variant: 'destructive',
+      });
+
+      setIsLoading(false);
+      return;
     }
 
     if (
@@ -188,6 +207,15 @@ function EditWishlistGiftWithGiftForm({
 
         setIsLoading(false);
         return;
+      }
+
+      const updatedGift = await updateGiftImageUrl(
+        latestGift.imageUrl,
+        latestGift.id
+      );
+
+      if (updatedGift?.error) {
+        return { error: updatedGift.error };
       }
     }
 

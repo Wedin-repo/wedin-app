@@ -32,18 +32,23 @@ const DashboardGiftCard = async ({
 
   return (
     <Card variant="dashboard" size="dashboard">
-      <CardHeader variant="dashboard" className="relative w-[118px] h-[118px]">
+      <CardHeader
+        variant="dashboard"
+        className="relative !w-[118px] !h-[118px]"
+      >
         <Image
           src={imageUrl || ringsLoader}
           height={118}
           width={118}
           alt={name}
-          className="object-cover rounded-lg shadow"
+          className="object-cover !min-w-[118px] rounded-lg shadow"
         />
       </CardHeader>
 
       <CardContent variant="dashboard">
-        <p className="text-lg font-medium text-primaryTitleColor">{name}</p>
+        <p className="text-base sm:text-lg font-medium text-primaryTitleColor">
+          {name}
+        </p>
         <p className="text-sm text-secondaryTextColor">{category?.name}</p>
         <span className="text-lg text-black">{formattedPrice}</span>
         {(isFavoriteGift || isGroupGift) && (

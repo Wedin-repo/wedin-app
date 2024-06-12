@@ -23,7 +23,8 @@ type GetSignedURLParams = {
   fileName: string;
   fileType: string;
   fileSize: number;
-  giftId: string;
+  id: string;
+  type: 'giftId' | 'eventId';
   checksum: string;
 };
 
@@ -33,7 +34,8 @@ export const getSignedURL = async ({
   fileName,
   fileType,
   fileSize,
-  giftId,
+  id,
+  type,
   checksum,
 }: GetSignedURLParams) => {
   const session = await auth();
@@ -50,15 +52,23 @@ export const getSignedURL = async ({
     return { error: 'Archvo muy grande' };
   }
 
+  const metadata: { [key: string]: string } = { checksum };
+
+  if (type === 'giftId') {
+    metadata.giftId = id;
+  }
+
+  if (type === 'eventId') {
+    metadata.eventId = id;
+  }
+
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_BUCKET,
     Key: fileName,
     ContentType: fileType,
     ContentLength: fileSize,
     ChecksumSHA256: checksum,
-    Metadata: {
-      giftId: giftId,
-    },
+    Metadata: metadata,
   });
 
   const signedUrl = await getSignedUrl(s3Client, putObjectCommand, {

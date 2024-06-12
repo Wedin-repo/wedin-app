@@ -70,7 +70,10 @@ export async function getGifts({
   }
 }
 
-export async function updateGiftImageUrl(url: string, giftId: string) {
+export async function updateGiftImageUrl(
+  url: string | null | undefined,
+  giftId: string
+) {
   try {
     await prismaClient.gift.update({
       where: { id: giftId },
@@ -135,7 +138,7 @@ export async function createGift(formData: z.infer<typeof GiftPostSchema>) {
     }
 
     revalidatePath('/dashboard');
-    return { giftId: newGift.id };
+    return { giftId: newGift.id, imageUrl: newGift.imageUrl };
   } catch (error) {
     console.error('Error creating gift:', error);
     return { error: getErrorMessage(error) };
