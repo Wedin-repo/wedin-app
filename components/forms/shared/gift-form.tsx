@@ -80,7 +80,7 @@ const GiftForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:justify-between lg:flex-row lg:pt-0">
+        <div className="flex flex-col gap-4 justify-center items-center pt-6 w-full sm:justify-between md:flex-row md:pt-0">
           <div className="w-full lg:w-7/12">
             <FormField
               control={form.control}
@@ -186,11 +186,6 @@ const GiftForm = ({
                           >
                             {category.name}
                           </SelectItem>
-                          {/* this is just a border for aesthetic purposes */}
-                          <div
-                            className="flex justify-center items-center w-5/6 border border-b-secondaryBorderColor"
-                            style={{ margin: '0 auto' }}
-                          />
                         </div>
                       ))}
                     </SelectContent>

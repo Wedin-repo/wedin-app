@@ -1,8 +1,14 @@
 import { Loader2 } from 'lucide-react';
 
-const Loader = () => {
+type LoaderProps = {
+  mfHeight?: string;
+};
+
+const Loader = ({ mfHeight }: LoaderProps) => {
+  const loaderHeight = mfHeight ?? 'min-h-[50vh]';
+
   return (
-    <div className="flex justify-center items-center min-h-[40vh]">
+    <div className={`flex justify-center items-center ${loaderHeight}`}>
       <Loader2 className="w-20 h-20 animate-spin text-secondaryBorderColor" />
     </div>
   );

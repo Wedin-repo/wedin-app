@@ -1,15 +1,16 @@
-import { updateGiftImageUrl } from '@/actions/data/gift';
 import { getSignedURL } from '@/actions/upload-to-s3';
 import { computeSHA256 } from './utils';
 
 type UploadImageToAwsParams = {
   file: File;
-  giftId: string;
+  id: string;
+  type?: 'giftId' | 'eventId';
 };
 
 export const uploadImageToAws = async ({
   file,
-  giftId,
+  id,
+  type = 'giftId',
 }: UploadImageToAwsParams) => {
   const checksum = await computeSHA256(file);
 
@@ -17,7 +18,8 @@ export const uploadImageToAws = async ({
     fileName: file.name,
     fileType: file.type,
     fileSize: file.size,
-    giftId,
+    id,
+    type,
     checksum,
   });
 
@@ -27,12 +29,16 @@ export const uploadImageToAws = async ({
 
   const imageUrl = presignResponse.success.split('?')[0];
 
+  if (!imageUrl) {
+    return { error: 'Failed to upload image' };
+  }
+
   const awsImagePosting = await fetch(imageUrl, {
     method: 'PUT',
     body: file,
     headers: {
       'Content-Type': file.type,
-      metadata: JSON.stringify({ giftId }),
+      metadata: JSON.stringify({ id }),
     },
   });
 
@@ -40,9 +46,5 @@ export const uploadImageToAws = async ({
     return { error: awsImagePosting.statusText };
   }
 
-  const updatedGift = await updateGiftImageUrl(imageUrl, giftId);
-
-  if (updatedGift?.error) {
-    return { error: updatedGift.error };
-  }
+  return { imageUrl: imageUrl };
 };

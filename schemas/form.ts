@@ -109,12 +109,118 @@ export const TransactionStatusLogUpdateSchema = z.object({
 });
 
 export const EventDetailsFormSchema = z.object({
-  eventType: z.string(),
-  name: z.string(),
-  lastName: z.string(),
-  partnerName: z.string(),
-  partnerLastName: z.string(),
-  eventCity: z.string(),
-  eventCountry: z.string(),
-  eventGuestList: z.string(),
+  eventId: z.string(),
+  eventType: z
+    .string()
+    .min(1, { message: 'Debes seleccionar un tipo de evento' }),
+  name: z
+    .string()
+    .min(1, { message: 'El nombre no puede estar vacío' })
+    .min(2, { message: 'Nombre muy corto' })
+    .max(255, { message: 'Nombre muy largo' }),
+  lastName: z
+    .string()
+    .min(1, { message: 'El apellido no puede estar vacío' })
+    .min(2, { message: 'Apellido muy corto' })
+    .max(255, { message: 'Apellido muy largo' }),
+  partnerName: z
+    .string()
+    .min(1, { message: 'El nombre de tu pareja no puede estar vacío' })
+    .min(2, { message: 'Nombre muy corto' })
+    .max(255, { message: 'Nombre muy largo' }),
+  partnerLastName: z
+    .string()
+    .min(1, { message: 'El apellido de tu pareja no puede estar vacío' })
+    .min(2, { message: 'Apellido muy corto' })
+    .max(255, { message: 'Apellido muy largo' }),
+  partnerEmail: z.string(),
+  eventCity: z.string().optional(),
+  eventCountry: z.string().optional(),
+  eventGuests: z.string().optional(),
+});
+
+export const EventUrlFormSchema = z.object({
+  eventId: z.string(),
+  eventUrl: z
+    .string()
+    .min(1, { message: 'La dirección de tu evento no puede estar vacío' })
+    .min(3, {
+      message: 'La dirección de tu evento debe contener al menos 3 caracteres',
+    })
+    .max(255, {
+      message:
+        'La dirección de tu evento debe contener un máximo de 255 caracteres',
+    })
+    .refine(value => /^[a-zA-Z0-9-]*$/.test(value), {
+      message:
+        'La dirección de tu evento no puede contener caracteres especiales (.*%$#&...)',
+    }),
+});
+
+export const EventCoverImageFormSchema = z.object({
+  eventId: z.string(),
+  eventCoverImage: z.any().nullable() as ZodType<File>,
+  eventCoverImageUrl: z.string(),
+});
+
+export const EventCoverMessageFormSchema = z.object({
+  eventId: z.string(),
+  eventCoverMessage: z
+    .string()
+    .min(1, { message: 'El mensaje para tus invitados no puede esta vacío' })
+    .min(3, {
+      message:
+        'El mensaje para tus invitados debe contener al menos 3 caracteres',
+    })
+    .max(255, {
+      message:
+        'El mensaje para tus invitados debe contener un máximo de 255 caracteres',
+    }),
+});
+
+export const EventDateFormSchema = z.object({
+  eventId: z.string(),
+  eventDate: z.date().nullable(),
+});
+
+export const BankDetailsFormSchema = z.object({
+  eventId: z.string(),
+  bankName: z.string().min(1, { message: 'Debe seleccionar una entidad' }),
+  accountHolder: z
+    .string()
+    .min(1, { message: 'Nombre y apellido no puede estar vacío' })
+    .min(2, { message: 'Nombre y Apellido muy corto' })
+    .max(255, { message: 'Nombre y Apellido muy largo' }),
+  accountNumber: z
+    .string()
+    .min(1, { message: 'Número de cuenta no puede estar vacío' })
+    .max(24, { message: 'Número de cuenta muy largo' }),
+  accountType: z.string().min(1, { message: 'Debe seleccionar una moneda' }),
+  identificationType: z
+    .string()
+    .min(1, { message: 'Debe seleccionar un documento' }),
+  identificationNumber: z
+    .string()
+    .min(1, { message: 'Número de documento no puede estar vacío' })
+    .max(12, { message: 'Número de documento muy largo' }),
+  razonSocial: z.string().optional(),
+  ruc: z.string().optional(),
+});
+
+const giftAmountSchema = z
+  .string()
+  .regex(/^\d{1,3}(\d{3})*$/, { message: 'Formato inválido' }) // Ensure the format allows commas
+  .refine(val => parseInt(val.replace(/,/g, ''), 10) >= 99999, {
+    message: 'El monto no puede ser menor a Gs. 99,999',
+  })
+  .refine(val => parseInt(val.replace(/,/g, ''), 10) <= 9999999, {
+    message: 'El monto no puede ser mayor de Gs. 9,999,999',
+  });
+
+export const GiftAmountsFormSchema = z.object({
+  eventId: z.string(),
+  giftAmount1: giftAmountSchema,
+  giftAmount2: giftAmountSchema,
+  giftAmount3: giftAmountSchema,
+  giftAmount4: giftAmountSchema,
 });

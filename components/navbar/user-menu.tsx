@@ -40,7 +40,7 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
                 <IoIosArrowDown size={18} />
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white">
+            <DropdownMenuContent className="bg-white flex flex-col gap-1">
               <DropdownMenuItem>
                 <MenuItem
                   onClick={() => router.push('/dashboard')}
@@ -51,7 +51,7 @@ const UserMenu = ({ currentUser }: UserMenuProps) => {
               <DropdownMenuItem>
                 <MenuItem
                   onClick={() => router.push('/dashboard')}
-                  label="Mi perfil"
+                  label="Configurar mi lista"
                   icon={<IoSettingsOutline fontSize={'18px'} />}
                 />
               </DropdownMenuItem>
