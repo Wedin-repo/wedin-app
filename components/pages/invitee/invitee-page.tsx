@@ -1,0 +1,58 @@
+import { getCategories } from '@/actions/data/category';
+import type {
+  Event,
+  Gift,
+  Transaction,
+  User,
+  WishlistGift,
+} from '@prisma/client';
+import { Suspense } from 'react';
+import Banner from '../../banner';
+import Categories from '../../categories';
+import Loader from '../../loader';
+import InviteeGifts from './invitee-gifts';
+import { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
+import InviteeTop from './invitee-top';
+import Logo from '@/components/logo';
+
+type InvateePageProps = {
+  event: Event & {
+    wishlistGifts: (WishlistGift & {
+      gift: Gift;
+      transactions: Transaction[];
+    })[];
+    eventPrimaryUser: User | null;
+    eventSecondaryUser: User | null;
+  };
+  searchParams: EventPageSearchParams;
+};
+async function InvateePage({ event, searchParams }: InvateePageProps) {
+  const categories = await getCategories();
+  const { eventPrimaryUser, eventSecondaryUser } = event;
+  return (
+    <>
+      <div className="flex flex-col items-center gap-5">
+        <InviteeTop eventUrl={event.url} />
+        <Logo />
+        <Banner
+          primaryUser={eventPrimaryUser}
+          secondaryUser={eventSecondaryUser}
+          eventDate={event.date}
+          eventCoverMessage={event.coverMessage}
+        />
+      </div>
+
+      <div className="my-8">
+        <Categories categories={categories} />
+      </div>
+
+      <div>
+        <Suspense fallback={<Loader />}>
+          <InviteeGifts event={event} searchParams={searchParams} />
+        </Suspense>
+      </div>
+    </>
+  );
+}
+
+export default InvateePage;

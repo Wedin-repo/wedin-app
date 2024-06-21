@@ -1,36 +1,41 @@
 import type { User } from '@prisma/client';
 
 type BannerProps = {
-  primayUser: User | null;
+  primaryUser: User | null;
   secondaryUser: User | null;
   eventDate: Date | null;
+  eventCoverMessage: string | null;
 };
 
-function Banner({ primayUser, secondaryUser, eventDate }: BannerProps) {
+function Banner({
+  primaryUser,
+  secondaryUser,
+  eventDate,
+  eventCoverMessage,
+}: BannerProps) {
+  const formatDate = (date: Date | null) => {
+    if (!date) return 'Fecha de evento sin decidir';
+    return new Intl.DateTimeFormat('es-ES', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  };
   return (
-    <div className="flex flex-row p-2 w-full h-[270px] bg-primaryBorderColor">
-      <div className="w-1/12" />
-
-      <div className="flex flex-col justify-center items-start w-4/12">
-        <p>
-          {primayUser?.name} & {''} {secondaryUser?.name}
+    <div className="flex flex-row p-10 w-full h-[270px] bg-Gray600 rounded-2xl">
+      <div className="flex flex-col justify-center gap-1 items-start w-2/5">
+        <p className="text-3xl md:text-4xl font-medium text-Primary700">
+          {primaryUser?.name} & {''} {secondaryUser?.name}
         </p>
-        <p className="text-2xl">
-          {eventDate?.toLocaleDateString() ?? 'Todavia sin decidir'}
+        <p className="text-xl md:text-2xl text-Secondary400">
+          {eventDate ? formatDate(eventDate) : 'Fecha de evento sin decidir'}
         </p>
       </div>
 
-      <div className="flex flex-row justify-center items-center w-6/12">
-        <p>
-          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit
-          enim labore culpa sint ad nisi Lorem pariatur mollit ex esse
-          exercitation amet. Nisi anim cupidatat excepteur officia.
-          Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate
-          voluptate dolor minim nulla est proident. Nostrud officia pariatur ut
-          officia. Sit irure elit esse ea nulla sunt ex occaecat reprehenderit
-          commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-          Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis
-          consectetur et est culpa et culpa duis.
+      <div className="flex items-center w-3/5">
+        <p className="text-xl md:text-2xl text-Primary300 max-w-3xl">
+          {eventCoverMessage ??
+            'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.'}
         </p>
       </div>
     </div>
