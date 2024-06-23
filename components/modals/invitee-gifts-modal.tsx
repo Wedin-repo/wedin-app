@@ -24,11 +24,11 @@ function InviteeWishlistGiftModal({
       <DialogContent className="bg-white !rounded-2xl flex w-full">
         <div className="w-1/2">
           <Image
-            width={420}
-            height={400}
+            width={600}
+            height={600}
             src={wishlistGift.gift.imageUrl ?? ''}
-            alt={'Image'}
-            className="rounded-xl"
+            alt={'Wishlist Gift Image'}
+            className="rounded-xl h-full w-full object-cover"
           />
         </div>
         <div className="w-1/2">
