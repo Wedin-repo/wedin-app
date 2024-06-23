@@ -31,7 +31,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
   const { eventPrimaryUser, eventSecondaryUser } = event;
   return (
     <>
-      <div className="flex flex-col items-center gap-5">
+      <div className="flex flex-col items-start gap-10">
         <InviteeTop eventUrl={event.url} />
         <Logo />
         <Banner
@@ -39,6 +39,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
           secondaryUser={eventSecondaryUser}
           eventDate={event.date}
           eventCoverMessage={event.coverMessage}
+          eventCoverImageUrl={event.coverImageUrl}
         />
       </div>
 

@@ -89,7 +89,7 @@ export default function CreateTransactionForm({
         <FormField
           control={form.control}
           name="amount"
-          render={({ field }) => <PriceField field={field} disabled={true} />}
+          render={({ field }) => <PriceField field={field} />}
         />
 
         <Button
@@ -98,7 +98,7 @@ export default function CreateTransactionForm({
           type="submit"
           disabled={isLoading}
         >
-          Pagar
+          Contribuir
         </Button>
       </form>
     </Form>

@@ -1,10 +1,12 @@
 import type { User } from '@prisma/client';
+import Image from 'next/image';
 
 type BannerProps = {
   primaryUser: User | null;
   secondaryUser: User | null;
   eventDate: Date | null;
   eventCoverMessage: string | null;
+  eventCoverImageUrl: string | null;
 };
 
 function Banner({
@@ -12,6 +14,7 @@ function Banner({
   secondaryUser,
   eventDate,
   eventCoverMessage,
+  eventCoverImageUrl,
 }: BannerProps) {
   const formatDate = (date: Date | null) => {
     if (!date) return 'Fecha de evento sin decidir';
@@ -22,8 +25,8 @@ function Banner({
     }).format(date);
   };
   return (
-    <div className="flex flex-row p-10 w-full h-[270px] bg-Gray600 rounded-2xl">
-      <div className="flex flex-col justify-center gap-1 items-start w-2/5">
+    <div className="flex flex-row p-10 w-full h-[270px] bg-Gray600 rounded-2xl gap-4">
+      <div className="flex flex-col justify-center gap-1 items-start w-2/6">
         <p className="text-3xl md:text-4xl font-medium text-Primary700">
           {primaryUser?.name} & {''} {secondaryUser?.name}
         </p>
@@ -32,11 +35,21 @@ function Banner({
         </p>
       </div>
 
-      <div className="flex items-center w-3/5">
-        <p className="text-xl md:text-2xl text-Primary300 max-w-3xl">
+      <div className="flex items-center w-2/6">
+        <p className="text-xl md:text-2xl text-Primary300">
           {eventCoverMessage ??
             'Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.'}
         </p>
+      </div>
+
+      <div className="flex items-center w-2/6">
+        <Image
+          width={600}
+          height={500}
+          src={eventCoverImageUrl ?? ''}
+          alt={eventCoverImageUrl ?? 'Image'}
+          className="h-full w-full rounded-xl"
+        />
       </div>
     </div>
   );
