@@ -8,7 +8,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { TransactionCreateSchema } from '@/schemas/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { Gift, Transaction, WishlistGift } from '@prisma/client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { Progress } from '@/components/ui/progress';
@@ -27,6 +27,9 @@ export default function CreateTransactionForm({
 }: CreateTransactionFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const totalCost = Number.parseInt(wishlistGift.gift.price);
+  const [contributeAmount, setContributeAmount] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [isFullAmountChecked, setIsFullAmountChecked] = useState(false);
   const { toast } = useToast();
 
   let amountToPay = totalCost;
@@ -41,6 +44,37 @@ export default function CreateTransactionForm({
       amount: amountToPay.toString(),
     },
   });
+
+  const { formState } = form;
+
+  useEffect(() => {
+    // Synchronize contributeAmount with form state
+    form.setValue('amount', contributeAmount);
+  }, [contributeAmount, form]);
+
+  const handleContributeAmountChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const numericValue = event.target.value.replace(/\D/g, '');
+    const numericAmount = Math.min(
+      parseInt(numericValue || '0', 10),
+      amountToPay
+    );
+    const formattedValue = numericAmount
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    setContributeAmount(formattedValue);
+
+    const newProgress = Math.min(100, (numericAmount / totalCost) * 100);
+    setProgress(newProgress);
+  };
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newCheckedState = event.target.checked;
+    setIsFullAmountChecked(newCheckedState);
+    setContributeAmount(newCheckedState ? formatPrice(amountToPay) : '');
+    setProgress(newCheckedState ? 100 : 0);
+  };
 
   const handleCreateTransaction = async (
     data: z.infer<typeof TransactionCreateSchema>
@@ -111,9 +145,9 @@ export default function CreateTransactionForm({
               {formatPrice(amountToPay)}
             </p>
             <div className="flex flex-col">
-              <Progress value={35} />
+              <Progress value={progress} />
               <span className="text-sm text-Gray300 flex justify-end mt-1">
-                35%
+                {Math.floor(progress)}% {progress === 100 ? '🎉' : ''}
               </span>
             </div>
           </div>
@@ -129,9 +163,20 @@ export default function CreateTransactionForm({
 
           <div className="flex flex-col gap-2">
             <p className="text-base text-Gray300">Monto a contribuir</p>
-            <Input placeholder="Gs." />
-            <div className="flex items-center gap-2">
-              <Checkbox />
+            <Input
+              name="amount"
+              value={contributeAmount}
+              onChange={handleContributeAmountChange}
+              placeholder="Gs."
+              disabled={isFullAmountChecked}
+            />
+            <div className="flex items-center gap-2 mt-1">
+              <input
+                type="checkbox"
+                checked={isFullAmountChecked}
+                onChange={handleCheckboxChange}
+                className="h-4 w-4 rounded-full border border-borderColor cursor-pointer"
+              />
               <p className="text-sm text-Gray300">
                 Completar el valor total del regalo
               </p>
@@ -142,7 +187,7 @@ export default function CreateTransactionForm({
             variant="primaryButton"
             className=""
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !formState.isDirty}
           >
             Contribuir
           </Button>
