@@ -9,6 +9,7 @@ import type {
   User,
   WishlistGift,
 } from '@prisma/client';
+import { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
 
 type InvateeGiftsProps = {
   event: Event & {
@@ -19,13 +20,24 @@ type InvateeGiftsProps = {
     eventPrimaryUser: User | null;
     eventSecondaryUser: User | null;
   };
+  searchParams: EventPageSearchParams;
 };
 
-async function InviteeGifts({ event }: InvateeGiftsProps) {
-  const { wishlistGifts } = event;
+async function InviteeGifts({ event, searchParams }: InvateeGiftsProps) {
+  let { wishlistGifts } = event;
 
   if (!wishlistGifts || wishlistGifts.length === 0) {
     return <EmptyState showReset title="Aún no tienes regalos en tu lista" />;
+  }
+
+  if (searchParams.category) {
+    wishlistGifts = wishlistGifts.filter(
+      w => w.gift.categoryId === searchParams.category
+    );
+  }
+
+  if (wishlistGifts.length === 0) {
+    return <EmptyState title="No se encontraron regalos" />;
   }
 
   return (

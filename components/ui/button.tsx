@@ -45,6 +45,8 @@ const buttonVariants = cva(
         logoutButton: 'hover:bg-neutral-100 transition flex gap-2 items-center',
         socialMediaLoginButton:
           'bg-secondaryBackgroundColor text-tertiaryTextColor py-1.5 px-6 rounded-lg w-[208px] hover:opacity-80 transition-all',
+        publishButton:
+          'text-xl !h-12 !px-5 font-normal transition hover:!opacity-70 hover',
       },
       size: {
         default: 'h-10 px-4 py-2',
