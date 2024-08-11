@@ -28,6 +28,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   //     router.push('/login');
   //   }
   // }, [session, currentUser, router]);
+  // console.log('currentUser', currentUser);
 
   if (pathname.includes('/gifts-received')) {
     menuValue = 'gifts-received';
