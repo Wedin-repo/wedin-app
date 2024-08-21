@@ -1,6 +1,6 @@
 import { getEventByUrl } from '@/actions/data/event';
 import EmptyState from '@/components/empty-state';
-import InvateePage from '@/components/pages/invitee-page';
+import InvateePage from '@/components/pages/invitee/invitee-page';
 
 export type EventPageParams = {
   slug: string;
@@ -16,7 +16,10 @@ type EventPageProps = {
   params: EventPageParams;
 };
 
-export default async function EventPage({ params }: EventPageProps) {
+export default async function EventPage({
+  params,
+  searchParams,
+}: EventPageProps) {
   const { slug } = params;
   const event = await getEventByUrl(slug);
 
@@ -24,5 +27,5 @@ export default async function EventPage({ params }: EventPageProps) {
     return <EmptyState title="Event not found" />;
   }
 
-  return <InvateePage event={event} />;
+  return <InvateePage event={event} searchParams={searchParams} />;
 }
