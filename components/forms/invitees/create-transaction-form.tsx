@@ -189,7 +189,7 @@ export default function CreateTransactionForm({
             type="submit"
             disabled={isLoading || !formState.isDirty}
           >
-            Contribuir
+            Agregar
           </Button>
         </div>
       </form>
