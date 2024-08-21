@@ -93,7 +93,7 @@ const GiftForm = ({
                       <span className="!text-xs font-normal text-secondaryTextColor">
                         372px por 322px
                       </span>
-                      <div className="flex flex-col gap-3 p-4 rounded-xl bg-primaryBorderColor">
+                      <div className="flex flex-col gap-3 p-4 rounded-xl bg-Gray500">
                         <div className="flex overflow-hidden justify-center items-center rounded-xl border-2 border-dashed border-primaryTextColor h-[322px]">
                           <Image
                             src={previewUrl || gift?.imageUrl || ringSvg}

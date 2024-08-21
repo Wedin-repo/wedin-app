@@ -49,7 +49,7 @@ const cardHeaderVariants = cva('', {
     variant: {
       default: 'flex flex-col space-y-1.5 p-2',
       dashboard:
-        'min-h-[90px] bg-primaryBorderColor rounded-lg min-w-[90px] flex justify-center',
+        'min-h-[90px] bg-Gray500 rounded-lg min-w-[90px] flex justify-center',
       emailVerification: 'flex justify-center items-end',
     },
     size: {
