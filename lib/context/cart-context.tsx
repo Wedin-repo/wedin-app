@@ -28,7 +28,7 @@ const initialState: CartState = {
   items: [],
 };
 
-const CartContext = createContext<{
+export const CartContext = createContext<{
   state: CartState;
   dispatch: Dispatch<CartAction>;
 }>({

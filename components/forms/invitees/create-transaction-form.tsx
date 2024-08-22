@@ -31,8 +31,8 @@ export default function CreateTransactionForm({
   const [contributeAmount, setContributeAmount] = useState('');
   const [progress, setProgress] = useState(0);
   const [isFullAmountChecked, setIsFullAmountChecked] = useState(false);
-  const { toast } = useToast();
   const { dispatch } = useCart();
+  const { toast } = useToast();
   let amountToPay = totalCost;
 
   if (wishlistGift.isGroupGift && wishlistGift.groupGiftParts) {

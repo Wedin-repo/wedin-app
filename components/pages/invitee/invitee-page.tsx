@@ -15,6 +15,7 @@ import { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
 import InviteeTop from './invitee-top';
 import Logo from '@/components/logo';
 import Cart from '@/components/cart/cart';
+import { CartProvider, useCart } from '@/lib/context/cart-context';
 
 type InvateePageProps = {
   event: Event & {
@@ -28,10 +29,11 @@ type InvateePageProps = {
   searchParams: EventPageSearchParams;
 };
 async function InvateePage({ event, searchParams }: InvateePageProps) {
+  // const { dispatch, state } = useCart();
   const categories = await getCategories();
   const { eventPrimaryUser, eventSecondaryUser } = event;
   return (
-    <>
+    <CartProvider>
       <div className="flex flex-col items-start gap-10">
         <InviteeTop eventUrl={event.url} />
         <Logo />
@@ -53,8 +55,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
           <InviteeGifts event={event} searchParams={searchParams} />
         </Suspense>
       </div>
-      <Cart />
-    </>
+    </CartProvider>
   );
 }
 
