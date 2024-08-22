@@ -14,6 +14,7 @@ import InviteeGifts from './invitee-gifts';
 import { EventPageSearchParams } from '@/app/(default)/events/[slug]/page';
 import InviteeTop from './invitee-top';
 import Logo from '@/components/logo';
+import Cart from '@/components/cart/cart';
 
 type InvateePageProps = {
   event: Event & {
@@ -52,6 +53,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
           <InviteeGifts event={event} searchParams={searchParams} />
         </Suspense>
       </div>
+      <Cart />
     </>
   );
 }
