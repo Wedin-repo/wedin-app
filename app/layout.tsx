@@ -1,5 +1,6 @@
 import { auth } from '@/auth';
 import { Toaster } from '@/components/ui/toaster';
+import { CartProvider } from '@/lib/context/cart-context';
 import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
@@ -23,8 +24,10 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} sm:min-h-[100vh]`}>
         <SessionProvider session={session}>
-          <Toaster />
-          {children}
+          <CartProvider>
+            <Toaster />
+            {children}
+          </CartProvider>
         </SessionProvider>
       </body>
     </html>

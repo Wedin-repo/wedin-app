@@ -15,6 +15,7 @@ import { Progress } from '@/components/ui/progress';
 import { formatPrice } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useCart } from '@/lib/context/cart-context';
 
 type CreateTransactionFormProps = {
   wishlistGift: WishlistGift & { gift: Gift; transactions: Transaction[] };
@@ -31,7 +32,7 @@ export default function CreateTransactionForm({
   const [progress, setProgress] = useState(0);
   const [isFullAmountChecked, setIsFullAmountChecked] = useState(false);
   const { toast } = useToast();
-
+  const { dispatch } = useCart();
   let amountToPay = totalCost;
 
   if (wishlistGift.isGroupGift && wishlistGift.groupGiftParts) {
@@ -93,32 +94,44 @@ export default function CreateTransactionForm({
       return;
     }
 
-    const response = await createTransaction(
-      validatedData.data,
-      'INVITEE',
-      'ORGANIZER',
-      wishlistGift
-    );
+    handleAddToCart();
 
-    if (response?.error) {
-      toast({
-        title: 'Error',
-        description: response.error,
-        variant: 'destructive',
-      });
+    // const response = await createTransaction(
+    //   validatedData.data,
+    //   'INVITEE',
+    //   'ORGANIZER',
+    //   wishlistGift
+    // );
 
-      setIsLoading(false);
-      return;
-    }
+    // if (response?.error) {
+    //   toast({
+    //     title: 'Error',
+    //     description: response.error,
+    //     variant: 'destructive',
+    //   });
+
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     toast({
       title: 'Success!',
-      description: 'Transaction created successfully.',
+      description: 'Gift added to cart.',
       className: 'bg-white',
     });
 
     setIsLoading(false);
     setIsOpen?.(false);
+  };
+
+  const handleAddToCart = () => {
+    const cartItem = {
+      ...wishlistGift,
+      name: wishlistGift.gift.name,
+      price: wishlistGift.gift.price,
+      quantity: 1,
+    };
+    dispatch({ type: 'ADD_ITEM', item: cartItem });
   };
 
   return (
