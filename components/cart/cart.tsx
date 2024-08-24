@@ -2,12 +2,13 @@
 
 import { useCart } from '@/lib/context/cart-context';
 import { Button } from '@/components/ui/button';
+import { formatPrice } from '@/lib/utils';
 
 export const Cart = () => {
   const { state, removeItem, clearCart } = useCart();
 
   if (state.items.length === 0) {
-    return <p>Your cart is empty</p>;
+    return null;
   }
 
   const handleRemoveItem = (id: string) => {
@@ -19,7 +20,7 @@ export const Cart = () => {
   };
 
   return (
-    <div className="cart-items relative">
+    <div className="cart-items fixed bottom-0 left-0 right-0 bg-primaryBackgroundColor p-4 shadow-lg text-white">
       <h2 className="text-2xl font-bold mb-4">Cart Items</h2>
       <ul className="space-y-4">
         {state.items.map(item => (
@@ -27,7 +28,7 @@ export const Cart = () => {
             <div>
               <p className="text-lg font-medium">{item.name}</p>
               <p className="text-sm text-gray-500">
-                {item.price} x {item.quantity}
+                {formatPrice(Number(item.price))} x {item.quantity}
               </p>
             </div>
             <Button

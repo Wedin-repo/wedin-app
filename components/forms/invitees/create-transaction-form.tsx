@@ -196,6 +196,7 @@ export default function CreateTransactionForm({
             </div>
           </div>
 
+          {/* TODO: fix button when 'checkbox' is checked, it doesnt add the gift to cart */}
           <Button
             variant="primaryButton"
             className=""

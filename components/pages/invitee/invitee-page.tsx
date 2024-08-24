@@ -50,7 +50,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
         <Categories categories={categories} />
       </div>
 
-      <div>
+      <div className="mb-28">
         <Suspense fallback={<Loader />}>
           <InviteeGifts event={event} searchParams={searchParams} />
         </Suspense>
