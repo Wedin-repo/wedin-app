@@ -14,7 +14,7 @@ import type { z } from 'zod';
 import { Progress } from '@/components/ui/progress';
 import { formatPrice } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
+//import { Checkbox } from '@/components/ui/checkbox';
 import { useCart } from '@/lib/context/cart-context';
 
 type CreateTransactionFormProps = {
@@ -94,7 +94,10 @@ export default function CreateTransactionForm({
       return;
     }
 
-    handleAddToCart();
+    const pureAmountToGift = Number.parseInt(
+      validatedData.data.amount.replace(/\D/g, '')
+    );
+    handleAddToCart(pureAmountToGift);
 
     // const response = await createTransaction(
     //   validatedData.data,
@@ -124,12 +127,10 @@ export default function CreateTransactionForm({
     setIsOpen?.(false);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (amountToGift: number) => {
     const cartItem = {
       ...wishlistGift,
-      name: wishlistGift.gift.name,
-      price: wishlistGift.gift.price,
-      quantity: 1,
+      amountToGift,
     };
     addItem(cartItem);
   };

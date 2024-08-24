@@ -11,9 +11,10 @@ import {
 
 type CartItem = {
   id: string;
-  name: string;
-  price: string;
-  quantity: number;
+  amountToGift: number;
+  gift: {
+    name: string;
+  };
 };
 
 type CartState = {

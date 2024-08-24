@@ -29,7 +29,6 @@ type InvateePageProps = {
   searchParams: EventPageSearchParams;
 };
 async function InvateePage({ event, searchParams }: InvateePageProps) {
-  // const { dispatch, state } = useCart();
   const categories = await getCategories();
   const { eventPrimaryUser, eventSecondaryUser } = event;
   return (
@@ -50,7 +49,7 @@ async function InvateePage({ event, searchParams }: InvateePageProps) {
         <Categories categories={categories} />
       </div>
 
-      <div className="mb-28">
+      <div className="mb-14">
         <Suspense fallback={<Loader />}>
           <InviteeGifts event={event} searchParams={searchParams} />
         </Suspense>
