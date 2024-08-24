@@ -31,8 +31,8 @@ export default function CreateTransactionForm({
   const [contributeAmount, setContributeAmount] = useState('');
   const [progress, setProgress] = useState(0);
   const [isFullAmountChecked, setIsFullAmountChecked] = useState(false);
-  const { dispatch } = useCart();
   const { toast } = useToast();
+  const { addItem } = useCart();
   let amountToPay = totalCost;
 
   if (wishlistGift.isGroupGift && wishlistGift.groupGiftParts) {
@@ -131,7 +131,7 @@ export default function CreateTransactionForm({
       price: wishlistGift.gift.price,
       quantity: 1,
     };
-    dispatch({ type: 'ADD_ITEM', item: cartItem });
+    addItem(cartItem);
   };
 
   return (

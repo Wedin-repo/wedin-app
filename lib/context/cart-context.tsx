@@ -6,6 +6,7 @@ import {
   useReducer,
   ReactNode,
   Dispatch,
+  useMemo,
 } from 'react';
 
 type CartItem = {
@@ -52,14 +53,32 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 };
 
+// Action creators
+const addItem = (item: CartItem): CartAction => ({ type: 'ADD_ITEM', item });
+const removeItem = (id: string): CartAction => ({ type: 'REMOVE_ITEM', id });
+const clearCart = (): CartAction => ({ type: 'CLEAR_CART' });
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
+  const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
-      {children}
-    </CartContext.Provider>
+    <CartContext.Provider value={contextValue}>{children}</CartContext.Provider>
   );
 };
 
-export const useCart = () => useContext(CartContext);
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  const { state, dispatch } = context;
+
+  return {
+    state,
+    addItem: (item: CartItem) => dispatch(addItem(item)),
+    removeItem: (id: string) => dispatch(removeItem(id)),
+    clearCart: () => dispatch(clearCart()),
+  };
+};
