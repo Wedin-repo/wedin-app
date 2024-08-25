@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { SessionProvider } from 'next-auth/react';
 import { Inter } from 'next/font/google';
 import '../styles/global.css';
-import { CartProvider } from '@/lib/context/cart-context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,10 +23,8 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.className} sm:min-h-[100vh]`}>
         <SessionProvider session={session}>
-          <CartProvider>
-            <Toaster />
-            {children}
-          </CartProvider>
+          <Toaster />
+          {children}
         </SessionProvider>
       </body>
     </html>
