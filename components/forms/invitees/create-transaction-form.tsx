@@ -49,31 +49,32 @@ export default function CreateTransactionForm({
   const { formState } = form;
 
   useEffect(() => {
-    // Synchronize contributeAmount with form state
     form.setValue('amount', contributeAmount);
   }, [contributeAmount, form]);
+
+  const formatAndLimitAmount = (value: string) => {
+    const numericValue = parseInt(value.replace(/\D/g, '') || '0', 10);
+    const limitedValue = Math.min(numericValue, amountToPay);
+    return limitedValue.toLocaleString();
+  };
+
+  const calculateProgress = (amount: number) => {
+    return Math.min(100, (amount / totalCost) * 100);
+  };
 
   const handleContributeAmountChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const numericValue = event.target.value.replace(/\D/g, '');
-    const numericAmount = Math.min(
-      parseInt(numericValue || '0', 10),
-      amountToPay
-    );
-    const formattedValue = numericAmount
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    setContributeAmount(formattedValue);
-
-    const newProgress = Math.min(100, (numericAmount / totalCost) * 100);
-    setProgress(newProgress);
+    const formattedAmount = formatAndLimitAmount(event.target.value);
+    const numericAmount = parseInt(formattedAmount.replace(/,/g, ''), 10);
+    setContributeAmount(formattedAmount);
+    setProgress(calculateProgress(numericAmount));
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newCheckedState = event.target.checked;
     setIsFullAmountChecked(newCheckedState);
-    setContributeAmount(newCheckedState ? formatPrice(amountToPay) : '');
+    setContributeAmount(newCheckedState ? amountToPay.toString() : '');
     setProgress(newCheckedState ? 100 : 0);
   };
 
@@ -118,8 +119,8 @@ export default function CreateTransactionForm({
     // }
 
     toast({
-      title: 'Success!',
-      description: 'Gift added to cart.',
+      title: 'Exito! 🎁🎉',
+      description: 'Regalo agregado al carrito.',
       className: 'bg-white',
     });
 
@@ -177,13 +178,20 @@ export default function CreateTransactionForm({
 
           <div className="flex flex-col gap-2">
             <p className="text-base text-Gray300">Monto a contribuir</p>
-            <Input
-              name="amount"
-              value={contributeAmount}
-              onChange={handleContributeAmountChange}
-              placeholder="Gs."
-              disabled={isFullAmountChecked}
-            />
+            {!isFullAmountChecked ? (
+              <Input
+                name="amount"
+                value={contributeAmount}
+                onChange={handleContributeAmountChange}
+                placeholder="Gs."
+                disabled={isFullAmountChecked}
+              />
+            ) : (
+              <Input
+                value={formatPrice(Number(contributeAmount))}
+                disabled={true}
+              />
+            )}
             <div className="flex items-center gap-2 mt-1">
               <input
                 type="checkbox"
@@ -197,7 +205,6 @@ export default function CreateTransactionForm({
             </div>
           </div>
 
-          {/* TODO: fix button when 'checkbox' is checked, it doesnt add the gift to cart */}
           <Button
             variant="primaryButton"
             className=""
