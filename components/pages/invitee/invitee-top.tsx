@@ -20,8 +20,11 @@ const InviteeTop = ({ eventUrl }: InviteeTopProps) => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink className="text-base hover:opacity-70 transition-all">
-                <Link href="/dashboard">Mi lista</Link>
+              <BreadcrumbLink
+                href="/dashboard"
+                className="text-base hover:opacity-70 transition-all"
+              >
+                Mi lista
               </BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
