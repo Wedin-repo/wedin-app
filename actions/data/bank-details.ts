@@ -7,11 +7,11 @@ import { revalidatePath } from 'next/cache';
 
 export async function updateBankDetails(
   values: z.infer<typeof BankDetailsFormSchema>
-) {
+): Promise<{ success?: boolean; error?: string }> {
   const validatedField = BankDetailsFormSchema.safeParse(values);
 
   if (!validatedField.success) {
-    return { error: 'Campos inválidos' };
+    return { error: 'Invalid fields' };
   }
 
   try {
@@ -57,7 +57,7 @@ export async function updateBankDetails(
     revalidatePath('/dashboard');
     return { success: true };
   } catch (error) {
-    console.error(error);
+    console.error('Error upserting bank details:', error);
     return { error: 'Failed to upsert bank details' };
   }
 }

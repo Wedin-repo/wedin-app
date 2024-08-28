@@ -1,10 +1,14 @@
 'use client';
 
-import UserMenu from '@/components/navbar/user-menu';
+import dynamic from 'next/dynamic';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { User } from '@prisma/client';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '../logo';
+
+const UserMenu = dynamic(() => import('@/components/navbar/user-menu'), {
+  ssr: false,
+});
 
 type NavBarProps = {
   currentUser?: User | null;
@@ -24,6 +28,7 @@ export const NavBar = ({ currentUser }: NavBarProps) => {
   //     router.push('/login');
   //   }
   // }, [session, currentUser, router]);
+  // console.log('currentUser', currentUser);
 
   if (pathname.includes('/gifts-received')) {
     menuValue = 'gifts-received';

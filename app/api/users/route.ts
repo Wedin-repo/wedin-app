@@ -3,27 +3,32 @@ import { MagicLoginSchema } from '@/schemas/auth';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const email = searchParams.get('email');
-  const validatedFields = MagicLoginSchema.safeParse({ email });
+  try {
+    const { searchParams } = new URL(request.url);
+    const email = searchParams.get('email');
+    const validatedFields = MagicLoginSchema.safeParse({ email });
 
-  if (!validatedFields.success) {
-    return NextResponse.json({ error: 'Campos inválidos' }, { status: 400 });
-  }
+    if (!validatedFields.success) {
+      return NextResponse.json({ error: 'Invalid fields' }, { status: 400 });
+    }
 
-  const user = await prismaClient.user.findUnique({
-    where: { email: validatedFields.data.email },
-  });
+    const user = await prismaClient.user.findUnique({
+      where: { email: validatedFields.data.email },
+    });
 
-  if (!user) {
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      status: 200,
+      user: user,
+    });
+  } catch (error) {
+    console.error('Error fetching user:', error);
     return NextResponse.json(
-      { error: 'No existe usuario con este email' },
-      { status: 404 }
+      { error: 'Internal Server Error' },
+      { status: 500 }
     );
   }
-
-  return NextResponse.json({
-    status: 200,
-    user: user,
-  });
 }
