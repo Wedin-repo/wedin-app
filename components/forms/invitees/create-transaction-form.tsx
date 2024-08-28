@@ -126,6 +126,7 @@ export default function CreateTransactionForm({
 
     setIsLoading(false);
     setIsOpen?.(false);
+    //TODO: redirect to cart
   };
 
   const handleAddToCart = (amountToGift: number) => {
