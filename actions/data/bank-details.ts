@@ -11,7 +11,7 @@ export async function updateBankDetails(
   const validatedField = BankDetailsFormSchema.safeParse(values);
 
   if (!validatedField.success) {
-    return { error: 'Invalid fields' };
+    return { error: 'Campos inválidos' };
   }
 
   try {
