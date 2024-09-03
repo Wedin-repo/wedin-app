@@ -210,7 +210,7 @@ export default function CreateTransactionForm({
             variant="primaryButton"
             className=""
             type="submit"
-            disabled={isLoading || !formState.isDirty}
+            disabled={isLoading}
           >
             Agregar
           </Button>
